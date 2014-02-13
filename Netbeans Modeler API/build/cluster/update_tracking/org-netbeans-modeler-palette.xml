@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="org.netbeans.modeler.palette">
-    <module_version install_time="1392230119362" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1392233415461" last="true" origin="installer" specification_version="1.0">
         <file crc="2615523629" name="config/Modules/org-netbeans-modeler-palette.xml"/>
-        <file crc="1329076348" name="modules/org-netbeans-modeler-palette.jar"/>
+        <file crc="2714014782" name="modules/org-netbeans-modeler-palette.jar"/>
     </module_version>
 </module>

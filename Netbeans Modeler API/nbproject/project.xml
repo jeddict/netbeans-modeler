@@ -3,6 +3,7 @@
     <type>org.netbeans.modules.apisupport.project.suite</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-suite-project/1">
+            <name>JPA Modeler Suite</name>            
         </data>
     </configuration>
 </project>
