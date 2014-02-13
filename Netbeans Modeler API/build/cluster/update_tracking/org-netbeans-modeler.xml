@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="org.netbeans.modeler">
+    <module_version install_time="1392230132089" last="true" origin="installer" specification_version="1.0">
+        <file crc="3105492123" name="config/Modules/org-netbeans-modeler.xml"/>
+        <file crc="2785340545" name="modules/ext/batik-all-1_7.jar"/>
+        <file crc="4290569424" name="modules/ext/batik-ext-1.6-1.jar"/>
+        <file crc="1277217186" name="modules/ext/commons-beanutils-1.8.3.jar"/>
+        <file crc="4209184204" name="modules/ext/commons-beanutils-bean-collections-1.8.3.jar"/>
+        <file crc="2778658886" name="modules/ext/commons-beanutils-core-1.8.3.jar"/>
+        <file crc="2347256547" name="modules/ext/commons-logging-1.1.3.jar"/>
+        <file crc="2365209312" name="modules/ext/gson-2.2.3.jar"/>
+        <file crc="296779652" name="modules/ext/w3c.jar"/>
+        <file crc="240037832" name="modules/org-netbeans-modeler.jar"/>
+    </module_version>
+</module>
