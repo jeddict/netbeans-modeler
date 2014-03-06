@@ -12,20 +12,6 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- *//**
- * Copyright [2014] Gaurav Gupta
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
  */
 package org.netbeans.modeler.widget.edge;
 
@@ -59,6 +45,7 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
@@ -75,22 +62,41 @@ public class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
     private IModelerScene scene;
     private LabelManager labelManager;
     private EdgeWidgetInfo edgeWidgetInfo;
-    private Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
 
+    @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
         this.propertyChangeHandlers.put(id, propertyChangeListener);
     }
 
+    @Override
     public void removePropertyChangeListener(String id) {
         propertyChangeHandlers.remove(id);
     }
 
+    @Override
     public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
         return propertyChangeHandlers;
     }
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+
+    @Override
+    public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandlers.put(id, propertyVisibilityHandler);
+    }
+
+    @Override
+    public void removePropertyVisibilityHandler(String id) {
+        propertyVisibilityHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers() {
+        return propertyVisibilityHandlers;
+    }
+
     //private static WidgetAction deleteAction = new KeyEventLoggerAction();
 //    private WidgetAction editorAction = ActionFactory.createInplaceEditorAction(new LabelTextFieldEditor());
-
     public EdgeWidget(IModelerScene scene, EdgeWidgetInfo edge) {
         super((Scene) scene);
         this.setModelerScene(scene);
@@ -379,7 +385,7 @@ public class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
             this.hideLabel();
 //        scene.getConnectionLayer().removeChild(this);
 //        scene.validate();
-            ((IBaseElementWidget) this).destroy();
+//            ((IBaseElementWidget) this).destroy();
             scene.deleteBaseElement((IBaseElementWidget) this);
 
             scene.deleteEdgeWidget(this);

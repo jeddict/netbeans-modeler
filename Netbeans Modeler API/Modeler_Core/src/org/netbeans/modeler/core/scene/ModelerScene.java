@@ -18,10 +18,10 @@ package org.netbeans.modeler.core.scene;
 import java.util.HashMap;
 import java.util.Map;
 import org.netbeans.modeler.scene.AbstractModelerScene;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 
 public abstract class ModelerScene extends AbstractModelerScene {
 
@@ -85,18 +85,37 @@ public abstract class ModelerScene extends AbstractModelerScene {
         return rootElementSpec;
     }
 
-    private Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
 
+    @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
         this.propertyChangeHandlers.put(id, propertyChangeListener);
     }
 
+    @Override
     public void removePropertyChangeListener(String id) {
         propertyChangeHandlers.remove(id);
     }
 
+    @Override
     public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
         return propertyChangeHandlers;
+    }
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+
+    @Override
+    public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandlers.put(id, propertyVisibilityHandler);
+    }
+
+    @Override
+    public void removePropertyVisibilityHandler(String id) {
+        propertyVisibilityHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers() {
+        return propertyVisibilityHandlers;
     }
 
 }

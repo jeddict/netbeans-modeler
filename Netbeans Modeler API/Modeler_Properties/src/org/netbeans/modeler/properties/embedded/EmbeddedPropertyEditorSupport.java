@@ -29,6 +29,7 @@ public class EmbeddedPropertyEditorSupport extends PropertyEditorSupport impleme
     public EmbeddedPropertyEditorSupport(ModelerFile modelerFile, GenericEmbedded entity) {
         this.modelerFile = modelerFile;
         this.entity = entity;
+//        entity.getEntityEditor().init();
     }
 
     @Override

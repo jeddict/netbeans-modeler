@@ -16,6 +16,7 @@
 package org.netbeans.modeler.specification.model.document;
 
 import java.util.List;
+import java.util.Map;
 import javax.swing.JComponent;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.router.Router;
@@ -30,6 +31,8 @@ import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
+import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 
 public interface IModelerScene extends IBaseElementWidget, IObjectScene {
@@ -142,4 +145,17 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
     /* GraphScene & GraphPinScene */
     boolean isNode(Object object);
 
+    void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
+
+    void removePropertyChangeListener(String id);
+
+    Map<String, PropertyChangeListener> getPropertyChangeListeners();
+
+    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
+
+    void removePropertyVisibilityHandler(String id);
+
+    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
+
+    public void autoLayout();
 }

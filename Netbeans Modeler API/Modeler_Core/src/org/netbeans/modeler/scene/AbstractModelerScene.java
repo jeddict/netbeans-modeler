@@ -38,6 +38,9 @@ import javax.swing.JRadioButtonMenuItem;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.anchor.PointShape;
 import org.netbeans.api.visual.graph.GraphScene;
+import org.netbeans.api.visual.graph.layout.GridGraphLayout;
+import org.netbeans.api.visual.layout.LayoutFactory;
+import org.netbeans.api.visual.layout.SceneLayout;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.router.RouterFactory;
@@ -60,7 +63,6 @@ import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidg
 import org.netbeans.modeler.tool.DesignerTools;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
 import org.netbeans.modeler.widget.context.SwingPaletteManager;
-import org.netbeans.modeler.widget.edge.EdgeWidget;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
@@ -164,6 +166,9 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         IEdgeWidget edgeWidget = (IEdgeWidget) findWidget(edgeWidgetInfo);
         INodeWidget targetNodeWidget = (INodeWidget) findWidget(targetNodeInfo);
         NBModelerUtil.attachEdgeTargetAnchor((IModelerScene) this, edgeWidget, targetNodeWidget);
+        if (edgeWidget instanceof IBaseElementWidget) {
+            ((IBaseElementWidget) edgeWidget).init();
+        }
     }
 
     @Override
@@ -746,19 +751,27 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
             if (edgeWidget instanceof IFlowEdgeWidget) {
                 ((IFlowEdgeWidget) edgeWidget).setName(edge.getName());
             }
-            ((IBaseElementWidget) edgeWidget).init();
+//            ((IBaseElementWidget) edgeWidget).init();
         }
         return edgeWidget;
     }
 
     @Override
     public void deleteNodeWidget(INodeWidget nodeWidget) {
+
         this.removeNode(nodeWidget.getNodeWidgetInfo());
+        if (nodeWidget instanceof IBaseElementWidget) {
+            ((IBaseElementWidget) nodeWidget).destroy();
+        }
     }
 
     @Override
     public void deleteEdgeWidget(IEdgeWidget edgeWidget) {
+
         this.removeEdge(edgeWidget.getEdgeWidgetInfo());
+        if (edgeWidget instanceof IBaseElementWidget) {
+            ((IBaseElementWidget) edgeWidget).destroy();
+        }
     }
 
     @Override
@@ -797,5 +810,10 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
      */
     public void setLabelLayer(LayerWidget labelLayer) {
         this.labelLayer = labelLayer;
+    }
+
+    public void autoLayout() {
+        SceneLayout sceneLayout = LayoutFactory.createSceneGraphLayout(this, new GridGraphLayout<NodeWidgetInfo, EdgeWidgetInfo>().setChecker(true));
+        sceneLayout.invokeLayout();
     }
 }

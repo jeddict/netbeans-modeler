@@ -31,8 +31,10 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.ResizeProvider;
+import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
@@ -41,6 +43,10 @@ import org.netbeans.modeler.border.RoundResizeBorder;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
+import org.netbeans.modeler.label.LabelInplaceEditor;
+import org.netbeans.modeler.label.inplace.InplaceEditorAction;
+import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
+import org.netbeans.modeler.properties.embedded.EmbeddedPropertySupport;
 import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
@@ -57,7 +63,9 @@ import org.netbeans.modeler.widget.node.vmd.internal.AbstractPNodeWidget;
 import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
+import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
@@ -82,18 +90,37 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
     private NodeWidgetInfo nodeWidgetInfo;
     private boolean activeStatus = true;
     private boolean anchorState = false;
-    private Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
 
+    @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
         this.propertyChangeHandlers.put(id, propertyChangeListener);
     }
 
+    @Override
     public void removePropertyChangeListener(String id) {
         propertyChangeHandlers.remove(id);
     }
 
+    @Override
     public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
         return propertyChangeHandlers;
+    }
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+
+    @Override
+    public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandlers.put(id, propertyVisibilityHandler);
+    }
+
+    @Override
+    public void removePropertyVisibilityHandler(String id) {
+        propertyVisibilityHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers() {
+        return propertyVisibilityHandlers;
     }
 
     public void setRangeConstraint() {
@@ -125,6 +152,9 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
         IModelerDocument modelerDoc = nodeWidgetInfo.getModelerDocument();
         Dimension dimension = new Dimension((int) modelerDoc.getBounds().getWidth().getValue(), (int) modelerDoc.getBounds().getHeight().getValue());
         nodeWidgetInfo.setDimension(dimension);
+        WidgetAction editAction = new InplaceEditorAction<JTextField>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        getNodeNameWidget().getActions().addAction(editAction);
+        getHeader().getActions().addAction(scene.createObjectHoverAction());
 
         this.getModelerScene().getModelerFile().getModelerDiagramEngine().setNodeWidgetAction(this);
         setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
@@ -292,11 +322,28 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
     public AbstractNode getNode() {
         if (node == null) {
             node = new BasePropertyViewManager((IBaseElementWidget) this);
+            node.setDisplayName(this.getNodeName());
         }
         BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
         for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
             for (Property property : propertySet.getProperties()) {
-                if (property.getClass() == NEntityPropertySupport.class) {
+                property.setHidden(false);
+                if (property.getClass() == ElementCustomPropertySupport.class) {
+                    ElementCustomPropertySupport elementCustomPropertySupport = (ElementCustomPropertySupport) property;
+                    if (elementCustomPropertySupport.getPropertyVisibilityHandler() != null) {
+                        if (!elementCustomPropertySupport.getPropertyVisibilityHandler().isVisible()) {
+                            property.setHidden(true);
+                        }
+                    }
+                } else if (property.getClass() == EmbeddedPropertySupport.class) {
+                    EmbeddedPropertySupport embeddedPropertySupport = (EmbeddedPropertySupport) property;
+                    PropertyVisibilityHandler propertyVisibilityHandler = this.getPropertyVisibilityHandlers().get(embeddedPropertySupport.getEntity().getName());
+                    if (propertyVisibilityHandler != null) {
+                        if (!propertyVisibilityHandler.isVisible()) {
+                            property.setHidden(true);
+                        }
+                    }
+                } else if (property.getClass() == NEntityPropertySupport.class) {
                     NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
                     attributeProperty.getAttributeEntity().getTableDataListener().initCount();
                 }
@@ -492,7 +539,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
         if (!locked) {
             this.setLabel("");
             this.hideLabel();
-            ((IBaseElementWidget) this).destroy();
+//            ((IBaseElementWidget) this).destroy();
             if (((IFlowNodeWidget) this).getFlowElementsContainer() instanceof IModelerSubScene) {
                 IModelerSubScene modelerSubScene = (IModelerSubScene) ((IFlowNodeWidget) this).getFlowElementsContainer();
                 modelerSubScene.deleteBaseElement((IBaseElementWidget) this);

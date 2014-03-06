@@ -45,7 +45,7 @@ public class EmbeddedPropertySupport extends PropertySupport {
 
     @Override
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
-        return entity.getDataListener().getData();
+        return getEntity().getDataListener().getData();
     }
 
     @Override
@@ -62,8 +62,15 @@ public class EmbeddedPropertySupport extends PropertySupport {
     public PropertyEditor getPropertyEditor() {
 
         if (editor == null) {
-            editor = new EmbeddedPropertyEditorSupport(modelerFile, entity);
+            editor = new EmbeddedPropertyEditorSupport(modelerFile, getEntity());
         }
         return editor;
+    }
+
+    /**
+     * @return the entity
+     */
+    public GenericEmbedded getEntity() {
+        return entity;
     }
 }

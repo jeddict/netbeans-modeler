@@ -25,10 +25,15 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import org.netbeans.api.visual.action.PopupMenuProvider;
+import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
+import org.netbeans.modeler.label.LabelInplaceEditor;
+import org.netbeans.modeler.label.inplace.InplaceEditorAction;
+import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
 import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
@@ -39,7 +44,9 @@ import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.vmd.internal.AbstractPinWidget;
 import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
+import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
@@ -61,6 +68,8 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
         this.setModelerScene(scene);
         this.pinWidgetInfo = pinWidgetInfo;
         this.nodeWidget = nodeWidget;
+        WidgetAction editAction = new InplaceEditorAction<JTextField>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        getPinNameWidget().getActions().addAction(editAction);
         scene.getModelerFile().getModelerDiagramEngine().setPinWidgetAction(this);
 
         this.setProperties(pinWidgetInfo.getName(), null);
@@ -160,11 +169,20 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
     public AbstractNode getNode() {
         if (node == null) {
             node = new BasePropertyViewManager((IBaseElementWidget) this);
+            node.setDisplayName(this.getPinName());
         }
         BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
         for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
             for (Node.Property property : propertySet.getProperties()) {
-                if (property.getClass() == NEntityPropertySupport.class) {
+                property.setHidden(false);
+                if (property.getClass() == ElementCustomPropertySupport.class) {
+                    ElementCustomPropertySupport elementCustomPropertySupport = (ElementCustomPropertySupport) property;
+                    if (elementCustomPropertySupport.getPropertyVisibilityHandler() != null) {
+                        if (!elementCustomPropertySupport.getPropertyVisibilityHandler().isVisible()) {
+                            property.setHidden(true);
+                        }
+                    }
+                } else if (property.getClass() == NEntityPropertySupport.class) {
                     NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
                     attributeProperty.getAttributeEntity().getTableDataListener().initCount();
                 }
@@ -203,18 +221,37 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
     public void setPinWidgetInfo(PinWidgetInfo pinWidgetInfo) {
         this.pinWidgetInfo = pinWidgetInfo;
     }
-    private Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
 
+    @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
         this.propertyChangeHandlers.put(id, propertyChangeListener);
     }
 
+    @Override
     public void removePropertyChangeListener(String id) {
         propertyChangeHandlers.remove(id);
     }
 
+    @Override
     public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
         return propertyChangeHandlers;
+    }
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+
+    @Override
+    public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandlers.put(id, propertyVisibilityHandler);
+    }
+
+    @Override
+    public void removePropertyVisibilityHandler(String id) {
+        propertyVisibilityHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers() {
+        return propertyVisibilityHandlers;
     }
 
     /**
@@ -251,7 +288,7 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
     private void removeNode() {
         if (!locked) {
             this.setLabel("");
-            ((IBaseElementWidget) this).destroy();
+//            ((IBaseElementWidget) this).destroy();
 //        ((IPFlowNodeWidget) nodeWidget).deleteFlowPinWidget((IFlowPinWidget) this);
             nodeWidget.deletePinWidget(this);
             scene.getModelerPanelTopComponent().changePersistenceState(false);

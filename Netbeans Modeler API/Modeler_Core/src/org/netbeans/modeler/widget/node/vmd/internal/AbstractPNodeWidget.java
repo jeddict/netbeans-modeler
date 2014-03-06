@@ -206,7 +206,7 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
      * @param image the image
      */
     public void setNodeImage(Image image) {
-        imageWidget.setImage(image);
+        getImageWidget().setImage(image);
         revalidate();
     }
 
@@ -424,6 +424,13 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
      */
     public Widget getPinsSeparator() {
         return pinsSeparator;
+    }
+
+    /**
+     * @return the imageWidget
+     */
+    public ImageWidget getImageWidget() {
+        return imageWidget;
     }
 
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {

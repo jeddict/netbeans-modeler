@@ -15,10 +15,13 @@
  */
 package org.netbeans.modeler.widget.edge;
 
+import java.util.Map;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
+import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 
 public interface IEdgeWidget extends IConnectionWidget {
@@ -56,5 +59,17 @@ public interface IEdgeWidget extends IConnectionWidget {
     boolean isLocked();
 
     void setLocked(boolean locked);
+
+    void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
+
+    void removePropertyChangeListener(String id);
+
+    Map<String, PropertyChangeListener> getPropertyChangeListeners();
+
+    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
+
+    void removePropertyVisibilityHandler(String id);
+
+    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
 
 }

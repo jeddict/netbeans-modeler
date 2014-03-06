@@ -40,6 +40,9 @@ import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.anchor.AnchorFactory;
 import org.netbeans.api.visual.anchor.PointShape;
 import org.netbeans.api.visual.graph.GraphPinScene;
+import org.netbeans.api.visual.graph.layout.GridGraphLayout;
+import org.netbeans.api.visual.layout.LayoutFactory;
+import org.netbeans.api.visual.layout.SceneLayout;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.router.RouterFactory;
@@ -282,7 +285,9 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
             INodeWidget targetNodeWidget = (INodeWidget) findWidget(getPinNode(targetPinInfo));
             NBModelerUtil.attachEdgeTargetAnchor((IModelerScene) this, edgeWidget, targetNodeWidget);
         }
-
+        if (edgeWidget instanceof IBaseElementWidget) {
+            ((IBaseElementWidget) edgeWidget).init();
+        }
     }
 
     protected void notifyStateChanged(ObjectState previousState, ObjectState state) {
@@ -803,7 +808,7 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
             if (edgeWidget instanceof IFlowEdgeWidget) {
                 ((IFlowEdgeWidget) edgeWidget).setName(edge.getName());
             }
-            ((IBaseElementWidget) edgeWidget).init();
+//            ((IBaseElementWidget) edgeWidget).init(); //move to target anchor
         }
         return edgeWidget;
     }
@@ -820,17 +825,29 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
 
     @Override
     public void deleteNodeWidget(INodeWidget nodeWidget) {
+
         this.removeNode(nodeWidget.getNodeWidgetInfo());
+        if (nodeWidget instanceof IBaseElementWidget) {
+            ((IBaseElementWidget) nodeWidget).destroy();
+        }
     }
 
     @Override
     public void deleteEdgeWidget(IEdgeWidget edgeWidget) {
+
         this.removeEdge(edgeWidget.getEdgeWidgetInfo());
+        if (edgeWidget instanceof IBaseElementWidget) {
+            ((IBaseElementWidget) edgeWidget).destroy();
+        }
     }
 
     @Override
     public void deletePinWidget(IPinWidget pinWidget) {
+
         this.removePin(pinWidget.getPinWidgetInfo());
+        if (pinWidget instanceof IBaseElementWidget) {
+            ((IBaseElementWidget) pinWidget).destroy();
+        }
     }
 
     @Override
@@ -885,5 +902,10 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
         anchor = AnchorFactory.createDirectionalAnchor((Widget) pin, AnchorFactory.DirectionalAnchorKind.HORIZONTAL, 8);
         anchor = nodeWidget.createAnchorPin(anchor);
         return anchor;
+    }
+
+    public void autoLayout() {
+        SceneLayout sceneLayout = LayoutFactory.createSceneGraphLayout(this, new GridGraphLayout<NodeWidgetInfo, EdgeWidgetInfo>().setChecker(true));
+        sceneLayout.invokeLayout();
     }
 }

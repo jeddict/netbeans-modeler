@@ -18,6 +18,7 @@ package org.netbeans.modeler.widget.properties.generic;
 import java.lang.reflect.InvocationTargetException;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -26,33 +27,30 @@ import org.openide.nodes.PropertySupport;
  */
 public class ElementCustomPropertySupport<T extends Object> extends PropertySupport.Reflection<T> {// PropertySupport.ReadOnly {
 
-    Object object = null;
-    String propertyName = null;
-    Class<T> classType = null;
-    PropertyChangeListener propertyChangeListener;
+    private Object object = null;
+    private String propertyName = null;
+    private Class<T> classType = null;
+    private PropertyChangeListener propertyChangeListener;
+    private PropertyVisibilityHandler propertyVisibilityHandler;
     private ModelerFile modelerFile;
 
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
-        super(object, classType, propertyName);
-        this.modelerFile = modelerFile;
-        this.object = object;
-        this.propertyName = propertyName;
-        this.classType = classType;
-        this.propertyChangeListener = propertyChangeListener;
-
-        this.setDisplayName(propertyName);
-        this.setShortDescription(propertyName);
-
+        this(modelerFile, object, classType, propertyName, propertyName, propertyName, propertyChangeListener);
     }
+//
 
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
+        this(modelerFile, object, classType, propertyName, displayName, description, propertyChangeListener, null);
+    }
+
+    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
         super(object, classType, propertyName);
         this.modelerFile = modelerFile;
         this.object = object;
         this.propertyName = propertyName;
         this.classType = classType;
         this.propertyChangeListener = propertyChangeListener;
-
+        this.propertyVisibilityHandler = propertyVisibilityHandler;
         this.setDisplayName(displayName);
         this.setShortDescription(description);
 
@@ -90,5 +88,19 @@ public class ElementCustomPropertySupport<T extends Object> extends PropertySupp
         propertyChangeListener.changePerformed(t);
         modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
 
+    }
+
+    /**
+     * @return the propertyVisibilityHandler
+     */
+    public PropertyVisibilityHandler getPropertyVisibilityHandler() {
+        return propertyVisibilityHandler;
+    }
+
+    /**
+     * @param propertyVisibilityHandler the propertyVisibilityHandler to set
+     */
+    public void setPropertyVisibilityHandler(PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandler = propertyVisibilityHandler;
     }
 }

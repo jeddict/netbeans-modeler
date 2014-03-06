@@ -120,7 +120,7 @@ public class NBModelerUtil {
 //        } else if (targetNodeWidget instanceof IPNodeWidget) {
 //            scene.getModelerFile().getPModelerUtil().attachEdgeTargetAnchor(scene, edgeWidget, targetNodeWidget);
 //        }
-        scene.getModelerFile().getPModelerUtil().attachEdgeTargetAnchor(scene, edgeWidget, targetNodeWidget);
+        scene.getModelerFile().getModelerUtil().attachEdgeTargetAnchor(scene, edgeWidget, targetNodeWidget);
     }
 
     public static void dettachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget sourcePinWidget) {

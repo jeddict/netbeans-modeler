@@ -15,9 +15,11 @@
  */
 package org.netbeans.modeler.properties.embedded;
 
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
+import javax.swing.JComponent;
 import org.netbeans.modeler.core.ModelerFile;
 import org.openide.explorer.propertysheet.PropertyEnv;
 
@@ -49,9 +51,21 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
     @Override //Save Button Clicked
     public void propertyChange(PropertyChangeEvent evt) {
         if (PropertyEnv.PROP_STATE.equals(evt.getPropertyName()) && evt.getNewValue() == PropertyEnv.STATE_VALID) {
-            entity.getDataListener().setData(this.getValue());
-            getModelerFile().getModelerPanelTopComponent().changePersistenceState(false);
-
+//            T obj = this.getValue();
+//            if (obj == null) {
+//                this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
+//            } else {
+//                entity.getDataListener().setData(obj);
+//                getModelerFile().getModelerPanelTopComponent().changePersistenceState(false);
+//            }
+            
+            try{
+                 entity.getDataListener().setData(this.getValue());
+                getModelerFile().getModelerPanelTopComponent().changePersistenceState(false);
+            }catch(IllegalStateException ise){
+                  this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
+            }
+            
         }
     }
 
@@ -112,4 +126,56 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
     public void setModelerFile(ModelerFile modelerFile) {
         this.modelerFile = modelerFile;
     }
+
+//    @Override
+//    public int getWidth() {
+//        if (this.getParent() != null) {
+//            Container dialog = (Container) this.getParent().getParent().getParent().getParent();
+//            return dialog.getWidth();
+//        }
+//        return 0;
+//    }
+//
+//    @Override
+//    public int getHeight() {
+//        if (this.getParent() != null) {
+//            Container dialog = (Container) this.getParent().getParent().getParent().getParent();
+//            return dialog.getHeight();
+//        }
+//        return 0;
+//    }
+//    @Override
+//    public void setSize(int width, int height) {
+//        if (this.getParent() != null) {
+//            Container dialog = (Container) this.getParent().getParent().getParent().getParent();//NBDialog
+//            dialog.setSize(width, height);
+//
+//            Toolkit toolkit = Toolkit.getDefaultToolkit();
+//            Dimension screenSize = toolkit.getScreenSize();
+//            int x = (screenSize.width - this.getWidth()) / 2;
+//            int y = (screenSize.height - this.getHeight()) / 2;
+//            dialog.setLocation(x, y);
+//
+//        }
+//    }
+    protected void setEnablePanel(JComponent layerPane, boolean status) {
+        for (Component com : layerPane.getComponents()) {
+            if (com instanceof javax.swing.JLayeredPane) {
+                javax.swing.JLayeredPane layerPane_Child = (javax.swing.JLayeredPane) com;
+                setEnablePanel(layerPane_Child, status);
+            } else if (com instanceof javax.swing.JScrollPane) {
+                javax.swing.JScrollPane layerPane_Child = (javax.swing.JScrollPane) com;
+                setEnablePanel(layerPane_Child, status);
+            } else if (com instanceof javax.swing.JViewport) {
+                javax.swing.JViewport layerPane_Child = (javax.swing.JViewport) com;
+                setEnablePanel(layerPane_Child, status);
+
+            } else {
+                com.setEnabled(status);
+            }
+        }
+        layerPane.setEnabled(status);
+
+    }
+
 }

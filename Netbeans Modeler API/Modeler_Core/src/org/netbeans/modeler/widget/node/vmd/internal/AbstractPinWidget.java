@@ -70,7 +70,7 @@ public class AbstractPinWidget extends Widget {
      * @param image the image
      */
     public void setPinImage(Image image) {  // method added by gaurav gupta
-        imageWidget.setImage(image);
+        getImageWidget().setImage(image);
         revalidate();
     }
 
@@ -142,5 +142,12 @@ public class AbstractPinWidget extends Widget {
             anchor = new PNodeAnchor(this, false);
         }
         return anchor;
+    }
+
+    /**
+     * @return the imageWidget
+     */
+    public ImageWidget getImageWidget() {
+        return imageWidget;
     }
 }

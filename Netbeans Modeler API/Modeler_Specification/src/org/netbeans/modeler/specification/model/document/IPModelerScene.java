@@ -15,14 +15,7 @@
  */
 package org.netbeans.modeler.specification.model.document;
 
-import java.awt.Rectangle;
-import java.util.List;
-import java.util.Set;
-import javax.swing.JComponent;
 import org.netbeans.api.visual.anchor.Anchor;
-import org.netbeans.api.visual.router.Router;
-import org.netbeans.modeler.core.IModelerDiagramEngine;
-import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.pin.IPinWidget;

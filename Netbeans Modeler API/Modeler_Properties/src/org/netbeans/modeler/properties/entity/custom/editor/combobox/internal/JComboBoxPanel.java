@@ -27,6 +27,8 @@ public class JComboBoxPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form NewJPanel1
+     * @param modelerFile
+     * @param actionHandler
      */
     public JComboBoxPanel(ModelerFile modelerFile, ActionHandler actionHandler) {
         this.actionHandler = actionHandler;

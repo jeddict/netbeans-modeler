@@ -18,6 +18,7 @@ package org.netbeans.modeler.label;
 import org.netbeans.api.visual.action.TextFieldInplaceEditor;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowPinWidget;
@@ -47,7 +48,9 @@ public class LabelInplaceEditor implements TextFieldInplaceEditor {
             if (connector instanceof IFlowNodeWidget) {
                 ((IFlowNodeWidget) connector).setName(text);
             }
-            ((INodeWidget) connector).getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
+
+            IModelerPanel modelerPanel = ((INodeWidget) connector).getModelerScene().getModelerPanelTopComponent();
+            modelerPanel.changePersistenceState(false);
 
         } else if (connector instanceof IEdgeWidget) {
             ((IEdgeWidget) connector).setLabel(text);

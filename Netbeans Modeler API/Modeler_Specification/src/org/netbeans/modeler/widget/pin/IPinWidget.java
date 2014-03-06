@@ -21,6 +21,7 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 
 public interface IPinWidget extends IParentPinWidget {
@@ -52,6 +53,12 @@ public interface IPinWidget extends IParentPinWidget {
     void removePropertyChangeListener(String id);
 
     Map<String, PropertyChangeListener> getPropertyChangeListeners();
+
+    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
+
+    void removePropertyVisibilityHandler(String id);
+
+    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
 
     void setLabel(String label);
 

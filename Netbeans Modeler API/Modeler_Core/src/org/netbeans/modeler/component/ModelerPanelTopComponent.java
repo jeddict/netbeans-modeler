@@ -246,11 +246,12 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     @Override
     public void componentClosed() {
         super.componentClosed();
-        System.out.println("---------------------componentClosed1-----------------------");
+        System.out.println("---------------------ModelerCore.removeModelerFile Start-----------------------");
         if (this.getModelerFile() != null) {
             ModelerCore.removeModelerFile(this.getModelerFile().getPath());
         }
-    }
+         System.out.println("---------------------ModelerCore.removeModelerFile End-----------------------");
+      }
 
     /**
      * @return the modelerScene

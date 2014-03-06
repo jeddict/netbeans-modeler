@@ -61,10 +61,10 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
 //        return State.REJECTED;
 
         if (editor != null) {
-            Container parent = editor.getParent();
-            if (parent != null) {
-                parent.requestFocusInWindow();
-            }
+//            Container parent = editor.getParent(); //BUG : TopComponent KeyListener not working on textfield blur event
+//            if (parent != null) {
+//                parent.requestFocusInWindow();
+//            }
             closeEditor(true);
         }
         return State.REJECTED;
@@ -181,9 +181,9 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
             parent.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
         }
 //        if (hasFocus) {
-        if (parent != null) {
-            parent.requestFocusInWindow();
-        }
+//        if (parent != null) {
+//            parent.requestFocusInWindow();//BUG : TopComponent KeyListener not working on textfield blur event
+//        }
 //        }
         editor = null;
         widget = null;

@@ -26,6 +26,7 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
 import org.netbeans.modeler.widget.properties.generic.ElementPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.util.Exceptions;
 
 public class ElementConfigFactory {
@@ -86,23 +87,35 @@ public class ElementConfigFactory {
     }
 
     public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers) {
-        createPropertySet(set, object, propertyChangeHandlers, true);
+        createPropertySet(set, object, propertyChangeHandlers, null, true);
+    }
+
+    public void createPropertySet(ElementPropertySet set, final Object object) {
+        createPropertySet(set, object, null, null, true);
     }
 
     public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, boolean inherit) {
+        createPropertySet(set, object, propertyChangeHandlers, null, true);
+    }
+
+    public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
+        createPropertySet(set, object, propertyChangeHandlers, propertyVisiblityHandlers, true);
+    }
+
+    private void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit) {
         if (inherit) {
             for (Element element : getElements(object.getClass())) {
-                createPropertySetInternal(set, object, element, propertyChangeHandlers);
+                createPropertySetInternal(set, object, element, propertyChangeHandlers, propertyVisiblityHandlers);
             }
         } else {
             Element element = getElement(object.getClass());
             if (element != null) {
-                createPropertySetInternal(set, object, element, propertyChangeHandlers);
+                createPropertySetInternal(set, object, element, propertyChangeHandlers, propertyVisiblityHandlers);
             }
         }
     }
 
-    private void createPropertySetInternal(ElementPropertySet set, final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers) {
+    private void createPropertySetInternal(ElementPropertySet set, final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
 
 //        PropertyChangeHandler p = new PropertyChangeHandler<Object>() {
 //    public void manage(Object value){}
@@ -136,7 +149,7 @@ public class ElementConfigFactory {
                                             propertyChangeHandlers.get(name).changePerformed(value);
                                         }
                                     }
-                                }));
+                                }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())));
 
                     } else {
                         if (attribute.isReadOnly()) {
@@ -146,6 +159,7 @@ public class ElementConfigFactory {
                             }
                             set.put(attribute.getGroupId(), new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()));
                         } else {
+                            PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
                             set.put(attribute.getGroupId(), new ElementCustomPropertySupport(set.getModelerFile(), object, attribute.getClassType(),
                                     attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
                                     new PropertyChangeListener<Object>() {
@@ -174,7 +188,7 @@ public class ElementConfigFactory {
                                                 propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
                                             }
                                         }
-                                    }));
+                                    }, propertyVisibilityHandler));
 
                         }
                     }

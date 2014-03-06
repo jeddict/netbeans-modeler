@@ -27,6 +27,7 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 //import org.netbeans.modules.visual.border.ResizeBorder;
 
@@ -97,6 +98,12 @@ public interface INodeWidget extends IWidget {
     void removePropertyChangeListener(String id);
 
     Map<String, PropertyChangeListener> getPropertyChangeListeners();
+
+    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
+
+    void removePropertyVisibilityHandler(String id);
+
+    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
 
     boolean isLocked();
 
