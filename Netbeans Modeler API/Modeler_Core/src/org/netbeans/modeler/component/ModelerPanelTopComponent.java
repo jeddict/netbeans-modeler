@@ -250,8 +250,8 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         if (this.getModelerFile() != null) {
             ModelerCore.removeModelerFile(this.getModelerFile().getPath());
         }
-         System.out.println("---------------------ModelerCore.removeModelerFile End-----------------------");
-      }
+        System.out.println("---------------------ModelerCore.removeModelerFile End-----------------------");
+    }
 
     /**
      * @return the modelerScene
@@ -337,6 +337,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     private boolean persistenceState = true;
     private final static String SPACE_STAR = " *";
 
+    @Override
     public void changePersistenceState(boolean state) {
         if (persistenceState == state) {
             return;
@@ -356,19 +357,9 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         this.setDiagramDisplayName(displName);
     }
 
-//    // the presence of save cookie in activated nodes enables/disables "Save" button
-    /**
-     * @return the persistenceState
-     */
+    @Override
     public boolean isPersistenceState() {
         return persistenceState;
-    }
-
-    /**
-     * @param persistenceState the persistenceState to set
-     */
-    public void setPersistenceState(boolean persistenceState) {
-        this.persistenceState = persistenceState;
     }
 
 }

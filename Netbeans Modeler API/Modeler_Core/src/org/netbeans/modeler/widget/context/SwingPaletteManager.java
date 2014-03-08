@@ -211,14 +211,6 @@ public class SwingPaletteManager implements ContextPaletteManager {
                 getDecoratorLayer().add(paletteWidget);
                 getDecoratorLayer().revalidate();
             }
-//            else
-//            {
-////                //System.out.println("NULL Exist for showPaletteFor(Widget widget)");
-////                // Check if a parent has the a model.
-////                if(widget instanceof INodeWidget){
-////                showPaletteFor((INodeWidget)widget.getParentWidget());
-////                }
-//            }
         }
     }
 
@@ -227,13 +219,15 @@ public class SwingPaletteManager implements ContextPaletteManager {
      * enough space, the palette should be on the left side.
      *
      * @param widget The widget that will be decorated.
+     * @param palette
+     * @return
      */
-    protected Point getPaletteLocation(INodeWidget widget,
-            ContextPalette palette) {
+    protected Point getPaletteLocation(INodeWidget widget, ContextPalette palette) {
 
         int xPos = 0;
         int yPos = 0;
-
+        Rectangle clientArea = widget.getScene().getClientArea();
+        Rectangle visibleRect = widget.getScene().getView().getVisibleRect();
         if (widget != null) {
             Dimension collapsedDim = palette.getPreferredSize();
 
@@ -272,6 +266,14 @@ public class SwingPaletteManager implements ContextPaletteManager {
                 yPos = yCenter - (height / 2);
                 /*End :  for inner widget */
 
+                // Issue Fix #5852 Start
+                if (yCenter - (height / 2) < visibleRect.y) {
+                    yPos = (int) visibleRect.y;
+                } else if (yCenter + (height / 2) > visibleRect.y + visibleRect.getHeight()) {
+                    yPos = (int) visibleRect.y + (int) visibleRect.getHeight() - (int) collapsedDim.getHeight();
+                }
+                // Issue Fix #5852 End
+
                 JComponent view = getScene().getView();
 
                 int expandedWidth = palette.getExpandedWidth();
@@ -284,6 +286,9 @@ public class SwingPaletteManager implements ContextPaletteManager {
             }
         }
 
+//
+//if(clientArea.getY() < )
+//
         return new Point(xPos, yPos);
     }
 
