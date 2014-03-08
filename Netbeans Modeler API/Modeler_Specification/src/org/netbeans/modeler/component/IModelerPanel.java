@@ -42,4 +42,6 @@ public interface IModelerPanel {
     void setActivatedNodes(Node[] activatedNodes);
 
     void changePersistenceState(boolean state);
+
+    boolean isPersistenceState();
 }
