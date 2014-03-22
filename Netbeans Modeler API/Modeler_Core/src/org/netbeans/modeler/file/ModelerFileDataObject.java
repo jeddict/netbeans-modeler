@@ -32,7 +32,6 @@ public abstract class ModelerFileDataObject extends MultiDataObject implements I
 
     @Override
     protected int associateLookup() {
-
         return 1;
     }
 

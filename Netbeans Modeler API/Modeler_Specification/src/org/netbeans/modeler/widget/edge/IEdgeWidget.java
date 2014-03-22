@@ -52,9 +52,9 @@ public interface IEdgeWidget extends IConnectionWidget {
 
     void showProperties();
 
-    void remove();
+    boolean remove();
 
-    void remove(boolean notification);
+    boolean remove(boolean notification);
 
     boolean isLocked();
 

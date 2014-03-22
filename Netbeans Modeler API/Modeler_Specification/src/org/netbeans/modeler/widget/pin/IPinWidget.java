@@ -40,9 +40,9 @@ public interface IPinWidget extends IParentPinWidget {
 
     void setNode(AbstractNode node);
 
-    void remove();
+    boolean remove();
 
-    void remove(boolean notification);
+    boolean remove(boolean notification);
 
     public boolean isActiveStatus();
 

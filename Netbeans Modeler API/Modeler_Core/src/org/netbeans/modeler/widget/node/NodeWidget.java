@@ -906,19 +906,22 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         return getCursor();
     }
 
-    public void remove() {
-        remove(false);
+    public boolean remove() {
+        return remove(false);
     }
 
-    public void remove(boolean notification) {
+    public boolean remove(boolean notification) {
         if (notification) {
             NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Node ?", "Delete Node", NotifyDescriptor.OK_CANCEL_OPTION);
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
                 removeNode();
+                return true;
             }
         } else {
             removeNode();
+            return true;
         }
+        return false;
     }
 
     private void removeNode() {

@@ -18,14 +18,18 @@ package org.netbeans.modeler.specification.model.file.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
-import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.core.ModelerCore;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.specification.Vendor;
 import org.netbeans.modeler.specification.annotaton.ModelerConfig;
 import org.netbeans.modeler.specification.model.DiagramModel;
+import org.openide.*;
 import org.openide.filesystems.FileObject;
+import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
+import org.openide.util.Exceptions;
 
 public abstract class ModelerFileActionListener implements ActionListener {
 
@@ -45,9 +49,22 @@ public abstract class ModelerFileActionListener implements ActionListener {
         });
     }
 
+//    public static void openModelerFile(FileObject context) {
+//        org.openide.loaders.DataObject datObject = null;
+//        try {
+//            datObject = org.openide.loaders.DataObject.find(context);
+//        } catch (DataObjectNotFoundException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
+//        if (datObject == null || !(datObject instanceof IModelerFileDataObject)) {
+//            throw new IllegalStateException("Invalid Modeler File");
+//        }
+//        ModelerFileActionListener actionListener = new ModelerFileActionListener((IModelerFileDataObject) datObject);
+//        actionListener.actionPerformed(null);
+//
+//    }
     protected void openModelerFile(IModelerFileDataObject context) {
 
-//        ElementConfigFactory.init();
         FileObject fileObject = context.getPrimaryFile();
         String path = fileObject.getPath();
         ModelerFile modelerFile = ModelerCore.getModelerFile(path);

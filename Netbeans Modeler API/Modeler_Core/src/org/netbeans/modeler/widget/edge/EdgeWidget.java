@@ -364,19 +364,22 @@ public class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
 //
 //
 
-    public void remove() {
-        remove(false);
+    public boolean remove() {
+        return remove(false);
     }
 
-    public void remove(boolean notification) {
+    public boolean remove(boolean notification) {
         if (notification) {
             NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Edge?", "Delete Edge", NotifyDescriptor.OK_CANCEL_OPTION);
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
                 removeEdge();
+                return true;
             }
         } else {
             removeEdge();
+            return true;
         }
+        return false;
     }
 
     private void removeEdge() {

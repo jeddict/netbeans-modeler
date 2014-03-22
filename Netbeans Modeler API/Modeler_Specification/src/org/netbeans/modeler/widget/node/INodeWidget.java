@@ -85,9 +85,9 @@ public interface INodeWidget extends IWidget {
     void showLabel();
 
 //    LabelManager getLabelManager();
-    void remove();
+    boolean remove();
 
-    void remove(boolean notification);
+    boolean remove(boolean notification);
 
     public boolean isActiveStatus();
 
