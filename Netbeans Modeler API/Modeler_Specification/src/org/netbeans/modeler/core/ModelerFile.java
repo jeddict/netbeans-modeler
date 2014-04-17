@@ -254,11 +254,11 @@ public class ModelerFile {
         }
         if (nodeWidgets.size() + edgeWidgets.size() >= 1) {
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
-                for (INodeWidget nodeWidget : new CopyOnWriteArrayList<INodeWidget>(nodeWidgets)) {
-                    nodeWidget.remove();
-                }
                 for (IEdgeWidget edgeWidget : new CopyOnWriteArrayList<IEdgeWidget>(edgeWidgets)) {
                     edgeWidget.remove();
+                }
+                for (INodeWidget nodeWidget : new CopyOnWriteArrayList<INodeWidget>(nodeWidgets)) {
+                    nodeWidget.remove();
                 }
                 scene.validate();
             }
