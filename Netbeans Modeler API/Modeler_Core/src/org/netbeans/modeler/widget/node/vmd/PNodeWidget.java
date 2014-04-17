@@ -299,6 +299,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
 
     @Override
     public void showProperties() {
+        getNode().setDisplayName( getNodeNameWidget().getLabel() );
         NodeOperation.getDefault().showProperties(getNode());
     }
 
