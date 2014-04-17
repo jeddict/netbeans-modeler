@@ -146,6 +146,7 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
 
     @Override
     public void showProperties() {
+        getNode().setDisplayName( getLabel() );
         NodeOperation.getDefault().showProperties(getNode());
     }
 
