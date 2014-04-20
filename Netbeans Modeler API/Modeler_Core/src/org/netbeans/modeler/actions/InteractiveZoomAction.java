@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.scene.AbstractModelerScene;
 
 /**
  *
@@ -21,7 +20,7 @@ public class InteractiveZoomAction extends WidgetAction.Adapter {
     public State mousePressed(Widget widget, WidgetMouseEvent event) {
         if (event.getButton() == MouseEvent.BUTTON1) {
 
-            scene = (AbstractModelerScene) widget.getScene();
+            scene = widget.getScene();
             lastLocation = event.getPoint();
             lastLocation = widget.getScene().convertSceneToView(lastLocation);
 

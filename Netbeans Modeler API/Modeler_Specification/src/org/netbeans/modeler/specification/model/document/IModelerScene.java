@@ -22,6 +22,7 @@ import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.component.IModelerPanel;
+import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
@@ -37,7 +38,7 @@ import org.openide.nodes.AbstractNode;
 
 public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
-    public void init(ModelerFile file);
+    public void init();
 
     public String getName();
 
@@ -91,6 +92,8 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
     public ContextPaletteManager getContextPaletteManager();
 
     public IModelerPanel getModelerPanelTopComponent();
+
+    public void setModelerPanelTopComponent(IModelerPanel topComponent);
 
     public LayerWidget getConnectionLayer();
 
@@ -158,4 +161,7 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
     Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
 
     public void autoLayout();
+
+    public void setModelerDiagramEngine(IModelerDiagramEngine modelerDiagramEngine);
+
 }

@@ -46,9 +46,6 @@ import org.netbeans.modeler.config.document.IModelerDocument;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
-import org.netbeans.modeler.properties.embedded.EmbeddedPropertySupport;
-import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
-import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
@@ -56,21 +53,17 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene;
-import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.node.vmd.internal.AbstractPNodeWidget;
-import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
-import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Node;
-import org.openide.nodes.Node.Property;
 import org.openide.nodes.NodeOperation;
 import org.openide.util.Exceptions;
 
@@ -78,7 +71,7 @@ import org.openide.util.Exceptions;
  *
  *
  */
-public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeWidget {
+public abstract class PNodeWidget extends AbstractPNodeWidget {
 
     private PinWidgetInfo internalPinWidgetInfo;
     public static final int WIDGET_BORDER_PADDING = 4;
@@ -89,6 +82,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
     private NodeWidgetStatus status;
     private NodeWidgetInfo nodeWidgetInfo;
     private boolean activeStatus = true;
+    private boolean highlightStatus = false;
     private boolean anchorState = false;
     private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
 
@@ -145,9 +139,10 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
     }
 
     public PNodeWidget(IModelerScene scene, NodeWidgetInfo nodeWidgetInfo) {
-        super((Scene) scene, PFactory.getNetBeans60Scheme());
+        super((Scene) scene, ((IPModelerScene) scene).getColorScheme());
         this.setModelerScene(scene);
         this.nodeWidgetInfo = nodeWidgetInfo;
+        setAnchorGap(0);
 
         IModelerDocument modelerDoc = nodeWidgetInfo.getModelerDocument();
         Dimension dimension = new Dimension((int) modelerDoc.getBounds().getWidth().getValue(), (int) modelerDoc.getBounds().getHeight().getValue());
@@ -299,7 +294,6 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
 
     @Override
     public void showProperties() {
-        getNode().setDisplayName( getNodeNameWidget().getLabel() );
         NodeOperation.getDefault().showProperties(getNode());
     }
 
@@ -321,35 +315,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
     private AbstractNode node;
 
     public AbstractNode getNode() {
-        if (node == null) {
-            node = new BasePropertyViewManager((IBaseElementWidget) this);
-            node.setDisplayName(this.getNodeName());
-        }
-        BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
-        for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
-            for (Property property : propertySet.getProperties()) {
-                property.setHidden(false);
-                if (property.getClass() == ElementCustomPropertySupport.class) {
-                    ElementCustomPropertySupport elementCustomPropertySupport = (ElementCustomPropertySupport) property;
-                    if (elementCustomPropertySupport.getPropertyVisibilityHandler() != null) {
-                        if (!elementCustomPropertySupport.getPropertyVisibilityHandler().isVisible()) {
-                            property.setHidden(true);
-                        }
-                    }
-                } else if (property.getClass() == EmbeddedPropertySupport.class) {
-                    EmbeddedPropertySupport embeddedPropertySupport = (EmbeddedPropertySupport) property;
-                    PropertyVisibilityHandler propertyVisibilityHandler = this.getPropertyVisibilityHandlers().get(embeddedPropertySupport.getEntity().getName());
-                    if (propertyVisibilityHandler != null) {
-                        if (!propertyVisibilityHandler.isVisible()) {
-                            property.setHidden(true);
-                        }
-                    }
-                } else if (property.getClass() == NEntityPropertySupport.class) {
-                    NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
-                    attributeProperty.getAttributeEntity().getTableDataListener().initCount();
-                }
-            }
-        }
+        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getNodeName(), propertyVisibilityHandlers);
         return node;
     }
 
@@ -609,4 +575,27 @@ public abstract class PNodeWidget extends AbstractPNodeWidget implements IPNodeW
         this.locked = locked;
     }
 
+    private int anchorGap;
+
+    public int getAnchorGap() {
+        return anchorGap;
+    }
+
+    public void setAnchorGap(int anchorGap) {
+        this.anchorGap = anchorGap;
+    }
+
+    /**
+     * @return the highlightStatus
+     */
+    public boolean isHighlightStatus() {
+        return highlightStatus;
+    }
+
+    /**
+     * @param highlightStatus the highlightStatus to set
+     */
+    public void setHighlightStatus(boolean highlightStatus) {
+        this.highlightStatus = highlightStatus;
+    }
 }

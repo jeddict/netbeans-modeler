@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.specification.model.document;
 
+import java.util.List;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
@@ -32,5 +33,11 @@ public interface IPModelerScene extends IModelerScene {
     void deletePinWidget(IPinWidget pinWidget);
 
     Anchor getPinAnchor(IPinWidget pin);
+
+    IColorScheme getColorScheme();
+
+    void setColorScheme(IColorScheme scheme);
+
+    List<IColorScheme> getColorSchemes();
 
 }

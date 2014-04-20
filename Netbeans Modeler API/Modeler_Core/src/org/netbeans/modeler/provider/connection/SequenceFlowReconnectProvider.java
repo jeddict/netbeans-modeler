@@ -113,10 +113,10 @@ public class SequenceFlowReconnectProvider implements ReconnectProvider {
         if (replacementWidget == null) {
             ((IEdgeWidget) edgeWidget).remove(true);
         } else if (reconnectingSource) {
-            NBModelerUtil.dettachEdgeSourceAnchor(scene, (IEdgeWidget) edgeWidget, (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getSourceFlowNodeWidget()); //.getSourceNode()
+            NBModelerUtil.dettachEdgeSourceAnchor(scene, (IEdgeWidget) edgeWidget, (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getSourceWidget()); //.getSourceNode()
             NBModelerUtil.attachEdgeSourceAnchor(scene, (IEdgeWidget) edgeWidget, (INodeWidget) nodeWidget);
         } else {
-            NBModelerUtil.dettachEdgeTargetAnchor(scene, (IEdgeWidget) edgeWidget, (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getTargetFlowNodeWidget());
+            NBModelerUtil.dettachEdgeTargetAnchor(scene, (IEdgeWidget) edgeWidget, (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getTargetWidget());
             NBModelerUtil.attachEdgeTargetAnchor(scene, (IEdgeWidget) edgeWidget, (INodeWidget) nodeWidget);
         }
         scene.validate();

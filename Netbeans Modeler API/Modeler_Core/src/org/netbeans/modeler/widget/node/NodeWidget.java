@@ -49,8 +49,6 @@ import org.netbeans.modeler.core.scene.ModelerScene;
 import org.netbeans.modeler.label.BasicLabelManager;
 import org.netbeans.modeler.label.LabelManager;
 import org.netbeans.modeler.locale.I18n;
-import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
-import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.VisualPropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.shape.ShapeDesign;
@@ -68,7 +66,6 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Node;
-import org.openide.nodes.Node.Property;
 import org.openide.nodes.NodeOperation;
 import org.openide.util.Exceptions;
 import org.w3c.dom.svg.SVGDocument;
@@ -379,22 +376,13 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     }
     private AbstractNode node;
 
+    @Override
     public AbstractNode getNode() {
-        if (node == null) {
-            node = new BasePropertyViewManager((IBaseElementWidget) this);
-        }
-        BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
-        for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
-            for (Property property : propertySet.getProperties()) {
-                if (property.getClass() == NEntityPropertySupport.class) {
-                    NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
-                    attributeProperty.getAttributeEntity().getTableDataListener().initCount();
-                }
-            }
-        }
+        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
         return node;
     }
 
+    @Override
     public void setNode(AbstractNode node) {
         this.node = node;
     }

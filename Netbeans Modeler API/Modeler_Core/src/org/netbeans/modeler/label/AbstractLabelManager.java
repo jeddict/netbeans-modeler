@@ -43,6 +43,7 @@ import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextPaneInplaceEditorProvider;
 import org.netbeans.modeler.label.multiline.MultilineEditableCompartmentWidget;
 import org.netbeans.modeler.tool.DesignerTools;
+import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
@@ -376,6 +377,11 @@ public abstract class AbstractLabelManager implements LabelManager {
         @Override
         public LabelWidget getLabelWidget() {
             return label;
+        }
+
+        @Override
+        public ContextPaletteModel getContextPaletteModel() {
+            return null;
         }
     }
 

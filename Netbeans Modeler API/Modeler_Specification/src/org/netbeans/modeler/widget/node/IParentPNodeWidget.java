@@ -21,6 +21,7 @@ import java.util.Map;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.model.StateModel;
 import org.netbeans.api.visual.vmd.VMDMinimizeAbility;
+import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -66,7 +67,7 @@ public interface IParentPNodeWidget extends StateModel.Listener, VMDMinimizeAbil
      *
      * @return the miminize button widget
      */
-    Widget getMinimizeButton();
+    ImageWidget getMinimizeButton();
 
     /**
      * Returns a node anchor.

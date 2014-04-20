@@ -26,9 +26,12 @@ import org.netbeans.api.visual.action.WidgetAction.WidgetMouseEvent;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.context.ui.ContextPalette;
+import org.netbeans.modeler.widget.node.INNodeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
-import org.netbeans.modeler.widget.node.vmd.PNodeWidget;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 
 /**
  *
@@ -45,7 +48,7 @@ public class SwingPaletteManager implements ContextPaletteManager {
     private FollowCursorLeftRightAction followLRAction = new FollowCursorLeftRightAction();
 
     //if palette is cancelled and reappears it's good to put to the same position (have sense for follow case)
-    private INodeWidget cancelledWidget;
+    private IWidget cancelledWidget;
 
     public SwingPaletteManager(IModelerScene scene) {
         this(scene, null);
@@ -74,7 +77,7 @@ public class SwingPaletteManager implements ContextPaletteManager {
      * specified the best location if determined.
      */
     @Override
-    public void selectionChanged(INodeWidget selectedWidget, Point scenePoint) {
+    public void selectionChanged(IWidget selectedWidget, Point scenePoint) {
         selectionChanged(selectedWidget, scenePoint, false);
     }
 
@@ -88,12 +91,12 @@ public class SwingPaletteManager implements ContextPaletteManager {
      * @param forceShow If true the palette will be show even if more than one
      * widget is selected.
      */
-    protected void selectionChanged(INodeWidget widget, Point scenePoint, boolean forceShow) {
+    protected void selectionChanged(IWidget widget, Point scenePoint, boolean forceShow) {
         //  //System.out.println("INSIDE selectionChanged(Widget selectedWidget,Point scenePoint, boolean forceShow)");
         // Clear the previous palette
         cancelPalette();
 
-        INodeWidget selectedWidget = widget;
+        IWidget selectedWidget = widget;
 
         cancelledWidget = selectedWidget;
 
@@ -179,7 +182,7 @@ public class SwingPaletteManager implements ContextPaletteManager {
 
     ///////////////////////////////////////////////////////////////
     // Helper Methods
-    protected void showPaletteFor(INodeWidget widget) {
+    protected void showPaletteFor(IWidget widget) {
         if (widget != null) {
             // Lookup lookup = widget.getLookup();
             //ContextPaletteModel model = lookup.lookup(ContextPaletteModel.class);
@@ -222,23 +225,34 @@ public class SwingPaletteManager implements ContextPaletteManager {
      * @param palette
      * @return
      */
-    protected Point getPaletteLocation(INodeWidget widget, ContextPalette palette) {
+    protected Point getPaletteLocation(IWidget widget, ContextPalette palette) {
 
         int xPos = 0;
         int yPos = 0;
-        Rectangle clientArea = widget.getScene().getClientArea();
+//        Rectangle clientArea = widget.getScene().getClientArea();
         Rectangle visibleRect = widget.getScene().getView().getVisibleRect();
         if (widget != null) {
             Dimension collapsedDim = palette.getPreferredSize();
 
             // The 10 accounts for the top, and bottom values of the empty border.
             int height = collapsedDim.height - 10;
-
-            Point location = widget.getPreferredLocation();
+            Point location;
+            if (widget instanceof IPinWidget) {
+                IPinWidget pinWidget = (IPinWidget) widget;
+                Point parentLocation = pinWidget.getPNodeWidget().getPreferredLocation();
+                Point currentLocation = widget.getLocation(); // pinwidget location is not set manually
+                location = new Point(parentLocation.x + currentLocation.x, parentLocation.y + currentLocation.y);
+            } else if (widget instanceof INodeWidget) {
+                location = widget.getPreferredLocation();
+            } else {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
             if (location != null) {
                 Widget parentWidget = widget.getParentWidget();
-                if (parentWidget != null) {
-                    location = parentWidget.convertLocalToScene(location);
+                if (widget instanceof INodeWidget) {
+                    if (parentWidget != null) {
+                        location = parentWidget.convertLocalToScene(location);
+                    }
                 }
                 Rectangle actual = widget.getClientArea();
 
@@ -249,16 +263,23 @@ public class SwingPaletteManager implements ContextPaletteManager {
 
                 /*Start :  for inner widget */
                 Rectangle inner;
-                if (widget instanceof NodeWidget) {
+                if (widget instanceof INNodeWidget) {
                     inner = ((NodeWidget) widget).getNodeImageWidget().getPreferredBounds();
-                } else if (widget instanceof PNodeWidget) {
+                } else if (widget instanceof IPNodeWidget) {
                     inner = widget.getPreferredBounds();
+                } else if (widget instanceof IPinWidget) {
+                    IPinWidget pinWidget = (IPinWidget) widget;
+                    inner = pinWidget.getBounds();
                 } else {
                     throw new UnsupportedOperationException("Not supported yet.");
                 }
                 Rectangle outer = widget.getClientArea();
                 double difX = (outer.getWidth() - inner.getWidth()) / 2;
                 xPos = xPos - (int) difX;
+                if (widget instanceof IPinWidget) { //remove padding space
+                    IPinWidget pinWidget = (IPinWidget) widget;
+                    xPos = xPos - (int) pinWidget.getLocation().getX() / 2;
+                }
 
                 // Center the palette on the widget.
 //                int yCenter = viewLocation.y + (viewActual.height / 2);

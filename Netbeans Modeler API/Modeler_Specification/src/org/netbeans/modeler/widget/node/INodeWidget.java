@@ -68,8 +68,6 @@ public interface INodeWidget extends IWidget {
 
     public void setAnchorState(boolean state);
 
-    ContextPaletteModel getContextPaletteModel();
-
     AbstractNode getNode();
 
     void setNode(AbstractNode node);

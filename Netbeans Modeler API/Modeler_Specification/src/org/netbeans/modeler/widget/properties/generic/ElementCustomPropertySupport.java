@@ -37,7 +37,6 @@ public class ElementCustomPropertySupport<T extends Object> extends PropertySupp
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
         this(modelerFile, object, classType, propertyName, propertyName, propertyName, propertyChangeListener);
     }
-//
 
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
         this(modelerFile, object, classType, propertyName, displayName, description, propertyChangeListener, null);
@@ -85,7 +84,9 @@ public class ElementCustomPropertySupport<T extends Object> extends PropertySupp
     @Override
     public void setValue(T t) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         super.setValue(t);
-        propertyChangeListener.changePerformed(t);
+        if (propertyChangeListener != null) {
+            propertyChangeListener.changePerformed(t);
+        }
         modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
 
     }

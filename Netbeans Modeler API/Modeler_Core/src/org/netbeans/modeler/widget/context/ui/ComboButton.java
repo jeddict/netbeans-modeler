@@ -41,7 +41,7 @@ import javax.swing.border.Border;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.widget.context.PaletteDirection;
 import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
-import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 
 /**
  *
@@ -57,7 +57,7 @@ public class ComboButton extends ContextPaletteButton {
     private static final Border LEFT_POPOUT_FOCUSBORDER
             = BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(UIManager.getColor("List.selectionBackground"), 11),
                     BorderFactory.createEmptyBorder(0, 0, 0, 3));
-    private INodeWidget associatedWidget = null;
+    private IWidget associatedWidget = null;
     private ContextPaletteButtonModel model = null;
     private ArrayList< ComboButtonListener> listeners
             = new ArrayList< ComboButtonListener>();
@@ -67,7 +67,7 @@ public class ComboButton extends ContextPaletteButton {
             = new ArrayList< ContextButtonListener>();
     private ButtonListener myButtonListener = new ButtonListener();
 
-    public ComboButton(INodeWidget context, ContextPaletteButtonModel desc) {
+    public ComboButton(IWidget context, ContextPaletteButtonModel desc) {
         setContext(context);
         setModel(desc);
 
@@ -289,11 +289,11 @@ public class ComboButton extends ContextPaletteButton {
 
     /////////////////////////////////////////////////////////
     // Getter/Setters
-    public INodeWidget getContext() {
+    public IWidget getContext() {
         return associatedWidget;
     }
 
-    public void setContext(INodeWidget context) {
+    public void setContext(IWidget context) {
         this.associatedWidget = context;
     }
 

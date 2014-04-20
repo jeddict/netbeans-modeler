@@ -19,6 +19,7 @@ import java.awt.Point;
 import java.util.Collections;
 import org.netbeans.api.visual.action.SelectProvider;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 
@@ -41,7 +42,6 @@ public class PinWidgetSelectProvider implements SelectProvider {
     public void select(Widget widget, Point localLocation, boolean invertSelection) {
         IPinWidget pinWidget = (IPinWidget) widget;
         IModelerScene modelerScene = pinWidget.getModelerScene();
-
         Object object = modelerScene.findObject(widget);
         modelerScene.setFocusedObject(object);
         if (object != null) {
@@ -52,6 +52,7 @@ public class PinWidgetSelectProvider implements SelectProvider {
         } else {
             modelerScene.userSelectionSuggested(Collections.emptySet(), invertSelection);
         }
+        NBModelerUtil.showContextPalette(pinWidget.getModelerScene(), pinWidget);
 
         pinWidget.exploreProperties();
 

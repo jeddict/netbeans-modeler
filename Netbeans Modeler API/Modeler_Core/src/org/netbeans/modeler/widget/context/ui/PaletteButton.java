@@ -41,7 +41,7 @@ import org.netbeans.modeler.widget.context.ContextActionType;
 import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.context.PaletteDirection;
-import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 
 /**
  * The PaletteButton is displayed in the context palette.
@@ -49,7 +49,7 @@ import org.netbeans.modeler.widget.node.INodeWidget;
  */
 public class PaletteButton extends ContextPaletteButton {
 
-    private INodeWidget actionTarget = null;
+    private IWidget actionTarget = null;
     private ContextPaletteButtonModel model = null;
     private WidgetAction[] actions = null;
     private String currentTool = "";
@@ -59,18 +59,18 @@ public class PaletteButton extends ContextPaletteButton {
     private ArrayList< ContextButtonListener> listeners
             = new ArrayList< ContextButtonListener>();
 
-    public PaletteButton(INodeWidget context,
+    public PaletteButton(IWidget context,
             ContextPaletteButtonModel desc) {
         this(context, desc, PaletteDirection.RIGHT, true);
     }
 
-    public PaletteButton(INodeWidget context,
+    public PaletteButton(IWidget context,
             ContextPaletteButtonModel desc,
             PaletteDirection direction) {
         this(context, desc, direction, true);
     }
 
-    public PaletteButton(INodeWidget context,
+    public PaletteButton(IWidget context,
             ContextPaletteButtonModel desc,
             PaletteDirection direction,
             boolean addFiller) {
@@ -184,7 +184,7 @@ public class PaletteButton extends ContextPaletteButton {
         WidgetAction.WidgetMouseEvent retVal
                 = new WidgetAction.WidgetMouseEvent(e.getID(), e);
 
-        IModelerScene scene = actionTarget.getModelerScene();
+        IModelerScene scene = (IModelerScene) actionTarget.getScene();
         Point scenePt = scene.convertViewToScene(e.getPoint());
         retVal.setPoint(new Point(scenePt));
 
@@ -194,7 +194,7 @@ public class PaletteButton extends ContextPaletteButton {
     }
 
     protected MouseEvent convertMouseEvent(MouseEvent event) {
-        return SwingUtilities.convertMouseEvent(this, event, actionTarget.getModelerScene().getView());
+        return SwingUtilities.convertMouseEvent(this, event, actionTarget.getScene().getView());
     }
 
     ///////////////////////////////////////////////////////////////
@@ -226,7 +226,7 @@ public class PaletteButton extends ContextPaletteButton {
         @Override
         public void mousePressed(MouseEvent event) {
 
-            IModelerScene scene = actionTarget.getModelerScene();
+            IModelerScene scene = (IModelerScene) actionTarget.getScene();
 
             ArrayList< ButtonWidgetAction> delegateActions
                     = new ArrayList< ButtonWidgetAction>();
@@ -344,7 +344,7 @@ public class PaletteButton extends ContextPaletteButton {
 //                removeMouseListener(this);
 //                removeMouseMotionListener(this);
             }
-            NBModelerUtil.hideContextPalette(actionTarget.getModelerScene());
+            NBModelerUtil.hideContextPalette((IModelerScene) actionTarget.getScene());
         }
     }
 

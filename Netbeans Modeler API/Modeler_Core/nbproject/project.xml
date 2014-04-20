@@ -167,6 +167,7 @@
                 <package>org.netbeans.modeler.actions</package>
                 <package>org.netbeans.modeler.anchors</package>
                 <package>org.netbeans.modeler.anchorshape</package>
+                <package>org.netbeans.modeler.border</package>
                 <package>org.netbeans.modeler.component</package>
                 <package>org.netbeans.modeler.core.engine</package>
                 <package>org.netbeans.modeler.core.scene</package>
@@ -197,6 +198,7 @@
                 <package>org.netbeans.modeler.widget.node.vmd</package>
                 <package>org.netbeans.modeler.widget.node.vmd.internal</package>
                 <package>org.netbeans.modeler.widget.pin</package>
+                <package>org.netbeans.modeler.widget.theme.mac</package>
                 <package>org.netbeans.modeler.widget.transferable</package>
                 <package>tmp.rep</package>
             </public-packages>

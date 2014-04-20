@@ -101,8 +101,8 @@ public class CustomPathAnchor extends Anchor {
         List<Point> points = entry.getAttachedConnectionWidget().getControlPoints();
         if (entry.getAttachedConnectionWidget() instanceof IFlowEdgeWidget) {
             IFlowEdgeWidget flowEdgeWidget = (IFlowEdgeWidget) entry.getAttachedConnectionWidget();
-            INodeWidget sourceNodeWidget = (INodeWidget) flowEdgeWidget.getSourceFlowNodeWidget();
-            INodeWidget targetNodeWidget = (INodeWidget) flowEdgeWidget.getTargetFlowNodeWidget();
+            INodeWidget sourceNodeWidget = (INodeWidget) flowEdgeWidget.getSourceWidget();
+            INodeWidget targetNodeWidget = (INodeWidget) flowEdgeWidget.getTargetWidget();
             if (!sourceNodeWidget.isAnchorEnable() && !targetNodeWidget.isAnchorEnable() && !points.isEmpty()) {        //if edge both nodes anchor not enabled (if any one is allowed then calculated[means this if condition failed])
                 if (entry.isAttachedToConnectionSource()) {
                     return new Anchor.Result(points.get(0), Anchor.DIRECTION_ANY); //return current

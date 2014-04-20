@@ -46,6 +46,7 @@ import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 import org.netbeans.modeler.widget.connection.relation.RelationProxy;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.Exceptions;
@@ -163,7 +164,7 @@ public class NBModelerUtil {
         }
     }
 
-    public static void showContextPalette(IModelerScene scene, INodeWidget widget) {
+    public static void showContextPalette(IModelerScene scene, IWidget widget) {
         if (scene.getContextPaletteManager() != null) {
             scene.getContextPaletteManager().selectionChanged(widget, ((Widget) widget).convertLocalToScene(((Widget) widget).getLocation()));
         }
@@ -312,4 +313,5 @@ public class NBModelerUtil {
         }
         return empty;
     }
+
 }

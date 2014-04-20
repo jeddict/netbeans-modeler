@@ -49,8 +49,6 @@ public class NodeWidgetSelectProvider implements SelectProvider {
     public void select(Widget widget, Point localLocation, boolean invertSelection) {
         INodeWidget nodeWidget = (INodeWidget) widget;
         Object object = scene.findObject(widget);
-        ////System.out.println("ObjectSelectProvider Selected");
-
         if (object != null) {// bug if removed then widget does not move
             if (scene.getSelectedObjects().contains(object)) {
                 return;
@@ -59,10 +57,6 @@ public class NodeWidgetSelectProvider implements SelectProvider {
         } else {
             scene.userSelectionSuggested(Collections.emptySet(), invertSelection);
         }
-//            if (scene.getContextPaletteManager() != null)
-//            {
-//                scene.getContextPaletteManager().selectionChanged(widget,widget.convertLocalToScene(localLocation));
-//            }
         NBModelerUtil.showContextPalette(nodeWidget.getModelerScene(), nodeWidget);
         nodeWidget.exploreProperties();
 

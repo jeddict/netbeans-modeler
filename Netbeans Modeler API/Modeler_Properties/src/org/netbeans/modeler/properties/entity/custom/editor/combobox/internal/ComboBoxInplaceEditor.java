@@ -17,14 +17,15 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.internal;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.beans.PropertyEditor;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
+import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import org.openide.explorer.propertysheet.InplaceEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
 import org.openide.explorer.propertysheet.PropertyModel;
@@ -34,13 +35,10 @@ public class ComboBoxInplaceEditor implements InplaceEditor {
     private JComboBox comboBox;
     private JComponent comboBoxComponent;
     private PropertyEditor editor = null;
-//   private  List<ComboBoxValue> values;
     private ComboBoxListener comboBoxListener;
 
     public ComboBoxInplaceEditor(final ModelerFile modelerFile, final ComboBoxListener comboBoxListener) {
         this.comboBoxListener = comboBoxListener;
-//        this.values = comboBoxListener.getItemList();
-
         if (comboBoxListener.getActionHandler() == null) {
             comboBoxComponent = new JComboBox();
             comboBox = (JComboBox) comboBoxComponent;
@@ -48,31 +46,26 @@ public class ComboBoxInplaceEditor implements InplaceEditor {
             comboBoxComponent = new JComboBoxPanel(modelerFile, comboBoxListener.getActionHandler());
             comboBox = ((JComboBoxPanel) comboBoxComponent).getComboBox();
         }
-
         comboBox.addItemListener(
-                //                new ActionListener() {
-                //            @Override
-                //            public void actionPerformed(ActionEvent e) {
-                //                comboBoxListener.setItem((ComboBoxValue)comboBox.getModel().getSelectedItem());
-                //            }
-                //        }
-
                 new java.awt.event.ItemListener() {
-                    public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                        comboBoxListener.setItem((ComboBoxValue) comboBox.getModel().getSelectedItem());
+                    public void itemStateChanged(java.awt.event.ItemEvent event) {
+                        if (event.getStateChange() == ItemEvent.SELECTED && stateActive) {
+                            comboBoxListener.setItem((ComboBoxValue) comboBox.getModel().getSelectedItem());
+                        }
                         modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
                     }
                 });
 
     }
 
+    private boolean stateActive;
+
     @Override
     public void connect(PropertyEditor propertyEditor, PropertyEnv env) {
-
         editor = propertyEditor;
-
+        stateActive = false;
         reset();
-
+        stateActive = true;
     }
 
     @Override
@@ -82,53 +75,32 @@ public class ComboBoxInplaceEditor implements InplaceEditor {
 
     @Override
     public void clear() {
-
         editor = null;
-
         model = null;
-
     }
 
     @Override
     public Object getValue() {
-
-//        comboBoxComponent.repaint();
-//
-//        comboBoxComponent.updateUI();
         ((JComponent) comboBoxComponent.getParent()).requestFocus();
-
         comboBoxComponent.updateUI();
-
         comboBoxComponent.repaint();
-
         return comboBox.getSelectedItem();
-
     }
 
     @Override
     public void setValue(Object object) {
-
-        comboBox.setSelectedItem(object);
-
-        comboBoxComponent.repaint();
-
-        comboBoxComponent.updateUI();
-        comboBoxListener.setItem((ComboBoxValue) comboBox.getModel().getSelectedItem());
-
-        ((JComponent) comboBoxComponent.getParent()).requestFocus();
-
+//do nothing - logic implemented in itemStateChanged
     }
 
     @Override
     public boolean supportsTextEntry() {
-
         return true;
-
     }
 
     @Override
     public void reset() {
         List<ComboBoxValue> values = comboBoxListener.getItemList();
+        comboBox.removeAllItems();
         for (ComboBoxValue comValue : values) {
             comboBox.addItem(comValue);
         }
@@ -141,38 +113,28 @@ public class ComboBoxInplaceEditor implements InplaceEditor {
 
     @Override
     public KeyStroke[] getKeyStrokes() {
-
         return new KeyStroke[0];
-
     }
 
     @Override
     public PropertyEditor getPropertyEditor() {
-
         return editor;
-
     }
 
     @Override
     public PropertyModel getPropertyModel() {
-
         return model;
-
     }
     private PropertyModel model;
 
     @Override
     public void setPropertyModel(PropertyModel propertyModel) {
-
         this.model = propertyModel;
-
     }
 
     @Override
     public boolean isKnownComponent(Component component) {
-
         return component == comboBoxComponent || comboBoxComponent.isAncestorOf(component);
-
     }
 
     @Override

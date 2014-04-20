@@ -24,9 +24,11 @@ import java.awt.geom.Line2D;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -52,8 +54,6 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
-import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
-import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
@@ -62,11 +62,14 @@ import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
 import org.netbeans.modeler.tool.DesignerTools;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
+import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.context.SwingPaletteManager;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
+import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeOperation;
@@ -147,11 +150,41 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
 
     }
 
-    public void init(ModelerFile file) {
-        this.setModelerFile(file);
-        this.modelerPanel = file.getModelerPanelTopComponent();
-        this.modelerDiagramEngine = file.getModelerDiagramEngine();
-        modelerDiagramEngine.setModelerSceneAction();
+    public void init() {
+
+    }
+
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+
+    @Override
+    public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
+        this.propertyChangeHandlers.put(id, propertyChangeListener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(String id) {
+        propertyChangeHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
+        return propertyChangeHandlers;
+    }
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+
+    @Override
+    public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandlers.put(id, propertyVisibilityHandler);
+    }
+
+    @Override
+    public void removePropertyVisibilityHandler(String id) {
+        propertyVisibilityHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers() {
+        return propertyVisibilityHandlers;
     }
 
     @Override
@@ -644,18 +677,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     private AbstractNode node;
 
     public AbstractNode getNode() {
-        if (node == null) {
-            node = new BasePropertyViewManager((IBaseElementWidget) this);
-        }
-        BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
-        for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
-            for (Node.Property property : propertySet.getProperties()) {
-                if (property.getClass() == NEntityPropertySupport.class) {
-                    NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
-                    attributeProperty.getAttributeEntity().getTableDataListener().initCount();
-                }
-            }
-        }
+        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
         return node;
     }
 
@@ -815,5 +837,14 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     public void autoLayout() {
         SceneLayout sceneLayout = LayoutFactory.createSceneGraphLayout(this, new GridGraphLayout<NodeWidgetInfo, EdgeWidgetInfo>().setChecker(true));
         sceneLayout.invokeLayout();
+    }
+
+    public void setModelerDiagramEngine(IModelerDiagramEngine modelerDiagramEngine) {
+        this.modelerDiagramEngine = modelerDiagramEngine;
+    }
+
+    @Override
+    public ContextPaletteModel getContextPaletteModel() {
+        return null;
     }
 }

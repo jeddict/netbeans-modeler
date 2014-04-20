@@ -18,7 +18,6 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.sup
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.ComboBoxPropertyEditorSupport;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
@@ -28,6 +27,7 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
 
     private ModelerFile modelerFile;
     private ComboBoxListener comboBoxListener;
+    private PropertyEditor propertyEditor;
 
     public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener) {
         super(id, ComboBoxValue.class, name, description);
@@ -43,8 +43,10 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
 
     @Override
     public PropertyEditor getPropertyEditor() {
-//        List<ComboBoxValue> values = comboBoxListener.getValueList();
-        return new ComboBoxPropertyEditorSupport(modelerFile, comboBoxListener);
+        if (propertyEditor == null) {
+            propertyEditor = new ComboBoxPropertyEditorSupport(modelerFile, comboBoxListener);
+        }
+        return propertyEditor;
 
     }
 

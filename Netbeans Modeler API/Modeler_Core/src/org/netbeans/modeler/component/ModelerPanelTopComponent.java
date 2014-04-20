@@ -43,20 +43,14 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
 import org.openide.windows.TopComponent;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
  */
-//@ConvertAsProperties(
-//        dtd = "-//org.netbeans.modeler.component//ModelerPanel//EN",
-//        autostore = false)
 @TopComponent.Description(
         preferredID = "ModelerPanelTopComponent",
-        //iconBase="SET/PATH/TO/ICON/HERE",
         persistenceType = TopComponent.PERSISTENCE_NEVER)
-//@TopComponent.Registration(mode = "editor", openAtStartup = false)
-//@ActionID(category = "Window", id = "org.netbeans.modeler.component.ModelerPanelTopComponent")
-//@ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
         displayName = "#CTL_ModelerPanelAction",
         preferredID = "ModelerPanelTopComponent")
@@ -101,19 +95,11 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
             scrollPane.setViewportView(scene.getView());
         }
 
-        //     associateLookup( Lookups.fixed( new Object[] { PaletteSupport.createPalette("Palette Root") } ) );
-        //  associateLookup(ExplorerUtils.createLookup(mgr, getActionMap()));
-        // the Childfactory creates Nodes for selected Objects
-        //final FakeChildFactory childFactory = new FakeChildFactory();
-        // A Root Context Node for the ExplorerManager
-//        Node root = new AbstractNode(Children.create(new EventChildFactory(), true));
-        // ExplorerManager will create the Proxy Lookups for multiple selected Nodes
-//        em.setRootContext(root);
-        //connect to global selection management
-        //  associateLookup(ExplorerUtils.createLookup(em, getActionMap()));
-//        deleteActionPerformer.setEnabled(false);
-//        Lookup joint = new ProxyLookup(ExplorerUtils.createLookup(em, setupActionMap(getActionMap())), Lookups.fixed(new Object[]{PaletteSupport.createPalette(modelerFile)}));
-//        associateLookup(joint);
+        TopComponent propertiesComponent = WindowManager.getDefault().findTopComponent("properties");
+        if (!propertiesComponent.isOpened()) {
+            propertiesComponent.open();
+        }
+
         explorerManager = new ExplorerManager();
 
         initLookup();
@@ -138,7 +124,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 //        paletteController = getAssociatedPalette();
         lookupContent.add(ExplorerUtils.createLookup(explorerManager, getActionMap())); //getActionMap() => setupActionMap(getActionMap()) to apply custom action key // it is commented because KeyAdapter functionality is added for key listener
         lookupContent.add(PaletteSupport.createPalette(modelerFile));
-//        associateLookup(joint););
         lookupContent.add(modelerFile.getModelerScene());
         lookupContent.add(modelerFile.getModelerFileDataObject());
         lookupContent.add(getNavigatorCookie());
@@ -280,6 +265,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         boolean safeToClose = true;
 
         if (modelerFile == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null) {
+            this.getModelerScene().destroy();
             return true;
         }
         //prompt to save before close
@@ -295,6 +281,10 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
             case RESULT_CANCEL:
                 safeToClose = false;
                 break;
+        }
+
+        if (safeToClose) {
+            this.getModelerScene().destroy();
         }
 
         return safeToClose;

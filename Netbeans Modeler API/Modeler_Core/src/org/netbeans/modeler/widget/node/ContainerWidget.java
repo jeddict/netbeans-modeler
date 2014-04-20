@@ -20,8 +20,9 @@ import org.netbeans.modeler.scene.AbstractModelerScene;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
+import org.netbeans.modeler.widget.context.ContextPaletteModel;
 
-public class ContainerWidget extends Widget implements IBaseElementWidget {
+public abstract class ContainerWidget extends Widget implements IBaseElementWidget {
 
     public ContainerWidget(AbstractModelerScene scene) {
         super(scene);
@@ -87,5 +88,10 @@ public class ContainerWidget extends Widget implements IBaseElementWidget {
     @Override
     public void createVisualPropertySet(ElementPropertySet elementPropertySet) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ContextPaletteModel getContextPaletteModel() {
+        return null;
     }
 }

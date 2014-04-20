@@ -19,7 +19,6 @@ package org.netbeans.modeler.widget.node.vmd.internal;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -42,12 +41,16 @@ import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.SeparatorWidget;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.anchors.PNodeAnchor;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
 
 /**
  *
  *
  */
-public abstract class AbstractPNodeWidget extends Widget implements StateModel.Listener, VMDMinimizeAbility {
+public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget, StateModel.Listener, VMDMinimizeAbility {
 
     /*__________________________________________VMDNodeWidget Impl Start___________________________*/
     private Widget header;
@@ -59,11 +62,11 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
 
     private SeparatorWidget pinsSeparator;
 
-    private HashMap<String, Widget> pinCategoryWidgets = new HashMap<String, Widget>();
+    private HashMap<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<String, IPinSeperatorWidget>();
 
     private StateModel stateModel = new StateModel(2);
-    private Anchor nodeAnchor;
-    private PColorScheme scheme;
+    private PNodeAnchor nodeAnchor;
+    private IColorScheme colorScheme;
 
     private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<Anchor, Anchor>();
 
@@ -73,14 +76,11 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
      * @param scene the scene
      * @param scheme the color scheme
      */
-    public AbstractPNodeWidget(Scene scene, PColorScheme scheme) {
+    public AbstractPNodeWidget(Scene scene, IColorScheme scheme) {
         super(scene);
-        if (scheme == null) {
-            this.scheme = PFactory.getOriginalScheme();
-        } else {
-            this.scheme = scheme;
-        }
-        nodeAnchor = new PNodeAnchor(this, true, scheme);
+
+        this.colorScheme = scheme;
+        nodeAnchor = new PNodeAnchor(this, true);
 
         setLayout(LayoutFactory.createVerticalFlowLayout());
         setMinimumSize(new Dimension(128, 8));
@@ -102,7 +102,7 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
         header.addChild(imageWidget);
 
         nameWidget = new LabelWidget(scene);
-        nameWidget.setFont(scene.getDefaultFont().deriveFont(Font.BOLD));
+//        nameWidget.setFont(scene.getDefaultFont().deriveFont(Font.BOLD));
         header.addChild(nameWidget);
 
         typeWidget = new LabelWidget(scene);
@@ -181,13 +181,14 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
      */
     public void stateChanged() {
         boolean minimized = stateModel.getBooleanState();
-        Rectangle rectangle = minimized ? new Rectangle() : null;
+        Rectangle rectangle = minimized ? new Rectangle(0, 0, (int) getBounds().getWidth(), 0) : null;  //getBounds().getWidth() dont need to change width
         for (Widget widget : getChildren()) {
             if (widget != header && widget != pinsSeparator) {
                 getScene().getSceneAnimator().animatePreferredBounds(widget, minimized && isMinimizableWidget(widget) ? rectangle : null);
             }
         }
-        minimizeWidget.setImage(scheme.getMinimizeWidgetImage(this));
+        minimizeWidget.setImage(colorScheme.getMinimizeWidgetImage(this));
+
     }
 
     /**
@@ -197,7 +198,9 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
      * @param state the new state
      */
     protected void notifyStateChanged(ObjectState previousState, ObjectState state) {
-        scheme.updateUI(this, previousState, state);
+        if (!this.isHighlightStatus()) {
+            colorScheme.updateUI(this, previousState, state);
+        }
     }
 
     /**
@@ -329,17 +332,18 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
      * widgets as value
      */
     public void sortPins(Map<String, List<Widget>> pinsCategories) {
+
         List<Widget> previousPins = getPinWidgets();
         ArrayList<Widget> unresolvedPins = new ArrayList<Widget>(previousPins);
 
         for (Iterator<Widget> iterator = unresolvedPins.iterator(); iterator.hasNext();) {
             Widget widget = iterator.next();
-            if (pinCategoryWidgets.containsValue(widget)) {
+            if (getPinCategoryWidgets().containsValue(widget)) {
                 iterator.remove();
             }
         }
 
-        ArrayList<String> unusedCategories = new ArrayList<String>(pinCategoryWidgets.keySet());
+        ArrayList<String> unusedCategories = new ArrayList<String>(getPinCategoryWidgets().keySet());
 
         ArrayList<String> categoryNames = new ArrayList<String>(pinsCategories.keySet());
 //        Collections.sort(categoryNames);
@@ -350,7 +354,7 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
                 continue;
             }
             unusedCategories.remove(categoryName);
-            newWidgets.add(createPinCategoryWidget(categoryName));
+            newWidgets.add((Widget) createPinCategoryWidget(categoryName));
             List<Widget> widgets = pinsCategories.get(categoryName);
             for (Widget widget : widgets) {
                 if (unresolvedPins.remove(widget)) {
@@ -364,7 +368,7 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
         }
 
         for (String category : unusedCategories) {
-            pinCategoryWidgets.remove(category);
+            getPinCategoryWidgets().remove(category);
         }
 
         removeChildren(previousPins);
@@ -372,16 +376,16 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
         this.getScene().validate();
     }
 
-    private Widget createPinCategoryWidget(String categoryDisplayName) {
-        Widget w = pinCategoryWidgets.get(categoryDisplayName);
+    private IPinSeperatorWidget createPinCategoryWidget(String categoryDisplayName) {
+        IPinSeperatorWidget w = getPinCategoryWidgets().get(categoryDisplayName);
         if (w != null) {
             return w;
         }
-        Widget label = scheme.createPinCategoryWidget(this, categoryDisplayName);
+        IPinSeperatorWidget label = colorScheme.createPinCategoryWidget(this, categoryDisplayName);
         if (stateModel.getBooleanState()) {
             label.setPreferredBounds(new Rectangle());
         }
-        pinCategoryWidgets.put(categoryDisplayName, label);
+        getPinCategoryWidgets().put(categoryDisplayName, label);
         return label;
     }
 
@@ -413,7 +417,7 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
      *
      * @return the miminize button widget
      */
-    public Widget getMinimizeButton() {
+    public ImageWidget getMinimizeButton() {
         return minimizeWidget;
     }
 
@@ -433,6 +437,20 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
         return imageWidget;
     }
 
+    /**
+     * @return the pinCategoryWidgets
+     */
+    public HashMap<String, IPinSeperatorWidget> getPinCategoryWidgets() {
+        return pinCategoryWidgets;
+    }
+
+    /**
+     * @param pinCategoryWidgets the pinCategoryWidgets to set
+     */
+    public void setPinCategoryWidgets(HashMap<String, IPinSeperatorWidget> pinCategoryWidgets) {
+        this.pinCategoryWidgets = pinCategoryWidgets;
+    }
+
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {
 
         public WidgetAction.State mousePressed(Widget widget, WidgetAction.WidgetMouseEvent event) {
@@ -444,5 +462,17 @@ public abstract class AbstractPNodeWidget extends Widget implements StateModel.L
         }
     }
 
-    /*__________________________________________VMDNodeWidget Impl End___________________________*/
+    /*__________________________________________VMDNodeWidget Impl End___________________________*/ /**
+     * @return the colorScheme
+     */
+    public IColorScheme getColorScheme() {
+        return colorScheme;
+    }
+
+    /**
+     * @param colorScheme the colorScheme to set
+     */
+    public void setColorScheme(IColorScheme colorScheme) {
+        this.colorScheme = colorScheme;
+    }
 }

@@ -37,8 +37,6 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.label.BasicLabelManager;
 import org.netbeans.modeler.label.LabelManager;
-import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
-import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
@@ -57,7 +55,7 @@ import org.openide.util.Exceptions;
  *
  *
  */
-public class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
+public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
 
     private IModelerScene scene;
     private LabelManager labelManager;
@@ -244,18 +242,7 @@ public class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
 
     @Override
     public AbstractNode getNode() {
-        if (node == null) {
-            node = new BasePropertyViewManager((IBaseElementWidget) this);
-        }
-        BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
-        for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
-            for (Node.Property property : propertySet.getProperties()) {
-                if (property.getClass() == NEntityPropertySupport.class) {
-                    NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
-                    attributeProperty.getAttributeEntity().getTableDataListener().initCount();
-                }
-            }
-        }
+        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
         return node;
     }
 
@@ -267,7 +254,6 @@ public class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
     @Override
     public void notifyStateChanged(ObjectState previousState, ObjectState newState) {
         super.notifyStateChanged(previousState, newState);
-
     }
 
     @Override

@@ -24,9 +24,13 @@ import java.awt.geom.Line2D;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -54,9 +58,8 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
-import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
-import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
@@ -64,16 +67,21 @@ import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
 import org.netbeans.modeler.tool.DesignerTools;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
+import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.context.SwingPaletteManager;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
+import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.node.vmd.PNodeWidget;
+import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.PinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
+import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeOperation;
@@ -137,14 +145,44 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
         setActiveTool(DesignerTools.SELECT);
         this.setContextPaletteManager(new SwingPaletteManager((IModelerScene) this));
 
+//        getColorScheme().installUI(this);
     }
 
     @Override
-    public void init(ModelerFile file) {
-        this.setModelerFile(file);
-        this.modelerPanel = file.getModelerPanelTopComponent();
-        this.modelerDiagramEngine = file.getModelerDiagramEngine();
-        modelerDiagramEngine.setModelerSceneAction();
+    public void init() {
+        getColorScheme().installUI(this);
+    }
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+
+    @Override
+    public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
+        this.propertyChangeHandlers.put(id, propertyChangeListener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(String id) {
+        propertyChangeHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
+        return propertyChangeHandlers;
+    }
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+
+    @Override
+    public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandlers.put(id, propertyVisibilityHandler);
+    }
+
+    @Override
+    public void removePropertyVisibilityHandler(String id) {
+        propertyVisibilityHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers() {
+        return propertyVisibilityHandlers;
     }
 
     /**
@@ -392,6 +430,7 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
     /**
      * @param topComponent the topComponent to set
      */
+    @Override
     public void setModelerPanelTopComponent(IModelerPanel topComponent) {
         this.modelerPanel = topComponent;
     }
@@ -529,6 +568,10 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
         return modelerDiagramEngine;
     }
 
+    public void setModelerDiagramEngine(IModelerDiagramEngine modelerDiagramEngine) {
+        this.modelerDiagramEngine = modelerDiagramEngine;
+    }
+
 //    /**
 //     * @return the name
 //     */
@@ -558,8 +601,80 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
         this.router = router;
     }
 
+    private void reinstallColorScheme() {
+        IColorScheme scheme = this.getColorScheme();
+        scheme.installUI(this);
+        for (Widget widget : this.getChildren()) {
+            reinstallColorScheme(widget, scheme);
+        }
+    }
+
+    private void reinstallColorScheme(Widget widget, IColorScheme scheme) {
+        if (widget instanceof IPNodeWidget) {//PNodeAnchor implements skipped
+            IPNodeWidget nodeWidget = (IPNodeWidget) widget;
+            scheme.installUI(nodeWidget);
+            scheme.updateUI(nodeWidget, nodeWidget.getState(), nodeWidget.getState());
+            if (nodeWidget.isHighlightStatus()) {
+                scheme.highlightUI(nodeWidget);
+            }
+            nodeWidget.setColorScheme(scheme);
+
+            Iterator<Entry<String, IPinSeperatorWidget>> itr = nodeWidget.getPinCategoryWidgets().entrySet().iterator();
+            while (itr.hasNext()) {
+                Entry<String, IPinSeperatorWidget> entry = itr.next();
+                scheme.installUI(entry.getValue());
+            }
+
+            for (Widget widget_TMP : nodeWidget.getChildren()) {
+                reinstallColorScheme(widget_TMP, scheme);
+            }
+        } else if (widget instanceof IPEdgeWidget) {
+            IPEdgeWidget edgeWidget = (IPEdgeWidget) widget;
+            scheme.installUI(edgeWidget);
+            scheme.updateUI(edgeWidget, edgeWidget.getState(), edgeWidget.getState());
+            if (edgeWidget.isHighlightStatus()) {
+                scheme.highlightUI(edgeWidget);
+            }
+            edgeWidget.setColorScheme(scheme);
+        } else if (widget instanceof IPinWidget) {
+            IPinWidget pinWidget = (IPinWidget) widget;
+            scheme.installUI(pinWidget);
+            scheme.updateUI(pinWidget, pinWidget.getState(), pinWidget.getState());
+            if (pinWidget.isHighlightStatus()) {
+                scheme.highlightUI(pinWidget);
+            }
+            pinWidget.setColorScheme(scheme);
+        } else {
+            for (Widget widget_TMP : widget.getChildren()) {
+                reinstallColorScheme(widget_TMP, scheme);
+            }
+        }
+    }
+
     protected List<JMenuItem> getPopupMenuItemList() {
         List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
+
+//
+        JMenu themeMenu = new JMenu("Theme");
+        ButtonGroup thmemeGroup = new javax.swing.ButtonGroup();
+
+        for (final IColorScheme scheme : this.getColorSchemes()) {
+            JRadioButtonMenuItem schemeMenu = new JRadioButtonMenuItem(scheme.getName());
+            schemeMenu.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    AbstractPModelerScene.this.setColorScheme(scheme);
+                    reinstallColorScheme();
+                    AbstractPModelerScene.this.getModelerPanelTopComponent().changePersistenceState(false);
+                }
+            });
+            themeMenu.add(schemeMenu);
+            thmemeGroup.add(schemeMenu);
+//            if (this.getColorScheme().getId().equals(scheme.getId())) {
+//                schemeMenu.setSelected(true);
+//            }
+        }
+        menuItemList.add(themeMenu);
 
         JMenu routeMenu = new JMenu("Router");
 //        position.setIcon(ImageUtil.getInstance().getIcon("position.png"));
@@ -689,20 +804,8 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
     }
     private AbstractNode node;
 
-    @Override
     public AbstractNode getNode() {
-        if (node == null) {
-            node = new BasePropertyViewManager((IBaseElementWidget) this);
-        }
-        BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
-        for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
-            for (Node.Property property : propertySet.getProperties()) {
-                if (property.getClass() == NEntityPropertySupport.class) {
-                    NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
-                    attributeProperty.getAttributeEntity().getTableDataListener().initCount();
-                }
-            }
-        }
+        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
         return node;
     }
 
@@ -907,5 +1010,10 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
     public void autoLayout() {
         SceneLayout sceneLayout = LayoutFactory.createSceneGraphLayout(this, new GridGraphLayout<NodeWidgetInfo, EdgeWidgetInfo>().setChecker(true));
         sceneLayout.invokeLayout();
+    }
+
+    @Override
+    public ContextPaletteModel getContextPaletteModel() {
+        return null;
     }
 }

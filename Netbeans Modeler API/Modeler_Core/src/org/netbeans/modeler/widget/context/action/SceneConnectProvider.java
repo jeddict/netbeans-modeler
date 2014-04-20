@@ -80,7 +80,7 @@ public class SceneConnectProvider implements ExConnectProvider {
                 if (targetWidget instanceof INodeWidget) {
                     target = (INodeWidget) targetWidget;
                 }
-                if (((source != null) && (target != null)) && (source != target)) {
+                if (((source != null) && (target != null)) /*&& (source != target)*/) {
                     INodeWidget from = source;//.getFirstSubject();
                     INodeWidget to = target;//.getFirstSubject();
                     NBModelerUtil.isValidRelationship(relationValidator, from, to, connectionContextToolId, true);
@@ -90,7 +90,7 @@ public class SceneConnectProvider implements ExConnectProvider {
                 }
 
                 if (retVal == ConnectorState.ACCEPT) {
-                    if (isSourceParent(sourceWidget, targetWidget) == true) {
+                    if (source != target && isSourceParent(sourceWidget, targetWidget) == true) {
                         retVal = ConnectorState.REJECT;
                     }
                 }

@@ -43,7 +43,7 @@ public final class FreeMoveControlPointProvider implements MoveControlPointProvi
         if (index == 1) {
             INodeWidget sourceNodeWidget = null;
             if (edgeWidget instanceof IFlowEdgeWidget) {
-                sourceNodeWidget = (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getSourceFlowNodeWidget();
+                sourceNodeWidget = (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getSourceWidget();
             } else if (edgeWidget instanceof IArtifactEdgeWidget) {
                 IBaseElementWidget elementWidget = ((IArtifactEdgeWidget) edgeWidget).getSourceElementWidget();
                 if (elementWidget instanceof INodeWidget) {
@@ -59,7 +59,7 @@ public final class FreeMoveControlPointProvider implements MoveControlPointProvi
         if (index == cpSize - 1) {
             INodeWidget targetNodeWidget = null;
             if (edgeWidget instanceof IFlowEdgeWidget) {
-                targetNodeWidget = (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getTargetFlowNodeWidget();
+                targetNodeWidget = (INodeWidget) ((IFlowEdgeWidget) edgeWidget).getTargetWidget();
             } else if (edgeWidget instanceof IArtifactEdgeWidget) {
                 IBaseElementWidget elementWidget = ((IArtifactEdgeWidget) edgeWidget).getTargetElementWidget();
                 if (elementWidget instanceof INodeWidget) {

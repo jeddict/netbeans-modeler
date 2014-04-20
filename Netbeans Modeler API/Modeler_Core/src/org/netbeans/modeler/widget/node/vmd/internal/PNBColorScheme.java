@@ -44,20 +44,29 @@
 package org.netbeans.modeler.widget.node.vmd.internal;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import org.netbeans.api.visual.anchor.PointShape;
-import org.netbeans.api.visual.anchor.PointShapeFactory;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.api.visual.model.ObjectState;
+import org.netbeans.api.visual.widget.LabelWidget;
+import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.widget.edge.vmd.PEdgeWidget;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.widget.edge.IEdgeWidget;
+import org.netbeans.modeler.widget.edge.IPEdgeWidget;
+import org.netbeans.modeler.widget.node.IPNodeWidget;
+import static org.netbeans.modeler.widget.node.vmd.internal.POriginalColorScheme.BORDER_CATEGORY_BACKGROUND;
+import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 
 /**
  * @author David Kaspar
  */
-public class PNBColorScheme extends PColorScheme {
+public class PNBColorScheme implements IColorScheme {
 
     protected static final Color COLOR_NORMAL = new Color(160, 180, 210);
     protected static final Color COLOR_HIGHLIGHTED = new Color(0x5B67B0);
@@ -72,22 +81,24 @@ public class PNBColorScheme extends PColorScheme {
     private static final Border BORDER60_PIN_SELECT = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, COLOR60_SELECT), BorderFactory.createLineBorder(2, 7, 2, 7, COLOR60_SELECT));
 //        private static final Border BORDER60_PIN_HOVER = BorderFactory.createLineBorder (2, 8, 2, 8, COLOR60_HOVER);
 
-    private static final PointShape POINT_SHAPE60_IMAGE = PointShapeFactory.createImagePointShape(ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-pin-60.png")); // NOI18N
-
     @Override
-    public void installUI(AbstractPNodeWidget widget) {
+    public void installUI(IPNodeWidget widget) {
         widget.setBorder(BORDER60);
 
         Widget header = widget.getHeader();
         header.setBackground(COLOR60_HOVER_BACKGROUND);
         header.setBorder(POriginalColorScheme.BORDER_PIN);
+        widget.getNodeNameWidget().setForeground(Color.BLACK);
+        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(Font.BOLD, 12));
 
         Widget pinsSeparator = widget.getPinsSeparator();
         pinsSeparator.setForeground(POriginalColorScheme.BORDER_CATEGORY_BACKGROUND);
+
+        widget.getMinimizeButton().setImage(this.getMinimizeWidgetImage(widget));
     }
 
     @Override
-    public void updateUI(AbstractPNodeWidget widget, ObjectState previousState, ObjectState state) {
+    public void updateUI(IPNodeWidget widget, ObjectState previousState, ObjectState state) {
         if (!previousState.isSelected() && state.isSelected()) {
             widget.bringToFront();
         }
@@ -107,14 +118,14 @@ public class PNBColorScheme extends PColorScheme {
     }
 
     @Override
-    public void installUI(PEdgeWidget widget) {
+    public void installUI(IPEdgeWidget widget) {
 //        widget.setSourceAnchorShape(AnchorShape.NONE);
 //        widget.setTargetAnchorShape(AnchorShape.TRIANGLE_FILLED);
         widget.setPaintControlPoints(true);
     }
 
     @Override
-    public void updateUI(PEdgeWidget widget, ObjectState previousState, ObjectState state) {
+    public void updateUI(IPEdgeWidget widget, ObjectState previousState, ObjectState state) {
         if (state.isSelected()) {
             widget.setForeground(COLOR60_SELECT);
         } else if (state.isHighlighted()) {
@@ -142,13 +153,14 @@ public class PNBColorScheme extends PColorScheme {
     }
 
     @Override
-    public void installUI(AbstractPinWidget widget) {
+    public void installUI(IPinWidget widget) {
         widget.setBorder(POriginalColorScheme.BORDER_PIN);
         widget.setBackground(COLOR60_HOVER_BACKGROUND);
+        widget.getPinNameWidget().setForeground(Color.BLACK);
     }
 
     @Override
-    public void updateUI(AbstractPinWidget widget, ObjectState previousState, ObjectState state) {
+    public void updateUI(IPinWidget widget, ObjectState previousState, ObjectState state) {
         widget.setOpaque(state.isHovered() || state.isFocused());
         if (state.isSelected()) {
             widget.setBorder(BORDER60_PIN_SELECT);
@@ -158,12 +170,7 @@ public class PNBColorScheme extends PColorScheme {
     }
 
     @Override
-    public int getNodeAnchorGap(PNodeAnchor anchor) {
-        return 4;
-    }
-
-    @Override
-    public boolean isNodeMinimizeButtonOnRight(AbstractPNodeWidget widget) {
+    public boolean isNodeMinimizeButtonOnRight(IPNodeWidget widget) {
         return true;
     }
 
@@ -173,15 +180,58 @@ public class PNBColorScheme extends PColorScheme {
 //                ? ImageUtilities.loadImage("org/netbeans/modeler/widget/resource/cf_plus.gif") // NOI18N
 //                : ImageUtilities.loadImage("org/netbeans/modeler/widget/resource/cf_minus.gif"); // NOI18N
 //    }
-    public Image getMinimizeWidgetImage(AbstractPNodeWidget widget) {
+    public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized()
                 ? ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-expand-60.png") // NOI18N
                 : ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-collapse-60.png"); // NOI18N
     }
 
     @Override
-    public Widget createPinCategoryWidget(AbstractPNodeWidget widget, String categoryDisplayName) {
-        return POriginalColorScheme.createPinCategoryWidgetCore(widget, categoryDisplayName, false);
+    public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
+        Scene scene = widget.getScene();
+        IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
+        installUI(label);
+        return label;
     }
 
+    @Override
+    public void installUI(IPinSeperatorWidget label) {
+        label.setOpaque(true);
+        label.setBackground(BORDER_CATEGORY_BACKGROUND);
+        label.setForeground(Color.GRAY);
+        Font fontPinCategory = label.getScene().getDefaultFont().deriveFont(10.0f);
+        label.setFont(fontPinCategory);
+        label.setAlignment(LabelWidget.Alignment.CENTER);
+        label.setCheckClipping(true);
+    }
+
+    @Override
+    public String getId() {
+        return "CLASSIC";
+    }
+
+    @Override
+    public String getName() {
+        return "Classic";
+    }
+
+    @Override
+    public void installUI(IModelerScene scene) {
+        scene.setBackground(Color.WHITE);
+    }
+
+    @Override
+    public void highlightUI(IPNodeWidget widget) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void highlightUI(IEdgeWidget widget) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void highlightUI(IPinWidget widget) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

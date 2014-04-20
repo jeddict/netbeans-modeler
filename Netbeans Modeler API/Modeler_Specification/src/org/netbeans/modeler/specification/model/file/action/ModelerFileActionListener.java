@@ -25,11 +25,8 @@ import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.specification.Vendor;
 import org.netbeans.modeler.specification.annotaton.ModelerConfig;
 import org.netbeans.modeler.specification.model.DiagramModel;
-import org.openide.*;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
 
 public abstract class ModelerFileActionListener implements ActionListener {
 
@@ -91,16 +88,24 @@ public abstract class ModelerFileActionListener implements ActionListener {
             modelerFile.getVendorSpecification().createModelerDocumentConfig(vendorConfig.id(), modelerConfig.document());
             modelerFile.getVendorSpecification().createPaletteConfig(vendorConfig.id(), diagramModelConfig.id(), modelerConfig.palette());
 
-            modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerDiagramEngine().init(modelerFile);
-            modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene().init(modelerFile);
-            modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().init(modelerFile);
             modelerFile.getVendorSpecification().getModelerDiagramModel().init(modelerFile);
+            modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerDiagramEngine().init(modelerFile);
+
+            IModelerScene scene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
+
+            scene.setModelerFile(modelerFile);
+            scene.setModelerPanelTopComponent(modelerFile.getModelerPanelTopComponent());
+            scene.setModelerDiagramEngine(modelerFile.getModelerDiagramEngine());
+            modelerFile.getModelerDiagramEngine().setModelerSceneAction();
+
+            modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().init(modelerFile);
 
             ModelerCore.addModelerFile(path, modelerFile);
             modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().open();
             modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().requestActive();
 
             NBModelerUtil.loadModelerFile(modelerFile);
+            modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene().init();
 
         } else {
             modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().requestActive();

@@ -24,7 +24,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -34,7 +33,7 @@ import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.context.PaletteDirection;
 import org.netbeans.modeler.widget.context.SwingPaletteManager;
-import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 
 /**
  *
@@ -337,8 +336,8 @@ public class ContextPalette extends JPanel {
 
     protected void updatePosition(boolean expanded, int width) {
         if (getDirection() == PaletteDirection.LEFT) {
-            INodeWidget widget = model.getContext();
-            IModelerScene scene = widget.getModelerScene();
+            IWidget widget = model.getContext();
+            IModelerScene scene = (IModelerScene) widget.getScene();
             Point location = widget.getPreferredLocation();
             location = widget.getParentWidget().convertLocalToScene(location);
             Point viewLocaton = scene.convertSceneToView(location);

@@ -73,6 +73,7 @@
                 </dependency>
             </module-dependencies>
             <public-packages>
+                <package>org.netbeans.modeler.node</package>
                 <package>org.netbeans.modeler.properties.editor.documentation</package>
                 <package>org.netbeans.modeler.properties.embedded</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.advance.client.listener</package>
@@ -81,6 +82,7 @@
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.client.support</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.internal</package>
                 <package>org.netbeans.modeler.properties.nentity</package>
+                <package>org.netbeans.modeler.properties.util</package>
                 <package>org.netbeans.modeler.properties.view.manager</package>
                 <package>org.netbeans.modeler.widget.properties.customattr</package>
             </public-packages>

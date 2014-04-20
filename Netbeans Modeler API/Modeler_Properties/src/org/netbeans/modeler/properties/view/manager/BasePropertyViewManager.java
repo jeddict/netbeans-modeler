@@ -28,19 +28,19 @@ import org.openide.nodes.Sheet;
 public class BasePropertyViewManager extends AbstractNode {
 
     private IBaseElementWidget baseElementWidget;
-    private IModelerScene scene;
+    private IModelerScene modelerScene;
 
     public BasePropertyViewManager(IBaseElementWidget baseElementWidget) {
         super(Children.LEAF);
         this.baseElementWidget = baseElementWidget;
         if (baseElementWidget instanceof INodeWidget) {
-            scene = ((INodeWidget) baseElementWidget).getModelerScene();
+            modelerScene = ((INodeWidget) baseElementWidget).getModelerScene();
         } else if (baseElementWidget instanceof IEdgeWidget) {
-            scene = ((IEdgeWidget) baseElementWidget).getModelerScene();
+            modelerScene = ((IEdgeWidget) baseElementWidget).getModelerScene();
         } else if (baseElementWidget instanceof IModelerScene) {
-            scene = (IModelerScene) baseElementWidget;
+            modelerScene = (IModelerScene) baseElementWidget;
         } else if (baseElementWidget instanceof IPinWidget) {
-            scene = ((IPinWidget) baseElementWidget).getModelerScene();
+            modelerScene = ((IPinWidget) baseElementWidget).getModelerScene();
         }
     }
 
@@ -56,13 +56,27 @@ public class BasePropertyViewManager extends AbstractNode {
     //http://forums.netbeans.org/ntopic52707.html
     protected Sheet createSheet() {
         Sheet sheet = super.createSheet();
-        ElementPropertySet elementPropertySet = new ElementPropertySet(scene.getModelerFile(), sheet);
-        baseElementWidget.createPropertySet(elementPropertySet);
+        ElementPropertySet elementPropertySet = new ElementPropertySet(getModelerScene().getModelerFile(), sheet);
+        getBaseElementWidget().createPropertySet(elementPropertySet);
 
         for (Sheet.Set set : elementPropertySet.getGroups()) {
             elementPropertySet.getSheet().put(set);
         }
 
         return sheet;
+    }
+
+    /**
+     * @return the modelerScene
+     */
+    public IModelerScene getModelerScene() {
+        return modelerScene;
+    }
+
+    /**
+     * @return the baseElementWidget
+     */
+    public IBaseElementWidget getBaseElementWidget() {
+        return baseElementWidget;
     }
 }

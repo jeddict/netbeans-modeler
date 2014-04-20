@@ -15,6 +15,9 @@
  */
 package org.netbeans.modeler.widget.node;
 
+import java.util.HashMap;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 
@@ -24,7 +27,24 @@ public interface IPNodeWidget extends INodeWidget, IParentPNodeWidget {
 
     void setInternalPinWidgetInfo(PinWidgetInfo internalPinWidgetInfo);
 
-    public IPinWidget createPinWidget(PinWidgetInfo pinWidgetInfo);
+    IPinWidget createPinWidget(PinWidgetInfo pinWidgetInfo);
 
     void deletePinWidget(IPinWidget pinWidget);
+
+    IColorScheme getColorScheme();
+
+    void setColorScheme(IColorScheme colorScheme);
+
+    HashMap<String, IPinSeperatorWidget> getPinCategoryWidgets();
+
+    void setPinCategoryWidgets(HashMap<String, IPinSeperatorWidget> pinCategoryWidgets);
+
+    int getAnchorGap();
+
+    void setAnchorGap(int gap);
+
+    boolean isHighlightStatus();
+
+    void setHighlightStatus(boolean highlightStatus);
+
 }

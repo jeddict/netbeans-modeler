@@ -46,6 +46,7 @@ package org.netbeans.modeler.widget.node.vmd.internal;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.anchor.AnchorShape;
 import org.netbeans.api.visual.anchor.PointShape;
 import org.netbeans.api.visual.anchor.PointShapeFactory;
@@ -55,7 +56,13 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.widget.edge.vmd.PEdgeWidget;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.widget.edge.IEdgeWidget;
+import org.netbeans.modeler.widget.edge.IPEdgeWidget;
+import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 
 /**
@@ -64,7 +71,7 @@ import org.openide.util.ImageUtilities;
  *
  * @author David Kaspar
  */
-public class POriginalColorScheme extends PColorScheme {
+public class POriginalColorScheme implements IColorScheme {
 
     static final Color COLOR_NORMAL = new Color(0xBACDF0);
     private static final Color COLOR_HOVERED = Color.BLACK;
@@ -90,7 +97,8 @@ public class POriginalColorScheme extends PColorScheme {
     public POriginalColorScheme() {
     }
 
-    public void installUI(AbstractPNodeWidget widget) {
+    @Override
+    public void installUI(IPNodeWidget widget) {
         widget.setBorder(PFactory.createPNodeBorder());
         widget.setOpaque(false);
 
@@ -104,9 +112,11 @@ public class POriginalColorScheme extends PColorScheme {
 
         Widget pinsSeparator = widget.getPinsSeparator();
         pinsSeparator.setForeground(BORDER_CATEGORY_BACKGROUND);
+        widget.getMinimizeButton().setImage(this.getMinimizeWidgetImage(widget));
     }
 
-    public void updateUI(AbstractPNodeWidget widget, ObjectState previousState, ObjectState state) {
+    @Override
+    public void updateUI(IPNodeWidget widget, ObjectState previousState, ObjectState state) {
         if (!previousState.isSelected() && state.isSelected()) {
             widget.bringToFront();
         } else if (!previousState.isHovered() && state.isHovered()) {
@@ -118,27 +128,26 @@ public class POriginalColorScheme extends PColorScheme {
         header.setBorder(state.isFocused() || state.isHovered() ? BORDER_PIN_HOVERED : BORDER_PIN);
     }
 
-    public boolean isNodeMinimizeButtonOnRight(AbstractPNodeWidget widget) {
+    @Override
+    public boolean isNodeMinimizeButtonOnRight(IPNodeWidget widget) {
         return false;
     }
 
-    public Image getMinimizeWidgetImage(AbstractPNodeWidget widget) {
+    @Override
+    public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized()
                 ? ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-expand.png") // NOI18N
                 : ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-collapse.png"); // NOI18N
     }
 
-    public Widget createPinCategoryWidget(AbstractPNodeWidget widget, String categoryDisplayName) {
-        return createPinCategoryWidgetCore(widget, categoryDisplayName, true);
-    }
-
-    public void installUI(PEdgeWidget widget) {
+    public void installUI(IPEdgeWidget widget) {
         widget.setSourceAnchorShape(AnchorShape.NONE);
         widget.setTargetAnchorShape(AnchorShape.TRIANGLE_FILLED);
         widget.setPaintControlPoints(true);
     }
 
-    public void updateUI(PEdgeWidget widget, ObjectState previousState, ObjectState state) {
+    @Override
+    public void updateUI(IPEdgeWidget widget, ObjectState previousState, ObjectState state) {
         if (state.isHovered()) {
             widget.setForeground(COLOR_HOVERED);
         } else if (state.isSelected()) {
@@ -160,13 +169,16 @@ public class POriginalColorScheme extends PColorScheme {
         }
     }
 
-    public void installUI(AbstractPinWidget widget) {
+    @Override
+    public void installUI(IPinWidget widget) {
         widget.setBorder(BORDER_PIN);
         widget.setBackground(COLOR_SELECTED);
         widget.setOpaque(false);
+
     }
 
-    public void updateUI(AbstractPinWidget widget, ObjectState previousState, ObjectState state) {
+    @Override
+    public void updateUI(IPinWidget widget, ObjectState previousState, ObjectState state) {
         widget.setOpaque(state.isSelected());
         widget.setBorder(state.isFocused() || state.isHovered() ? BORDER_PIN_HOVERED : BORDER_PIN);
 //        LookFeel lookFeel = getScene ().getLookFeel ();
@@ -174,23 +186,55 @@ public class POriginalColorScheme extends PColorScheme {
 //        setForeground (lookFeel.getForeground (state));
     }
 
-    public int getNodeAnchorGap(PNodeAnchor anchor) {
+    public int getNodeAnchorGap(Anchor anchor) {
         return 8;
     }
 
-    static Widget createPinCategoryWidgetCore(AbstractPNodeWidget widget, String categoryDisplayName, boolean changeFont) {
+    public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
         Scene scene = widget.getScene();
-        LabelWidget label = new LabelWidget(scene, categoryDisplayName);
-        label.setOpaque(true);
-        label.setBackground(BORDER_CATEGORY_BACKGROUND);
-        label.setForeground(Color.GRAY);
-        if (changeFont) {
-            Font fontPinCategory = scene.getDefaultFont().deriveFont(10.0f);
-            label.setFont(fontPinCategory);
-        }
-        label.setAlignment(LabelWidget.Alignment.CENTER);
-        label.setCheckClipping(true);
+        IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
+        installUI(label);
         return label;
     }
 
+    @Override
+    public void installUI(IPinSeperatorWidget label) {
+        label.setOpaque(true);
+        label.setBackground(BORDER_CATEGORY_BACKGROUND);
+        label.setForeground(Color.GRAY);
+        Font fontPinCategory = label.getScene().getDefaultFont().deriveFont(10.0f);
+        label.setFont(fontPinCategory);
+        label.setAlignment(LabelWidget.Alignment.CENTER);
+        label.setCheckClipping(true);
+    }
+
+    @Override
+    public String getId() {
+        return "ORIGINAL";
+    }
+
+    @Override
+    public String getName() {
+        return "Original";
+    }
+
+    @Override
+    public void installUI(IModelerScene widget) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void highlightUI(IPNodeWidget widget) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void highlightUI(IEdgeWidget widget) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void highlightUI(IPinWidget widget) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

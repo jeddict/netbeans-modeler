@@ -18,7 +18,6 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.internal;
 import java.beans.PropertyEditorSupport;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
-import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.InplaceEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
@@ -37,7 +36,7 @@ public class ComboBoxPropertyEditorSupport extends PropertyEditorSupport impleme
 
     @Override
     public String getAsText() {
-        String text = comboBoxListener.getItem() == null ? "" : comboBoxListener.getItem().getDisplayValue() == null ? "" : comboBoxListener.getItem().getDisplayValue();
+        String text = comboBoxListener.getItem() == null ? defaultText : comboBoxListener.getItem().getDisplayValue() == null ? "" : comboBoxListener.getItem().getDisplayValue();
         return text;
 
     }

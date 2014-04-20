@@ -25,23 +25,17 @@ import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.anchors.PNodeAnchor;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 
-public class AbstractPinWidget extends Widget {
+public abstract class AbstractPinWidget extends Widget implements IPinWidget {
 
-    private PColorScheme scheme;
+    private IColorScheme colorScheme;
     private ImageWidget imageWidget;
     private LabelWidget nameWidget;
     private VMDGlyphSetWidget glyphsWidget;
     private PNodeAnchor anchor;
-
-    /**
-     * Creates a pin widget.
-     *
-     * @param scene the scene
-     */
-    public AbstractPinWidget(Scene scene) {
-        this(scene, PFactory.getOriginalScheme());
-    }
 
     /**
      * Creates a pin widget with a specific color scheme.
@@ -49,10 +43,10 @@ public class AbstractPinWidget extends Widget {
      * @param scene the scene
      * @param scheme the color scheme
      */
-    public AbstractPinWidget(Scene scene, PColorScheme scheme) {
+    public AbstractPinWidget(Scene scene, IColorScheme scheme) {
         super(scene);
         assert scheme != null;
-        this.scheme = scheme;
+        this.colorScheme = scheme;
 
         setLayout(LayoutFactory.createHorizontalFlowLayout(LayoutFactory.SerialAlignment.CENTER, 8));
 
@@ -81,7 +75,9 @@ public class AbstractPinWidget extends Widget {
      * @param state the new state
      */
     protected void notifyStateChanged(ObjectState previousState, ObjectState state) {
-        scheme.updateUI(this, previousState, state);
+        if (!this.isHighlightStatus()) {
+            getColorScheme().updateUI(this, previousState, state);
+        }
     }
 
     /**
@@ -149,5 +145,19 @@ public class AbstractPinWidget extends Widget {
      */
     public ImageWidget getImageWidget() {
         return imageWidget;
+    }
+
+    /**
+     * @return the colorScheme
+     */
+    public IColorScheme getColorScheme() {
+        return colorScheme;
+    }
+
+    /**
+     * @param colorScheme the colorScheme to set
+     */
+    public void setColorScheme(IColorScheme colorScheme) {
+        this.colorScheme = colorScheme;
     }
 }

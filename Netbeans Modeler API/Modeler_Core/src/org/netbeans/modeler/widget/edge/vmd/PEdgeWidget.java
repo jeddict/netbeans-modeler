@@ -16,30 +16,72 @@
 package org.netbeans.modeler.widget.edge.vmd;
 
 import org.netbeans.api.visual.model.ObjectState;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.widget.edge.EdgeWidget;
+import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
-import org.netbeans.modeler.widget.node.vmd.internal.PColorScheme;
-import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 
-public class PEdgeWidget extends EdgeWidget {
+public abstract class PEdgeWidget extends EdgeWidget implements IPEdgeWidget {
 
-    private PColorScheme scheme;
+    private IColorScheme colorScheme;
+    private boolean highlightStatus = false;
 
     public PEdgeWidget(IModelerScene scene, EdgeWidgetInfo edge) {
-        this(scene, edge, PFactory.getNetBeans60Scheme());
+        this(scene, edge, ((IPModelerScene) scene).getColorScheme());
     }
 
-    public PEdgeWidget(IModelerScene scene, EdgeWidgetInfo edge, PColorScheme scheme) {
+    public PEdgeWidget(IModelerScene scene, EdgeWidgetInfo edge, IColorScheme colorScheme) {
         super(scene, edge);
-        this.scheme = scheme;
-        scheme.installUI(this);
+        setAnchorGap(0);
+        this.colorScheme = colorScheme;
+        colorScheme.installUI(this);
         setState(ObjectState.createNormal());
     }
 
     public void notifyStateChanged(ObjectState previousState, ObjectState state) {
 //        super.notifyStateChanged(previousState, state);
-        scheme.updateUI(this, previousState, state);
+        if (!highlightStatus) {
+            colorScheme.updateUI(this, previousState, state);
+        }
 
+    }
+
+    /**
+     * @return the colorScheme
+     */
+    public IColorScheme getColorScheme() {
+        return colorScheme;
+    }
+
+    /**
+     * @param colorScheme the colorScheme to set
+     */
+    public void setColorScheme(IColorScheme colorScheme) {
+        this.colorScheme = colorScheme;
+    }
+    private int anchorGap;
+
+    public int getAnchorGap() {
+        return anchorGap;
+    }
+
+    public void setAnchorGap(int anchorGap) {
+        this.anchorGap = anchorGap;
+    }
+
+    /**
+     * @return the highlightStatus
+     */
+    public boolean isHighlightStatus() {
+        return highlightStatus;
+    }
+
+    /**
+     * @param highlightStatus the highlightStatus to set
+     */
+    public void setHighlightStatus(boolean highlightStatus) {
+        this.highlightStatus = highlightStatus;
     }
 }

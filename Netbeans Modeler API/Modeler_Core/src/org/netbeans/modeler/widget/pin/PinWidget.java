@@ -34,17 +34,13 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
-import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
-import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.vmd.internal.AbstractPinWidget;
-import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
-import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
@@ -54,26 +50,22 @@ import org.openide.nodes.Node;
 import org.openide.nodes.NodeOperation;
 import org.openide.util.Exceptions;
 
-public class PinWidget extends AbstractPinWidget implements IPinWidget {
+public abstract class PinWidget extends AbstractPinWidget {
 
     private IPNodeWidget nodeWidget;
     private PinWidgetInfo pinWidgetInfo;
     private boolean activeStatus = true;
-//    public PinWidget(Scene scene) {
-//        super(scene, VMDFactory.getNetBeans60Scheme());
-//    }
+    private boolean highlightStatus = false;
 
     public PinWidget(IModelerScene scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
-        super((Scene) scene, PFactory.getNetBeans60Scheme());
+        super((Scene) scene, ((IPModelerScene) scene).getColorScheme());
         this.setModelerScene(scene);
         this.pinWidgetInfo = pinWidgetInfo;
         this.nodeWidget = nodeWidget;
         WidgetAction editAction = new InplaceEditorAction<JTextField>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getPinNameWidget().getActions().addAction(editAction);
         scene.getModelerFile().getModelerDiagramEngine().setPinWidgetAction(this);
-
         this.setProperties(pinWidgetInfo.getName(), null);
-
     }
 
     public void setLabel(String label) {
@@ -146,7 +138,6 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
 
     @Override
     public void showProperties() {
-        getNode().setDisplayName( getLabel() );
         NodeOperation.getDefault().showProperties(getNode());
     }
 
@@ -168,27 +159,7 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
     private AbstractNode node;
 
     public AbstractNode getNode() {
-        if (node == null) {
-            node = new BasePropertyViewManager((IBaseElementWidget) this);
-            node.setDisplayName(this.getPinName());
-        }
-        BasePropertyViewManager baseNode = (BasePropertyViewManager) node;
-        for (Node.PropertySet propertySet : baseNode.getPropertySets()) {
-            for (Node.Property property : propertySet.getProperties()) {
-                property.setHidden(false);
-                if (property.getClass() == ElementCustomPropertySupport.class) {
-                    ElementCustomPropertySupport elementCustomPropertySupport = (ElementCustomPropertySupport) property;
-                    if (elementCustomPropertySupport.getPropertyVisibilityHandler() != null) {
-                        if (!elementCustomPropertySupport.getPropertyVisibilityHandler().isVisible()) {
-                            property.setHidden(true);
-                        }
-                    }
-                } else if (property.getClass() == NEntityPropertySupport.class) {
-                    NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
-                    attributeProperty.getAttributeEntity().getTableDataListener().initCount();
-                }
-            }
-        }
+        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
         return node;
     }
 
@@ -312,5 +283,19 @@ public class PinWidget extends AbstractPinWidget implements IPinWidget {
      */
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    /**
+     * @return the highlightStatus
+     */
+    public boolean isHighlightStatus() {
+        return highlightStatus;
+    }
+
+    /**
+     * @param highlightStatus the highlightStatus to set
+     */
+    public void setHighlightStatus(boolean highlightStatus) {
+        this.highlightStatus = highlightStatus;
     }
 }

@@ -17,6 +17,7 @@ package org.netbeans.modeler.widget.pin;
 
 import java.util.Map;
 import org.netbeans.api.visual.action.PopupMenuProvider;
+import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
@@ -71,5 +72,13 @@ public interface IPinWidget extends IParentPinWidget {
     boolean isLocked();
 
     void setLocked(boolean locked);
+
+    public IColorScheme getColorScheme();
+
+    public void setColorScheme(IColorScheme colorScheme);
+
+    boolean isHighlightStatus();
+
+    void setHighlightStatus(boolean highlightStatus);
 
 }
