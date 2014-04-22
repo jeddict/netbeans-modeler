@@ -254,12 +254,21 @@ public class ModelerFile {
         }
         if (nodeWidgets.size() + edgeWidgets.size() >= 1) {
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
-                for (INodeWidget nodeWidget : new CopyOnWriteArrayList<INodeWidget>(nodeWidgets)) {
-                    nodeWidget.remove();
-                }
+                // Issue Fix #5869 Start
+                /**
+                 * #5869 FIX fixed NullPointerException during delete process
+                 *
+                 * @author Juraj Balaz <georgeeb@java.net>
+                 * @since Thu, 17 Apr 2014 10:39:05 +0000
+                 */
                 for (IEdgeWidget edgeWidget : new CopyOnWriteArrayList<IEdgeWidget>(edgeWidgets)) {
                     edgeWidget.remove();
                 }
+                for (INodeWidget nodeWidget : new CopyOnWriteArrayList<INodeWidget>(nodeWidgets)) {
+                    nodeWidget.remove();
+                }
+                // Issue Fix #5869 Start
+
                 scene.validate();
             }
         }
