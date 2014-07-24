@@ -48,7 +48,6 @@ public abstract class ModelerFileDataObject extends MultiDataObject implements I
 
     @Override
     public void removeSaveCookie() {
-
         setModified(false);
         Node.Cookie saveCookie = getCookie(SaveCookie.class);
         if (saveCookie != null) {

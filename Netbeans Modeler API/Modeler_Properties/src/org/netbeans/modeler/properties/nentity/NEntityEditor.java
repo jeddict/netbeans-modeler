@@ -40,7 +40,6 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
     private NAttributeEntity attributeEntity;
 
     public NEntityEditor() {
-
         this.setSize(1900, 900);
     }
 
@@ -51,17 +50,16 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
             this.env.addPropertyChangeListener(this);
         }
         this.editor = editor;
-
         this.setSize(1900, 900);
         this.attributeEntity = attributeEntity;
         initComponents();
         this.setInternalAttributeEntity(attributeEntity);
-
     }
 
     public void setAttributeEntity(NAttributeEntity attributeEntity) {
         this.attributeEntity = attributeEntity;
         initComponents();
+        this.setInternalAttributeEntity(attributeEntity);
     }
 
     /**
@@ -70,29 +68,8 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
     private void setInternalAttributeEntity(NAttributeEntity attributeEntity) {
 
         attributeEntity.getTableDataListener().initData();
-//        /* Redesign Start */
-//        jTableAttribute.removeAll();
-//
-//        jTableAttribute.updateUI();
-//        jTableAttribute.repaint();
-//        jScrollPane3.removeAll();
-//
-//        jScrollPane3.updateUI();
-//        jScrollPane3.repaint();
-//
-//        jTableAttribute = new javax.swing.JTable();
-//        jTableAttribute.addMouseListener(new java.awt.event.MouseAdapter() {
-//            public void mouseClicked(java.awt.event.MouseEvent evt) {
-//                jTableAttributeMouseClicked(evt);
-//            }
-//        });
-//        jScrollPane3.setViewportView(jTableAttribute);
-//        /* Redesign End */
         attributeEntity.getCustomDialog().setRootComponent(jTableAttribute);
-
-//        clearRow();
         jTableAttribute.setModel(new javax.swing.table.DefaultTableModel(
-                //(Object[][])attributeEntity.getData().toArray(new Object[0]),
                 attributeEntity.getTableDataListener().getData().toArray(new Object[][]{}),
                 attributeEntity.getColumnsName().toArray(new String[0])) {
                     Class[] types = NEntityEditor.this.attributeEntity.getColumnsType().toArray(new Class[0]);

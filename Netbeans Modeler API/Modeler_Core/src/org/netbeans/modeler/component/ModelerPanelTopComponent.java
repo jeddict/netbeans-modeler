@@ -82,7 +82,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         this.modelerScene = file.getVendorSpecification().getModelerDiagramModel().getModelerScene();
         this.setName(modelerFile.getName());
         this.setIcon(modelerFile.getIcon());
-        this.setToolTipText(modelerFile.getPath());
+        this.setToolTipText(modelerFile.getTooltip());
         setFocusable(true);
         addKeyListener(new ModelerKeyAdapter(file));
 
@@ -137,6 +137,13 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
             navigatorCookie = new NavigatorHint();
         }
         return navigatorCookie;
+    }
+
+    /**
+     * @return the forceClose
+     */
+    private boolean isForceClose() {
+        return forceClose;
     }
 
     public class NavigatorHint implements NavigatorLookupHint, Node.Cookie {
@@ -231,11 +238,18 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     @Override
     public void componentClosed() {
         super.componentClosed();
-        System.out.println("---------------------ModelerCore.removeModelerFile Start-----------------------");
         if (this.getModelerFile() != null) {
             ModelerCore.removeModelerFile(this.getModelerFile().getPath());
         }
-        System.out.println("---------------------ModelerCore.removeModelerFile End-----------------------");
+    }
+
+    @Override
+    public void componentShowing() { //this function is added to handle multiple topcompoent for single file
+        if (persistenceState == Boolean.FALSE) {
+            modelerFile.getModelerFileDataObject().addSaveCookie(saveCookies);
+        } else {
+            modelerFile.getModelerFileDataObject().removeSaveCookie();
+        }
     }
 
     /**
@@ -260,11 +274,28 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     private static final int RESULT_NO = 1;
     private static final int RESULT_YES = 2;
 
+    private boolean forceClose = false;
+
+    @Override
+    public final void forceClose() {
+        forceClose = true;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ModelerPanelTopComponent.this.close();
+            }
+        });
+    }
+
     @Override
     public boolean canClose() {
         boolean safeToClose = true;
 
-        if (modelerFile == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null) {
+        if (isForceClose()) {
+            return true;
+        }
+
+        if (modelerFile == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) != this.saveCookies) {
             this.getModelerScene().destroy();
             return true;
         }

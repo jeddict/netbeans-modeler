@@ -16,7 +16,6 @@
 package org.netbeans.modeler.file;
 
 import java.awt.Image;
-import org.netbeans.modeler.core.ModelerFile;
 import org.openide.cookies.SaveCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.nodes.Node;

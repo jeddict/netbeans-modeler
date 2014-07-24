@@ -41,7 +41,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                openModelerFile(context);
+                openModelerFile();
             }
         });
     }
@@ -60,20 +60,32 @@ public abstract class ModelerFileActionListener implements ActionListener {
 //        actionListener.actionPerformed(null);
 //
 //    }
-    protected void openModelerFile(IModelerFileDataObject context) {
+    
+    public void openModelerFile() {
+        openModelerFile(null);
+    }
+    public void openModelerFile(String id) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
 
         FileObject fileObject = context.getPrimaryFile();
         String path = fileObject.getPath();
-        ModelerFile modelerFile = ModelerCore.getModelerFile(path);
-
+        
+        String absolutePath;
+        if(id==null){
+            absolutePath = path;
+        } else {
+            absolutePath = path + "#" + id;
+        }
+        ModelerFile modelerFile = ModelerCore.getModelerFile(absolutePath);
+        
         if (modelerFile == null) {
             modelerFile = new ModelerFile();
             modelerFile.setModelerFileDataObject(context);
             modelerFile.setName(fileObject.getName());
             modelerFile.setExtension(fileObject.getExt());
-            modelerFile.setPath(path);
+            modelerFile.setTooltip(path);
+            modelerFile.setPath(absolutePath);
             modelerFile.setIcon(context.getIcon());
-
+            
             initSpecification(modelerFile);
 
             Class _class = this.getClass();
@@ -88,7 +100,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
             modelerFile.getVendorSpecification().createModelerDocumentConfig(vendorConfig.id(), modelerConfig.document());
             modelerFile.getVendorSpecification().createPaletteConfig(vendorConfig.id(), diagramModelConfig.id(), modelerConfig.palette());
 
-            modelerFile.getVendorSpecification().getModelerDiagramModel().init(modelerFile);
+            modelerFile.getVendorSpecification().getModelerDiagramModel().init(modelerFile);//load empty configuration //override it in loadModelerFile() if already have
             modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerDiagramEngine().init(modelerFile);
 
             IModelerScene scene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
@@ -100,7 +112,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
             modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().init(modelerFile);
 
-            ModelerCore.addModelerFile(path, modelerFile);
+            ModelerCore.addModelerFile(absolutePath, modelerFile);
             modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().open();
             modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent().requestActive();
 

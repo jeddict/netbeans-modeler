@@ -19,7 +19,9 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
@@ -50,11 +52,13 @@ import org.openide.filesystems.FileUtil;
 public class ModelerFile {
 
     private String name;
+    private String tooltip;
     private String extension;
     private String path;
     private Image icon;
     private IModelerFileDataObject modelerFileDataObject;
     private ModelerVendorSpecification modelerVendorSpecification;
+    private Map<String,Object> attributes = new HashMap<String,Object>();
 
     /**
      * @return the name
@@ -272,5 +276,45 @@ public class ModelerFile {
                 scene.validate();
             }
         }
+    }
+
+    /**
+     * @return the attributes
+     */
+    public Map<String,Object> getAttributes() {
+        return attributes;
+    }
+    
+    public Object getAttribute(String key) {
+        return attributes.get(key);
+    }
+
+    public void addAttribute(String key ,Object value) {
+        this.attributes.put(key, value);
+    }
+    
+    public void removeAttribute(String key ,Object value) {
+        this.attributes.remove(key);
+    }
+    
+    /**
+     * @param attributes the attributes to set
+     */
+    public void setAttributes(Map<String,Object> attributes) {
+        this.attributes = attributes;
+    }
+
+    /**
+     * @return the tooltip
+     */
+    public String getTooltip() {
+        return tooltip;
+    }
+
+    /**
+     * @param tooltip the tooltip to set
+     */
+    public void setTooltip(String tooltip) {
+        this.tooltip = tooltip;
     }
 }

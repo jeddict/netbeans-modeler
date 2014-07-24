@@ -93,7 +93,7 @@ public class ShapeDesign /*implements Unmarshaller , Marshaller*/ {
         Shape shape = json.fromJson(value, Shape.class);
         this.innerShapeContext = shape.inner;
         this.outerShapeContext = shape.outer;
-        System.out.println("afterUnmarshal value : " + value);
+//        System.out.println("afterUnmarshal value : " + value);
     }
 
     void beforeMarshal(Marshaller marshaller, Object parent) {
@@ -101,7 +101,7 @@ public class ShapeDesign /*implements Unmarshaller , Marshaller*/ {
         shape.inner = this.innerShapeContext;
         shape.outer = this.outerShapeContext;
         value = json.toJson(shape);//"<![CDATA[" + json.toJson(shape) + "]]>";
-        System.out.println("beforeMarshal value : " + value);
+//        System.out.println("beforeMarshal value : " + value);
     }
 
     public void beforeMarshal() {
