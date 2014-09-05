@@ -184,7 +184,6 @@ public class CustomPathAnchor extends Anchor {
 
             Shape shape = imageWidget.getTransform().createTransformedShape(imageWidget.getOutlineShape());
             Point widgetLoc = widget.convertLocalToScene(widget.getLocation());
-            System.out.println("cpatSSSSSSS   " + shape.getClass() + "   " + shape);
             ClosestSegment cs = GeometryClosestPointManager.getClosetsPoint(shape, new Point2D.Double(point.x - widgetLoc.x, point.y - widgetLoc.y));
             int padX = 0;//padding
             int padY = 0;

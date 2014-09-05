@@ -34,6 +34,9 @@ public class SubCategoryNodeConfig {
     private String name;
     @XmlTransient
     private Image image;
+
+    @XmlAttribute
+    private boolean visible = true;
     @XmlTransient
     private IModelerDocument modelerDocument;
 
@@ -124,5 +127,19 @@ public class SubCategoryNodeConfig {
      */
     public void setPaletteDocument(PaletteDocument paletteDocument) {
         this.paletteDocument = paletteDocument;
+    }
+
+    /**
+     * @return the visible
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * @param visible the visible to set
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

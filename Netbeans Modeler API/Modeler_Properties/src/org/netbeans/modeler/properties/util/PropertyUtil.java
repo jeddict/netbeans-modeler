@@ -15,17 +15,21 @@
  */
 package org.netbeans.modeler.properties.util;
 
-import java.util.HashMap;
+import java.beans.PropertyVetoException;
 import java.util.Map;
+import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.properties.embedded.EmbeddedPropertySupport;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.support.ComboBoxPropertySupport;
 import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Node;
+import org.openide.nodes.NodeOperation;
+import org.openide.util.Exceptions;
 
 public class PropertyUtil {
 
@@ -84,15 +88,62 @@ public class PropertyUtil {
                         }
                     }
                 } else if (property.getClass() == NEntityPropertySupport.class) {
-                    NEntityPropertySupport attributeProperty = (NEntityPropertySupport) property;
-                    attributeProperty.getAttributeEntity().getTableDataListener().initCount();
+                    NEntityPropertySupport nEntityPropertySupport = (NEntityPropertySupport) property;
+                    nEntityPropertySupport.getAttributeEntity().getTableDataListener().initCount();
+                    if (nEntityPropertySupport.getPropertyVisibilityHandler() != null) { 
+                        if (!nEntityPropertySupport.getPropertyVisibilityHandler().isVisible()) {
+                            property.setHidden(true);
+                            hiddenPropertyCount++;
+                        }
+                    }
                 }
+                
+                //propertyVisibilityHandlerList is Obselete remove this functionality in future
+                //.getPropertyVisibilityHandler() is the right way
+                
             }
             if (hiddenPropertyCount == propertySet.getProperties().length) {
                 propertySet.setHidden(true);
             }
+            
         }
+        
         return node;
+    }
+    
+    
+    public static void exploreProperties(IModelerScene modelerScene,IBaseElementWidget baseElementWidget, AbstractNode node, String displayName, Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
+        AbstractNode currentNode = org.netbeans.modeler.properties.util.PropertyUtil.getNode(baseElementWidget , node, displayName, propertyVisibilityHandlerList);
+        IModelerPanel modelerPanel = modelerScene.getModelerPanelTopComponent();
+        if (modelerPanel.getExplorerManager().getRootContext() != currentNode) {
+            modelerPanel.getExplorerManager().setRootContext(currentNode);
+            try {
+                modelerPanel.getExplorerManager().setSelectedNodes(
+                        new Node[]{currentNode});
+            } catch (PropertyVetoException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+
+            modelerPanel.setActivatedNodes(new Node[]{currentNode});
+        }
+    }
+    
+    public static void refreshProperties(IModelerScene modelerScene,IBaseElementWidget baseElementWidget, AbstractNode node, String displayName, Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
+        AbstractNode currentNode = org.netbeans.modeler.properties.util.PropertyUtil.getNode(baseElementWidget , node, displayName, propertyVisibilityHandlerList);
+        IModelerPanel modelerPanel = modelerScene.getModelerPanelTopComponent();
+         modelerPanel.getExplorerManager().setRootContext(currentNode);
+            try {
+                modelerPanel.getExplorerManager().setSelectedNodes(
+                        new Node[]{currentNode});
+            } catch (PropertyVetoException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+
+            modelerPanel.setActivatedNodes(new Node[]{currentNode});
+    }
+    
+    public static void showProperties(IModelerScene modelerScene,IBaseElementWidget baseElementWidget, AbstractNode node, String displayName, Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
+           NodeOperation.getDefault().showProperties(org.netbeans.modeler.properties.util.PropertyUtil.getNode(baseElementWidget , node, displayName, propertyVisibilityHandlerList));
     }
 
 }

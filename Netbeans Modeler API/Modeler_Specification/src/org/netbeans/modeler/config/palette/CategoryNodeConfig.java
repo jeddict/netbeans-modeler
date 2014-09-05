@@ -40,7 +40,6 @@ public class CategoryNodeConfig {
     private String icon;
     @XmlTransient
     private Image paletteImage;
-//
     @XmlTransient
     private SvgImage svgPaletteImage;
 //    @XmlElementWrapper(name = "category-node-config")
@@ -133,4 +132,6 @@ public class CategoryNodeConfig {
         }
         return img;
     }
+
+
 }

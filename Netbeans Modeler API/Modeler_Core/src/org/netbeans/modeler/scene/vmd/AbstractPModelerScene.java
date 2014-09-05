@@ -782,38 +782,22 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
         return popupMenuProvider;
     }
 
-    @Override
-    public void showProperties() {
-        NodeOperation.getDefault().showProperties(getNode());
-    }
-
+    private AbstractNode node;
     @Override
     public void exploreProperties() {
-        AbstractNode currentNode = getNode();
-        if (modelerPanel.getExplorerManager().getRootContext() != currentNode) {
-            modelerPanel.getExplorerManager().setRootContext(currentNode);
-            try {
-                modelerPanel.getExplorerManager().setSelectedNodes(
-                        new Node[]{currentNode});
-            } catch (PropertyVetoException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            modelerPanel.setActivatedNodes(new Node[]{currentNode});
-        }
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
     }
-    private AbstractNode node;
-
-    public AbstractNode getNode() {
-        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
-        return node;
-    }
-
+    
     @Override
-    public void setNode(AbstractNode node) {
-        this.node = node;
+    public void refreshProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
     }
-
+    
+    @Override
+    public void showProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
+    }
+    
     /**
      * @return the validNodeWidget
      */
@@ -894,6 +878,10 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
     @Override
     public INodeWidget createNodeWidget(NodeWidgetInfo node) {
         IPNodeWidget nodeWidget = (IPNodeWidget) this.addNode(node);
+        if (!node.isExist()) {
+            this.revalidate();
+            this.validate();
+        }
         if (nodeWidget instanceof IBaseElementWidget) {
             ((IBaseElementWidget) nodeWidget).init();
         }

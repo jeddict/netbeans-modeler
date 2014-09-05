@@ -41,7 +41,10 @@ import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
+import org.netbeans.modeler.specification.model.util.ModelerUtil;
+import org.netbeans.modeler.specification.model.util.NModelerUtil;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
+import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
@@ -123,9 +126,6 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
 
     @Override
     public void setLabel(String label) {
-        if (labelManager == null) {
-            labelManager = new BasicLabelManager(this, label);
-        }
         getLabelManager().setLabel(label);
     }
 
@@ -140,6 +140,9 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
     }
 
     public LabelManager getLabelManager() {
+        if (labelManager == null) {
+            labelManager = new BasicLabelManager(this, "");
+        }
         return labelManager;
     }
 
@@ -217,38 +220,21 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
         return popupMenuProvider;
     }
 
-    @Override
-    public void showProperties() {
-        NodeOperation.getDefault().showProperties(getNode());
-    }
-
+   
+    private AbstractNode node;
     @Override
     public void exploreProperties() {
-        IModelerPanel modelerPanel = this.getModelerScene().getModelerPanelTopComponent();
-        AbstractNode currentNode = getNode();
-        if (modelerPanel.getExplorerManager().getRootContext() != currentNode) {
-            modelerPanel.getExplorerManager().setRootContext(currentNode);
-            try {
-                modelerPanel.getExplorerManager().setSelectedNodes(
-                        new Node[]{currentNode});
-            } catch (PropertyVetoException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            modelerPanel.setActivatedNodes(new Node[]{currentNode});
-        }
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this.getModelerScene(),(IBaseElementWidget) this, node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
-    private AbstractNode node;
-
+    
     @Override
-    public AbstractNode getNode() {
-        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
-        return node;
+    public void refreshProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this.getModelerScene(),(IBaseElementWidget) this, node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
-
+    
     @Override
-    public void setNode(AbstractNode node) {
-        this.node = node;
+    public void showProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this.getModelerScene(),(IBaseElementWidget) this, node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
 
     @Override
@@ -370,13 +356,16 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
 
     private void removeEdge() {
         if (!locked) {
-            this.setLabel("");
+//            this.setLabel("");
             this.hideLabel();
-//        scene.getConnectionLayer().removeChild(this);
-//        scene.validate();
-//            ((IBaseElementWidget) this).destroy();
-            scene.deleteBaseElement((IBaseElementWidget) this);
 
+            ModelerUtil modelerUtil = this.getModelerScene().getModelerFile().getModelerUtil();
+            if (modelerUtil instanceof NModelerUtil) {
+                NModelerUtil nModelerUtil = (NModelerUtil) modelerUtil;
+                nModelerUtil.dettachEdgeSourceAnchor(scene, this, (INodeWidget) this.getSourceAnchor().getRelatedWidget().getParentWidget());
+                nModelerUtil.dettachEdgeTargetAnchor(scene, this, (INodeWidget) this.getTargetAnchor().getRelatedWidget().getParentWidget());
+            }
+            scene.deleteBaseElement((IBaseElementWidget) this);
             scene.deleteEdgeWidget(this);
             this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         }

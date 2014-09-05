@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -31,6 +32,7 @@ public class NEntityPropertySupport extends PropertySupport {
     private PropertyEditor editor = null;
     private ModelerFile modelerFile;
     private NAttributeEntity attributeEntity;
+    private PropertyVisibilityHandler propertyVisibilityHandler;
 
     public NEntityPropertySupport(ModelerFile modelerFile, NAttributeEntity attributeEntity) {
         super(attributeEntity.getName(), Map.class, attributeEntity.getDisplayName(), attributeEntity.getShortDescription(), true, true);
@@ -41,6 +43,12 @@ public class NEntityPropertySupport extends PropertySupport {
             attributeEntity.getTableDataListener().initData();
         }
     }
+
+    public NEntityPropertySupport(ModelerFile modelerFile, NAttributeEntity attributeEntity, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this( modelerFile, attributeEntity);
+        this.propertyVisibilityHandler = propertyVisibilityHandler;
+    }
+    
 
     @Override
     public Object getValue() throws IllegalAccessException, InvocationTargetException {
@@ -73,6 +81,20 @@ public class NEntityPropertySupport extends PropertySupport {
      */
     public NAttributeEntity getAttributeEntity() {
         return attributeEntity;
+    }
+
+    /**
+     * @return the propertyVisibilityHandler
+     */
+    public PropertyVisibilityHandler getPropertyVisibilityHandler() {
+        return propertyVisibilityHandler;
+    }
+
+    /**
+     * @param propertyVisibilityHandler the propertyVisibilityHandler to set
+     */
+    public void setPropertyVisibilityHandler(PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandler = propertyVisibilityHandler;
     }
 
 }

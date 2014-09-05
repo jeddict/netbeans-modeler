@@ -24,7 +24,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,6 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.border.RoundResizeBorder;
-import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
 import org.netbeans.modeler.core.NBModelerUtil;
@@ -57,6 +55,7 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene;
+import org.netbeans.modeler.widget.context.action.SceneConnectProvider;
 import org.netbeans.modeler.widget.node.image.NodeImageWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.generic.ElementPropertySupport;
@@ -65,9 +64,7 @@ import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Node;
 import org.openide.nodes.NodeOperation;
-import org.openide.util.Exceptions;
 import org.w3c.dom.svg.SVGDocument;
 
 /**
@@ -354,39 +351,33 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         return popupMenuProvider;
     }
 
-    @Override
-    public void showProperties() {
-        NodeOperation.getDefault().showProperties(getNode());
-    }
-
-    public void exploreProperties() {
-        IModelerPanel modelerPanel = this.getModelerScene().getModelerPanelTopComponent();
-        AbstractNode currentNode = getNode();
-        if (modelerPanel.getExplorerManager().getRootContext() != currentNode) {
-            modelerPanel.getExplorerManager().setRootContext(currentNode);
-            try {
-                modelerPanel.getExplorerManager().setSelectedNodes(
-                        new Node[]{currentNode});
-            } catch (PropertyVetoException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            modelerPanel.setActivatedNodes(new Node[]{currentNode});
-        }
-    }
     private AbstractNode node;
 
     @Override
-    public AbstractNode getNode() {
-        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
-        return node;
+    public void exploreProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
     }
 
     @Override
-    public void setNode(AbstractNode node) {
-        this.node = node;
+    public void refreshProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
     }
 
+    @Override
+    public void showProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
+    }
+
+//    @Override
+//    public AbstractNode getNode() {
+//        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
+//        return node;
+//    }
+//
+//    @Override
+//    public void setNode(AbstractNode node) {
+//        this.node = node;
+//    }
     void hoverWidget() {
         hoverWidget(0);
     }
@@ -831,9 +822,11 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     }
 
     public Rectangle getSceneViewBound() {
+        return this.convertLocalToScene(this.getPreferredBounds());
+    }
 
-        return this.convertLocalToScene(this.getBounds());
-
+    public Point getSceneViewLocation() {
+        return this.convertLocalToScene(this.getPreferredLocation());
     }
 
     @Override
@@ -946,4 +939,37 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         this.locked = locked;
     }
 
+    public INodeWidget addSiblingWidget(NodeWidgetInfo newNodeWidgetInfo, int xPadding, int yPadding, boolean connect, boolean horizontal) {
+        NodeWidget nodeWidget = this;
+        Rectangle sceneBound = nodeWidget.getSceneViewBound();
+        INodeWidget new_nodewidget = nodeWidget.getModelerScene().createNodeWidget(newNodeWidgetInfo);
+        Rectangle new_rec = new_nodewidget.getSceneViewBound();
+        Point point;
+        if (horizontal) {
+            point = new Point((int) (sceneBound.getX() + sceneBound.getWidth() + xPadding
+                    + (sceneBound.getWidth() - new_rec.getWidth()) / 2),
+                    (int) (sceneBound.getY() + yPadding
+                    + (sceneBound.getHeight() - new_rec.getHeight()) / 2));
+
+        } else {
+            point = new Point((int) (sceneBound.getX() + xPadding
+                    + (sceneBound.getWidth() - new_rec.getWidth()) / 2),
+                    (int) (sceneBound.getY() + sceneBound.getHeight() + yPadding
+                    + (sceneBound.getHeight() - new_rec.getHeight()) / 2));
+        }
+        new_nodewidget.setPreferredLocation(point);
+
+        if (connect) {
+            SceneConnectProvider connectProvider = new SceneConnectProvider(null);// ModelerUtil.getEdgeType() will decide EdgeType
+            connectProvider.createConnection((ModelerScene) nodeWidget.getModelerScene(), nodeWidget, (NodeWidget) new_nodewidget);
+        }
+//                        if (nodeWidget instanceof FlowNodeWidget) {
+//                            FlowNodeWidget flowNodeWidget = (FlowNodeWidget) nodeWidget;
+//                            if (flowNodeWidget.getFlowElementsContainer() instanceof IModelerSubScene) {
+//                                ((SubProcessWidget) flowNodeWidget.getFlowElementsContainer()).moveFlowNodeWidget((FlowNodeWidget) new_nodewidget);
+//                            }
+//                        }
+        nodeWidget.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
+        return new_nodewidget;
+    }
 }

@@ -25,6 +25,8 @@ public class Column {
     private Integer width = -1;
     private boolean editable;
     private boolean hidden = false;
+    private boolean autoIncrement = false;
+    private String  autoIncrementSufix = "";
     private Class clazz;
     private List<? extends Object> values = new LinkedList();
 
@@ -43,6 +45,14 @@ public class Column {
         this.name = name;
         this.editable = editable;
         this.clazz = clazz;
+    }
+
+     public Column(String name, boolean editable, Class clazz, boolean autoIncrement ,String autoIncrementSufix  ) {
+        this.name = name;
+        this.editable = editable;
+        this.clazz = clazz;
+        this.autoIncrement = autoIncrement;
+        this.autoIncrementSufix = autoIncrementSufix;
     }
 
     public Column(String name, boolean editable, Class clazz, Integer width) {
@@ -154,5 +164,33 @@ public class Column {
      */
     public void setWidth(Integer width) {
         this.width = width;
+    }
+
+    /**
+     * @return the autoIncrement
+     */
+    public boolean isAutoIncrement() {
+        return autoIncrement;
+    }
+
+    /**
+     * @param autoIncrement the autoIncrement to set
+     */
+    public void setAutoIncrement(boolean autoIncrement) {
+        this.autoIncrement = autoIncrement;
+    }
+
+    /**
+     * @return the autoIncrementSufix
+     */
+    public String getAutoIncrementSufix() {
+        return autoIncrementSufix;
+    }
+
+    /**
+     * @param autoIncrementSufix the autoIncrementSufix to set
+     */
+    public void setAutoIncrementSufix(String autoIncrementSufix) {
+        this.autoIncrementSufix = autoIncrementSufix;
     }
 }

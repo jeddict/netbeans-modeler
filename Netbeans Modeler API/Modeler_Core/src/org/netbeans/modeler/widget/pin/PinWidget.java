@@ -136,35 +136,20 @@ public abstract class PinWidget extends AbstractPinWidget {
         return popupMenuProvider;
     }
 
+ private AbstractNode node;
+    @Override
+    public void exploreProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this.getModelerScene(),(IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
+    }
+    
+    @Override
+    public void refreshProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this.getModelerScene(),(IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
+    }
+    
     @Override
     public void showProperties() {
-        NodeOperation.getDefault().showProperties(getNode());
-    }
-
-    public void exploreProperties() {
-        IModelerPanel modelerPanel = this.getModelerScene().getModelerPanelTopComponent();
-        AbstractNode currentNode = getNode();
-        if (modelerPanel.getExplorerManager().getRootContext() != currentNode) {
-            modelerPanel.getExplorerManager().setRootContext(currentNode);
-            try {
-                modelerPanel.getExplorerManager().setSelectedNodes(
-                        new Node[]{currentNode});
-            } catch (PropertyVetoException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            modelerPanel.setActivatedNodes(new Node[]{currentNode});
-        }
-    }
-    private AbstractNode node;
-
-    public AbstractNode getNode() {
-        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
-        return node;
-    }
-
-    public void setNode(AbstractNode node) {
-        this.node = node;
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this.getModelerScene(),(IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
     }
 
     @Override

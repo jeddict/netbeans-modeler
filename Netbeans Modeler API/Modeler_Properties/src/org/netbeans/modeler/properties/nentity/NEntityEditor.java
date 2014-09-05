@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.RowValue;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
 import org.openide.explorer.propertysheet.PropertyEnv;
@@ -38,7 +39,7 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
     private PropertyEditor editor;
 
     private NAttributeEntity attributeEntity;
-
+    private TableModel tableModel;
     public NEntityEditor() {
         this.setSize(1900, 900);
     }
@@ -69,7 +70,7 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
 
         attributeEntity.getTableDataListener().initData();
         attributeEntity.getCustomDialog().setRootComponent(jTableAttribute);
-        jTableAttribute.setModel(new javax.swing.table.DefaultTableModel(
+        tableModel = new javax.swing.table.DefaultTableModel(
                 attributeEntity.getTableDataListener().getData().toArray(new Object[][]{}),
                 attributeEntity.getColumnsName().toArray(new String[0])) {
                     Class[] types = NEntityEditor.this.attributeEntity.getColumnsType().toArray(new Class[0]);
@@ -84,7 +85,11 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
                     public boolean isCellEditable(int rowIndex, int columnIndex) {
                         return canEdit[columnIndex];
                     }
-                });
+                };
+        jTableAttribute.setModel(tableModel);
+        
+        updateTableUI();        
+         
 
         for (Column column : attributeEntity.getColumns()) {
             if (column.isHidden()) {
@@ -307,12 +312,28 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         if (attrDialog.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {
             Object[] row = ((RowValue) attrDialog.getEntity()).getRow();
             dtm.addRow(row);
-            jTableAttribute.updateUI();
+            updateTableUI();
+            
 //            data.add(row);
-
+            
         }
     }//GEN-LAST:event_jButtonNewPropertyActionPerformed
 
+    public void updateTableUI(){
+        int columnIndex=0;
+        for(Column column : attributeEntity.getColumns()){
+            if(column.isAutoIncrement()){
+                for(int rowIndex = 0 ; rowIndex < tableModel.getRowCount(); rowIndex++){
+                tableModel.setValueAt(column.getAutoIncrementSufix() + rowIndex , rowIndex, columnIndex);
+                }
+            }
+            columnIndex++;
+        }
+        jTableAttribute.updateUI();
+    }
+    
+    
+    
     private void jButtonModifyPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifyPropertyActionPerformed
         int index = jTableAttribute.getSelectedRow();
         DefaultTableModel dtm = (DefaultTableModel) jTableAttribute.getModel();
@@ -333,7 +354,8 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
             for (Object value : row) {
                 dtm.setValueAt(value, index, i++);
             }
-            jTableAttribute.updateUI();
+            
+            updateTableUI();
 //            data.add(row);
         }
     }//GEN-LAST:event_jButtonModifyPropertyActionPerformed
@@ -344,6 +366,7 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         for (int i = rows.length - 1; i >= 0; --i) {
             dtm.removeRow(rows[i]);  //jTableProperties.convertRowIndexToModel(rows[i])
         }
+        updateTableUI();
     }//GEN-LAST:event_jButtonDeletePropertyActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane action_Panel;
@@ -385,20 +408,7 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
 
     }
 
-//    public void clearRow() {
-//        DefaultTableModel defaultTableModel = (DefaultTableModel) jTableAttribute.getModel(); //remove previos session row/data
-//        if (defaultTableModel != null) {
-//            for (int i = 0; i < defaultTableModel.getRowCount(); i++) {
-//                defaultTableModel.removeRow(i);
-//            }
-//        }
-//        defaultTableModel.addRow(new Object[]{});
-//        jTableAttribute.updateUI();
-//        defaultTableModel.removeRow(0);
-//        jTableAttribute.updateUI();
-//
-////        jTableAttribute.setModel(new DefaultTableModel());
-//    }
+
     public void jTablePropertiesListSelectionValueChanged(javax.swing.event.ListSelectionEvent e) {
         if (attributeEntity.isEnableActionPanel()) {
             if (this.jTableAttribute.getSelectedRowCount() <= 0) {

@@ -41,6 +41,10 @@ public class ElementCustomPropertySupport<T extends Object> extends PropertySupp
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
         this(modelerFile, object, classType, propertyName, displayName, description, propertyChangeListener, null);
     }
+    
+//    public ElementCustomPropertySupport(ModelerFile modelerFile, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
+//         this(modelerFile, new BooleanWrapper(), Boolean.class, "booleanValue", displayName, description, propertyChangeListener, null);
+//    }
 
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
         super(object, classType, propertyName);
@@ -105,3 +109,12 @@ public class ElementCustomPropertySupport<T extends Object> extends PropertySupp
         this.propertyVisibilityHandler = propertyVisibilityHandler;
     }
 }
+// class BooleanWrapper {
+//    private Boolean booleanValue;
+//    public Boolean getBooleanValue() {
+//        return booleanValue;
+//    }
+//    public void setBooleanValue(Boolean booleanValue) {
+//        this.booleanValue=booleanValue;
+//    }
+//}

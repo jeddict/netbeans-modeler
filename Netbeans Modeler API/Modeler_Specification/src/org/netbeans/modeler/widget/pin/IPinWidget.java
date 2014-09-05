@@ -36,10 +36,12 @@ public interface IPinWidget extends IParentPinWidget {
     void showProperties();
 
     void exploreProperties();
+    
+    void refreshProperties();
 
-    AbstractNode getNode();
-
-    void setNode(AbstractNode node);
+//    AbstractNode getNode();
+//
+//    void setNode(AbstractNode node);
 
     boolean remove();
 

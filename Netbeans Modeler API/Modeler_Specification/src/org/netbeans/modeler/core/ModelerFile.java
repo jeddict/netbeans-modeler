@@ -266,10 +266,14 @@ public class ModelerFile {
                  * @since Thu, 17 Apr 2014 10:39:05 +0000
                  */
                 for (IEdgeWidget edgeWidget : new CopyOnWriteArrayList<IEdgeWidget>(edgeWidgets)) {
-                    edgeWidget.remove();
+                  if(edgeWidget.getModelerScene().isEdge(edgeWidget.getEdgeWidgetInfo())){
+                     edgeWidget.remove();
+                    }
                 }
                 for (INodeWidget nodeWidget : new CopyOnWriteArrayList<INodeWidget>(nodeWidgets)) {
-                    nodeWidget.remove();
+                    if(nodeWidget.getModelerScene().isNode(nodeWidget.getNodeWidgetInfo())){
+                     nodeWidget.remove();
+                    }
                 }
                 // Issue Fix #5869 Start
 

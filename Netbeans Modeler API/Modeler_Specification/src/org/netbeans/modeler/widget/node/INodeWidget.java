@@ -16,6 +16,7 @@
 package org.netbeans.modeler.widget.node;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Map;
 import org.netbeans.api.visual.action.PopupMenuProvider;
@@ -24,11 +25,9 @@ import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
-import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
-import org.openide.nodes.AbstractNode;
 //import org.netbeans.modules.visual.border.ResizeBorder;
 
 public interface INodeWidget extends IWidget {
@@ -60,6 +59,8 @@ public interface INodeWidget extends IWidget {
 
     void exploreProperties();
 
+    void refreshProperties();
+
     void showResizeBorder();
 
     void hideResizeBorder();
@@ -67,10 +68,10 @@ public interface INodeWidget extends IWidget {
     public boolean isAnchorEnable();
 
     public void setAnchorState(boolean state);
-
-    AbstractNode getNode();
-
-    void setNode(AbstractNode node);
+//
+//    AbstractNode getNode();
+//
+//    void setNode(AbstractNode node);
 
     Rectangle getSceneViewBound();
 
@@ -107,4 +108,5 @@ public interface INodeWidget extends IWidget {
 
     void setLocked(boolean locked);
 
+    Point getSceneViewLocation();
 }

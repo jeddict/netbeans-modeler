@@ -29,12 +29,13 @@ public interface IEdgeWidget extends IConnectionWidget {
     void createVisualPropertySet(ElementPropertySet elementPropertySet);
 
     void exploreProperties();
+    void refreshProperties();
 
     EdgeWidgetInfo getEdgeWidgetInfo();
 
     IModelerScene getModelerScene();
 
-    AbstractNode getNode();
+//    AbstractNode getNode();
 
     PopupMenuProvider getPopupMenuProvider();
 
@@ -46,7 +47,7 @@ public interface IEdgeWidget extends IConnectionWidget {
 
     void setModelerScene(IModelerScene scene);
 
-    void setNode(AbstractNode node);
+//    void setNode(AbstractNode node);
 
     void showLabel();
 

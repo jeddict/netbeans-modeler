@@ -24,7 +24,6 @@ import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
@@ -37,8 +36,6 @@ import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 
 public interface IModelerScene extends IBaseElementWidget, IObjectScene {
-
-    public void init();
 
     public String getName();
 
@@ -82,8 +79,7 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     public IBaseElementWidget getBaseElement(String id);
 
-    public void createPropertySet(ElementPropertySet set);
-
+  
     /* Abstract Modeler Scene */
     public ModelerFile getModelerFile();
 
@@ -134,10 +130,12 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
     void showProperties();
 
     void exploreProperties();
+    
+    void refreshProperties();
 
-    AbstractNode getNode();
-
-    void setNode(AbstractNode node);
+//    AbstractNode getNode();
+//
+//    void setNode(AbstractNode node);
 
     LayerWidget getLabelLayer();
 
@@ -147,6 +145,8 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     /* GraphScene & GraphPinScene */
     boolean isNode(Object object);
+
+    public boolean isEdge(Object object);
 
     void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
 

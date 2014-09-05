@@ -15,5 +15,9 @@
  */
 package org.netbeans.modeler.widget.node;
 
+import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
+
 public interface INNodeWidget extends INodeWidget {
+
+    INodeWidget addSiblingWidget(NodeWidgetInfo newNodeWidgetInfo, int xPadding, int yPadding, boolean connect, boolean vertical);
 }

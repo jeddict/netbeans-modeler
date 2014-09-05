@@ -24,7 +24,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,6 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.border.RoundResizeBorder;
-import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
 import org.netbeans.modeler.label.LabelInplaceEditor;
@@ -63,9 +61,6 @@ import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Node;
-import org.openide.nodes.NodeOperation;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -292,36 +287,23 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         return popupMenuProvider;
     }
 
-    @Override
-    public void showProperties() {
-        NodeOperation.getDefault().showProperties(getNode());
-    }
-
-    public void exploreProperties() {
-        IModelerPanel modelerPanel = this.getModelerScene().getModelerPanelTopComponent();
-        AbstractNode currentNode = getNode();
-        if (modelerPanel.getExplorerManager().getRootContext() != currentNode) {
-            modelerPanel.getExplorerManager().setRootContext(currentNode);
-            try {
-                modelerPanel.getExplorerManager().setSelectedNodes(
-                        new Node[]{currentNode});
-            } catch (PropertyVetoException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            modelerPanel.setActivatedNodes(new Node[]{currentNode});
-        }
-    }
     private AbstractNode node;
 
-    public AbstractNode getNode() {
-        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getNodeName(), propertyVisibilityHandlers);
-        return node;
+    @Override
+    public void exploreProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getNodeName(), propertyVisibilityHandlers);
     }
 
-    public void setNode(AbstractNode node) {
-        this.node = node;
+    @Override
+    public void refreshProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getNodeName(), propertyVisibilityHandlers);
     }
+
+    @Override
+    public void showProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getNodeName(), propertyVisibilityHandlers);
+    }
+
 
     /*----------------------------------------*/
     String getColorString(Color color) {
@@ -425,6 +407,10 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
 
     public Rectangle getSceneViewBound() {
         return this.convertLocalToScene(this.getBounds());
+    }
+
+    public Point getSceneViewLocation() {
+        return this.convertLocalToScene(this.getPreferredLocation());
     }
 
     @Override

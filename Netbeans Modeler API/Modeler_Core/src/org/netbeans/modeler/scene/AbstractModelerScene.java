@@ -656,35 +656,22 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         return popupMenuProvider;
     }
 
-    public void showProperties() {
-        NodeOperation.getDefault().showProperties(getNode());
-    }
-
-    public void exploreProperties() {
-        AbstractNode currentNode = getNode();
-        if (modelerPanel.getExplorerManager().getRootContext() != currentNode) {
-            modelerPanel.getExplorerManager().setRootContext(currentNode);
-            try {
-                modelerPanel.getExplorerManager().setSelectedNodes(
-                        new Node[]{currentNode});
-            } catch (PropertyVetoException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            modelerPanel.setActivatedNodes(new Node[]{currentNode});
-        }
-    }
     private AbstractNode node;
-
-    public AbstractNode getNode() {
-        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
-        return node;
+    @Override
+    public void exploreProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
     }
-
-    public void setNode(AbstractNode node) {
-        this.node = node;
+    
+    @Override
+    public void refreshProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
     }
-
+    
+    @Override
+    public void showProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
+    }
+    
     /**
      * @return the validNodeWidget
      */
@@ -734,7 +721,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     public void manageLayerWidget() {
 
         getInterractionLayer().bringToBack();
-        getBoundaryWidgetLayer().bringToFront();
+//        getBoundaryWidgetLayer().bringToFront();
         getMainLayer().bringToFront();
         getConnectionLayer().bringToFront();
         getBoundaryWidgetLayer().bringToFront();
@@ -760,6 +747,11 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     @Override
     public INodeWidget createNodeWidget(NodeWidgetInfo node) {
         INodeWidget nodeWidget = (INodeWidget) this.addNode(node);
+        nodeWidget.setPreferredLocation(this.convertLocalToScene(node.getLocation()));
+        if (!node.isExist()) {
+            this.revalidate();
+            this.validate();
+        }
         if (nodeWidget instanceof IBaseElementWidget) {
             ((IBaseElementWidget) nodeWidget).init();
         }
