@@ -878,6 +878,7 @@ public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo
     @Override
     public INodeWidget createNodeWidget(NodeWidgetInfo node) {
         IPNodeWidget nodeWidget = (IPNodeWidget) this.addNode(node);
+        nodeWidget.setPreferredLocation(this.convertLocalToScene(node.getLocation()));
         if (!node.isExist()) {
             this.revalidate();
             this.validate();
