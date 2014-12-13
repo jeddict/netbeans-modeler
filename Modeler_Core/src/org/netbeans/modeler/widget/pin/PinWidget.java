@@ -1,0 +1,286 @@
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.netbeans.modeler.widget.pin;
+
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+import org.netbeans.api.visual.action.PopupMenuProvider;
+import org.netbeans.api.visual.action.WidgetAction;
+import org.netbeans.api.visual.widget.Scene;
+import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.component.IModelerPanel;
+import org.netbeans.modeler.label.LabelInplaceEditor;
+import org.netbeans.modeler.label.inplace.InplaceEditorAction;
+import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
+import org.netbeans.modeler.resource.toolbar.ImageUtil;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.specification.model.document.IPModelerScene;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
+import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.node.vmd.internal.AbstractPinWidget;
+import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
+import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
+import org.openide.nodes.AbstractNode;
+import org.openide.nodes.Node;
+import org.openide.nodes.NodeOperation;
+import org.openide.util.Exceptions;
+
+public abstract class PinWidget extends AbstractPinWidget {
+
+    private IPNodeWidget nodeWidget;
+    private PinWidgetInfo pinWidgetInfo;
+    private boolean activeStatus = true;
+    private boolean highlightStatus = false;
+
+    public PinWidget(IModelerScene scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
+        super((Scene) scene, ((IPModelerScene) scene).getColorScheme());
+        this.setModelerScene(scene);
+        this.pinWidgetInfo = pinWidgetInfo;
+        this.nodeWidget = nodeWidget;
+        WidgetAction editAction = new InplaceEditorAction<JTextField>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        getPinNameWidget().getActions().addAction(editAction);
+        scene.getModelerFile().getModelerDiagramEngine().setPinWidgetAction(this);
+        this.setProperties(pinWidgetInfo.getName(), null);
+    }
+
+    public void setLabel(String label) {
+        this.setPinName(label);
+    }
+
+    public String getLabel() {
+        return this.getPinName();
+    }
+    private IPModelerScene scene;
+
+    /**
+     * @return the scene
+     */
+    public IModelerScene getModelerScene() {
+        return scene;
+    }
+
+    /**
+     * @param scene the scene to set
+     */
+    public void setModelerScene(IModelerScene scene) {
+        if (scene instanceof IPModelerScene) {
+            this.scene = (IPModelerScene) scene;
+        } else {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+
+    protected List<JMenuItem> getPopupMenuItemList() {
+        List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
+        JMenuItem baseProperty = new JMenuItem("Properties");
+        baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
+        baseProperty.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PinWidget.this.showProperties();
+                PinWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
+            }
+        });
+
+        menuItemList.add(baseProperty);
+        return menuItemList;
+    }
+
+    @Override
+    public PopupMenuProvider getPopupMenuProvider() {
+        final PopupMenuProvider popupMenuProvider;
+        final JPopupMenu popupMenu; //PopupMenu used to give some funcionality to the widget
+
+        popupMenu = new JPopupMenu();
+
+        List<JMenuItem> menuItemList = getPopupMenuItemList();
+        for (JMenuItem menuItem : menuItemList) {
+            if (menuItem == null) {
+                popupMenu.addSeparator();
+            } else {
+                popupMenu.add(menuItem);
+            }
+        }
+        popupMenuProvider = new PopupMenuProvider() {
+            @Override
+            public JPopupMenu getPopupMenu(final Widget widget, final Point location) {
+                return popupMenu;
+            }
+        };
+
+        return popupMenuProvider;
+    }
+
+ private AbstractNode node;
+    @Override
+    public void exploreProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this.getModelerScene(),(IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
+    }
+    
+    @Override
+    public void refreshProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this.getModelerScene(),(IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
+    }
+    
+    @Override
+    public void showProperties() {
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this.getModelerScene(),(IBaseElementWidget) this, node, this.getPinName(), propertyVisibilityHandlers);
+    }
+
+    @Override
+    public boolean isActiveStatus() {
+        return activeStatus;
+    }
+
+    /**
+     * @param activeStatus the activeStatus to set
+     */
+    @Override
+    public void setActiveStatus(boolean activeStatus) {
+        this.activeStatus = activeStatus;
+    }
+
+    /**
+     * @return the pinWidgetInfo
+     */
+    public PinWidgetInfo getPinWidgetInfo() {
+        return pinWidgetInfo;
+    }
+
+    /**
+     * @param pinWidgetInfo the pinWidgetInfo to set
+     */
+    public void setPinWidgetInfo(PinWidgetInfo pinWidgetInfo) {
+        this.pinWidgetInfo = pinWidgetInfo;
+    }
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+
+    @Override
+    public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
+        this.propertyChangeHandlers.put(id, propertyChangeListener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(String id) {
+        propertyChangeHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
+        return propertyChangeHandlers;
+    }
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+
+    @Override
+    public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
+        this.propertyVisibilityHandlers.put(id, propertyVisibilityHandler);
+    }
+
+    @Override
+    public void removePropertyVisibilityHandler(String id) {
+        propertyVisibilityHandlers.remove(id);
+    }
+
+    @Override
+    public Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers() {
+        return propertyVisibilityHandlers;
+    }
+
+    /**
+     * @return the nodeWidget
+     */
+    public IPNodeWidget getPNodeWidget() {
+        return nodeWidget;
+    }
+
+    /**
+     * @param nodeWidget the nodeWidget to set
+     */
+    public void setPNodeWidget(IPNodeWidget nodeWidget) {
+        this.nodeWidget = nodeWidget;
+    }
+
+    @Override
+    public boolean remove() {
+        return remove(false);
+    }
+
+    @Override
+    public boolean remove(boolean notification) {
+        if (notification) {
+            NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Node ?", "Delete Node", NotifyDescriptor.OK_CANCEL_OPTION);
+            if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
+                removePin();
+                return true;
+            }
+        } else {
+            removePin();
+            return true;
+        }
+        return false;
+    }
+
+    private void removePin() {
+        if (!locked) {
+            this.setLabel("");
+//            ((IBaseElementWidget) this).destroy();
+//        ((IPFlowNodeWidget) nodeWidget).deleteFlowPinWidget((IFlowPinWidget) this);
+            nodeWidget.deletePinWidget(this);
+            scene.getModelerPanelTopComponent().changePersistenceState(false);
+        }
+    }
+    private boolean locked = false;
+
+    /**
+     * @return the exist
+     */
+    public boolean isLocked() {
+        return locked;
+    }
+
+    /**
+     * @param locked the locked to set
+     */
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    /**
+     * @return the highlightStatus
+     */
+    public boolean isHighlightStatus() {
+        return highlightStatus;
+    }
+
+    /**
+     * @param highlightStatus the highlightStatus to set
+     */
+    public void setHighlightStatus(boolean highlightStatus) {
+        this.highlightStatus = highlightStatus;
+    }
+}
