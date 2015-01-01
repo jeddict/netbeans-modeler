@@ -16,10 +16,16 @@
 package org.netbeans.modeler.properties.embedded;
 
 import java.beans.PropertyEditor;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
+import org.mvel2.MVEL;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
+import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
+import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -31,8 +37,9 @@ public class EmbeddedPropertySupport extends PropertySupport {
     PropertyEditor editor = null;
     private ModelerFile modelerFile;
     private GenericEmbedded entity;
+    private PropertyVisibilityHandler propertyVisibilityHandler;
 
-    public EmbeddedPropertySupport(ModelerFile modelerFile, GenericEmbedded attributeEntity) {
+    public EmbeddedPropertySupport(ModelerFile modelerFile, GenericEmbedded attributeEntity, PropertyVisibilityHandler propertyVisibilityHandler) {
         super(attributeEntity.getName(), Map.class, attributeEntity.getDisplayName(), attributeEntity.getShortDescription(), true, !attributeEntity.isReadOnly());
         this.modelerFile = modelerFile;
         setValue("canEditAsText", Boolean.FALSE);
@@ -40,7 +47,24 @@ public class EmbeddedPropertySupport extends PropertySupport {
         if (entity.getDataListener() != null) {
             entity.getDataListener().init();
         }
+        this.propertyVisibilityHandler = propertyVisibilityHandler;
 
+    }
+
+    public EmbeddedPropertySupport(ModelerFile modelerFile, GenericEmbedded attributeEntity) {
+        this(modelerFile, attributeEntity, null);
+    }
+
+    public EmbeddedPropertySupport(ModelerFile modelerFile, GenericEmbedded attributeEntity, String visible, Object object) {
+        super(attributeEntity.getName(), Map.class, attributeEntity.getDisplayName(), attributeEntity.getShortDescription(), true, !attributeEntity.isReadOnly());
+        this.modelerFile = modelerFile;
+        setValue("canEditAsText", Boolean.FALSE);
+        this.entity = attributeEntity;
+        if (entity.getDataListener() != null) {
+            entity.getDataListener().init();
+        }
+        Serializable visibilityExpression = MVEL.compileExpression(visible);
+        this.propertyVisibilityHandler = ElementPropertySet.createPropertyVisibilityHandler(modelerFile, object, visibilityExpression);
     }
 
     @Override
@@ -72,5 +96,12 @@ public class EmbeddedPropertySupport extends PropertySupport {
      */
     public GenericEmbedded getEntity() {
         return entity;
+    }
+
+    /**
+     * @return the propertyVisibilityHandler
+     */
+    public PropertyVisibilityHandler getPropertyVisibilityHandler() {
+        return propertyVisibilityHandler;
     }
 }

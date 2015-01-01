@@ -15,14 +15,33 @@
  */
 package org.netbeans.modeler.specification.model.document.property;
 
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.mvel2.MVEL;
+import org.mvel2.compiler.CompiledExpression;
+import org.netbeans.modeler.config.element.Attribute;
+import org.netbeans.modeler.config.element.Element;
 import org.netbeans.modeler.config.element.ElementConfig;
+import org.netbeans.modeler.config.element.ElementConfigFactory;
 import org.netbeans.modeler.config.element.Group;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.specification.model.document.IRootElement;
+import org.netbeans.modeler.specification.model.document.ITextElement;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
+import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
+import org.netbeans.modeler.widget.properties.generic.ElementPropertySupport;
+import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
+import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.Node;
 import org.openide.nodes.Sheet;
+import org.openide.util.Exceptions;
 
 public class ElementPropertySet {
 
@@ -43,8 +62,7 @@ public class ElementPropertySet {
         set.get(id).setName(id);// Sheet.Set : name is required work as key [otherwise set is replaced]
     }
 
-    public synchronized Node.Property<?> put(String id, Node.Property<?> p) {
-
+    public synchronized Node.Property<?> put(String id, Node.Property<?> p , boolean replace) {
         if (set.get(id) == null) {
             Group group = elementConfig.getGroup(id);
             if (group == null) {
@@ -53,8 +71,13 @@ public class ElementPropertySet {
             createGroup(id);
             setGroupDisplayName(id, group.getName());
         }
+         if(replace && set.get(id).get(p.getName()) != null){
+            set.get(id).remove(p.getName());
+        }
         return set.get(id).put(p);
-
+    }
+    public synchronized Node.Property<?> put(String id, Node.Property<?> p) {
+        return put(id,  p , false);
     }
 
     public void setGroupDisplayName(String id, String displayName) {
@@ -81,6 +104,10 @@ public class ElementPropertySet {
     public Sheet.Set getGroup(String id) {
         return set.get(id);
     }
+    
+    public Set<String> getGroupKey() {
+        return set.keySet();
+    }
 
     public LinkedList<Sheet.Set> getGroups() {
         return new LinkedList<Sheet.Set>(set.values());
@@ -99,5 +126,219 @@ public class ElementPropertySet {
     public void setModelerFile(ModelerFile modelerFile) {
         this.modelerFile = modelerFile;
     }
+    
+    
+    
+    
+
+    public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object) {
+        createPropertySet(baseElementWidget, object, null, null, true, false);
+    }
+    public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
+            final Map<String, PropertyChangeListener> propertyChangeHandlers) {
+        createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, false);
+    }
+    public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
+            final Map<String, PropertyChangeListener> propertyChangeHandlers,
+            final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
+        createPropertySet(baseElementWidget, object, propertyChangeHandlers, propertyVisiblityHandlers, true, false);
+    }
+    public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
+            final Map<String, PropertyChangeListener> propertyChangeHandlers, boolean inherit) {
+        createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, false);
+    }
+
+    
+    /** Replace Property Start
+     * @param baseElementWidget 
+     * @param object 
+     * @param propertyChangeHandlers **/ 
+    public void replacePropertySet(IBaseElementWidget baseElementWidget, final Object object,
+            final Map<String, PropertyChangeListener> propertyChangeHandlers) {
+        createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, true);
+    }
+    
+   
+
+    private void createPropertySet( IBaseElementWidget baseElementWidget , final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
+     ElementConfigFactory elementConfigFactory = modelerFile.getVendorSpecification().getElementConfigFactory();
+        if (inherit) {
+            for (Element element : elementConfigFactory.getElements(object.getClass())) {
+                createPropertySetInternal( baseElementWidget,object, element, propertyChangeHandlers, propertyVisiblityHandlers,  replaceProperty);
+            }
+        } else {
+            Element element = elementConfigFactory.getElement(object.getClass());
+            if (element != null) {
+                createPropertySetInternal( baseElementWidget,object, element, propertyChangeHandlers, propertyVisiblityHandlers,  replaceProperty);
+            }
+        }
+    }
+
+    private void createPropertySetInternal( final IBaseElementWidget baseElementWidget ,final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers , boolean replaceProperty) {
+
+//        PropertyChangeHandler p = new PropertyChangeHandler<Object>() {
+//    public void manage(Object value){}
+//};
+//        p.manage("");
+        try {
+            if (element != null) {
+                for (final Attribute attribute : element.getAttributes()) {
+                    if (attribute.getClassType() == ITextElement.class) {
+                        final String name = attribute.getName();
+                        final ITextElement expression = (ITextElement) PropertyUtils.getProperty(object, name);//return must not be null//(TExpression) PropertyUtils.getProperty(object, id) == null ? new TExpression() : (TExpression) PropertyUtils.getProperty(object, id);
+//                        PropertyUtils.setProperty(object, id, expression);
+
+                        this.put(attribute.getGroupId(), new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, "content",
+                                attribute.getDisplayName(), attribute.getShortDescription(),
+                                new PropertyChangeListener<String>() {
+                                    @Override
+                                    public void changePerformed(String value) {
+                                        if (expression.getContent() == null || expression.getContent().isEmpty()) {
+                                            try {
+                                                PropertyUtils.setProperty(object, name, null);
+                                            } catch (IllegalAccessException ex) {
+                                                Exceptions.printStackTrace(ex);
+                                            } catch (InvocationTargetException ex) {
+                                                Exceptions.printStackTrace(ex);
+                                            } catch (NoSuchMethodException ex) {
+                                                Exceptions.printStackTrace(ex);
+                                            }
+                                        }
+                                        if (propertyChangeHandlers != null && propertyChangeHandlers.get(name) != null) {
+                                            propertyChangeHandlers.get(name).changePerformed(value);
+                                        }
+                                        if(attribute.isRefreshOnChange()){
+                                                baseElementWidget.refreshProperties();
+                                         }
+                                    }
+                                }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())), replaceProperty);
+
+                    } else {
+                        if (attribute.isReadOnly()) {
+                            String value = BeanUtils.getProperty(object, attribute.getName());
+                            if (value == null) {
+                                BeanUtils.setProperty(object, attribute.getName(), attribute.getValue());
+                            }
+                            this.put(attribute.getGroupId(), new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()), replaceProperty);
+                        } else {
+                            PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
+                            
+                            if(propertyVisibilityHandler==null && attribute.getVisible()!=null && !attribute.getVisible().trim().isEmpty()){
+                                propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile,baseElementWidget, object, attribute.getVisibilityExpression());
+                            }
+                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent()!=null && !attribute.getOnChangeEvent().trim().isEmpty()) {
+                                         propertyChangeHandlers.put(attribute.getId() ,  createPropertyChangeHandler(modelerFile,baseElementWidget, object, attribute.getChangeListenerExpression()));
+                             }
+                            this.put(attribute.getGroupId(), new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
+                                    attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
+                                    new PropertyChangeListener<Object>() {
+                                        @Override
+                                        public void changePerformed(Object value) {
+                                            try {
+                                                if (value != null) {
+                                                    if (value instanceof String) {
+                                                        if (!((String) value).isEmpty()) {
+                                                            BeanUtils.setProperty(object, attribute.getName(), value);
+                                                        } else {
+                                                            BeanUtils.setProperty(object, attribute.getName(), null);
+                                                        }
+                                                    } else {
+                                                        BeanUtils.setProperty(object, attribute.getName(), value);
+                                                    }
+                                                } else {
+                                                    BeanUtils.setProperty(object, attribute.getName(), null);
+                                                }
+                                            } catch (IllegalAccessException ex) {
+                                                Exceptions.printStackTrace(ex);
+                                            } catch (InvocationTargetException ex) {
+                                                Exceptions.printStackTrace(ex);
+                                            }
+                                            if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
+                                                propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
+                                            }
+                                            if(attribute.isRefreshOnChange()){
+                                                baseElementWidget.refreshProperties();
+                                            }
+                                        }
+                                    }, propertyVisibilityHandler), replaceProperty);
+
+                        }
+                    }
+                }
+            }
+        } catch (IllegalAccessException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (InvocationTargetException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (NoSuchMethodException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (NoSuchFieldException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
+    }
+
+    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile,final IBaseElementWidget baseElementWidget , final Object object, final Serializable exp) {
+        final IRootElement root = modelerFile.getRootElement();
+        return new PropertyVisibilityHandler() {
+            @Override
+            public boolean isVisible() {
+                Map vars = new HashMap();
+                vars.put("root", root);
+                vars.put("widget", baseElementWidget);
+                vars.put("_this", object);
+                vars.put("node", baseElementWidget.getBaseElementSpec());
+//                                        System.out.println("getVisible().replaceAll(\"this\", \"_this\") " + attribute.getVisible().replaceAll("this", "_this"));
+//                                        System.out.println("attributeattributeattribute " + attribute.getName() + " : " + attribute.getVisible() + " : " +  MVEL.executeExpression(attribute.getVisibilityExpression(), vars));
+                return (Boolean) MVEL.executeExpression(exp, vars);
+            }
+        };
+    }
+        public static PropertyChangeListener createPropertyChangeHandler(final ModelerFile modelerFile,final IBaseElementWidget baseElementWidget , final Object object, final Serializable exp) {
+        final IRootElement root = modelerFile.getRootElement();
+        return new PropertyChangeListener() {
+            @Override
+            public void changePerformed(Object value) {
+                Map vars = new HashMap();
+                vars.put("root", root);
+                vars.put("widget", baseElementWidget);
+                vars.put("_this", object);
+                vars.put("node", baseElementWidget.getBaseElementSpec());
+                vars.put("value", value);
+                vars.put("scene", modelerFile.getModelerScene());
+                MVEL.executeExpression(exp, vars);
+            }
+        };
+    }
+    
+    
+    
+    
+     public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final String exp) { //this method should be removed // created cuz of MVEL BUG
+        final IRootElement root = modelerFile.getRootElement();
+        return new PropertyVisibilityHandler() {
+            @Override
+            public boolean isVisible() {
+                Map vars = new HashMap();
+                vars.put("root", root);
+                vars.put("widget", object);
+                return (Boolean) MVEL.executeExpression(MVEL.compileExpression(exp), vars);
+            }
+        };
+    }
+       public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final Serializable exp) { //this method should be removed // created cuz of MVEL BUG
+        final IRootElement root = modelerFile.getRootElement();
+        return new PropertyVisibilityHandler() {
+            @Override
+            public boolean isVisible() {
+                Map vars = new HashMap();
+                vars.put("root", root);
+                vars.put("widget", object);
+                return (Boolean) MVEL.executeExpression(exp, vars);
+            }
+        };
+    }
+    
+    
 
 }

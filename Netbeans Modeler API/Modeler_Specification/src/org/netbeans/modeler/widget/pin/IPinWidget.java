@@ -23,7 +23,6 @@ import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
-import org.openide.nodes.AbstractNode;
 
 public interface IPinWidget extends IParentPinWidget {
 
@@ -32,16 +31,6 @@ public interface IPinWidget extends IParentPinWidget {
     IModelerScene getModelerScene();
 
     PopupMenuProvider getPopupMenuProvider();
-
-    void showProperties();
-
-    void exploreProperties();
-    
-    void refreshProperties();
-
-//    AbstractNode getNode();
-//
-//    void setNode(AbstractNode node);
 
     boolean remove();
 
@@ -83,4 +72,11 @@ public interface IPinWidget extends IParentPinWidget {
 
     void setHighlightStatus(boolean highlightStatus);
 
+    
+            //custom added
+    void showProperties();
+
+    void exploreProperties();
+
+    void refreshProperties();
 }

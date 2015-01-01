@@ -24,11 +24,12 @@ import org.openide.nodes.PropertySupport;
 /**
  *
  *
+ * @param <T>
  */
-public class ElementCustomPropertySupport<T extends Object> extends PropertySupport.Reflection<T> {// PropertySupport.ReadOnly {
+public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<T> {// PropertySupport.ReadOnly {
 
-    private Object object = null;
-    private String propertyName = null;
+//    private Object object = null;
+//    private String propertyName = null;
     private Class<T> classType = null;
     private PropertyChangeListener propertyChangeListener;
     private PropertyVisibilityHandler propertyVisibilityHandler;
@@ -41,16 +42,13 @@ public class ElementCustomPropertySupport<T extends Object> extends PropertySupp
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
         this(modelerFile, object, classType, propertyName, displayName, description, propertyChangeListener, null);
     }
-    
-//    public ElementCustomPropertySupport(ModelerFile modelerFile, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
-//         this(modelerFile, new BooleanWrapper(), Boolean.class, "booleanValue", displayName, description, propertyChangeListener, null);
-//    }
+
 
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
         super(object, classType, propertyName);
         this.modelerFile = modelerFile;
-        this.object = object;
-        this.propertyName = propertyName;
+//        this.object = object;
+//        this.propertyName = propertyName;
         this.classType = classType;
         this.propertyChangeListener = propertyChangeListener;
         this.propertyVisibilityHandler = propertyVisibilityHandler;
@@ -62,7 +60,7 @@ public class ElementCustomPropertySupport<T extends Object> extends PropertySupp
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String getter, String setter, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException {
         super(object, classType, getter, setter);
         this.modelerFile = modelerFile;
-        this.object = object;
+//        this.object = object;
         //this.propertyName = propertyName;
         this.classType = classType;
         this.propertyChangeListener = propertyChangeListener;

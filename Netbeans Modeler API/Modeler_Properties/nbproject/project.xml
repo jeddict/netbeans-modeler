@@ -86,6 +86,10 @@
                 <package>org.netbeans.modeler.properties.view.manager</package>
                 <package>org.netbeans.modeler.widget.properties.customattr</package>
             </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/mvel2-2.2.0.Final.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/mvel2-2.2.0.Final.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

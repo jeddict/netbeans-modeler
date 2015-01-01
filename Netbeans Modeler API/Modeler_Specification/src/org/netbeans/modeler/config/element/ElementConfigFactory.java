@@ -86,123 +86,134 @@ public class ElementConfigFactory {
         }
     }
 
-    public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers) {
-        createPropertySet(set, object, propertyChangeHandlers, null, true);
-    }
-
-    public void createPropertySet(ElementPropertySet set, final Object object) {
-        createPropertySet(set, object, null, null, true);
-    }
-
-    public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, boolean inherit) {
-        createPropertySet(set, object, propertyChangeHandlers, null, true);
-    }
-
-    public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
-        createPropertySet(set, object, propertyChangeHandlers, propertyVisiblityHandlers, true);
-    }
-
-    private void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit) {
-        if (inherit) {
-            for (Element element : getElements(object.getClass())) {
-                createPropertySetInternal(set, object, element, propertyChangeHandlers, propertyVisiblityHandlers);
-            }
-        } else {
-            Element element = getElement(object.getClass());
-            if (element != null) {
-                createPropertySetInternal(set, object, element, propertyChangeHandlers, propertyVisiblityHandlers);
-            }
-        }
-    }
-
-    private void createPropertySetInternal(ElementPropertySet set, final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
-
-//        PropertyChangeHandler p = new PropertyChangeHandler<Object>() {
-//    public void manage(Object value){}
-//};
-//        p.manage("");
-        try {
-            if (element != null) {
-                for (final Attribute attribute : element.getAttributes()) {
-                    if (attribute.getClassType() == ITextElement.class) {
-                        final String name = attribute.getName();
-                        final ITextElement expression = (ITextElement) PropertyUtils.getProperty(object, name);//return must not be null//(TExpression) PropertyUtils.getProperty(object, id) == null ? new TExpression() : (TExpression) PropertyUtils.getProperty(object, id);
-//                        PropertyUtils.setProperty(object, id, expression);
-
-                        set.put(attribute.getGroupId(), new ElementCustomPropertySupport(set.getModelerFile(), expression, String.class, "content",
-                                attribute.getDisplayName(), attribute.getShortDescription(),
-                                new PropertyChangeListener<String>() {
-                                    @Override
-                                    public void changePerformed(String value) {
-                                        if (expression.getContent() == null || expression.getContent().isEmpty()) {
-                                            try {
-                                                PropertyUtils.setProperty(object, name, null);
-                                            } catch (IllegalAccessException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (InvocationTargetException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (NoSuchMethodException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            }
-                                        }
-                                        if (propertyChangeHandlers != null && propertyChangeHandlers.get(name) != null) {
-                                            propertyChangeHandlers.get(name).changePerformed(value);
-                                        }
-                                    }
-                                }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())));
-
-                    } else {
-                        if (attribute.isReadOnly()) {
-                            String value = BeanUtils.getProperty(object, attribute.getName());
-                            if (value == null) {
-                                BeanUtils.setProperty(object, attribute.getName(), attribute.getValue());
-                            }
-                            set.put(attribute.getGroupId(), new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()));
-                        } else {
-                            PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
-                            set.put(attribute.getGroupId(), new ElementCustomPropertySupport(set.getModelerFile(), object, attribute.getClassType(),
-                                    attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
-                                    new PropertyChangeListener<Object>() {
-                                        @Override
-                                        public void changePerformed(Object value) {
-                                            try {
-                                                if (value != null) {
-                                                    if (value instanceof String) {
-                                                        if (!((String) value).isEmpty()) {
-                                                            BeanUtils.setProperty(object, attribute.getName(), value);
-                                                        } else {
-                                                            BeanUtils.setProperty(object, attribute.getName(), null);
-                                                        }
-                                                    } else {
-                                                        BeanUtils.setProperty(object, attribute.getName(), value);
-                                                    }
-                                                } else {
-                                                    BeanUtils.setProperty(object, attribute.getName(), null);
-                                                }
-                                            } catch (IllegalAccessException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (InvocationTargetException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            }
-                                            if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
-                                                propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
-                                            }
-                                        }
-                                    }, propertyVisibilityHandler));
-
-                        }
-                    }
-                }
-            }
-        } catch (IllegalAccessException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (InvocationTargetException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (NoSuchMethodException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (NoSuchFieldException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-
-    }
+//    public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers) {
+//        createPropertySet(set, object, propertyChangeHandlers, null, true);
+//    }
+//
+//    public void createPropertySet(ElementPropertySet set, final Object object) {
+//        createPropertySet(set, object, null, null, true);
+//    }
+//
+//    public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, boolean inherit) {
+//        createPropertySet(set, object, propertyChangeHandlers, null, true);
+//    }
+//
+//    public void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
+//        createPropertySet(set, object, propertyChangeHandlers, propertyVisiblityHandlers, true);
+//    }
+//
+//    private void createPropertySet(ElementPropertySet set, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit) {
+//        if (inherit) {
+//            for (Element element : getElements(object.getClass())) {
+//                createPropertySetInternal(set, object, element, propertyChangeHandlers, propertyVisiblityHandlers);
+//            }
+//        } else {
+//            Element element = getElement(object.getClass());
+//            if (element != null) {
+//                createPropertySetInternal(set, object, element, propertyChangeHandlers, propertyVisiblityHandlers);
+//            }
+//        }
+//    }
+//
+//    private void createPropertySetInternal(ElementPropertySet set, final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
+//
+////        PropertyChangeHandler p = new PropertyChangeHandler<Object>() {
+////    public void manage(Object value){}
+////};
+////        p.manage("");
+//        try {
+//            if (element != null) {
+//                for (final Attribute attribute : element.getAttributes()) {
+//                    if (attribute.getClassType() == ITextElement.class) {
+//                        final String name = attribute.getName();
+//                        final ITextElement expression = (ITextElement) PropertyUtils.getProperty(object, name);//return must not be null//(TExpression) PropertyUtils.getProperty(object, id) == null ? new TExpression() : (TExpression) PropertyUtils.getProperty(object, id);
+////                        PropertyUtils.setProperty(object, id, expression);
+//
+//                        set.put(attribute.getGroupId(), new ElementCustomPropertySupport(set.getModelerFile(), expression, String.class, "content",
+//                                attribute.getDisplayName(), attribute.getShortDescription(),
+//                                new PropertyChangeListener<String>() {
+//                                    @Override
+//                                    public void changePerformed(String value) {
+//                                        if (expression.getContent() == null || expression.getContent().isEmpty()) {
+//                                            try {
+//                                                PropertyUtils.setProperty(object, name, null);
+//                                            } catch (IllegalAccessException ex) {
+//                                                Exceptions.printStackTrace(ex);
+//                                            } catch (InvocationTargetException ex) {
+//                                                Exceptions.printStackTrace(ex);
+//                                            } catch (NoSuchMethodException ex) {
+//                                                Exceptions.printStackTrace(ex);
+//                                            }
+//                                        }
+//                                        if (propertyChangeHandlers != null && propertyChangeHandlers.get(name) != null) {
+//                                            propertyChangeHandlers.get(name).changePerformed(value);
+//                                        }
+//                                    }
+//                                }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())));
+//
+//                    } else {
+//                        if (attribute.isReadOnly()) {
+//                            String value = BeanUtils.getProperty(object, attribute.getName());
+//                            if (value == null) {
+//                                BeanUtils.setProperty(object, attribute.getName(), attribute.getValue());
+//                            }
+//                            set.put(attribute.getGroupId(), new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()));
+//                        } else {
+//                            PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
+//                            
+//                            if(propertyVisibilityHandler==null && attribute.getVisible()!=null && !attribute.getVisible().trim().isEmpty()){
+//                                propertyVisibilityHandler = new PropertyVisibilityHandler(){
+//                                    @Override
+//                                    public boolean isVisible() {
+//                                        System.out.println("attributeattributeattribute " + attribute.getName() + " : " + attribute.getVisible());
+//                                       return true;
+//                                    }
+//                                };
+//                            }
+//                            
+//                            set.put(attribute.getGroupId(), new ElementCustomPropertySupport(set.getModelerFile(), object, attribute.getClassType(),
+//                                    attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
+//                                    new PropertyChangeListener<Object>() {
+//                                        @Override
+//                                        public void changePerformed(Object value) {
+//                                            try {
+//                                                if (value != null) {
+//                                                    if (value instanceof String) {
+//                                                        if (!((String) value).isEmpty()) {
+//                                                            BeanUtils.setProperty(object, attribute.getName(), value);
+//                                                        } else {
+//                                                            BeanUtils.setProperty(object, attribute.getName(), null);
+//                                                        }
+//                                                    } else {
+//                                                        BeanUtils.setProperty(object, attribute.getName(), value);
+//                                                    }
+//                                                } else {
+//                                                    BeanUtils.setProperty(object, attribute.getName(), null);
+//                                                }
+//                                            } catch (IllegalAccessException ex) {
+//                                                Exceptions.printStackTrace(ex);
+//                                            } catch (InvocationTargetException ex) {
+//                                                Exceptions.printStackTrace(ex);
+//                                            }
+//                                            if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
+//                                                propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
+//                                            }
+//                                        }
+//                                    }, propertyVisibilityHandler));
+//
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (IllegalAccessException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (InvocationTargetException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (NoSuchMethodException ex) {
+//            Exceptions.printStackTrace(ex);
+//        } catch (NoSuchFieldException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
+//
+//    }
 }

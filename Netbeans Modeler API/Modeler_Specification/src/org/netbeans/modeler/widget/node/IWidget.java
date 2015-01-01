@@ -685,4 +685,6 @@ public interface IWidget extends Accessible, Lookup.Provider {
 
     // custom added
     ContextPaletteModel getContextPaletteModel();//moved from INodeWidget to cover all Widget
+    
+
 }

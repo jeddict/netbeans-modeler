@@ -127,11 +127,7 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     public void setAlignSupport(boolean alignSupport);
 
-    void showProperties();
 
-    void exploreProperties();
-    
-    void refreshProperties();
 
 //    AbstractNode getNode();
 //
@@ -164,4 +160,11 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     public void setModelerDiagramEngine(IModelerDiagramEngine modelerDiagramEngine);
 
+    
+        //custom added
+    void showProperties();
+
+    void exploreProperties();
+
+    void refreshProperties();
 }

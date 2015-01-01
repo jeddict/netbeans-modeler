@@ -55,12 +55,6 @@ public interface INodeWidget extends IWidget {
 
     PopupMenuProvider getPopupMenuProvider();
 
-    void showProperties();
-
-    void exploreProperties();
-
-    void refreshProperties();
-
     void showResizeBorder();
 
     void hideResizeBorder();
@@ -109,4 +103,11 @@ public interface INodeWidget extends IWidget {
     void setLocked(boolean locked);
 
     Point getSceneViewLocation();
+    
+        //custom added
+    void showProperties();
+
+    void exploreProperties();
+
+    void refreshProperties();
 }

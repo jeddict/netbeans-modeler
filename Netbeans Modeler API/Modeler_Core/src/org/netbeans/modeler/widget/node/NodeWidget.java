@@ -47,6 +47,7 @@ import org.netbeans.modeler.core.scene.ModelerScene;
 import org.netbeans.modeler.label.BasicLabelManager;
 import org.netbeans.modeler.label.LabelManager;
 import org.netbeans.modeler.locale.I18n;
+import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.VisualPropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.shape.ShapeDesign;
@@ -351,21 +352,23 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         return popupMenuProvider;
     }
 
-    private AbstractNode node;
-
+    private BasePropertyViewManager node;
     @Override
     public void exploreProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
+        if(node==null){
+            node = new BasePropertyViewManager((IBaseElementWidget) this);
+        }
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getLabel(), propertyVisibilityHandlers);
     }
 
     @Override
     public void refreshProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(node, this.getLabel(), propertyVisibilityHandlers);
     }
 
     @Override
     public void showProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this.getModelerScene(), (IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node, this.getLabel(), propertyVisibilityHandlers);
     }
 
 //    @Override

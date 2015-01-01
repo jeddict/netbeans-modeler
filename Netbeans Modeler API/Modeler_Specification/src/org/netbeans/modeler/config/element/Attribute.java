@@ -1,59 +1,64 @@
-/** Copyright [2014] Gaurav Gupta
-   *
-   *Licensed under the Apache License, Version 2.0 (the "License");
-   *you may not use this file except in compliance with the License.
-   *You may obtain a copy of the License at
-   *
-   *    http://www.apache.org/licenses/LICENSE-2.0
-   *
-   *Unless required by applicable law or agreed to in writing, software
-   *distributed under the License is distributed on an "AS IS" BASIS,
-   *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   *See the License for the specific language governing permissions and
-   *limitations under the License.
-   */
- package org.netbeans.modeler.config.element;
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.netbeans.modeler.config.element;
 
+import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.mvel2.MVEL;
 
 /**
  *
- * 
+ *
  */
-
-
-@XmlRootElement(name = "attribute") 
+@XmlRootElement(name = "attribute")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Attribute {
+
     @XmlAttribute
     private String id;
-     @XmlAttribute
+    @XmlAttribute
     private String groupId;
-     @XmlAttribute(name="class")
+    @XmlAttribute(name = "class")
     private Class<?> classType;
     @XmlAttribute
-    private String name;  
+    private String name;
     @XmlAttribute
     private String condition;
-    @XmlElement(name="display-name")
-    private String displayName;  
-    @XmlElement(name="description")
+    @XmlElement(name = "display-name")
+    private String displayName;
+    @XmlElement(name = "description")
     private String shortDescription;
-    
+
     @XmlAttribute
     private Boolean exist = true;
-    @XmlAttribute(name="read-only")
+    @XmlAttribute(name = "read-only")
     private Boolean readOnly = false;
-     @XmlAttribute
+    @XmlAttribute
     private String value;
-    
-    
-    
-    
+    @XmlElement
+    private String visible;
+    @XmlElement(name = "change-listener")
+    private String onChangeEvent;
+    @XmlAttribute(name = "refresh-onchange")
+    private Boolean refreshOnChange = false;
 
     /**
      * @return the id
@@ -124,9 +129,8 @@ public class Attribute {
     public void setCondition(String condition) {
         this.condition = condition;
     }
-    
-    
-       /**
+
+    /**
      * @return the classType
      */
     public Class<?> getClassType() {
@@ -182,14 +186,10 @@ public class Attribute {
         this.value = value;
     }
 
-   
-    public String getFieldGetter()
-{
-    return "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
-}
-    
-    
-    
+    public String getFieldGetter() {
+        return "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+
 // public static String findGetterName(Class clazz, String name) throws IntrospectionException, NoSuchFieldException, NoSuchMethodException {
 //    Method getter = findGetter(clazz, name);
 //    if (getter == null) throw new NoSuchMethodException(clazz+" has no "+name+" getter");
@@ -215,7 +215,6 @@ public class Attribute {
 //        if (name.equals(pd.getName())) return pd.getWriteMethod();
 //    throw new NoSuchFieldException(clazz+" has no field "+name);
 //}   
-
     /**
      * @return the groupId
      */
@@ -229,6 +228,70 @@ public class Attribute {
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
-    
-    
+
+    /**
+     * @return the visible
+     */
+    public String getVisible() {
+        return visible;
+    }
+
+    @XmlTransient
+    private Serializable visibilityExpression;
+
+    public Serializable getVisibilityExpression() {
+        if (visibilityExpression == null && visible != null) {
+//            visibilityExpression = MVEL.compileExpression(getVisible().replaceAll("this", "_this"));
+            visibilityExpression = MVEL.compileExpression(getVisible());//this functionality not required currently , may be in future 
+        }
+        return visibilityExpression;
+    }
+
+    /**
+     * @param visible the visible to set
+     */
+    public void setVisible(String visible) {
+        this.visible = visible;
+    }
+
+    /**
+     * @return the onChangeEvent
+     */
+    public String getOnChangeEvent() {
+        return onChangeEvent;
+    }
+
+    /**
+     * @param onChangeEvent the onChangeEvent to set
+     */
+    public void setOnChangeEvent(String onChangeEvent) {
+        this.onChangeEvent = onChangeEvent;
+    }
+
+    @XmlTransient
+    private Serializable onChangeListenerExpression;
+
+    public Serializable getChangeListenerExpression() {
+        if (onChangeListenerExpression == null && onChangeEvent != null) {
+//            visibilityExpression = MVEL.compileExpression(getVisible().replaceAll("this", "_this"));
+            onChangeListenerExpression = MVEL.compileExpression(getVisible());//this functionality not required currently , may be in future 
+        }
+        return onChangeListenerExpression;
+    }
+
+    /**
+     * @return the refreshOnChange
+     */
+    public Boolean isRefreshOnChange() {
+        return refreshOnChange;
+    }
+
+    /**
+     * @param refreshOnChange the refreshOnChange to set
+     */
+    public void setRefreshOnChange(Boolean refreshOnChange) {
+        this.refreshOnChange = refreshOnChange;
+    }
+
+
 }

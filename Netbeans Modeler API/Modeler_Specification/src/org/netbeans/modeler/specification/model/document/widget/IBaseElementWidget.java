@@ -36,5 +36,14 @@ public interface IBaseElementWidget extends IWidget {
     public void init();
 
     public void destroy();
+    
+        //custom added
+    void showProperties();
+
+    void exploreProperties();
+
+    void refreshProperties();
+    
+
 
 }

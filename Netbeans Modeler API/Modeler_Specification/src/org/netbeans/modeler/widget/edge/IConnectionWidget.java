@@ -384,4 +384,11 @@ public interface IConnectionWidget extends IWidget {
      * @param targetAnchorShape the target anchor shape
      */
     void setTargetAnchorShape(AnchorShape targetAnchorShape);
+    
+    //custom added
+    void showProperties();
+
+    void exploreProperties();
+
+    void refreshProperties();
 }

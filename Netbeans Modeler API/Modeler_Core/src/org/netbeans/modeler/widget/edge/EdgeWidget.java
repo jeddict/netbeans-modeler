@@ -37,6 +37,7 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.label.BasicLabelManager;
 import org.netbeans.modeler.label.LabelManager;
+import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
@@ -221,20 +222,23 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
     }
 
    
-    private AbstractNode node;
+    private BasePropertyViewManager node;
     @Override
     public void exploreProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this.getModelerScene(),(IBaseElementWidget) this, node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
+        if(node==null){
+            node = new BasePropertyViewManager((IBaseElementWidget) this);
+        }
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
     
     @Override
     public void refreshProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this.getModelerScene(),(IBaseElementWidget) this, node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
     
     @Override
     public void showProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this.getModelerScene(),(IBaseElementWidget) this, node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
 
     @Override

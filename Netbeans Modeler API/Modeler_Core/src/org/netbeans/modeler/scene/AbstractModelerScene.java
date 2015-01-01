@@ -54,6 +54,7 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
+import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
@@ -656,20 +657,23 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         return popupMenuProvider;
     }
 
-    private AbstractNode node;
+    private BasePropertyViewManager node;
     @Override
     public void exploreProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
+        if(node==null){
+            node = new BasePropertyViewManager((IBaseElementWidget) this);
+        }
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getName(), propertyVisibilityHandlers);
     }
     
     @Override
     public void refreshProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(node, this.getName(), propertyVisibilityHandlers);
     }
     
     @Override
     public void showProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(this,(IBaseElementWidget) this, node, this.getName(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node, this.getName(), propertyVisibilityHandlers);
     }
     
     /**

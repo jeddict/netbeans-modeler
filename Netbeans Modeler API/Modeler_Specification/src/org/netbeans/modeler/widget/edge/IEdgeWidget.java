@@ -28,8 +28,7 @@ public interface IEdgeWidget extends IConnectionWidget {
 
     void createVisualPropertySet(ElementPropertySet elementPropertySet);
 
-    void exploreProperties();
-    void refreshProperties();
+  
 
     EdgeWidgetInfo getEdgeWidgetInfo();
 
@@ -51,7 +50,6 @@ public interface IEdgeWidget extends IConnectionWidget {
 
     void showLabel();
 
-    void showProperties();
 
     boolean remove();
 
