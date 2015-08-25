@@ -51,6 +51,7 @@ import org.openide.filesystems.FileUtil;
  */
 public class ModelerFile {
 
+    private String id;
     private String name;
     private String tooltip;
     private String extension;
@@ -136,6 +137,10 @@ public class ModelerFile {
      */
     public void setModelerFileDataObject(IModelerFileDataObject modelerFileDataObject) {
         this.modelerFileDataObject = modelerFileDataObject;
+        FileObject fileObject = modelerFileDataObject.getPrimaryFile();
+        this.setName(fileObject.getName());
+            this.setExtension(fileObject.getExt());
+            this.setIcon(modelerFileDataObject.getIcon());
     }
 
     /**
@@ -320,5 +325,19 @@ public class ModelerFile {
      */
     public void setTooltip(String tooltip) {
         this.tooltip = tooltip;
+    }
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 }

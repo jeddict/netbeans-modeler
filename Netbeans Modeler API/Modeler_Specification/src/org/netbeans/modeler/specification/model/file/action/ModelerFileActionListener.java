@@ -62,9 +62,9 @@ public abstract class ModelerFileActionListener implements ActionListener {
 //    }
     
     public void openModelerFile() {
-        openModelerFile(null);
+        openModelerFile(null,null,null);
     }
-    public void openModelerFile(String id) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
+    public void openModelerFile(String id , String name , String tooltip) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
 
         FileObject fileObject = context.getPrimaryFile();
         String path = fileObject.getPath();
@@ -79,12 +79,17 @@ public abstract class ModelerFileActionListener implements ActionListener {
         
         if (modelerFile == null) {
             modelerFile = new ModelerFile();
+            modelerFile.setId(id);
             modelerFile.setModelerFileDataObject(context);
-            modelerFile.setName(fileObject.getName());
-            modelerFile.setExtension(fileObject.getExt());
             modelerFile.setTooltip(path);
             modelerFile.setPath(absolutePath);
-            modelerFile.setIcon(context.getIcon());
+
+            if(name!=null){
+                modelerFile.setName(name);
+            }
+            if(tooltip!=null){
+                modelerFile.setTooltip(tooltip);
+            }
             
             initSpecification(modelerFile);
 
