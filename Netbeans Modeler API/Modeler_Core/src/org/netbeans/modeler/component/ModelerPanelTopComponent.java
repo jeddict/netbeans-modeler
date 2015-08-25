@@ -61,18 +61,16 @@ import org.openide.windows.WindowManager;
 })
 public class ModelerPanelTopComponent extends TopComponent implements ExplorerManager.Provider, IModelerPanel {
 
-    ExplorerManager explorerManager;
+    private ExplorerManager explorerManager;
     private ModelerFile modelerFile;
     private IModelerScene modelerScene;
-    private Toolbar editorToolbar = null;
-//    private InstanceContent content = new InstanceContent(); //The bag of stuff we add/remove the Saver from, and store the last-used file in
-    SaveDiagram saveCookies;
+    private final Toolbar editorToolbar;
+    private SaveDiagram saveCookies;
 
     public ModelerPanelTopComponent() {
         initComponents();
         editorToolbar = new Toolbar("Diagram Toolbar", false);
         add(editorToolbar, BorderLayout.NORTH);
-
     }
 
     @Override
@@ -87,12 +85,10 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         addKeyListener(new ModelerKeyAdapter(file));
 
         initializeToolBar();
-        Scene scene = (Scene) modelerScene;
-        if (scene.getView() == null) {
-            scrollPane.setViewportView(scene.createView());
-//            addKeyboardActions();
+        if (modelerScene.getView() == null) {
+            scrollPane.setViewportView(modelerScene.createView());
         } else {
-            scrollPane.setViewportView(scene.getView());
+            scrollPane.setViewportView(modelerScene.getView());
         }
 
         TopComponent propertiesComponent = WindowManager.getDefault().findTopComponent("properties");
