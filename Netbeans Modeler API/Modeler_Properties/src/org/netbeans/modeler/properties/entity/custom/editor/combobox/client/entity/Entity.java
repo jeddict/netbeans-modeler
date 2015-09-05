@@ -15,8 +15,6 @@
  */
 package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity;
 
-import java.awt.Component;
-
 
 public abstract class Entity<T> {
     private String id;

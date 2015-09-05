@@ -405,7 +405,6 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         }
         return data;
         //CustomNAttributeSupport>setValue
-
     }
 
 
