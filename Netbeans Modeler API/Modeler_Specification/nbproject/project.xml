@@ -264,6 +264,7 @@
                 <package>org.netbeans.modeler.shape.adapter</package>
                 <package>org.netbeans.modeler.specification</package>
                 <package>org.netbeans.modeler.specification.annotaton</package>
+                <package>org.netbeans.modeler.specification.export</package>
                 <package>org.netbeans.modeler.specification.model</package>
                 <package>org.netbeans.modeler.specification.model.document</package>
                 <package>org.netbeans.modeler.specification.model.document.core</package>

@@ -40,7 +40,7 @@ import org.netbeans.modeler.actions.LockSelectionAction;
 import org.netbeans.modeler.actions.PanAction;
 import org.netbeans.modeler.actions.ZoomManager;
 import org.netbeans.modeler.actions.ZoomManager.ZoomEvent;
-import org.netbeans.modeler.actions.export.image.ExportImageAction;
+import org.netbeans.modeler.actions.export.ExportAction;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.provider.EdgeWidgetSelectProvider;
@@ -216,7 +216,7 @@ public abstract class ModelerDiagramEngine implements IModelerDiagramEngine {
             }
         });
 
-        JButton exportImageButton = new JButton(new ExportImageAction(scene));
+        JButton exportImageButton = new JButton(new ExportAction(scene));
         bar.add(exportImageButton);
 
         final JButton satelliteViewButton = new JButton(ImageUtil.getInstance().getIcon("satelliteView.png"));

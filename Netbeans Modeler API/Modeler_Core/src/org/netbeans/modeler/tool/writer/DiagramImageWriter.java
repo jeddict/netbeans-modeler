@@ -1,4 +1,18 @@
-
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.netbeans.modeler.tool.writer;
 
 import java.awt.Graphics2D;
@@ -19,7 +33,7 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.core.scene.ModelerScene;
-import org.netbeans.modeler.locale.I18n;
+import org.netbeans.modeler.specification.export.ExportType;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 
 
@@ -32,39 +46,9 @@ public class DiagramImageWriter
     public static final int CURRENT_ZOOM_LEVEL = 2;
     public static final int ACTUAL_SIZE = 3;
     
-    public static enum ImageType {
-        jpg("jpg", I18n.getString(DiagramImageWriter.class, "MSG_JPG")), // NOI18N
-        png("png", I18n.getString(DiagramImageWriter.class, "MSG_PNG")); // NOI18N
-         
-        private final String name;
-        private final String description;
-        
-        ImageType(String name, String description)
-        {
-            this.name = name;
-            this.description = description;
-        }
-        
-        public String getDescription()
-        {
-            return description;
-        }
-        
-        public String getName()
-        {
-            return name;
-        }
-        
-        @Override
-        public String toString()
-        {
-            return description;
-        }
-    }
-    
-
+   
     public static void write(   IModelerScene scene,
-                                ImageType format, 
+                                ExportType format, 
                                 ImageOutputStream fo, 
                                 boolean visibleAreaOnly, 
                                 int zoomType, 
@@ -173,7 +157,7 @@ public class DiagramImageWriter
         
         try
         {
-            if (ImageType.jpg == format)
+            if (ExportType.jpg == format)
             {
                 Iterator iter = ImageIO.getImageWritersByFormatName(format.getName()); 
                 ImageWriter writer = (ImageWriter) iter.next();
@@ -213,7 +197,7 @@ public class DiagramImageWriter
     {
         int width = (int) (scene.getClientArea().width * scale);
         int height = (int) (scene.getClientArea().height * scale);
-        write(scene, ImageType.png, fo, false, CUSTOM_SIZE, false, 100, width, height);
+        write(scene, ExportType.png, fo, false, CUSTOM_SIZE, false, 100, width, height);
     }
             
 }

@@ -18,6 +18,7 @@ package org.netbeans.modeler.specification.model;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.specification.export.ExportManager;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
 import org.netbeans.modeler.specification.model.document.IDiagramElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -37,8 +38,11 @@ public abstract class ModelerSpecificationDiagramModel {
     private IDefinitionElement definitionElement;
     private IDiagramElement diagramElement;
     private IRootElement rootElement;
+    
+    private ExportManager exportManager;
 
     private IRelationValidator relationValidator;
+    
 
     public abstract void init(ModelerFile modelerFile);//Load Default Value Like Definition , RootElement , Design , will be raplaced if XML Content exist
 
@@ -166,6 +170,20 @@ public abstract class ModelerSpecificationDiagramModel {
      */
     public void setDiagramModel(DiagramModel diagramModel) {
         this.diagramModel = diagramModel;
+    }
+
+    /**
+     * @return the exportManager
+     */
+    public ExportManager getExportManager() {
+        return exportManager;
+    }
+
+    /**
+     * @param exportManager the exportManager to set
+     */
+    public void setExportManager(ExportManager exportManager) {
+        this.exportManager = exportManager;
     }
 
 }
