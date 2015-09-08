@@ -24,6 +24,7 @@ import java.util.List;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JComboBox;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
@@ -40,8 +41,33 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
 
     private NAttributeEntity attributeEntity;
     private TableModel tableModel;
+
     public NEntityEditor() {
         this.setSize(1900, 900);
+    }
+
+    public static NEntityEditor createInstance(JLayeredPane container, int witdh, int height) {
+        container.removeAll();
+        NEntityEditor editor = new NEntityEditor();
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(container);
+        container.setLayout(layout);
+//        layout.setHorizontalGroup(
+//                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+//                .addComponent(editor, javax.swing.GroupLayout.DEFAULT_SIZE, witdh, Short.MAX_VALUE)
+//        );
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(editor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, witdh, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(editor, javax.swing.GroupLayout.DEFAULT_SIZE, height, Short.MAX_VALUE)
+                        .addContainerGap())
+        );
+        container.setLayer(editor, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        return editor;
     }
 
     public NEntityEditor(NAttributeEntity attributeEntity, PropertyEditor editor, PropertyEnv env) {
@@ -87,9 +113,8 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
                     }
                 };
         jTableAttribute.setModel(tableModel);
-        
-        updateTableUI();        
-         
+
+        updateTableUI();
 
         for (Column column : attributeEntity.getColumns()) {
             if (column.isHidden()) {
@@ -313,27 +338,25 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
             Object[] row = ((RowValue) attrDialog.getEntity()).getRow();
             dtm.addRow(row);
             updateTableUI();
-            
+
 //            data.add(row);
-            
         }
     }//GEN-LAST:event_jButtonNewPropertyActionPerformed
 
-    public void updateTableUI(){
-        int columnIndex=0;
-        for(Column column : attributeEntity.getColumns()){
-            if(column.isAutoIncrement()){
-                for(int rowIndex = 0 ; rowIndex < tableModel.getRowCount(); rowIndex++){
-                tableModel.setValueAt(column.getAutoIncrementSufix() + rowIndex , rowIndex, columnIndex);
+    public void updateTableUI() {
+        int columnIndex = 0;
+        for (Column column : attributeEntity.getColumns()) {
+            if (column.isAutoIncrement()) {
+                for (int rowIndex = 0; rowIndex < tableModel.getRowCount(); rowIndex++) {
+                    tableModel.setValueAt(column.getAutoIncrementSufix() + rowIndex, rowIndex, columnIndex);
                 }
             }
             columnIndex++;
         }
         jTableAttribute.updateUI();
     }
-    
-    
-    
+
+
     private void jButtonModifyPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifyPropertyActionPerformed
         int index = jTableAttribute.getSelectedRow();
         DefaultTableModel dtm = (DefaultTableModel) jTableAttribute.getModel();
@@ -354,7 +377,7 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
             for (Object value : row) {
                 dtm.setValueAt(value, index, i++);
             }
-            
+
             updateTableUI();
 //            data.add(row);
         }
@@ -406,7 +429,6 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         return data;
         //CustomNAttributeSupport>setValue
     }
-
 
     public void jTablePropertiesListSelectionValueChanged(javax.swing.event.ListSelectionEvent e) {
         if (attributeEntity.isEnableActionPanel()) {
