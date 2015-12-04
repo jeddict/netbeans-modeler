@@ -16,13 +16,8 @@
 package org.netbeans.modeler.properties.view.manager;
 
 import org.netbeans.modeler.properties.nentity.NEntityPropertySupport;
-import org.netbeans.modeler.properties.util.PropertyUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
-import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
-import org.netbeans.modeler.widget.edge.IEdgeWidget;
-import org.netbeans.modeler.widget.node.INodeWidget;
-import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;

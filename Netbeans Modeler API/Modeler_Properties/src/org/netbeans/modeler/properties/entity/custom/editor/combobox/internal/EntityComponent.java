@@ -30,7 +30,9 @@ public abstract class EntityComponent<T> extends javax.swing.JDialog {
     public EntityComponent(String title, boolean modal) {
         this((Frame) null, title, modal);
     }
-
+    public EntityComponent() {
+        this((Frame) null, "", true);
+    }
     public EntityComponent(java.awt.Frame parent, boolean modal) {
         this(parent, "", modal);
     }

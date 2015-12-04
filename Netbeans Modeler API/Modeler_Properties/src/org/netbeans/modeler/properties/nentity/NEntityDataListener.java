@@ -27,7 +27,7 @@ public interface NEntityDataListener {
 
     List<Object[]> getData();
 
-    void setData(java.util.List<Object[]> data);
+    void setData(List<Object[]> data);
 
 //    List<T> getEntities();
 //

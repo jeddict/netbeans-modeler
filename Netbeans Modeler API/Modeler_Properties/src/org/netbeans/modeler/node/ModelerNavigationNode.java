@@ -17,12 +17,17 @@ package org.netbeans.modeler.node;
 
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
+import org.openide.util.Lookup;
 
 //Class created initially only for Modeler API node identification
 public class ModelerNavigationNode extends AbstractNode {
 
     public ModelerNavigationNode(Children children) {
         super(children);
+    }
+    
+    public ModelerNavigationNode(Children children, Lookup lookup) {
+        super(children, lookup);
     }
 
 }
