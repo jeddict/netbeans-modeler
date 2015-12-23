@@ -34,8 +34,8 @@ public class SubCategoryChildren extends Index.ArrayChildren {
     protected java.util.List<Node> initCollection() {
         List<Node> childrenNodes = new ArrayList<Node>(category.getSubCategoryNodeConfigs().size());
         for (SubCategoryNodeConfig subCategoryNodeConfig : category.getSubCategoryNodeConfigs()) {
-            if(subCategoryNodeConfig.isVisible()){
-            childrenNodes.add(new SubCategoryNode(subCategoryNodeConfig));
+            if (subCategoryNodeConfig.isVisible()) {
+                childrenNodes.add(new SubCategoryNode(subCategoryNodeConfig));
             }
         }
         return childrenNodes;

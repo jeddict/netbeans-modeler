@@ -50,18 +50,20 @@ import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.Exceptions;
-import org.openide.util.RequestProcessor;
 
 public class NBModelerUtil {
-
-    private final static RequestProcessor RP = new RequestProcessor("Modeler File", 1, true);
 
     public static void loadModelerFile(ModelerFile file) {
         file.getModelerUtil().loadModelerFile(file);
     }
+    
+    public static void init(ModelerFile file) {
+        file.getModelerUtil().init();
+    }
 
     /**
      * BUG FIX Method : Remove all resize border
+     * @param file
      */
     public static void hideAllResizeBorder(ModelerFile file) {
         /* BUG : On Save if any widget is Selected with resize border then [NodeWidget + border] width is calculated as bound */

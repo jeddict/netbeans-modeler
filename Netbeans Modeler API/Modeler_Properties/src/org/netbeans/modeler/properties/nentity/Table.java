@@ -13,11 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package org.netbeans.modeler.properties.nentity;
 
-
 public class Table {
+
     private int width = 430;
     private int height = 400;
 

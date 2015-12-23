@@ -74,11 +74,13 @@ public class PaletteSupport {
 
     private static class ModelerPaletteItemDragAndDropHandler extends DragAndDropHandler {
 
+        @Override
         public void customize(ExTransferable exTransferable, Lookup lookup) {
             final Node node = lookup.lookup(Node.class);
 //            final PaletteItemTransferable paletteItemTransferable = new PaletteItemTransferable(node);
 
             exTransferable.put(new ExTransferable.Single(DataFlavor.imageFlavor) {
+                @Override
                 protected Object getData() throws IOException, UnsupportedFlavorException {
                     return node;
                 }

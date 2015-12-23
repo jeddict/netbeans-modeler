@@ -133,6 +133,7 @@ public class SwingPaletteManager implements ContextPaletteManager {
 
     }
 
+    @Override
     public void cancelPalette() {
         if (paletteWidget != null) {
             getDecoratorLayer().remove(paletteWidget);
@@ -151,6 +152,7 @@ public class SwingPaletteManager implements ContextPaletteManager {
         }
     }
 
+    @Override
     public ContextPaletteModel getModel() {
         ContextPaletteModel retVal = null;
 
@@ -164,6 +166,7 @@ public class SwingPaletteManager implements ContextPaletteManager {
     /**
      * Request that the context palette recieve input focus.
      */
+    @Override
     public void requestFocus() {
         if (paletteWidget != null) {
             paletteWidget.requestFocusInWindow();

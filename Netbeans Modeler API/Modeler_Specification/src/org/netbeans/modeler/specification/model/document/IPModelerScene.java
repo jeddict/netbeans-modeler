@@ -15,7 +15,7 @@
  */
 package org.netbeans.modeler.specification.model.document;
 
-import java.util.List;
+import java.util.Map;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
@@ -36,8 +36,8 @@ public interface IPModelerScene extends IModelerScene {
 
     IColorScheme getColorScheme();
 
-    void setColorScheme(IColorScheme scheme);
+    void setColorScheme(Class<? extends IColorScheme> scheme);
 
-    List<IColorScheme> getColorSchemes();
+    Map<String, Class<? extends IColorScheme>> getColorSchemes();
 
 }

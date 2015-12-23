@@ -60,6 +60,7 @@ public final class TextAreaInplaceEditorProvider implements InplaceEditorProvide
         this.expansionDirections = expansionDirections;
     }
 
+    @Override
     public JTextArea createEditorComponent(InplaceEditorProvider.EditorController controller, Widget widget) {
         if (!editor.isEnabled(widget)) {
             return null;
@@ -80,9 +81,11 @@ public final class TextAreaInplaceEditorProvider implements InplaceEditorProvide
         return field;
     }
 
+    @Override
     public void notifyOpened(final InplaceEditorProvider.EditorController controller, Widget widget, JTextArea editor) {
 //        editor.setMinimumSize(new Dimension(64, 1d9));
         keyListener = new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyChar()) {
                     case KeyEvent.VK_ESCAPE:
@@ -97,19 +100,23 @@ public final class TextAreaInplaceEditorProvider implements InplaceEditorProvide
             }
         };
         focusListener = new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent e) {
                 controller.closeEditor(true);
             }
         };
         documentListener = new DocumentListener() {
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 controller.notifyEditorComponentBoundsChanged();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 controller.notifyEditorComponentBoundsChanged();
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 controller.notifyEditorComponentBoundsChanged();
             }
@@ -120,6 +127,7 @@ public final class TextAreaInplaceEditorProvider implements InplaceEditorProvide
         editor.selectAll();
     }
 
+    @Override
     public void notifyClosing(InplaceEditorProvider.EditorController controller, Widget widget, JTextArea editor, boolean commit) {
         editor.getDocument().removeDocumentListener(documentListener);
         editor.removeFocusListener(focusListener);
@@ -132,10 +140,12 @@ public final class TextAreaInplaceEditorProvider implements InplaceEditorProvide
         }
     }
 
+    @Override
     public Rectangle getInitialEditorComponentBounds(InplaceEditorProvider.EditorController controller, Widget widget, JTextArea editor, Rectangle viewBounds) {
         return null;
     }
 
+    @Override
     public EnumSet<InplaceEditorProvider.ExpansionDirection> getExpansionDirections(InplaceEditorProvider.EditorController controller, Widget widget, JTextArea editor) {
         return expansionDirections;
     }

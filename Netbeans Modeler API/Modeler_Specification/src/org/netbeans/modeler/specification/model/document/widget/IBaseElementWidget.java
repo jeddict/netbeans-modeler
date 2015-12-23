@@ -19,7 +19,7 @@ import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.node.IWidget;
 
-public interface IBaseElementWidget extends IWidget {
+public interface IBaseElementWidget<E extends IBaseElement> extends IWidget {
 
     public String getId();
 
@@ -29,21 +29,19 @@ public interface IBaseElementWidget extends IWidget {
 
     void createVisualPropertySet(ElementPropertySet elementPropertySet);
 
-    public void setBaseElementSpec(IBaseElement baseElementSpec);
+    public void setBaseElementSpec(E baseElementSpec);
 
-    public IBaseElement getBaseElementSpec();
+    public E getBaseElementSpec();
 
     public void init();
 
     public void destroy();
-    
-        //custom added
+
+    //custom added
     void showProperties();
 
     void exploreProperties();
 
     void refreshProperties();
-    
-
 
 }

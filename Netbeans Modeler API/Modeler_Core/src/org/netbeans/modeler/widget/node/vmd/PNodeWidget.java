@@ -55,6 +55,7 @@ import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.node.vmd.internal.AbstractPNodeWidget;
+import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
@@ -186,6 +187,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
 
     }
 
+    @Override
     public NodeWidgetInfo getNodeWidgetInfo() {
         return nodeWidgetInfo;
     }
@@ -209,6 +211,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
 //        }
 //
 //    }
+    @Override
     public void showResizeBorder() {
         Border border = this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this);
         if (border != null) {
@@ -216,6 +219,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         }
     }
 
+    @Override
     public void hideResizeBorder() {
         this.setBorder(DEFAULT_BORDER);
     }
@@ -236,22 +240,16 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
 
         JMenuItem delete = new JMenuItem("Delete");
         delete.setIcon(ImageUtil.getInstance().getIcon("delete.png"));
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PNodeWidget.this.remove(true);
-                PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        delete.addActionListener((ActionEvent e) -> {
+            PNodeWidget.this.remove(true);
+            PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
-        baseProperty.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PNodeWidget.this.showProperties();
-                PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        baseProperty.addActionListener((ActionEvent e) -> {
+            PNodeWidget.this.showProperties();
+            PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
 //        menuItemList.add(visualProperty);
@@ -278,20 +276,16 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
                 popupMenu.add(menuItem);
             }
         }
-        popupMenuProvider = new PopupMenuProvider() {
-            @Override
-            public JPopupMenu getPopupMenu(final Widget widget, final Point location) {
-                return popupMenu;
-            }
-        };
+        popupMenuProvider = (final Widget widget, final Point location1) -> popupMenu;
 
         return popupMenuProvider;
     }
 
     private BasePropertyViewManager node;
+
     @Override
     public void exploreProperties() {
-        if(node==null){
+        if (node == null) {
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getNodeName(), propertyVisibilityHandlers);
@@ -375,6 +369,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @return the widgetBorder
      */
+    @Override
     public ResizeBorder getWidgetBorder() {
         return widgetBorder;
     }
@@ -400,18 +395,22 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         return widgetBorder.getWidgetArea().getSize();
     }
 
+    @Override
     public boolean isAnchorEnable() {
         return anchorState;
     }
 
+    @Override
     public void setAnchorState(boolean state) {
         this.anchorState = state;
     }
 
+    @Override
     public Rectangle getSceneViewBound() {
         return this.convertLocalToScene(this.getBounds());
     }
 
+    @Override
     public Point getSceneViewLocation() {
         return this.convertLocalToScene(this.getPreferredLocation());
     }
@@ -474,10 +473,12 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         return getCursor();
     }
 
+    @Override
     public boolean remove() {
         return remove(false);
     }
 
+    @Override
     public boolean remove(boolean notification) {
         if (notification) {
             NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Node ?", "Delete Node", NotifyDescriptor.OK_CANCEL_OPTION);
@@ -513,6 +514,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @return the scene
      */
+    @Override
     public IModelerScene getModelerScene() {
         return scene;
     }
@@ -537,6 +539,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @return the internalPinWidget
      */
+    @Override
     public PinWidgetInfo getInternalPinWidgetInfo() {
         return internalPinWidgetInfo;
     }
@@ -544,6 +547,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @param internalPinWidgetInfo the internalPinWidget to set
      */
+    @Override
     public void setInternalPinWidgetInfo(PinWidgetInfo internalPinWidgetInfo) {
         this.internalPinWidgetInfo = internalPinWidgetInfo;
     }
@@ -553,6 +557,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @return the exist
      */
+    @Override
     public boolean isLocked() {
         return locked;
     }
@@ -560,16 +565,19 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @param locked the locked to set
      */
+    @Override
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
 
     private int anchorGap;
 
+    @Override
     public int getAnchorGap() {
         return anchorGap;
     }
 
+    @Override
     public void setAnchorGap(int anchorGap) {
         this.anchorGap = anchorGap;
     }
@@ -577,6 +585,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @return the highlightStatus
      */
+    @Override
     public boolean isHighlightStatus() {
         return highlightStatus;
     }
@@ -584,6 +593,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     /**
      * @param highlightStatus the highlightStatus to set
      */
+    @Override
     public void setHighlightStatus(boolean highlightStatus) {
         this.highlightStatus = highlightStatus;
     }

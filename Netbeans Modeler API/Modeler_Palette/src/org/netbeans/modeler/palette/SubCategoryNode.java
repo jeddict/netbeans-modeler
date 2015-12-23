@@ -36,6 +36,7 @@ public class SubCategoryNode extends AbstractNode {
         subCategoryInfo.setImage(subCategoryInfo.getModelerDocument().getImage());
     }
 
+    @Override
     public Image getIcon(int type) {
         return subCategoryInfo.getPaletteDocument().getPaletteIcon();
 

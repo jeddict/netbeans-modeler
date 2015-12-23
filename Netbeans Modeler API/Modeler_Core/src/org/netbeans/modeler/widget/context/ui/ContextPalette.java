@@ -135,8 +135,7 @@ public class ContextPalette extends JPanel {
         ArrayList< ContextPaletteButtonModel> children = model.getChildren();
 
         ButtonListener buttonListener = new ButtonListener();
-        for (int index = 0; index < children.size(); index++) {
-            ContextPaletteButtonModel desc = children.get(index);
+        for (ContextPaletteButtonModel desc : children) {
             if (desc.isGroup() == true) {
                 ComboButton btn = new ComboButton(model.getContext(), desc);
                 btn.setDirection(getDirection());
@@ -157,6 +156,7 @@ public class ContextPalette extends JPanel {
         return retVal;
     }
 
+    @Override
     public boolean requestFocusInWindow() {
         boolean retVal = super.requestFocusInWindow();
 
@@ -355,6 +355,7 @@ public class ContextPalette extends JPanel {
         public ComboListener() {
         }
 
+        @Override
         public void expandStateChanged(ComboButton btn, boolean expanded) {
 
             if (expanded == true) {
@@ -379,6 +380,7 @@ public class ContextPalette extends JPanel {
 
     private class ButtonListener implements ContextButtonListener {
 
+        @Override
         public void actionPerformed(PaletteButton source, boolean locked) {
             ////System.out.println("ContextPalette ButtonListener  actionPerformed...");
             if (locked == true) {

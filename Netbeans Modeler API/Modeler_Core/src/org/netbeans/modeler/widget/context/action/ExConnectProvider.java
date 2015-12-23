@@ -1,39 +1,39 @@
-/** Copyright [2014] Gaurav Gupta
-   *
-   *Licensed under the Apache License, Version 2.0 (the "License");
-   *you may not use this file except in compliance with the License.
-   *You may obtain a copy of the License at
-   *
-   *    http://www.apache.org/licenses/LICENSE-2.0
-   *
-   *Unless required by applicable law or agreed to in writing, software
-   *distributed under the License is distributed on an "AS IS" BASIS,
-   *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   *See the License for the specific language governing permissions and
-   *limitations under the License.
-   */
- package org.netbeans.modeler.widget.context.action;
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.netbeans.modeler.widget.context.action;
 
 import org.netbeans.api.visual.action.ConnectProvider;
 
 /**
- * The extended connect provider adds the ability to create a node widget
- * and create a connector between the source node and the new node.
- * 
- * 
+ * The extended connect provider adds the ability to create a node widget and
+ * create a connector between the source node and the new node.
+ *
+ *
  */
-public interface ExConnectProvider extends ConnectProvider
-{
+public interface ExConnectProvider extends ConnectProvider {
     /**
-     * Checks if the provider is able to create new node widgets.  
-     * 
+     * Checks if the provider is able to create new node widgets.
+     *
      * @return true if the provider is able to create a new node widget.
      */
-  //  public boolean hasTargetWidgetCreator();
-    
+    //  public boolean hasTargetWidgetCreator();
+
     /**
      * Creates a new node widget.
-     * 
+     *
      * @param scene The scene that will contain the new widget.
      */
   //  public Widget createTargetWidget(Scene scene, Widget sourceWidget, Point location);

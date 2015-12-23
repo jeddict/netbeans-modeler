@@ -27,27 +27,29 @@ import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 
-public interface ModelerUtil {
+public interface IModelerUtil {
+    
+    void init();
 
-    public void loadModelerFile(ModelerFile file);
+    void loadModelerFile(ModelerFile file);
 
-    public void saveModelerFile(ModelerFile file);
+    void saveModelerFile(ModelerFile file);
 
-    public INodeWidget updateNodeWidgetDesign(ShapeDesign shapeDesign, INodeWidget nodeWidget);
+    INodeWidget updateNodeWidgetDesign(ShapeDesign shapeDesign, INodeWidget nodeWidget);
 
-    public Anchor getAnchor(INodeWidget nodeWidget);
+    Anchor getAnchor(INodeWidget nodeWidget);
 
-    public IEdgeWidget attachEdgeWidget(IModelerScene scene, EdgeWidgetInfo widgetInfo);
+    IEdgeWidget attachEdgeWidget(IModelerScene scene, EdgeWidgetInfo widgetInfo);
 
-    public INodeWidget attachNodeWidget(IModelerScene scene, NodeWidgetInfo widgetInfo);
+    INodeWidget attachNodeWidget(IModelerScene scene, NodeWidgetInfo widgetInfo);
 
-    public String getEdgeType(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, String connectionContextToolId);
+    String getEdgeType(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, String connectionContextToolId);
 
-    public ResizeBorder getNodeBorder(INodeWidget nodeWidget);
+    ResizeBorder getNodeBorder(INodeWidget nodeWidget);
 
-    public void transformNode(IFlowNodeWidget flowNodeWidget, IModelerDocument document);
+    void transformNode(IFlowNodeWidget flowNodeWidget, IModelerDocument document);
 
-    public void attachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget);
+    void attachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget);
 
-    public void attachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget);
+    void attachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget);
 }

@@ -25,7 +25,7 @@ public class ModelerNavigationNode extends AbstractNode {
     public ModelerNavigationNode(Children children) {
         super(children);
     }
-    
+
     public ModelerNavigationNode(Children children, Lookup lookup) {
         super(children, lookup);
     }

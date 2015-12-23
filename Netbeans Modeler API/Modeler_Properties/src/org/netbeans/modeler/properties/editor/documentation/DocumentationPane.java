@@ -170,6 +170,7 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
         m_TextPane.setText(val);
     }
 
+    @Override
     public void init() {
 
     }
@@ -306,6 +307,7 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
     }
 
     /* KeyListener methods */
+    @Override
     public void keyTyped(KeyEvent ke) {
         if (ke.getKeyChar() == KeyEvent.VK_ENTER) {
             // do not add <br> line break for pre-format text
@@ -320,19 +322,26 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
 
             try {
                 insertBreak();
-            } catch (Exception e) {
+            } catch (IOException e) {
+                ErrorManager.getDefault().notify(e);
+            } catch (BadLocationException e) {
+                ErrorManager.getDefault().notify(e);
+            } catch (RuntimeException e) {
                 ErrorManager.getDefault().notify(e);
             }
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
     }
 
     /* FocusListener methods */
+    @Override
     public void focusGained(FocusEvent fe) {
         // fixed 111959.
         // Need to call selectAll() to get the end position of the text,
@@ -345,18 +354,22 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
         }
     }
 
+    @Override
     public void focusLost(FocusEvent fe) {
     }
 
     /* DocumentListener methods */
+    @Override
     public void changedUpdate(DocumentEvent de) {
         handleDocumentChange(de);
     }
 
+    @Override
     public void insertUpdate(DocumentEvent de) {
         handleDocumentChange(de);
     }
 
+    @Override
     public void removeUpdate(DocumentEvent de) {
         handleDocumentChange(de);
     }
@@ -382,6 +395,7 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
         } else {
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
                     public void run() {
                         setDoc(sText);
                     }
@@ -491,6 +505,7 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
             setEnabled(false);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             try {
                 undoMgr.undo();
@@ -517,6 +532,7 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
             setEnabled(false);
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             try {
                 undoMgr.redo();
@@ -535,6 +551,7 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
 
     class DocUndoableEditListener implements UndoableEditListener {
 
+        @Override
         public void undoableEditHappened(UndoableEditEvent e) {
             undoMgr.addEdit(e.getEdit());
             undoAction.updateState();
@@ -569,6 +586,7 @@ public class DocumentationPane extends GenericEmbeddedEditor<String>
 
     class SaveAction extends AbstractAction {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             int pos = getTextPane().getCaretPosition();
 //            DocumentationPane.this.firePropertyChange(PROP_DIRTY, true, false);

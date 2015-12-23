@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.label;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -38,7 +39,6 @@ import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.border.RoundResizeBorder;
-import org.netbeans.modeler.core.engine.ModelerDiagramEngine;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextPaneInplaceEditorProvider;
 import org.netbeans.modeler.label.multiline.MultilineEditableCompartmentWidget;
@@ -58,6 +58,7 @@ import org.netbeans.modeler.widget.node.NodeWidget;
  */
 public abstract class AbstractLabelManager implements LabelManager {
 
+    private final static BasicStroke ALIGN_STROKE = new BasicStroke(1.0f, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 5.0f, new float[]{6.0f, 3.0f}, 0.0f);
     private final static Border NON_SELECTED_BORDER = BorderFactory.createOpaqueBorder(1, 1, 1, 1);
     private final static Border SELECTED_BORDER = BorderFactory.createLineBorder(1, new Color(0xFFA400));
     private Widget connector = null;
@@ -104,6 +105,7 @@ public abstract class AbstractLabelManager implements LabelManager {
         return label.getLabel();
     }
 
+    @Override
     public LabelWidget getLabelWidget() {
         return label;
     }
@@ -122,6 +124,7 @@ public abstract class AbstractLabelManager implements LabelManager {
         chain.addAction(ActionFactory.createMoveAction(labelMoveSupport, labelMoveSupport));
         chain.addAction(new MoveNodeKeyAction(labelMoveSupport, labelMoveSupport));
         chain.addAction(new WidgetAction.Adapter() {
+            @Override
             public WidgetAction.State keyPressed(Widget widget,
                     WidgetAction.WidgetKeyEvent event) {
                 WidgetAction.State retVal = WidgetAction.State.REJECTED;
@@ -155,6 +158,7 @@ public abstract class AbstractLabelManager implements LabelManager {
 
     }
 
+    @Override
     public void setDefaultPosition() {
         ObjectScene scene = (ObjectScene) getConnector().getScene();
         if (connector instanceof IEdgeWidget) {
@@ -250,7 +254,7 @@ public abstract class AbstractLabelManager implements LabelManager {
      */
     private ConnectionWidget createLineWidget(Scene scene) {
         ConnectionWidget widget = new ConnectionWidget(scene);
-        widget.setStroke(ModelerDiagramEngine.ALIGN_STROKE);
+        widget.setStroke(ALIGN_STROKE);
         widget.setForeground(new Color(242, 132, 0));//Color.GRAY);
         return widget;
     }
@@ -258,6 +262,7 @@ public abstract class AbstractLabelManager implements LabelManager {
     /**
      * @return the labelConnectionWidget
      */
+    @Override
     public ILabelConnectionWidget getLabelConnectionWidget() {
         return labelConnectionWidget;
     }
@@ -285,6 +290,7 @@ public abstract class AbstractLabelManager implements LabelManager {
             WidgetAction.Chain actions = labelWidget.createActions(DesignerTools.SELECT);
             actions.addAction(action);
             actions.addAction(new WidgetAction.Adapter() {
+                @Override
                 public WidgetAction.State keyPressed(Widget widget,
                         WidgetAction.WidgetKeyEvent event) {
                     WidgetAction.State retVal = WidgetAction.State.REJECTED;
@@ -363,6 +369,7 @@ public abstract class AbstractLabelManager implements LabelManager {
             }
         }
 
+        @Override
         public void propertyChange(PropertyChangeEvent event) {
             // Since this is a wrapper widget, we will simply forward the
             // event to the child widget.
@@ -396,25 +403,30 @@ public abstract class AbstractLabelManager implements LabelManager {
             this.connectorWidget = connectorWidget;
         }
 
+        @Override
         public void movementStarted(Widget widget) {
             show(widget);
         }
 
+        @Override
         public void movementFinished(Widget widget) {
             hide();
 
         }
 
+        @Override
         public Point getOriginalLocation(Widget widget) {
             origLoc = widget.getPreferredLocation();
             return origLoc;
         }
 
+        @Override
         public void setNewLocation(Widget widget, Point location) {
 //            connectLineWidget(location);
             widget.setPreferredLocation(location);
         }
 
+        @Override
         public Point locationSuggested(Widget widget, Point originalLocation, Point suggestedLocation) {
             Point labelLocation = widget.getLocation();
             Rectangle widgetBounds = widget.getBounds();

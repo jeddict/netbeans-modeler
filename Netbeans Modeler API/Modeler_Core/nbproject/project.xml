@@ -182,6 +182,7 @@
                 <package>org.netbeans.modeler.provider.node.move</package>
                 <package>org.netbeans.modeler.scene</package>
                 <package>org.netbeans.modeler.scene.vmd</package>
+                <package>org.netbeans.modeler.specification.model.file.action</package>
                 <package>org.netbeans.modeler.tool</package>
                 <package>org.netbeans.modeler.tool.writer</package>
                 <package>org.netbeans.modeler.validation.jaxb</package>

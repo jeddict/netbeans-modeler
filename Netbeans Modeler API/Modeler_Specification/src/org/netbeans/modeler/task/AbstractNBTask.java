@@ -104,6 +104,7 @@ public abstract class AbstractNBTask extends Thread
         addListener(listener);
     }
 
+    @Override
     public void run() {
         if (progressContribs != null && progressContribs.length > 0) {
             progressHandle = AggregateProgressFactory.createHandle(
@@ -122,6 +123,7 @@ public abstract class AbstractNBTask extends Thread
 
     }
 
+    @Override
     public boolean cancel() {
         cancelled = true;
         return true;
@@ -196,15 +198,17 @@ public abstract class AbstractNBTask extends Thread
         taskSettings.put(SETTING_KEY_TASK_NAME,
                 "<" + getBundleMessage("MSG_Default_Task_Name") + ">"); // NOI18N
 
-        taskSettings.put(SETTING_KEY_TOTAL_ITEMS, new Integer(-1));
+        taskSettings.put(SETTING_KEY_TOTAL_ITEMS, -1);
     }
 
     // public methods that should be invoked by subclass
     ////////////////////////////////////////////////////
+    @Override
     public boolean start(int totalItems) {
         return start(++contribCount, totalItems);
     }
 
+    @Override
     public boolean start(int contributor, int totalItems) {
         if (contributor < 0 && contributor > progressContribs.length - 1) {
             finishTask();
@@ -225,10 +229,12 @@ public abstract class AbstractNBTask extends Thread
         return true;
     }
 
+    @Override
     public int increment() {
         return ++counter;
     }
 
+    @Override
     public int increment(int step) {
         counter += step;
         return counter;
@@ -241,6 +247,7 @@ public abstract class AbstractNBTask extends Thread
      *
      * @return true if the process hasn't failed or been canceled
      */
+    @Override
     public boolean proceed() {
         return proceed(0);
     }
@@ -257,6 +264,7 @@ public abstract class AbstractNBTask extends Thread
      *
      * @return true if the process hasn't failed or been canceled
      */
+    @Override
     public boolean proceed(int step) {
         if (cancelled || !success) {
             progressContribs[contribCount].finish();
@@ -293,10 +301,12 @@ public abstract class AbstractNBTask extends Thread
     /**
      * Outputs a blank line
      */
+    @Override
     public void log() {
         log("", true);
     }
 
+    @Override
     public void log(int level) {
         if (logLevel < level) {
             return;
@@ -305,6 +315,7 @@ public abstract class AbstractNBTask extends Thread
         log("", true);
     }
 
+    @Override
     public void log(int level, String msg) {
         if (logLevel < level) {
             return;
@@ -313,6 +324,7 @@ public abstract class AbstractNBTask extends Thread
         log(msg, true);
     }
 
+    @Override
     public void log(int level, String msg, boolean newline) {
         if (logLevel < level) {
             return;
@@ -326,6 +338,7 @@ public abstract class AbstractNBTask extends Thread
      *
      * @param msg the message to be output
      */
+    @Override
     public void log(String msg) {
         log(msg, true);
     }
@@ -336,6 +349,7 @@ public abstract class AbstractNBTask extends Thread
      * @param msg the message to be output
      * @param newline if true, appends newline
      */
+    @Override
     public void log(String msg, boolean newline) {
         if (newline) {
             out.println(msg);
@@ -351,6 +365,7 @@ public abstract class AbstractNBTask extends Thread
      * the success flag to false. The next time proceed() is called, it will
      * invoke finish() return false.
      */
+    @Override
     public void fail() {
         success = false;
     }
@@ -371,11 +386,11 @@ public abstract class AbstractNBTask extends Thread
             return -1;
         }
 
-        return total.intValue();
+        return total;
     }
 
     public void setTotalItems(int total) {
-        setSetting(SETTING_KEY_TOTAL_ITEMS, new Integer(total));
+        setSetting(SETTING_KEY_TOTAL_ITEMS, total);
     }
 
     public boolean isDisplayOutput() {
@@ -385,11 +400,11 @@ public abstract class AbstractNBTask extends Thread
             return true;
         }
 
-        return show.booleanValue();
+        return show;
     }
 
     public void setDisplayOutput(boolean val) {
-        setSetting(SETTING_KEY_DISPLAY_OUTPUT, new Boolean(val));
+        setSetting(SETTING_KEY_DISPLAY_OUTPUT, val);
     }
 
     public Object getSetting(String key) {

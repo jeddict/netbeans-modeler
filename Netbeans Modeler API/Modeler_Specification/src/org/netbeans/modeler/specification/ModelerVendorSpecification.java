@@ -21,12 +21,12 @@ import org.netbeans.modeler.config.document.ModelerDocumentFactory;
 import org.netbeans.modeler.config.document.ModelerDocumentFactoryRepository;
 import org.netbeans.modeler.config.palette.IPaletteConfig;
 import org.netbeans.modeler.config.palette.PaletteConfigRepository;
-import org.netbeans.modeler.specification.model.ModelerSpecificationDiagramModel;
+import org.netbeans.modeler.specification.model.ModelerDiagramSpecification;
 
 public class ModelerVendorSpecification {
 
     private Vendor vendor;
-    private ModelerSpecificationDiagramModel modelerSpecificationDiagramModel;
+    private ModelerDiagramSpecification modelerSpecificationDiagramModel;
 
     private IPaletteConfig paletteConfig;
     private ElementConfigFactory elementConfigFactory;
@@ -47,7 +47,7 @@ public class ModelerVendorSpecification {
     /**
      * @return the modelerSpecificationDiagramModel
      */
-    public ModelerSpecificationDiagramModel getModelerDiagramModel() {
+    public ModelerDiagramSpecification getModelerDiagramModel() {
         return modelerSpecificationDiagramModel;
     }
 
@@ -55,7 +55,7 @@ public class ModelerVendorSpecification {
      * @param modelerSpecificationDiagramModel the
      * modelerSpecificationDiagramModel to set
      */
-    public void setModelerSpecificationDiagramModel(ModelerSpecificationDiagramModel modelerSpecificationDiagramModel) {
+    public void setModelerSpecificationDiagramModel(ModelerDiagramSpecification modelerSpecificationDiagramModel) {
         this.modelerSpecificationDiagramModel = modelerSpecificationDiagramModel;
     }
 

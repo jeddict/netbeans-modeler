@@ -87,6 +87,7 @@ public class PNodeAnchor extends Anchor {
      *
      * @param entry the registered entry
      */
+    @Override
     protected void notifyEntryAdded(Entry entry) {
         requiresRecalculation = true;
     }
@@ -96,6 +97,7 @@ public class PNodeAnchor extends Anchor {
      *
      * @param entry the unregistered entry
      */
+    @Override
     protected void notifyEntryRemoved(Entry entry) {
         results.remove(entry);
         requiresRecalculation = true;
@@ -106,6 +108,7 @@ public class PNodeAnchor extends Anchor {
      *
      * @since 2.8
      */
+    @Override
     protected void notifyRevalidate() {
         requiresRecalculation = true;
     }
@@ -194,16 +197,14 @@ public class PNodeAnchor extends Anchor {
     private Entry[] toArray(final HashMap<Entry, Float> map) {
         Set<Entry> keys = map.keySet();
         Entry[] entries = keys.toArray(new Entry[keys.size()]);
-        Arrays.sort(entries, new Comparator<Entry>() {
-            public int compare(Entry o1, Entry o2) {
-                float f = map.get(o1) - map.get(o2);
-                if (f > 0.0f) {
-                    return 1;
-                } else if (f < 0.0f) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+        Arrays.sort(entries, (Entry o1, Entry o2) -> {
+            float f = map.get(o1) - map.get(o2);
+            if (f > 0.0f) {
+                return 1;
+            } else if (f < 0.0f) {
+                return -1;
+            } else {
+                return 0;
             }
         });
         return entries;
@@ -215,6 +216,7 @@ public class PNodeAnchor extends Anchor {
      * @param entry the entry
      * @return the calculated result
      */
+    @Override
     public Result compute(Entry entry) {
         recalculate();
         return results.get(entry);

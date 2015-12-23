@@ -202,6 +202,7 @@ public interface IConnectionWidget extends IWidget {
      * @param localLocation the local locaytion
      * @return true, if the location is a part of the connection widget
      */
+    @Override
     boolean isHitAt(Point localLocation);
 
     /**
@@ -232,6 +233,7 @@ public interface IConnectionWidget extends IWidget {
      *
      * @return true, if the connection widget is validated and routed
      */
+    @Override
     boolean isValidated();
 
     /**
@@ -384,7 +386,7 @@ public interface IConnectionWidget extends IWidget {
      * @param targetAnchorShape the target anchor shape
      */
     void setTargetAnchorShape(AnchorShape targetAnchorShape);
-    
+
     //custom added
     void showProperties();
 

@@ -19,6 +19,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.netbeans.modeler.component.IModelerPanel;
+import org.netbeans.modeler.core.IModelerDiagramEngine;
+import org.netbeans.modeler.specification.export.IExportManager;
+import org.netbeans.modeler.specification.model.ModelerDiagramSpecification;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.specification.model.util.IModelerUtil;
+import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.TYPE})
@@ -27,4 +34,19 @@ public @interface DiagramModel {
     public String id();
 
     public String name();
+
+    public Class<? extends IModelerPanel> modelerPanel() default IModelerPanel.class;
+
+    public Class<? extends IModelerUtil> modelerUtil();
+
+    public Class<? extends IModelerScene> modelerScene();
+
+    public Class<? extends IExportManager> exportManager();
+
+    public Class<? extends IModelerDiagramEngine> modelerDiagramEngine();
+
+    public Class<? extends IRelationValidator> relationValidator();
+
+    public Class<? extends ModelerDiagramSpecification> diagramSpecification();
+
 }

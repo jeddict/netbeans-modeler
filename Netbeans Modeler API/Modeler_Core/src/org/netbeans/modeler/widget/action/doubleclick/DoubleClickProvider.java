@@ -18,7 +18,7 @@ package org.netbeans.modeler.widget.action.doubleclick;
 import java.awt.Point;
 import org.netbeans.api.visual.widget.Widget;
 
-
 public interface DoubleClickProvider {
-      public void onDoubleClick(Widget widget, Point point, boolean bln);
+
+    public void onDoubleClick(Widget widget, Point point, boolean bln);
 }

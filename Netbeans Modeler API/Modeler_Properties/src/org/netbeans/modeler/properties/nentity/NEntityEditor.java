@@ -356,7 +356,6 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         jTableAttribute.updateUI();
     }
 
-
     private void jButtonModifyPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifyPropertyActionPerformed
         int index = jTableAttribute.getSelectedRow();
         DefaultTableModel dtm = (DefaultTableModel) jTableAttribute.getModel();

@@ -66,7 +66,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
 
     @Override
     protected Sheet createSheet() {
-       return reloadSheet(new HashMap<String, PropertyVisibilityHandler>());
+        return reloadSheet(new HashMap<String, PropertyVisibilityHandler>());
     }
 
     public Sheet reloadSheet(Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
@@ -83,9 +83,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
         return sheet;
     }
 
-    
-    
-    private void createSheet(Sheet sheet , Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList){
+    private void createSheet(Sheet sheet, Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
         for (Sheet.Set propertySet : elementPropertySet.getGroups()) {
 //            propertySet.setHidden(false);
             int hiddenPropertyCount = 0;
@@ -107,7 +105,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
                             property.setHidden(true);
                             hiddenPropertyCount++;
                         }
-                    } else  if (embeddedPropertySupport.getPropertyVisibilityHandler() != null) {
+                    } else if (embeddedPropertySupport.getPropertyVisibilityHandler() != null) {
                         if (!embeddedPropertySupport.getPropertyVisibilityHandler().isVisible()) {
                             property.setHidden(true);
                             hiddenPropertyCount++;
@@ -121,7 +119,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
                             property.setHidden(true);
                             hiddenPropertyCount++;
                         }
-                    } else  if (comboBoxPropertySupport.getPropertyVisibilityHandler() != null) {
+                    } else if (comboBoxPropertySupport.getPropertyVisibilityHandler() != null) {
                         if (!comboBoxPropertySupport.getPropertyVisibilityHandler().isVisible()) {
                             property.setHidden(true);
                             hiddenPropertyCount++;
@@ -130,17 +128,16 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
                 } else if (property.getClass() == NEntityPropertySupport.class) {
                     NEntityPropertySupport nEntityPropertySupport = (NEntityPropertySupport) property;
                     nEntityPropertySupport.getAttributeEntity().getTableDataListener().initCount();
-                    if (nEntityPropertySupport.getPropertyVisibilityHandler() != null) { 
+                    if (nEntityPropertySupport.getPropertyVisibilityHandler() != null) {
                         if (!nEntityPropertySupport.getPropertyVisibilityHandler().isVisible()) {
                             property.setHidden(true);
                             hiddenPropertyCount++;
                         }
                     }
                 }
-                
+
                 //propertyVisibilityHandlerList is Obselete remove this functionality in future
                 //.getPropertyVisibilityHandler() is the right way
-                
             }
             if (hiddenPropertyCount != propertySet.getProperties().length) {
 //                propertySet.setHidden(true);
@@ -148,9 +145,6 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
             }
         }
     }
-    
-    
-    
 
     /**
      * @return the modelerScene

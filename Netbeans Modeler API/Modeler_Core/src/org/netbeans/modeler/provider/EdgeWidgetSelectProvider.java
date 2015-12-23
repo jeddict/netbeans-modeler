@@ -44,6 +44,7 @@ public class EdgeWidgetSelectProvider implements SelectProvider {
         return false;
     }
 
+    @Override
     public boolean isSelectionAllowed(Widget widget, Point localLocation, boolean invertSelection) {
         return true;
     }

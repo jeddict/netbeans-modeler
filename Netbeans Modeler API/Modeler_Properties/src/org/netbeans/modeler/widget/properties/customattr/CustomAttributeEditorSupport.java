@@ -75,6 +75,7 @@ public class CustomAttributeEditorSupport extends PropertyEditorSupport implemen
     private PropertyEnv env;
 
     // bugfix# 9219 added attachEnv() method checking if the user canWrite in text box
+    @Override
     public void attachEnv(PropertyEnv env) {
 
         FeatureDescriptor desc = env.getFeatureDescriptor();

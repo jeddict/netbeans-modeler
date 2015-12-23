@@ -33,22 +33,17 @@ public class SaveDiagram implements SaveCookie {
         this.file = file;
     }
 
+    @Override
     public synchronized void save() throws IOException {
-        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-            @Override
-            public void run() {
-                RP.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        NBModelerUtil.saveModelerFile(file);
-                        DataObject dobj = (DataObject) file.getModelerFileDataObject();
-                        file.getModelerPanelTopComponent().changePersistenceState(true);
-                        if (dobj instanceof ModelerFileDataObject) {
-                            ((ModelerFileDataObject) dobj).setDirty(false, SaveDiagram.this);
-                        }
-                    }
-                });
-            }
+        WindowManager.getDefault().invokeWhenUIReady(() -> {
+            RP.post(() -> {
+                NBModelerUtil.saveModelerFile(file);
+                DataObject dobj = (DataObject) file.getModelerFileDataObject();
+                file.getModelerPanelTopComponent().changePersistenceState(true);
+                if (dobj instanceof ModelerFileDataObject) {
+                    ((ModelerFileDataObject) dobj).setDirty(false, SaveDiagram.this);
+                }
+            });
         });
 
     }

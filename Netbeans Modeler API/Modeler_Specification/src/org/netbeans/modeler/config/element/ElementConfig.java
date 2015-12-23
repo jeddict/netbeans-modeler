@@ -64,6 +64,7 @@ public class ElementConfig implements IElementConfig {
     /**
      * @return the groups
      */
+    @Override
     public List<Group> getGroups() {
         return groups;
     }
@@ -80,10 +81,12 @@ public class ElementConfig implements IElementConfig {
     /**
      * @param groups the groups to set
      */
+    @Override
     public void setGroups(List<Group> groups) {
         this.groups = groups;
     }
 
+    @Override
     public void addGroup(Group group) {
         this.groups.add(group);
     }

@@ -45,10 +45,9 @@ public class NEntityPropertySupport extends PropertySupport {
     }
 
     public NEntityPropertySupport(ModelerFile modelerFile, NAttributeEntity attributeEntity, PropertyVisibilityHandler propertyVisibilityHandler) {
-        this( modelerFile, attributeEntity);
+        this(modelerFile, attributeEntity);
         this.propertyVisibilityHandler = propertyVisibilityHandler;
     }
-    
 
     @Override
     public Object getValue() throws IllegalAccessException, InvocationTargetException {

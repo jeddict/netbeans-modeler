@@ -29,6 +29,7 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 
 public final class FreeMoveControlPointProvider implements MoveControlPointProvider {
 
+    @Override
     public List<Point> locationSuggested(ConnectionWidget connectionWidget, int index, Point suggestedLocation) {
         IEdgeWidget edgeWidget = (IEdgeWidget) connectionWidget;
 

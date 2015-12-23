@@ -103,8 +103,8 @@ public interface INodeWidget extends IWidget {
     void setLocked(boolean locked);
 
     Point getSceneViewLocation();
-    
-        //custom added
+
+    //custom added
     void showProperties();
 
     void exploreProperties();

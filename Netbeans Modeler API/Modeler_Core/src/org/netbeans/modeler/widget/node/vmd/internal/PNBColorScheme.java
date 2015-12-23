@@ -58,28 +58,68 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
-import static org.netbeans.modeler.widget.node.vmd.internal.POriginalColorScheme.BORDER_CATEGORY_BACKGROUND;
+
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 
-/**
- * @author David Kaspar
- */
 public class PNBColorScheme implements IColorScheme {
 
-    protected static final Color COLOR_NORMAL = new Color(160, 180, 210);
-    protected static final Color COLOR_HIGHLIGHTED = new Color(0x5B67B0);
-    public static final Color COLOR60_SELECT = new Color(0xFF8500);
-    public static final Color COLOR60_HOVER = new Color(0x5B67B0);
-    public static final Color COLOR60_HOVER_BACKGROUND = new Color(0xB0C3E1);
+    private final Color COLOR_NORMAL;
+    private final Color COLOR_HIGHLIGHTED;
+    public final Color COLOR60_SELECT;
+    public final Color COLOR60_HOVER;
+    public final Color COLOR60_HOVER_BACKGROUND;
 
-    private static final Border BORDER60 = PFactory.createPNodeBorder(POriginalColorScheme.COLOR_NORMAL, 2, POriginalColorScheme.COLOR1, POriginalColorScheme.COLOR2, POriginalColorScheme.COLOR3, POriginalColorScheme.COLOR4, POriginalColorScheme.COLOR5);
-    private static final Border BORDER60_SELECT = PFactory.createPNodeBorder(COLOR60_SELECT, 2, POriginalColorScheme.COLOR1, POriginalColorScheme.COLOR2, POriginalColorScheme.COLOR3, POriginalColorScheme.COLOR4, POriginalColorScheme.COLOR5);
-    private static final Border BORDER60_HOVER = PFactory.createPNodeBorder(COLOR60_HOVER, 2, POriginalColorScheme.COLOR1, POriginalColorScheme.COLOR2, POriginalColorScheme.COLOR3, POriginalColorScheme.COLOR4, POriginalColorScheme.COLOR5);
+    private final Border BORDER60;
+    private final Border BORDER60_SELECT;
+    private final Border BORDER60_HOVER;
 
-    private static final Border BORDER60_PIN_SELECT = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, COLOR60_SELECT), BorderFactory.createLineBorder(2, 7, 2, 7, COLOR60_SELECT));
-//        private static final Border BORDER60_PIN_HOVER = BorderFactory.createLineBorder (2, 8, 2, 8, COLOR60_HOVER);
+    private final Border BORDER60_PIN_SELECT;
+
+    private final Color BORDER_CATEGORY_BACKGROUND;
+    private final Border BORDER_PIN;
+    private final Color COLOR1;
+    private final Color COLOR2;
+    private final Color COLOR3;
+    private final Color COLOR4;
+    private final Color COLOR5;
+    private static PNBColorScheme instance;
+
+    public static PNBColorScheme getInstance() {
+        if (instance == null) {
+            synchronized (PNBColorScheme.class) {
+                if (instance == null) {
+                    instance = new PNBColorScheme();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private PNBColorScheme() {
+        COLOR_NORMAL = new Color(0xBACDF0);//new Color(160, 180, 210);
+        COLOR_HIGHLIGHTED = new Color(0x5B67B0);
+        COLOR60_SELECT = new Color(0xFF8500);
+        COLOR60_HOVER = new Color(0x5B67B0);
+        COLOR60_HOVER_BACKGROUND = new Color(0xB0C3E1);
+
+        COLOR1 = new Color(221, 235, 246);
+        COLOR2 = new Color(255, 255, 255);
+        COLOR3 = new Color(214, 235, 255);
+        COLOR4 = new Color(241, 249, 253);
+        COLOR5 = new Color(255, 255, 255);
+
+        BORDER60 = PFactory.createPNodeBorder(COLOR_NORMAL, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        BORDER60_SELECT = PFactory.createPNodeBorder(COLOR60_SELECT, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        BORDER60_HOVER = PFactory.createPNodeBorder(COLOR60_HOVER, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+
+        BORDER60_PIN_SELECT = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, COLOR60_SELECT), BorderFactory.createLineBorder(2, 7, 2, 7, COLOR60_SELECT));
+
+        BORDER_CATEGORY_BACKGROUND = new Color(0xCDDDF8);
+        BORDER_PIN = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
+
+    }
 
     @Override
     public void installUI(IPNodeWidget widget) {
@@ -87,12 +127,12 @@ public class PNBColorScheme implements IColorScheme {
 
         Widget header = widget.getHeader();
         header.setBackground(COLOR60_HOVER_BACKGROUND);
-        header.setBorder(POriginalColorScheme.BORDER_PIN);
+        header.setBorder(BORDER_PIN);
         widget.getNodeNameWidget().setForeground(Color.BLACK);
         widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(Font.BOLD, 12));
 
         Widget pinsSeparator = widget.getPinsSeparator();
-        pinsSeparator.setForeground(POriginalColorScheme.BORDER_CATEGORY_BACKGROUND);
+        pinsSeparator.setForeground(BORDER_CATEGORY_BACKGROUND);
 
         widget.getMinimizeButton().setImage(this.getMinimizeWidgetImage(widget));
     }
@@ -154,7 +194,7 @@ public class PNBColorScheme implements IColorScheme {
 
     @Override
     public void installUI(IPinWidget widget) {
-        widget.setBorder(POriginalColorScheme.BORDER_PIN);
+        widget.setBorder(BORDER_PIN);
         widget.setBackground(COLOR60_HOVER_BACKGROUND);
         widget.getPinNameWidget().setForeground(Color.BLACK);
     }
@@ -165,7 +205,7 @@ public class PNBColorScheme implements IColorScheme {
         if (state.isSelected()) {
             widget.setBorder(BORDER60_PIN_SELECT);
         } else {
-            widget.setBorder(POriginalColorScheme.BORDER_PIN);
+            widget.setBorder(BORDER_PIN);
         }
     }
 
@@ -180,6 +220,7 @@ public class PNBColorScheme implements IColorScheme {
 //                ? ImageUtilities.loadImage("org/netbeans/modeler/widget/resource/cf_plus.gif") // NOI18N
 //                : ImageUtilities.loadImage("org/netbeans/modeler/widget/resource/cf_minus.gif"); // NOI18N
 //    }
+    @Override
     public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized()
                 ? ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-expand-60.png") // NOI18N
@@ -203,16 +244,6 @@ public class PNBColorScheme implements IColorScheme {
         label.setFont(fontPinCategory);
         label.setAlignment(LabelWidget.Alignment.CENTER);
         label.setCheckClipping(true);
-    }
-
-    @Override
-    public String getId() {
-        return "CLASSIC";
-    }
-
-    @Override
-    public String getName() {
-        return "Classic";
     }
 
     @Override

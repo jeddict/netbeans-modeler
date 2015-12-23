@@ -17,10 +17,10 @@ package org.netbeans.modeler.component;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.util.Date;
 import javax.swing.ActionMap;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
-import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.modeler.component.save.SaveDiagram;
 import org.netbeans.modeler.component.save.ui.SaveNotifierYesNo;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
@@ -64,26 +64,22 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     private ExplorerManager explorerManager;
     private ModelerFile modelerFile;
     private IModelerScene modelerScene;
-    private final Toolbar editorToolbar;
+    private Toolbar editorToolbar;
     private SaveDiagram saveCookies;
 
-    public ModelerPanelTopComponent() {
+    @Override
+    public void init(ModelerFile modelerFile) {
         initComponents();
         editorToolbar = new Toolbar("Diagram Toolbar", false);
         add(editorToolbar, BorderLayout.NORTH);
-    }
-
-    @Override
-    public void init(ModelerFile file) {
-        saveCookies = new SaveDiagram(file);
-        this.modelerFile = file;
-        this.modelerScene = file.getVendorSpecification().getModelerDiagramModel().getModelerScene();
+        saveCookies = new SaveDiagram(modelerFile);
+        this.modelerFile = modelerFile;
+        modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
         this.setName(modelerFile.getName());
         this.setIcon(modelerFile.getIcon());
         this.setToolTipText(modelerFile.getTooltip());
         setFocusable(true);
-        addKeyListener(new ModelerKeyAdapter(file));
-
+        addKeyListener(new ModelerKeyAdapter(modelerFile));
         initializeToolBar();
         if (modelerScene.getView() == null) {
             scrollPane.setViewportView(modelerScene.createView());
@@ -98,8 +94,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
         explorerManager = new ExplorerManager();
 
-        initLookup();
-//        associateLookup(getLookup());
+        initLookup();// 60 ms
     }
     private InstanceContent lookupContent = new InstanceContent();
     private Lookup lookup = null;
@@ -150,6 +145,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         }
     }
 
+    @Override
     public ExplorerManager getExplorerManager() {
         return explorerManager;
     }
@@ -201,13 +197,15 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     }
 
     private void initializeToolBar() {
-        //DiagramEngine engine = scene.getEngine();
-        IModelerDiagramEngine engine = getModelerScene().getModelerFile().getModelerDiagramEngine();
+        SwingUtilities.invokeLater(() -> {
+            IModelerDiagramEngine engine = modelerFile.getModelerDiagramEngine();
+            if (engine != null) {
+                engine.buildToolBar(editorToolbar);
+            }
+        });
 
-        if (engine != null) {
-            engine.buildToolBar(editorToolbar);
-        }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -248,16 +246,11 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         }
     }
 
-    /**
-     * @return the modelerScene
-     */
-    public IModelerScene getModelerScene() {
-        return modelerScene;
-    }
 
     /**
      * @return the modelerFile
      */
+    @Override
     public ModelerFile getModelerFile() {
         return modelerFile;
     }
@@ -275,12 +268,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     @Override
     public final void forceClose() {
         forceClose = true;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                ModelerPanelTopComponent.this.close();
-            }
-        });
+        SwingUtilities.invokeLater(ModelerPanelTopComponent.this::close);
     }
 
     @Override
@@ -290,9 +278,9 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         if (isForceClose()) {
             return true;
         }
-
+        IModelerScene modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
         if (modelerFile == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) != this.saveCookies) {
-            this.getModelerScene().destroy();
+            modelerScene.destroy();
             return true;
         }
         //prompt to save before close
@@ -311,18 +299,15 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         }
 
         if (safeToClose) {
-            this.getModelerScene().destroy();
+            modelerScene.destroy();
         }
 
         return safeToClose;
     }
 
     private void setDiagramDisplayName(final String name) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setDisplayName(name);
-            }
+        SwingUtilities.invokeLater(() -> {
+            setDisplayName(name);
         });
     }
 

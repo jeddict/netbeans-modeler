@@ -50,6 +50,7 @@ public class PaletteConfig implements IPaletteConfig {
     /**
      * @param categoryNodeConfigs the categoryNodeConfigs to set
      */
+    @Override
     public void setCategoryNodeConfigs(List<CategoryNodeConfig> categoryNodeConfigs) {
         this.categoryNodeConfigs = categoryNodeConfigs;
     }
@@ -57,6 +58,7 @@ public class PaletteConfig implements IPaletteConfig {
     /**
      * @return the id
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -64,6 +66,7 @@ public class PaletteConfig implements IPaletteConfig {
     /**
      * @param id the id to set
      */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -71,6 +74,7 @@ public class PaletteConfig implements IPaletteConfig {
     /**
      * @return the name
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -78,10 +82,12 @@ public class PaletteConfig implements IPaletteConfig {
     /**
      * @param name the name to set
      */
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public SubCategoryNodeConfig findSubCategoryNodeConfig(IModelerDocument modelerDocument) {
         for (CategoryNodeConfig categoryNodeConfig : categoryNodeConfigs) {
             for (SubCategoryNodeConfig subCategoryNodeConfig : categoryNodeConfig.getSubCategoryNodeConfigs()) {

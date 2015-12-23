@@ -17,21 +17,10 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.advance.cl
 
 import javax.swing.JDialog;
 
-
 public class ItemInsertPanelHandler extends JDialog {
-    
-    
-    
-    public ItemInsertPanelHandler(){
-        
+
+    public ItemInsertPanelHandler() {
+
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
 }

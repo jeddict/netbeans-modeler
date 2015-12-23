@@ -34,14 +34,17 @@ public class LabelInplaceEditor implements TextFieldInplaceEditor {
         this.connector = connector;
     }
 
+    @Override
     public boolean isEnabled(Widget widget) {
         return true;
     }
 
+    @Override
     public String getText(Widget widget) {
         return ((LabelWidget) widget).getLabel();
     }
 
+    @Override
     public void setText(Widget widget, String text) {
         if (connector instanceof INodeWidget) {
             ((INodeWidget) connector).setLabel(text);

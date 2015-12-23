@@ -48,6 +48,7 @@ public class ComboBoxInplaceEditor implements InplaceEditor {
         }
         comboBox.addItemListener(
                 new java.awt.event.ItemListener() {
+                    @Override
                     public void itemStateChanged(java.awt.event.ItemEvent event) {
                         if (event.getStateChange() == ItemEvent.SELECTED && stateActive) {
                             comboBoxListener.setItem((ComboBoxValue) comboBox.getModel().getSelectedItem());

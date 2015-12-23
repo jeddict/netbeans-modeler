@@ -26,6 +26,7 @@ public interface IBaseElement {
     public Map<String, String> getCustomAttributes();
 
     public void setCustomAttributes(Map<String, String> customAttributes);
+
     public Object getRootElement();
 
     public void setRootElement(Object rootElement);

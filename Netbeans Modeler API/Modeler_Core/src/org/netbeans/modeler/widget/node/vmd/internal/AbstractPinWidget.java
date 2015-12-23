@@ -74,6 +74,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      * @param previousState the previous state
      * @param state the new state
      */
+    @Override
     protected void notifyStateChanged(ObjectState previousState, ObjectState state) {
         if (!this.isHighlightStatus()) {
             getColorScheme().updateUI(this, previousState, state);
@@ -85,6 +86,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      *
      * @return the pin name widget
      */
+    @Override
     public Widget getPinNameWidget() {
         return nameWidget;
     }
@@ -94,6 +96,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      *
      * @param name the pin name
      */
+    @Override
     public void setPinName(String name) {
         nameWidget.setLabel(name);
     }
@@ -103,6 +106,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      *
      * @return the pin name
      */
+    @Override
     public String getPinName() {
         return nameWidget.getLabel();
     }
@@ -112,6 +116,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      *
      * @param glyphs the list of images
      */
+    @Override
     public void setGlyphs(List<Image> glyphs) {
         glyphsWidget.setGlyphs(glyphs);
     }
@@ -122,6 +127,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      * @param name the pin name
      * @param glyphs the pin glyphs
      */
+    @Override
     public void setProperties(String name, List<Image> glyphs) {
         setPinName(name);
         glyphsWidget.setGlyphs(glyphs);
@@ -133,6 +139,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      *
      * @return the anchor
      */
+    @Override
     public Anchor createAnchor() {
         if (anchor == null) {
             anchor = new PNodeAnchor(this, false);
@@ -150,6 +157,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     /**
      * @return the colorScheme
      */
+    @Override
     public IColorScheme getColorScheme() {
         return colorScheme;
     }
@@ -157,6 +165,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     /**
      * @param colorScheme the colorScheme to set
      */
+    @Override
     public void setColorScheme(IColorScheme colorScheme) {
         this.colorScheme = colorScheme;
     }

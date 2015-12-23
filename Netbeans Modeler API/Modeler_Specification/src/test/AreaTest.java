@@ -1,22 +1,23 @@
-/** Copyright [2014] Gaurav Gupta
-   *
-   *Licensed under the Apache License, Version 2.0 (the "License");
-   *you may not use this file except in compliance with the License.
-   *You may obtain a copy of the License at
-   *
-   *    http://www.apache.org/licenses/LICENSE-2.0
-   *
-   *Unless required by applicable law or agreed to in writing, software
-   *distributed under the License is distributed on an "AS IS" BASIS,
-   *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   *See the License for the specific language governing permissions and
-   *limitations under the License.
-   */
- package test;
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package test;
 
 /**
  *
- * 
+ *
  */
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,7 +32,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
-public class AreaTest extends JFrame{
+public class AreaTest extends JFrame {
+
     private static final long serialVersionUID = -2221432546854106311L;
 
     Area area = new Area();
@@ -43,21 +45,15 @@ public class AreaTest extends JFrame{
 
     AreaTest() {
         Path2D.Double triangle = new Path2D.Double();
-       
-        
-          triangle.moveTo(50 , 50);
-            triangle.lineTo(300 , 400);
-            triangle.lineTo(10 , 200);
-            triangle.closePath();
-            area.add(new Area(triangle));
-            triangle.reset();
-        
-        
-        
-        
 
-         insidePoint.setLocation(350 , 150);
-         
+        triangle.moveTo(50, 50);
+        triangle.lineTo(300, 400);
+        triangle.lineTo(10, 200);
+        triangle.closePath();
+        area.add(new Area(triangle));
+        triangle.reset();
+
+        insidePoint.setLocation(350, 150);
 
         // Note: we're storing double[] and not Point2D.Double
         ArrayList<double[]> areaPoints = new ArrayList<double[]>();
@@ -86,22 +82,22 @@ public class AreaTest extends JFrame{
             // Make the lines
             if (currentElement[0] == PathIterator.SEG_MOVETO) {
                 start = currentElement; // Record where the polygon started to close it later
-            } 
+            }
 
             if (nextElement[0] == PathIterator.SEG_LINETO) {
                 areaSegments.add(
                         new Line2D.Double(
-                            currentElement[1], currentElement[2],
-                            nextElement[1], nextElement[2]
+                                currentElement[1], currentElement[2],
+                                nextElement[1], nextElement[2]
                         )
-                    );
+                );
             } else if (nextElement[0] == PathIterator.SEG_CLOSE) {
                 areaSegments.add(
                         new Line2D.Double(
-                            currentElement[1], currentElement[2],
-                            start[1], start[2]
+                                currentElement[1], currentElement[2],
+                                start[1], start[2]
                         )
-                    );
+                );
             }
         }
 
@@ -109,9 +105,9 @@ public class AreaTest extends JFrame{
         for (Line2D.Double line : areaSegments) {
 
             // From: http://stackoverflow.com/questions/6176227
-            double u = 
-              ((insidePoint.getX() - line.x1) * (line.x2 - line.x1) + (insidePoint.getY() - line.y1) * (line.y2 - line.y1))
-            / ((line.x2 - line.x1) * (line.x2 - line.x1) + (line.y2 - line.y1) * (line.y2 - line.y1));
+            double u
+                    = ((insidePoint.getX() - line.x1) * (line.x2 - line.x1) + (insidePoint.getY() - line.y1) * (line.y2 - line.y1))
+                    / ((line.x2 - line.x1) * (line.x2 - line.x1) + (line.y2 - line.y1) * (line.y2 - line.y1));
 
             double xu = line.x1 + u * (line.x2 - line.x1);
             double yu = line.y1 + u * (line.y2 - line.y1);
@@ -138,6 +134,7 @@ public class AreaTest extends JFrame{
         setVisible(true);
     }
 
+    @Override
     public void paint(Graphics g) {
         // Fill the area
         Graphics2D g2d = (Graphics2D) g;
@@ -158,8 +155,8 @@ public class AreaTest extends JFrame{
                         insidePoint.getY() - 3,
                         6,
                         6
-                        )
-            );
+                )
+        );
 
         // Draw the other close points
         for (Point2D.Double point : closestPointList) {
@@ -170,8 +167,8 @@ public class AreaTest extends JFrame{
                             point.getY() - 3,
                             6,
                             6
-                            )
-                );
+                    )
+            );
         }
 
         // Draw the outside point
@@ -182,8 +179,8 @@ public class AreaTest extends JFrame{
                         bestPoint.getY() - 3,
                         6,
                         6
-                        )
-            );
+                )
+        );
     }
 
     public static void main(String[] args) {

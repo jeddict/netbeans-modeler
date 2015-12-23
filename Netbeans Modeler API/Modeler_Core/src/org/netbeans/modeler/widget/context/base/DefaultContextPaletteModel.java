@@ -47,15 +47,18 @@ public class DefaultContextPaletteModel implements ContextPaletteModel {
         descriptions.add(desc);
     }
 
+    @Override
     public FOLLOWMODE getFollowMouseMode() {
         return followMouse;
     }
 
     // ContextPaletteModel Implementation
+    @Override
     public ArrayList< ContextPaletteButtonModel> getChildren() {
         return descriptions;
     }
 
+    @Override
     public IWidget getContext() {
         return context;
     }

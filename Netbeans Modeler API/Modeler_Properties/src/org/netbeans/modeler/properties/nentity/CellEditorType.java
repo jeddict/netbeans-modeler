@@ -13,10 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package org.netbeans.modeler.properties.nentity;
 
-
 public enum CellEditorType {
-    TEXTFIELD , COMBOBOX ;
+
+    TEXTFIELD, COMBOBOX;
 }

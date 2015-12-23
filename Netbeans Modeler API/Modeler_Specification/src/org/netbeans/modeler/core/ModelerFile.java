@@ -27,12 +27,12 @@ import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.specification.ModelerVendorSpecification;
-import org.netbeans.modeler.specification.model.ModelerSpecificationDiagramModel;
+import org.netbeans.modeler.specification.model.ModelerDiagramSpecification;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
 import org.netbeans.modeler.specification.model.document.IDiagramElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.util.ModelerUtil;
+import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.specification.model.util.NModelerUtil;
 import org.netbeans.modeler.specification.model.util.PModelerUtil;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
@@ -59,7 +59,7 @@ public class ModelerFile {
     private Image icon;
     private IModelerFileDataObject modelerFileDataObject;
     private ModelerVendorSpecification modelerVendorSpecification;
-    private Map<String,Object> attributes = new HashMap<String,Object>();
+    private Map<String, Object> attributes = new HashMap<String, Object>();
 
     /**
      * @return the name
@@ -139,8 +139,8 @@ public class ModelerFile {
         this.modelerFileDataObject = modelerFileDataObject;
         FileObject fileObject = modelerFileDataObject.getPrimaryFile();
         this.setName(fileObject.getName());
-            this.setExtension(fileObject.getExt());
-            this.setIcon(modelerFileDataObject.getIcon());
+        this.setExtension(fileObject.getExt());
+        this.setIcon(modelerFileDataObject.getIcon());
     }
 
     /**
@@ -160,7 +160,7 @@ public class ModelerFile {
     /**
      * @return the modelerUtil
      */
-    public ModelerUtil getModelerUtil() {
+    public IModelerUtil getModelerUtil() {
         return this.getVendorSpecification().getModelerDiagramModel().getModelerUtil();
     }
 
@@ -186,7 +186,7 @@ public class ModelerFile {
      * @return the ModelerPanelTopComponent
      */
     public IModelerPanel getModelerPanelTopComponent() {
-        return this.getVendorSpecification().getModelerDiagramModel().getModelerPanelTopComponent();
+        return this.getModelerScene().getModelerPanelTopComponent();
     }
 
     /**
@@ -217,7 +217,7 @@ public class ModelerFile {
         return this.getVendorSpecification().getModelerDiagramModel().getRootElement();
     }
 
-    public ModelerSpecificationDiagramModel getModelerDiagramModel() {
+    public ModelerDiagramSpecification getModelerDiagramModel() {
         return this.getVendorSpecification().getModelerDiagramModel();
     }
 
@@ -271,13 +271,13 @@ public class ModelerFile {
                  * @since Thu, 17 Apr 2014 10:39:05 +0000
                  */
                 for (IEdgeWidget edgeWidget : new CopyOnWriteArrayList<IEdgeWidget>(edgeWidgets)) {
-                  if(edgeWidget.getModelerScene().isEdge(edgeWidget.getEdgeWidgetInfo())){
-                     edgeWidget.remove();
+                    if (edgeWidget.getModelerScene().isEdge(edgeWidget.getEdgeWidgetInfo())) {
+                        edgeWidget.remove();
                     }
                 }
                 for (INodeWidget nodeWidget : new CopyOnWriteArrayList<INodeWidget>(nodeWidgets)) {
-                    if(nodeWidget.getModelerScene().isNode(nodeWidget.getNodeWidgetInfo())){
-                     nodeWidget.remove();
+                    if (nodeWidget.getModelerScene().isNode(nodeWidget.getNodeWidgetInfo())) {
+                        nodeWidget.remove();
                     }
                 }
                 // Issue Fix #5869 Start
@@ -290,26 +290,26 @@ public class ModelerFile {
     /**
      * @return the attributes
      */
-    public Map<String,Object> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return attributes;
     }
-    
+
     public Object getAttribute(String key) {
         return attributes.get(key);
     }
 
-    public void addAttribute(String key ,Object value) {
+    public void addAttribute(String key, Object value) {
         this.attributes.put(key, value);
     }
-    
-    public void removeAttribute(String key ,Object value) {
+
+    public void removeAttribute(String key, Object value) {
         this.attributes.remove(key);
     }
-    
+
     /**
      * @param attributes the attributes to set
      */
-    public void setAttributes(Map<String,Object> attributes) {
+    public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 

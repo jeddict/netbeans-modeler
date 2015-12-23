@@ -20,13 +20,14 @@ import javax.xml.bind.ValidationEventHandler;
 
 public class ValidateJAXB implements ValidationEventHandler {
 
+    @Override
     public boolean handleEvent(ValidationEvent event) {
         try {
             System.out.println("\nEVENT");
             System.out.println("SEVERITY:  " + event.getSeverity());
             System.out.println("MESSAGE:  " + event.getMessage());
             System.out.println("LINKED EXCEPTION:  " + event.getLinkedException());
-            
+
             if (event.getLocator() != null) {
                 System.out.println("LOCATOR");
                 System.out.println("    LINE NUMBER:  " + event.getLocator().getLineNumber());

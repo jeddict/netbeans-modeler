@@ -18,31 +18,28 @@ package org.netbeans.modeler.specification.model;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.specification.export.ExportManager;
+import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
 import org.netbeans.modeler.specification.model.document.IDiagramElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.util.ModelerUtil;
+import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 
-public abstract class ModelerSpecificationDiagramModel {
+public abstract class ModelerDiagramSpecification {
 
     private DiagramModel diagramModel;
-    private ModelerUtil modelerUtil;
+    private IModelerUtil modelerUtil;
 
     private IModelerScene modelerScene;
-    private IModelerPanel modelerPanel;
     private IModelerDiagramEngine modelerDiagramEngine;
 
     private IDefinitionElement definitionElement;
     private IDiagramElement diagramElement;
     private IRootElement rootElement;
-    
-    private ExportManager exportManager;
 
+    private IExportManager exportManager;
     private IRelationValidator relationValidator;
-    
 
     public abstract void init(ModelerFile modelerFile);//Load Default Value Like Definition , RootElement , Design , will be raplaced if XML Content exist
 
@@ -60,19 +57,19 @@ public abstract class ModelerSpecificationDiagramModel {
         this.modelerScene = modelerScene;
     }
 
-    /**
-     * @return the ModelerPanelTopComponent
-     */
-    public IModelerPanel getModelerPanelTopComponent() {
-        return modelerPanel;
-    }
-
-    /**
-     * @param modelerPanel the ModelerPanelTopComponent to set
-     */
-    public void setModelerPanelTopComponent(IModelerPanel modelerPanel) {
-        this.modelerPanel = modelerPanel;
-    }
+//    /**
+//     * @return the ModelerPanelTopComponent
+//     */
+//    public IModelerPanel getModelerPanelTopComponent() {
+//        return modelerPanel;
+//    }
+//
+//    /**
+//     * @param modelerPanel the ModelerPanelTopComponent to set
+//     */
+//    public void setModelerPanelTopComponent(IModelerPanel modelerPanel) {
+//        this.modelerPanel = modelerPanel;
+//    }
 
     /**
      * @return the modelerDiagramEngine
@@ -133,14 +130,14 @@ public abstract class ModelerSpecificationDiagramModel {
     /**
      * @return the modelerUtil
      */
-    public ModelerUtil getModelerUtil() {
+    public IModelerUtil getModelerUtil() {
         return modelerUtil;
     }
 
     /**
      * @param modelerUtil the modelerUtil to set
      */
-    public void setModelerUtil(ModelerUtil modelerUtil) {
+    public void setModelerUtil(IModelerUtil modelerUtil) {
         this.modelerUtil = modelerUtil;
     }
 
@@ -175,14 +172,14 @@ public abstract class ModelerSpecificationDiagramModel {
     /**
      * @return the exportManager
      */
-    public ExportManager getExportManager() {
+    public IExportManager getExportManager() {
         return exportManager;
     }
 
     /**
      * @param exportManager the exportManager to set
      */
-    public void setExportManager(ExportManager exportManager) {
+    public void setExportManager(IExportManager exportManager) {
         this.exportManager = exportManager;
     }
 

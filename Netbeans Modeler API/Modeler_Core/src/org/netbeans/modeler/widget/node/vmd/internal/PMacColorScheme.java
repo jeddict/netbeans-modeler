@@ -45,49 +45,103 @@ import org.openide.util.ImageUtilities;
  */
 public class PMacColorScheme implements IColorScheme {
 
-    private static final String ID = "MAC";
-    private static final String NAME = "Mac";
-    private static final TexturePaint SCENE_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BACKGROUND.jpg"), new Rectangle(0, 0, 3812, 2362));
-    private static final org.netbeans.api.visual.border.Border OPAQUE_BORDER = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
-    private static final Image BUTTON_G = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_G.png");
-    private static final Image BUTTON_Y = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_Y.png");
-    private static final Image BUTTON_W = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_W.png");
-    private static final Color COLOR1 = new Color(249, 249, 249);
-    private static final Color COLOR2 = new Color(237, 237, 237);
-    private static final Color COLOR3 = new Color(227, 227, 227);
-    private static final Color COLOR4 = new Color(249, 249, 249);
-    private static final Color COLOR5 = new Color(237, 237, 237);
+    private final TexturePaint SCENE_BACKGROUND;
+    private final org.netbeans.api.visual.border.Border OPAQUE_BORDER;
+    private final Image BUTTON_G;
+    private final Image BUTTON_Y;
+    private final Image BUTTON_W;
+    private final Color COLOR1;
+    private final Color COLOR2;
+    private final Color COLOR3;
+    private final Color COLOR4;
+    private final Color COLOR5;
 
-    protected static final Color WIDGET_BORDER_COLOR = new Color(245, 245, 245);
-    private static final Color WIDGET_SELECT_BORDER_COLOR = new Color(230, 230, 230);
-    private static final Color WIDGET_HOVER_BORDER_COLOR = new Color(200, 200, 200);
+    private final Color WIDGET_BORDER_COLOR;
+    private final Color WIDGET_SELECT_BORDER_COLOR;
+    private final Color WIDGET_HOVER_BORDER_COLOR;
 
-    private static final TexturePaint WIDGET_HOVER_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_LIGHT.png"), new Rectangle(0, 0, 658, 61));
-    private static final TexturePaint WIDGET_SELECT_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_DARK.png"), new Rectangle(0, 0, 658, 37));
-    private static final TexturePaint WIDGET_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_AVG.png"), new Rectangle(0, 0, 660, 48));
+    private final TexturePaint WIDGET_HOVER_BACKGROUND;
+    private final TexturePaint WIDGET_SELECT_BACKGROUND;
+    private final TexturePaint WIDGET_BACKGROUND;
 
-    private static final Border WIDGET_BORDER = new ShadowBorder(WIDGET_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-    private static final Border WIDGET_SELECT_BORDER = new ShadowBorder(WIDGET_SELECT_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-    private static final Border WIDGET_HOVER_BORDER = new ShadowBorder(WIDGET_HOVER_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-// private static final Border WIDGET_HIGHT_BORDER = new ShadowBorder(WIDGET_HOVER_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+    private final Border WIDGET_BORDER;
+    private final Border WIDGET_SELECT_BORDER;
+    private final Border WIDGET_HOVER_BORDER;
+// private final Border WIDGET_HIGHT_BORDER ;
 
-    private static final Color EDGE_WIDGET_SELECT_COLOR = new Color(235, 235, 235);
-    private static final Color EDGE_WIDGET_HOVER_COLOR = new Color(255, 255, 255);
-    private static final Color EDGE_WIDGET_COLOR = new Color(250, 250, 250);
+    private final Color EDGE_WIDGET_SELECT_COLOR;
+    private final Color EDGE_WIDGET_HOVER_COLOR;
+    private final Color EDGE_WIDGET_COLOR;
 
-    private static final Color PIN_WIDGET_BACKGROUND = new Color(120, 138, 176);
-    private static final Color PIN_WIDGET_LBACKGROUND = new Color(138, 154, 190);
-    private static final Color PIN_WIDGET_HOVER_BACKGROUND = new Color(120, 138, 176);
-    private static final Color PIN_WIDGET_HOVER_LBACKGROUND = new Color(138, 154, 190);
-    private static final Color PIN_WIDGET_SELECT_BACKGROUND = new Color(110, 128, 166);
-    private static final Color PIN_WIDGET_SELECT_LBACKGROUND = new Color(128, 144, 180);
+    private final Color PIN_WIDGET_BACKGROUND;
+    private final Color PIN_WIDGET_LBACKGROUND;
+    private final Color PIN_WIDGET_HOVER_BACKGROUND;
+    private final Color PIN_WIDGET_HOVER_LBACKGROUND;
+    private final Color PIN_WIDGET_SELECT_BACKGROUND;
+    private final Color PIN_WIDGET_SELECT_LBACKGROUND;
 
-    private static final Color PIN_WIDGET_HOVER_TEXT_COLOR = Color.WHITE;
-    private static final Color PIN_WIDGET_TEXT_COLOR = new Color(34, 34, 34);
-    private static final org.netbeans.api.visual.border.Border PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+    private final Color PIN_WIDGET_HOVER_TEXT_COLOR;
+    private final Color PIN_WIDGET_TEXT_COLOR;
+    private final org.netbeans.api.visual.border.Border PIN_WIDGET_SELECT_BORDER;
 
-    private static final Color PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(200, 200, 200);
-    private static final Color PIN_SEPERATOR_WIDGET_FOREGROUND = new Color(34, 34, 34);
+    private final Color PIN_SEPERATOR_WIDGET_BACKGROUND;
+    private final Color PIN_SEPERATOR_WIDGET_FOREGROUND;
+    private static PMacColorScheme instance;
+
+    public static PMacColorScheme getInstance() {
+        if (instance == null) {
+            synchronized (PMacColorScheme.class) {
+                if (instance == null) {
+                    instance = new PMacColorScheme();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private PMacColorScheme() {
+        SCENE_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BACKGROUND.jpg"), new Rectangle(0, 0, 3812, 2362));
+        OPAQUE_BORDER = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
+        BUTTON_G = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_G.png");
+        BUTTON_Y = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_Y.png");
+        BUTTON_W = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_W.png");
+        COLOR1 = new Color(249, 249, 249);
+        COLOR2 = new Color(237, 237, 237);
+        COLOR3 = new Color(227, 227, 227);
+        COLOR4 = new Color(249, 249, 249);
+        COLOR5 = new Color(237, 237, 237);
+
+        WIDGET_BORDER_COLOR = new Color(245, 245, 245);
+        WIDGET_SELECT_BORDER_COLOR = new Color(230, 230, 230);
+        WIDGET_HOVER_BORDER_COLOR = new Color(200, 200, 200);
+
+        WIDGET_HOVER_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_LIGHT.png"), new Rectangle(0, 0, 658, 61));
+        WIDGET_SELECT_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_DARK.png"), new Rectangle(0, 0, 658, 37));
+        WIDGET_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_AVG.png"), new Rectangle(0, 0, 660, 48));
+
+        WIDGET_BORDER = new ShadowBorder(WIDGET_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_SELECT_BORDER = new ShadowBorder(WIDGET_SELECT_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_HOVER_BORDER = new ShadowBorder(WIDGET_HOVER_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+// WIDGET_HIGHT_BORDER = new ShadowBorder(WIDGET_HOVER_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+
+        EDGE_WIDGET_SELECT_COLOR = new Color(235, 235, 235);
+        EDGE_WIDGET_HOVER_COLOR = new Color(255, 255, 255);
+        EDGE_WIDGET_COLOR = new Color(250, 250, 250);
+
+        PIN_WIDGET_BACKGROUND = new Color(120, 138, 176);
+        PIN_WIDGET_LBACKGROUND = new Color(138, 154, 190);
+        PIN_WIDGET_HOVER_BACKGROUND = new Color(120, 138, 176);
+        PIN_WIDGET_HOVER_LBACKGROUND = new Color(138, 154, 190);
+        PIN_WIDGET_SELECT_BACKGROUND = new Color(110, 128, 166);
+        PIN_WIDGET_SELECT_LBACKGROUND = new Color(128, 144, 180);
+
+        PIN_WIDGET_HOVER_TEXT_COLOR = Color.WHITE;
+        PIN_WIDGET_TEXT_COLOR = new Color(34, 34, 34);
+        PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+
+        PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(200, 200, 200);
+        PIN_SEPERATOR_WIDGET_FOREGROUND = new Color(34, 34, 34);
+    }
 
     @Override
     public void installUI(IPNodeWidget widget) {
@@ -200,6 +254,7 @@ public class PMacColorScheme implements IColorScheme {
         return true;
     }
 
+    @Override
     public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized() ? BUTTON_G : BUTTON_Y;
     }
@@ -210,16 +265,6 @@ public class PMacColorScheme implements IColorScheme {
         IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
         installUI(label);
         return label;
-    }
-
-    @Override
-    public String getId() {
-        return ID;
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
     }
 
     @Override

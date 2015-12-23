@@ -17,36 +17,30 @@ package org.netbeans.modeler.specification.export;
 
 import org.netbeans.modeler.locale.I18n;
 
+public enum ExportType {
 
- public  enum ExportType {
-        jpg("jpg", I18n.getString(ExportType.class, "MSG_JPG")), // NOI18N
-        png("png", I18n.getString(ExportType.class, "MSG_PNG")); // NOI18N
+    jpg("jpg", I18n.getString(ExportType.class, "MSG_JPG")), // NOI18N
+    png("png", I18n.getString(ExportType.class, "MSG_PNG")); // NOI18N
 //        ppt("ppt", I18n.getString(ExportType.class, "MSG_PPT")); // NOI18N
-         
-        private final String name;
-        private final String description;
-        
-        ExportType(String name, String description)
-        {
-            this.name = name;
-            this.description = description;
-        }
-        
-        public String getDescription()
-        {
-            return description;
-        }
-        
-        public String getName()
-        {
-            return name;
-        }
-        
-        @Override
-        public String toString()
-        {
-            return description;
-        }
-    }
-    
 
+    private final String name;
+    private final String description;
+
+    ExportType(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return description;
+    }
+}

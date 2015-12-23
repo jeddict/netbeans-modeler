@@ -48,11 +48,12 @@ public class Util {
             loaderQuery = Lookup.getDefault().lookup(new Lookup.Template<ClassLoader>(ClassLoader.class));
             loaderQuery.addLookupListener(
                     new LookupListener() {
-                public void resultChanged(LookupEvent ev) {
-                    ERR.fine("Loader cleared"); // NOI18N
-                    currentLoader = null;
-                }
-            });
+                        @Override
+                        public void resultChanged(LookupEvent ev) {
+                            ERR.fine("Loader cleared"); // NOI18N
+                            currentLoader = null;
+                        }
+                    });
         }
 
         Iterator it = loaderQuery.allInstances().iterator();
@@ -68,7 +69,7 @@ public class Util {
                 noLoaderWarned = true;
                 ERR.warning(
                         "No ClassLoader instance found in " + Lookup.getDefault() // NOI18N
-                        );
+                );
             }
             return null;
         }

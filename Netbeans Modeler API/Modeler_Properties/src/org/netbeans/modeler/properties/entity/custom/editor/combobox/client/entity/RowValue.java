@@ -15,15 +15,12 @@
  */
 package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity;
 
+public class RowValue extends Entity {
 
-public class RowValue  extends Entity {
-    
-     private Object[] row;
+    private Object[] row;
 //     private AbstractTableModel tableModel;
-     
-//    private String  displayValue;
 
-    
+//    private String  displayValue;
     public RowValue(Object[] row) {
         this("", row);
     }
@@ -60,8 +57,4 @@ public class RowValue  extends Entity {
 //    public void setTableModel(AbstractTableModel tableModel) {
 //        this.tableModel = tableModel;
 //    }
-    
-    
-    
-
 }

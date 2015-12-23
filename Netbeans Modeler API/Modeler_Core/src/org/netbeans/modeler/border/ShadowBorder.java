@@ -61,14 +61,17 @@ public class ShadowBorder implements Border, Serializable {
         this.color5 = color5;
     }
 
+    @Override
     public Insets getBorderInsets(Component c) {
         return insets;
     }
 
+    @Override
     public boolean isBorderOpaque() {
         return false;
     }
 
+    @Override
     public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
 
         Rectangle bounds = new Rectangle(x, y, w, h);

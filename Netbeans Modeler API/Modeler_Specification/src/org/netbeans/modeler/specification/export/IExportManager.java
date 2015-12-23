@@ -19,14 +19,14 @@ import java.io.File;
 import java.util.List;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 
+public interface IExportManager {
 
-public interface ExportManager {
-    
     List<FileType> getExportType();
-//    boolean isSupported(ExportType format);
+
     void export(IModelerScene scene, FileType format, File file);
-    
+
     class FileType {
+
         private String extension;
         private String name;
 
@@ -37,8 +37,6 @@ public interface ExportManager {
 
         public FileType() {
         }
-        
-        
 
         /**
          * @return the extension
@@ -72,6 +70,6 @@ public interface ExportManager {
         public String toString() {
             return name;
         }
-        
+
     }
 }

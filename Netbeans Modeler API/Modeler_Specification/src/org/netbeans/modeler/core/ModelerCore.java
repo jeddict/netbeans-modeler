@@ -38,19 +38,6 @@ public class ModelerCore {
         return ModelerCore.modelerFiles.get(key);
     }
 
-    public static ModelerFile getModelerFile(IModelerDiagramEngine engine) {
-        ModelerFile file = null;
-        Iterator<Entry<String, ModelerFile>> itr = modelerFiles.entrySet().iterator();
-        while (itr.hasNext()) {
-            ModelerFile file_tmp = itr.next().getValue();
-            IModelerDiagramEngine engine_tmp = file_tmp.getVendorSpecification().getModelerDiagramModel().getModelerDiagramEngine();
-            if (engine_tmp == engine) {
-                file = file_tmp;
-            }
-        }
-        return file;
-    }
-
     /**
      * @param modelerFiles the modelerFiles to set
      */

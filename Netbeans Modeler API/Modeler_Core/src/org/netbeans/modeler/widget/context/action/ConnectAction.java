@@ -66,6 +66,7 @@ public class ConnectAction extends WidgetAction.LockedAdapter {
         this.provider = provider;
     }
 
+    @Override
     protected boolean isLocked() {
         return sourceWidget != null;
     }

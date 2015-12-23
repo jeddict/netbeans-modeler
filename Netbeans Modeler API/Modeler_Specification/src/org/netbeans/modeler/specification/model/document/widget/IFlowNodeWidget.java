@@ -16,8 +16,9 @@
 package org.netbeans.modeler.specification.model.document.widget;
 
 import java.util.List;
+import org.netbeans.modeler.specification.model.document.core.IFlowNode;
 
-public interface IFlowNodeWidget extends IFlowElementWidget {
+public interface IFlowNodeWidget<E extends IFlowNode> extends IFlowElementWidget<IFlowNode> {
 
     public String getName();
 

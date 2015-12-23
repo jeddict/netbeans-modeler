@@ -87,6 +87,7 @@ public class RelationProxy implements IRelationProxy {
     /**
      * @return the edgeType
      */
+    @Override
     public String getEdgeType() {
         return edgeType;
     }
@@ -94,6 +95,7 @@ public class RelationProxy implements IRelationProxy {
     /**
      * @param edgeType the edgeType to set
      */
+    @Override
     public void setEdgeType(String edgeType) {
         this.edgeType = edgeType;
     }

@@ -1,18 +1,19 @@
-/** Copyright [2014] Gaurav Gupta
-   *
-   *Licensed under the Apache License, Version 2.0 (the "License");
-   *you may not use this file except in compliance with the License.
-   *You may obtain a copy of the License at
-   *
-   *    http://www.apache.org/licenses/LICENSE-2.0
-   *
-   *Unless required by applicable law or agreed to in writing, software
-   *distributed under the License is distributed on an "AS IS" BASIS,
-   *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   *See the License for the specific language governing permissions and
-   *limitations under the License.
-   */
- package org.netbeans.modeler.widget.properties.customattr;
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.netbeans.modeler.widget.properties.customattr;
 
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -227,7 +228,6 @@ public class CustomAttributeEditortest extends javax.swing.JPanel implements Pro
     private void jButtonNewPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewPropertyActionPerformed
 //        Window pWin = SwingUtilities.windowForComponent(this);
 
-
         CustomAttributeDialog jrpd = new CustomAttributeDialog(Misc.getMainFrame(), true);
         //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
         jrpd.setProperties(getPropertiesList());
@@ -246,9 +246,9 @@ public class CustomAttributeEditortest extends javax.swing.JPanel implements Pro
     private void jButtonModifyPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifyPropertyActionPerformed
         int index = jTableAttribute.getSelectedRow();
         DefaultTableModel dtm = (DefaultTableModel) jTableAttribute.getModel();
-  
+
         CustomAttributeDialog attrDialog = new CustomAttributeDialog(Misc.getMainFrame(), true);
-       attrDialog.setProperty((GenericProperty) dtm.getValueAt(index, 0));
+        attrDialog.setProperty((GenericProperty) dtm.getValueAt(index, 0));
         attrDialog.setProperties(getPropertiesList());
         attrDialog.setVisible(true);
 
@@ -329,7 +329,6 @@ public class CustomAttributeEditortest extends javax.swing.JPanel implements Pro
 //    private Object getPropertyValue() throws IllegalStateException {
 //        return getPropertiesMap();
 //    }
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (PropertyEnv.PROP_STATE.equals(evt.getPropertyName()) && evt.getNewValue() == PropertyEnv.STATE_VALID) {

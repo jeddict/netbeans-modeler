@@ -73,7 +73,6 @@ public abstract class PModelerScene extends AbstractPModelerScene {
     @Override
     public void setBaseElementSpec(IBaseElement baseElementSpec) {
         setRootElementSpec((IRootElement) baseElementSpec);
-//          throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

@@ -66,6 +66,7 @@ public abstract class ContainerWidget extends Widget implements IBaseElementWidg
     /**
      * @param baseElementSpec the baseElementSpec to set
      */
+    @Override
     public void setBaseElementSpec(IBaseElement baseElementSpec) {
         this.baseElementSpec = baseElementSpec;
     }

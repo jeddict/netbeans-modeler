@@ -33,6 +33,7 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
     private ComboBoxListener comboBoxListener;
     private PropertyEditor propertyEditor;
     private PropertyVisibilityHandler propertyVisibilityHandler;
+
     public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener, PropertyVisibilityHandler propertyVisibilityHandler) {
         super(id, ComboBoxValue.class, name, description);
         this.modelerFile = modelerFile;
@@ -41,17 +42,16 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
     }
 
     public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener) {
-        this(modelerFile, id, name, description, comboBoxListener, (PropertyVisibilityHandler)null);
+        this(modelerFile, id, name, description, comboBoxListener, (PropertyVisibilityHandler) null);
     }
-    
-    
-    public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener , String visible , Object object) {
+
+    public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener, String visible, Object object) {
         super(id, ComboBoxValue.class, name, description);
         this.modelerFile = modelerFile;
         this.comboBoxListener = comboBoxListener;
         this.propertyVisibilityHandler = ElementPropertySet.createPropertyVisibilityHandler(modelerFile, object, visible);
     }
-    
+
     @Override
     public ComboBoxValue getValue() throws IllegalAccessException, InvocationTargetException {
         return comboBoxListener.getItem();
@@ -79,5 +79,4 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
         return propertyVisibilityHandler;
     }
 
- 
 }

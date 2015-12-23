@@ -55,8 +55,6 @@ public abstract class DynamicEntityComponent extends javax.swing.JDialog {
         this.attributeEntity = attributeEntity;
         row = new Object[attributeEntity.getColumns().size()];
 
-
-
         javax.swing.KeyStroke escape = javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
         javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
             @Override
@@ -68,9 +66,9 @@ public abstract class DynamicEntityComponent extends javax.swing.JDialog {
         getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
         getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
 
-
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
             }

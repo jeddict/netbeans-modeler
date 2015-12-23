@@ -15,19 +15,18 @@
  */
 package org.netbeans.modeler.core.exception;
 
-
 public class ModelerException extends Exception {
 
     /**
-     * Creates a new instance of
-     * <code>ModelerException</code> without detail message.
+     * Creates a new instance of <code>ModelerException</code> without detail
+     * message.
      */
     public ModelerException() {
     }
 
     /**
-     * Constructs an instance of
-     * <code>ModelerException</code> with the specified detail message.
+     * Constructs an instance of <code>ModelerException</code> with the
+     * specified detail message.
      *
      * @param msg the detail message.
      */

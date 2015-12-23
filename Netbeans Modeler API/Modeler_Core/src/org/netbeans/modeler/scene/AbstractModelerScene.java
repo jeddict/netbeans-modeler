@@ -19,9 +19,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
-import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -51,7 +49,6 @@ import org.netbeans.api.visual.widget.EventProcessingType;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
-import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
@@ -71,10 +68,6 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
-import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Node;
-import org.openide.nodes.NodeOperation;
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.InstanceContent;
 
 /**
@@ -93,7 +86,6 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     private JComponent satelliteView;
     private IModelerPanel modelerPanel;
     private ModelerFile modelerFile;
-    private IModelerDiagramEngine modelerDiagramEngine;
     // Data
     private ContextPaletteManager paletteManager = null;
     // Lookup Data
@@ -151,6 +143,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
 
     }
 
+    @Override
     public void init() {
 
     }
@@ -236,6 +229,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
 
     }
 
+    @Override
     protected void notifyStateChanged(ObjectState previousState, ObjectState state) {
         if (state.isSelected()) {
             this.getContextPaletteManager().cancelPalette();
@@ -249,69 +243,20 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
 //
     }
 
+    @Override
     public LayerWidget getConnectionLayer() {
         return connectionLayer;
     }
 
+    @Override
     public LayerWidget getInterractionLayer() {
         return interractionLayer;
     }
 
+    @Override
     public LayerWidget getMainLayer() {
         return mainLayer;
     }
-
-//    public void loadWidgetsFromXML() {
-//        JFileChooser chooser = new JFileChooser ();
-//        chooser.setDialogTitle ("Load Scene From XML");
-//        chooser.setDialogType (JFileChooser.OPEN_DIALOG);
-//        chooser.setMultiSelectionEnabled (false);
-//        chooser.setFileSelectionMode (JFileChooser.FILES_ONLY);
-//        chooser.setFileFilter (new FileFilter() {
-//            public boolean accept (File file) {
-//                if (file.isDirectory ())
-//                return true;
-//                return file.getName ().toLowerCase ().endsWith (".xml"); // NOI18N
-//            }
-//            public String getDescription () {
-//                return "Extensible Markup Language (.xml)"; // NOI18N
-//            }
-//        });
-//        if (chooser.showSaveDialog (new JFrame()) != JFileChooser.APPROVE_OPTION)
-//            return;
-//
-//        File file = chooser.getSelectedFile ();
-//
-//        WidgetsXML wxml = new WidgetsXML(file);
-//        wxml.prepareToLoad();
-//
-//        ArrayList<NodeWidgetInfo> myNodes = wxml.getMyNodes();
-//        for(int i=0; i<myNodes.size(); i++) {
-//            NodeWidgetInfo node = myNodes.get(i);
-//            Widget w = Scene.this.addNode(node);
-//            getSceneAnimator().animatePreferredLocation(w, w.convertLocalToScene(node.getLocation()));
-//        }
-//
-//        ArrayList<SequenceWidgetInfo> myEdges = wxml.getMyEdges();
-//        NodeWidgetInfo source = null;
-//        NodeWidgetInfo target = null;
-//        for(int i=0; i<myEdges.size(); i++) {
-//            SequenceWidgetInfo edge = myEdges.get(i);
-//
-//            for(int j=0; j<myNodes.size(); j++) {
-//                NodeWidgetInfo n = myNodes.get(j);
-//
-//                if(n.getId().equals(edge.getSource()))
-//                    source = n;
-//                if(n.getId().equals(edge.getTarget()))
-//                    target = n;
-//            }
-//
-//            addEdge(edge);
-//            setEdgeSource(edge, source);
-//            setEdgeTarget(edge, target);
-//        }
-//    }
     @Override
     public void paintChildren() {
         Object anti = getGraphics().getRenderingHint(RenderingHints.KEY_ANTIALIASING);
@@ -328,6 +273,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         getGraphics().setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, textAnti);
     }
 
+    @Override
     public JComponent getSatelliteView() {
         return satelliteView;
     }
@@ -341,6 +287,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         addToLookup(paletteManager);
     }
 
+    @Override
     public ContextPaletteManager getContextPaletteManager() {
         return paletteManager;
     }
@@ -377,6 +324,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @return the topComponent
      */
+    @Override
     public IModelerPanel getModelerPanelTopComponent() {
         return modelerPanel;
     }
@@ -384,23 +332,11 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @param topComponent the topComponent to set
      */
+    @Override
     public void setModelerPanelTopComponent(IModelerPanel topComponent) {
         this.modelerPanel = topComponent;
     }
 
-//    /**
-//     * @return the idGenerator
-//     */
-//    public UltraSimpleIdGenerator getIdGenerator() {
-//        return idGenerator;
-//    }
-//
-//    /**
-//     * @param idGenerator the idGenerator to set
-//     */
-//    public void setIdGenerator(UltraSimpleIdGenerator idGenerator) {
-//        this.idGenerator = idGenerator;
-//    }
     /**
      * Retrieves all of the nodes and edges that are in a specified area. The
      * area is specified in screen coordinates.
@@ -469,6 +405,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @return the backgroundLayer
      */
+    @Override
     public LayerWidget getBackgroundLayer() {
         return backgroundLayer;
     }
@@ -496,47 +433,10 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         lockedSelected.clear();
     }
 
-//    /**
-//     * @return the nodeWidgets
-//     */
-//    public List<NodeWidget> getNodeWidgets() {
-//        return nodeWidgets;
-//    }
-//
-//    /**
-//     * @param nodeWidgets the nodeWidgets to set
-//     */
-//    public void setNodeWidgets(List<NodeWidget> nodeWidgets) {
-//        this.nodeWidgets = nodeWidgets;
-//    }
-//
-//      public void addNodeWidget(NodeWidget nodeWidget) {
-//        this.nodeWidgets.add(nodeWidget);
-//    }
-    /**
-     * @return the engine
-     */
-    public IModelerDiagramEngine getModelerDiagramEngine() {
-        return modelerDiagramEngine;
-    }
-
-//    /**
-//     * @return the name
-//     */
-//    public String getName() {
-//        return name;
-//    }
-//
-//    /**
-//     * @param name the name to set
-//     */
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
     /**
      * @return the router
      */
+    @Override
     public Router getRouter() {
         return router;
     }
@@ -557,32 +457,26 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         final JRadioButtonMenuItem autoRoute = new JRadioButtonMenuItem("Auto Route");
 
 //        freeRoute.setIcon(ImageUtil.getInstance().getIcon("front.png"));
-        freeRoute.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                freeRoute.setSelected(true);
-                autoRoute.setSelected(false);
-                router = RouterFactory.createFreeRouter();
-                for (Widget widget : AbstractModelerScene.this.connectionLayer.getChildren()) {
-                    if (widget instanceof ConnectionWidget) {
-                        ((ConnectionWidget) widget).setRouter(router);
-                    }
+        freeRoute.addActionListener((ActionEvent e) -> {
+            freeRoute.setSelected(true);
+            autoRoute.setSelected(false);
+            router = RouterFactory.createFreeRouter();
+            for (Widget widget : AbstractModelerScene.this.connectionLayer.getChildren()) {
+                if (widget instanceof ConnectionWidget) {
+                    ((ConnectionWidget) widget).setRouter(router);
                 }
             }
         });
         routeMenu.add(freeRoute);
 
 //        autoRoute.setIcon(ImageUtil.getInstance().getIcon("back.png"));
-        autoRoute.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                freeRoute.setSelected(false);
-                autoRoute.setSelected(true);
-                router = RouterFactory.createOrthogonalSearchRouter(mainLayer);
-                for (Widget widget : AbstractModelerScene.this.connectionLayer.getChildren()) {
-                    if (widget instanceof ConnectionWidget) {
-                        ((ConnectionWidget) widget).setRouter(router);
-                    }
+        autoRoute.addActionListener((ActionEvent e) -> {
+            freeRoute.setSelected(false);
+            autoRoute.setSelected(true);
+            router = RouterFactory.createOrthogonalSearchRouter(mainLayer);
+            for (Widget widget : AbstractModelerScene.this.connectionLayer.getChildren()) {
+                if (widget instanceof ConnectionWidget) {
+                    ((ConnectionWidget) widget).setRouter(router);
                 }
             }
         });
@@ -603,14 +497,11 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
         menuItemList.add(routeMenu);
 
         JCheckBoxMenuItem alignMenu = new JCheckBoxMenuItem("Align Support");
-        alignMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (AbstractModelerScene.this.isAlignSupport()) {
-                    setAlignSupport(false);
-                } else {
-                    setAlignSupport(true);
-                }
+        alignMenu.addActionListener((ActionEvent e) -> {
+            if (AbstractModelerScene.this.isAlignSupport()) {
+                setAlignSupport(false);
+            } else {
+                setAlignSupport(true);
             }
         });
         alignMenu.setSelected(true);
@@ -619,12 +510,9 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
 
         JMenuItem propsMenu = new JMenuItem("Properties");
         propsMenu.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
-        propsMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                AbstractModelerScene.this.showProperties();
-                AbstractModelerScene.this.getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        propsMenu.addActionListener((ActionEvent e) -> {
+            AbstractModelerScene.this.showProperties();
+            AbstractModelerScene.this.getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         menuItemList.add(propsMenu);
@@ -647,38 +535,35 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
                 popupMenu.add(menuItem);
             }
         }
-        popupMenuProvider = new PopupMenuProvider() {
-            @Override
-            public JPopupMenu getPopupMenu(final Widget widget, final Point location) {
-                return popupMenu;
-            }
-        };
+        popupMenuProvider = (final Widget widget, final Point location1) -> popupMenu;
 
         return popupMenuProvider;
     }
 
     private BasePropertyViewManager node;
+
     @Override
     public void exploreProperties() {
-        if(node==null){
+        if (node == null) {
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getName(), propertyVisibilityHandlers);
     }
-    
+
     @Override
     public void refreshProperties() {
         org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(node, this.getName(), propertyVisibilityHandlers);
     }
-    
+
     @Override
     public void showProperties() {
         org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node, this.getName(), propertyVisibilityHandlers);
     }
-    
+
     /**
      * @return the validNodeWidget
      */
+    @Override
     public INodeWidget getValidNodeWidget() {
         return validNodeWidget;
     }
@@ -686,6 +571,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @param validNodeWidget the validNodeWidget to set
      */
+    @Override
     public void setValidNodeWidget(INodeWidget validNodeWidget) {
         this.validNodeWidget = validNodeWidget;
     }
@@ -693,6 +579,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @return the invalidNodeWidget
      */
+    @Override
     public INodeWidget getInvalidNodeWidget() {
         return invalidNodeWidget;
     }
@@ -700,6 +587,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @param invalidNodeWidget the invalidNodeWidget to set
      */
+    @Override
     public void setInvalidNodeWidget(INodeWidget invalidNodeWidget) {
         this.invalidNodeWidget = invalidNodeWidget;
     }
@@ -707,6 +595,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @return the boundaryWidgetLayer
      */
+    @Override
     public LayerWidget getBoundaryWidgetLayer() {
         return boundaryWidgetLayer;
     }
@@ -805,6 +694,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @return the alignSupport
      */
+    @Override
     public boolean isAlignSupport() {
         return alignSupport;
     }
@@ -812,6 +702,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @param alignSupport the alignSupport to set
      */
+    @Override
     public void setAlignSupport(boolean alignSupport) {
         this.alignSupport = alignSupport;
     }
@@ -819,6 +710,7 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @return the labelLayer
      */
+    @Override
     public LayerWidget getLabelLayer() {
         return labelLayer;
     }
@@ -826,17 +718,15 @@ public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, Ed
     /**
      * @param labelLayer the labelLayer to set
      */
+    @Override
     public void setLabelLayer(LayerWidget labelLayer) {
         this.labelLayer = labelLayer;
     }
 
+    @Override
     public void autoLayout() {
         SceneLayout sceneLayout = LayoutFactory.createSceneGraphLayout(this, new GridGraphLayout<NodeWidgetInfo, EdgeWidgetInfo>().setChecker(true));
         sceneLayout.invokeLayout();
-    }
-
-    public void setModelerDiagramEngine(IModelerDiagramEngine modelerDiagramEngine) {
-        this.modelerDiagramEngine = modelerDiagramEngine;
     }
 
     @Override

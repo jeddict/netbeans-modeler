@@ -1,18 +1,19 @@
-/** Copyright [2014] Gaurav Gupta
-   *
-   *Licensed under the Apache License, Version 2.0 (the "License");
-   *you may not use this file except in compliance with the License.
-   *You may obtain a copy of the License at
-   *
-   *    http://www.apache.org/licenses/LICENSE-2.0
-   *
-   *Unless required by applicable law or agreed to in writing, software
-   *distributed under the License is distributed on an "AS IS" BASIS,
-   *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   *See the License for the specific language governing permissions and
-   *limitations under the License.
-   */
- package org.netbeans.modeler.label.multiline;
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.netbeans.modeler.label.multiline;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,30 +28,27 @@ import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.modeler.border.ResizeBorderbk;
 
+public class MultilineLabelWidget extends LabelWidget {
 
-public class MultilineLabelWidget extends LabelWidget
-{ public static final Color BORDER_HILIGHTED_COLOR = new Color(0xFFA400);
-    public  static ResizeBorderbk NON_RESIZABLE_BORDER = new ResizeBorderbk(5, Color.BLACK, new ResizeProvider.ControlPoint[]{});
-   
-    public MultilineLabelWidget (Scene scene)
-    {
+    public static final Color BORDER_HILIGHTED_COLOR = new Color(0xFFA400);
+    public static ResizeBorderbk NON_RESIZABLE_BORDER = new ResizeBorderbk(5, Color.BLACK, new ResizeProvider.ControlPoint[]{});
+
+    public MultilineLabelWidget(Scene scene) {
         this(scene, null);
     }
 
-    public MultilineLabelWidget (Scene scene, String label)
-    {
+    public MultilineLabelWidget(Scene scene, String label) {
         super(scene, label);
     }
 
     /**
      * Calculates a client area for the label.
+     *
      * @return the client area
      */
     @Override
-    protected Rectangle calculateClientArea()
-    {
-        if (getLabel() == null)
-        {
+    protected Rectangle calculateClientArea() {
+        if (getLabel() == null) {
             return super.calculateClientArea();
         }
 
@@ -65,31 +63,24 @@ public class MultilineLabelWidget extends LabelWidget
         double height = 0;
 
         String[] lines = getLabel().split("\n");
-        for(int index = 0; index < lines.length; index++)
-        {
+        for (int index = 0; index < lines.length; index++) {
             String line = lines[index];
             Rectangle2D stringBounds = fontMetrics.getStringBounds(line, gr);
 
-            if(index == 0)
-            {
+            if (index == 0) {
                 x = stringBounds.getX();
                 y = stringBounds.getY();
                 width = stringBounds.getWidth();
-            }
-            else
-            {
-                if(stringBounds.getX() < x)
-                {
+            } else {
+                if (stringBounds.getX() < x) {
                     x = stringBounds.getX();
                 }
 
-                if(stringBounds.getY() < y)
-                {
+                if (stringBounds.getY() < y) {
                     y = stringBounds.getY();
                 }
 
-                if(stringBounds.getWidth() > width)
-                {
+                if (stringBounds.getWidth() > width) {
                     width = stringBounds.getWidth();
                 }
             }
@@ -98,8 +89,7 @@ public class MultilineLabelWidget extends LabelWidget
         }
         rectangle = roundRectangle(new Rectangle2D.Double(x, y, width, height));
 
-        switch (getOrientation())
-        {
+        switch (getOrientation()) {
             case NORMAL:
                 return rectangle;
             case ROTATE_90:
@@ -110,61 +100,52 @@ public class MultilineLabelWidget extends LabelWidget
     }
 
     @Override
-    protected void paintWidget()
-    {
+    protected void paintWidget() {
         Graphics2D g = getGraphics();
 
         g.setFont(getFont());
         FontMetrics fontMetrics = g.getFontMetrics(getFont());
 
-        String txt=getLabel();
-        if(txt!=null && txt.length()>0)
-        {
+        String txt = getLabel();
+        if (txt != null && txt.length() > 0) {
             String[] lines0 = getLabel().split("\n");
-            ArrayList<LineDetails> lineDeltails=new ArrayList<LineDetails>();
-            for(int i=0;i<lines0.length;i++)
-            {
-                String lineTxt=lines0[i];
-                if(lineTxt.length()==0)lineTxt=" ";//draw one space if empty line
-                LineDetails lines = breakupLinesInNoBreakLinedTxt(lineTxt,g, fontMetrics);
+            ArrayList<LineDetails> lineDeltails = new ArrayList<LineDetails>();
+            for (String lineTxt : lines0) {
+                if (lineTxt.length() == 0) {
+                    lineTxt = " ";//draw one space if empty line
+                }
+                LineDetails lines = breakupLinesInNoBreakLinedTxt(lineTxt, g, fontMetrics);
                 lineDeltails.add(lines);
             }
             LineDetails lines = new LineDetails();
-            if ( lineDeltails.size()>0)
-            {
-                for(int i=0;i<lineDeltails.size();i++)
-                {
-                    for(int j=0;j<lineDeltails.get(i).getNumberOfLines();j++)
-                    {
-                        lines.addLine(lineDeltails.get(i).getLine(j), lineDeltails.get(i).getHeight(j));
+            if (lineDeltails.size() > 0) {
+                for (LineDetails lineDeltail : lineDeltails) {
+                    for (int j = 0; j < lineDeltail.getNumberOfLines(); j++) {
+                        lines.addLine(lineDeltail.getLine(j), lineDeltail.getHeight(j));
                     }
                 }
                 // save the current color
                 Color currentColor = g.getColor();
                 g.setColor(this.getForeground());
 
-
                 int x;
                 int y = (getSize().height - lines.getNumberOfLines() * fontMetrics.getHeight()) / 2;
 
-                for(int index = 0; index < lines.getNumberOfLines(); index++)
-                {
+                for (int index = 0; index < lines.getNumberOfLines(); index++) {
                     String line = lines.getLine(index);
-                    if(line == null)
-                    {
+                    if (line == null) {
                         line = new String();
                     }
-                    switch (getAlignment())
-                    {
+                    switch (getAlignment()) {
                         case LEFT:
                             x = 0;
                             break;
                         case RIGHT:
-                            x = getSize().width- fontMetrics.stringWidth(line);
+                            x = getSize().width - fontMetrics.stringWidth(line);
                             break;
                         case CENTER:
                         default:
-                            x = (getSize().width- fontMetrics.stringWidth(line)) / 2;
+                            x = (getSize().width - fontMetrics.stringWidth(line)) / 2;
                     }
                     g.drawString(line, x, y);
 
@@ -172,19 +153,16 @@ public class MultilineLabelWidget extends LabelWidget
                 }
 
                 // reset to the original color
-                if ( !g.getColor().equals(currentColor))
-                {
+                if (!g.getColor().equals(currentColor)) {
                     g.setColor(currentColor);
                 }
             }
         }
-      }
+    }
 
-    protected LineDetails breakupLinesInNoBreakLinedTxt(String text,Graphics2D g, FontMetrics metrics)
-    {
+    protected LineDetails breakupLinesInNoBreakLinedTxt(String text, Graphics2D g, FontMetrics metrics) {
         LineDetails retVal = null;
-        if ( text == null ||  text.length() == 0)
-        {
+        if (text == null || text.length() == 0) {
             return retVal;
         }
 
@@ -199,12 +177,10 @@ public class MultilineLabelWidget extends LabelWidget
         String previousLine = null;
         double previousHeight = 0;
 
-        while(index >= 0)
-        {
+        while (index >= 0) {
 
             index = findEndOfNextWord(label, index);
-            if(index == -1)
-            {
+            if (index == -1) {
                 retVal.addLine(previousLine, previousHeight);
                 break;
             }
@@ -212,36 +188,29 @@ public class MultilineLabelWidget extends LabelWidget
             String line = label.substring(startLine, index);
             Rectangle2D strBounds = metrics.getStringBounds(line, g);
 
-            if(strBounds.getWidth() <= width)
+            if (strBounds.getWidth() <= width) {
+                previousLine = line;
+                previousHeight = strBounds.getHeight();
+                previousEnd = index;
+                index++;
+            } else // the width of the line is longer than the width of the Widget's client area.
             {
-                    previousLine = line;
-                    previousHeight = strBounds.getHeight();
-                    previousEnd = index;
-                    index++;
-            }
-            else  // the width of the line is longer than the width of the Widget's client area.
-            {
-                if ( previousLine != null)
-                {
+                if (previousLine != null) {
                     retVal.addLine(previousLine, previousHeight);
                     previousLine = null;  //Already added; hence reset
-                }
-                else
-                {
+                } else {
                     String subStr = null;
                     //int len = label.length();
                     int startIndx = startLine;
                     int endIndx = index;
-                    while (startIndx < endIndx)
-                    {
+                    while (startIndx < endIndx) {
                         subStr = label.substring(startIndx, endIndx);
                         strBounds = metrics.getStringBounds(subStr, g);
-                        if (strBounds.getWidth() < width)
-                        {
+                        if (strBounds.getWidth() < width) {
                             retVal.addLine(subStr, strBounds.getHeight());
                             // reset the subString' s start and end indices
                             startIndx = endIndx;
-                            endIndx = index+1;
+                            endIndx = index + 1;
                         }
                         endIndx--;
                     }
@@ -264,19 +233,14 @@ public class MultilineLabelWidget extends LabelWidget
      * @param start
      * @return
      */
-    protected int findFirstNonWhitespace(StringBuilder label, int start)
-    {
+    protected int findFirstNonWhitespace(StringBuilder label, int start) {
         int retVal = -1;
-        for(int index = start; index < label.length(); index++)
-        {
+        for (int index = start; index < label.length(); index++) {
             int codePointAt = label.codePointAt(index);
-            if(!Character.isWhitespace(codePointAt))
-            {
+            if (!Character.isWhitespace(codePointAt)) {
                 retVal = index;
                 break;
-            }
-            else if(codePointAt == '\n')
-            {
+            } else if (codePointAt == '\n') {
                 retVal = index;
                 break;
             }
@@ -288,21 +252,19 @@ public class MultilineLabelWidget extends LabelWidget
     /**
      * find end of word using whitespace separation(space, linebreak etc)
      * consist from one whitespace symbol at least.
+     *
      * @param label
      * @param start
      * @return
      */
-    protected int findEndOfNextWord(StringBuilder label, int start)
-    {
+    protected int findEndOfNextWord(StringBuilder label, int start) {
         int retVal = -1;
 
-        if((start >= 0) && (start < label.length()))
-        {
+        if ((start >= 0) && (start < label.length())) {
             retVal = label.length();
-            for (int index = start+1; index < label.length(); index++)
-            {
+            for (int index = start + 1; index < label.length(); index++) {
                 int codePoint = label.codePointAt(index);
-                if(Character.isWhitespace(codePoint))//currently split only on whitespace, may be consider to split on any not letter-digit
+                if (Character.isWhitespace(codePoint))//currently split only on whitespace, may be consider to split on any not letter-digit
                 {
                     retVal = index;
                     break;
@@ -315,15 +277,15 @@ public class MultilineLabelWidget extends LabelWidget
 
     /**
      * Rounds Rectangle2D to Rectangle.
+     *
      * @param rectangle the rectangle2D
      * @return the rectangle
      */
-    public Rectangle roundRectangle (Rectangle2D rectangle) {
+    public Rectangle roundRectangle(Rectangle2D rectangle) {
         return rectangle.getBounds();
     }
 
-    protected Dimension getSize()
-    {
+    protected Dimension getSize() {
         Insets labelInsets = getBorder().getInsets();
         int width = getBounds().width - labelInsets.left - labelInsets.right;
         int height = getBounds().height - labelInsets.top - labelInsets.bottom;
@@ -331,30 +293,25 @@ public class MultilineLabelWidget extends LabelWidget
         return new Dimension(width, height);
     }
 
+    protected class LineDetails {
 
-    protected class LineDetails
-    {
-        private ArrayList < String > lines = new ArrayList < String >();
-        private ArrayList < Float > heights = new ArrayList < Float >();
+        private ArrayList< String> lines = new ArrayList< String>();
+        private ArrayList< Float> heights = new ArrayList< Float>();
 
-        public final void addLine(String line, double height)
-        {
+        public final void addLine(String line, double height) {
             lines.add(line);
-            heights.add((float)height);
+            heights.add((float) height);
         }
 
-        public final String getLine(int index)
-        {
+        public final String getLine(int index) {
             return lines.get(index);
         }
 
-        public final float getHeight(int index)
-        {
+        public final float getHeight(int index) {
             return heights.get(index);
         }
 
-        public int getNumberOfLines()
-        {
+        public int getNumberOfLines() {
             return lines.size();
         }
     }

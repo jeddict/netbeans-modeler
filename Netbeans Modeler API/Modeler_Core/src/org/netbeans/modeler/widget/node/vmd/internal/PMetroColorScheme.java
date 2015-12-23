@@ -42,51 +42,108 @@ import org.openide.util.ImageUtilities;
  */
 public class PMetroColorScheme implements IColorScheme {
 
-    private static final String ID = "METRO";
-    private static final String NAME = "Metro";
-    private static final Color SCENE_BACKGROUND = Color.white;
-    private static final org.netbeans.api.visual.border.Border OPAQUE_BORDER = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
-    private static final Image BUTTON_E = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/metro/expand.png");
-    private static final Image BUTTON_C = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/metro/collapse.png");
-    private static final Color COLOR1 = new Color(221, 235, 246);
-    private static final Color COLOR2 = new Color(255, 255, 255);
-    private static final Color COLOR3 = new Color(214, 235, 255);
-    private static final Color COLOR4 = new Color(255, 255, 255);
-    private static final Color COLOR5 = new Color(241, 249, 253);
+    private final Color SCENE_BACKGROUND;
+    private final org.netbeans.api.visual.border.Border OPAQUE_BORDER;
+    private final Image BUTTON_E;
+    private final Image BUTTON_C;
+    private final Color COLOR1;
+    private final Color COLOR2;
+    private final Color COLOR3;
+    private final Color COLOR4;
+    private final Color COLOR5;
 
-    protected static final Color WIDGET_BORDER_COLOR = new Color(98, 168, 217);
-    private static final Color WIDGET_SELECT_BORDER_COLOR = new Color(40, 94, 142);
-    private static final Color WIDGET_HOVER_BORDER_COLOR = new Color(46, 139, 204);
+    protected final Color WIDGET_BORDER_COLOR;
+    private final Color WIDGET_SELECT_BORDER_COLOR;
+    private final Color WIDGET_HOVER_BORDER_COLOR;
 
-    private static final Color WIDGET_HOVER_BACKGROUND = new Color(46, 139, 204);
-    private static final Color WIDGET_SELECT_BACKGROUND = new Color(36, 119, 174);
-    private static final Color WIDGET_BACKGROUND = new Color(98, 168, 217);
+    private final Color WIDGET_HOVER_BACKGROUND;
+    private final Color WIDGET_SELECT_BACKGROUND;
+    private final Color WIDGET_BACKGROUND;
 
-    private static final Color WIDGET_HOVER_LBACKGROUND = new Color(56, 154, 219);
-    private static final Color WIDGET_SELECT_LBACKGROUND = new Color(56, 149, 204);
-    private static final Color WIDGET_LBACKGROUND = new Color(108, 178, 227);
+    private final Color WIDGET_HOVER_LBACKGROUND;
+    private final Color WIDGET_SELECT_LBACKGROUND;
+    private final Color WIDGET_LBACKGROUND;
 
-    private static final Border WIDGET_BORDER = new ShadowBorder(new Color(255, 255, 255), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-    private static final Border WIDGET_SELECT_BORDER = new ShadowBorder(new Color(230, 230, 230), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-    private static final Border WIDGET_HOVER_BORDER = new ShadowBorder(new Color(200, 200, 200), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+    private final Border WIDGET_BORDER;
+    private final Border WIDGET_SELECT_BORDER;
+    private final Border WIDGET_HOVER_BORDER;
 
-    private static final Color EDGE_WIDGET_COLOR = new Color(98, 168, 217);
-    private static final Color EDGE_WIDGET_SELECT_COLOR = new Color(40, 94, 142);
-    private static final Color EDGE_WIDGET_HOVER_COLOR = new Color(46, 139, 204);
+    private final Color EDGE_WIDGET_COLOR;
+    private final Color EDGE_WIDGET_SELECT_COLOR;
+    private final Color EDGE_WIDGET_HOVER_COLOR;
 
-    private static final Color PIN_WIDGET_BACKGROUND = new Color(98, 168, 217);
-    private static final Color PIN_WIDGET_LBACKGROUND = new Color(98, 168, 217);
-    private static final Color PIN_WIDGET_HOVER_BACKGROUND = new Color(98, 168, 217);
-    private static final Color PIN_WIDGET_SELECT_BACKGROUND = new Color(118, 188, 237);
-    private static final Color PIN_WIDGET_HOVER_LBACKGROUND = new Color(118, 188, 237);
-    private static final Color PIN_WIDGET_SELECT_LBACKGROUND = new Color(98, 168, 217);
+    private final Color PIN_WIDGET_BACKGROUND;
+    private final Color PIN_WIDGET_LBACKGROUND;
+    private final Color PIN_WIDGET_HOVER_BACKGROUND;
+    private final Color PIN_WIDGET_SELECT_BACKGROUND;
+    private final Color PIN_WIDGET_HOVER_LBACKGROUND;
+    private final Color PIN_WIDGET_SELECT_LBACKGROUND;
 
-    private static final Color PIN_WIDGET_TEXT_COLOR = new Color(36, 111, 159);
-    private static final Color PIN_WIDGET_HOVER_TEXT_COLOR = Color.white;
-    private static final org.netbeans.api.visual.border.Border PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+    private final Color PIN_WIDGET_TEXT_COLOR;
+    private final Color PIN_WIDGET_HOVER_TEXT_COLOR;
+    private final org.netbeans.api.visual.border.Border PIN_WIDGET_SELECT_BORDER;
 
-    private static final Color PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(170, 208, 234);
-    private static final Color PIN_SEPERATOR_WIDGET_FOREGROUND = Color.WHITE;
+    private final Color PIN_SEPERATOR_WIDGET_BACKGROUND;
+    private final Color PIN_SEPERATOR_WIDGET_FOREGROUND;
+
+    private static PMetroColorScheme instance;
+
+    public static PMetroColorScheme getInstance() {
+        if (instance == null) {
+            synchronized (PMetroColorScheme.class) {
+                if (instance == null) {
+                    instance = new PMetroColorScheme();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private PMetroColorScheme() {
+        SCENE_BACKGROUND = Color.white;
+        OPAQUE_BORDER = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
+        BUTTON_E = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/metro/expand.png");
+        BUTTON_C = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/metro/collapse.png");
+        COLOR1 = new Color(221, 235, 246);
+        COLOR2 = new Color(255, 255, 255);
+        COLOR3 = new Color(214, 235, 255);
+        COLOR4 = new Color(255, 255, 255);
+        COLOR5 = new Color(241, 249, 253);
+
+        WIDGET_BORDER_COLOR = new Color(98, 168, 217);
+        WIDGET_SELECT_BORDER_COLOR = new Color(40, 94, 142);
+        WIDGET_HOVER_BORDER_COLOR = new Color(46, 139, 204);
+
+        WIDGET_HOVER_BACKGROUND = new Color(46, 139, 204);
+        WIDGET_SELECT_BACKGROUND = new Color(36, 119, 174);
+        WIDGET_BACKGROUND = new Color(98, 168, 217);
+
+        WIDGET_HOVER_LBACKGROUND = new Color(56, 154, 219);
+        WIDGET_SELECT_LBACKGROUND = new Color(56, 149, 204);
+        WIDGET_LBACKGROUND = new Color(108, 178, 227);
+
+        WIDGET_BORDER = new ShadowBorder(new Color(255, 255, 255), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_SELECT_BORDER = new ShadowBorder(new Color(230, 230, 230), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_HOVER_BORDER = new ShadowBorder(new Color(200, 200, 200), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+
+        EDGE_WIDGET_COLOR = new Color(98, 168, 217);
+        EDGE_WIDGET_SELECT_COLOR = new Color(40, 94, 142);
+        EDGE_WIDGET_HOVER_COLOR = new Color(46, 139, 204);
+
+        PIN_WIDGET_BACKGROUND = new Color(98, 168, 217);
+        PIN_WIDGET_LBACKGROUND = new Color(98, 168, 217);
+        PIN_WIDGET_HOVER_BACKGROUND = new Color(98, 168, 217);
+        PIN_WIDGET_SELECT_BACKGROUND = new Color(118, 188, 237);
+        PIN_WIDGET_HOVER_LBACKGROUND = new Color(118, 188, 237);
+        PIN_WIDGET_SELECT_LBACKGROUND = new Color(98, 168, 217);
+
+        PIN_WIDGET_TEXT_COLOR = new Color(36, 111, 159);
+        PIN_WIDGET_HOVER_TEXT_COLOR = Color.white;
+        PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+
+        PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(170, 208, 234);
+        PIN_SEPERATOR_WIDGET_FOREGROUND = Color.WHITE;
+    }
 
     @Override
     public void installUI(IPNodeWidget widget) {
@@ -192,7 +249,7 @@ public class PMetroColorScheme implements IColorScheme {
         if (state.isSelected()) {
             widget.setBorder(PIN_WIDGET_SELECT_BORDER);
         } else {
-            widget.setBorder(PMetroColorScheme.OPAQUE_BORDER);
+            widget.setBorder(OPAQUE_BORDER);
         }
     }
 
@@ -201,6 +258,7 @@ public class PMetroColorScheme implements IColorScheme {
         return true;
     }
 
+    @Override
     public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized() ? BUTTON_E : BUTTON_C;
     }
@@ -211,16 +269,6 @@ public class PMetroColorScheme implements IColorScheme {
         IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
         installUI(label);
         return label;
-    }
-
-    @Override
-    public String getId() {
-        return ID;
-    }
-
-    @Override
-    public String getName() {
-        return NAME;
     }
 
     @Override

@@ -41,49 +41,95 @@ import org.openide.util.ImageUtilities;
  * @author Gaurav Gupta
  */
 public class PWoodColorScheme implements IColorScheme {
-//    Light Sky Blue 98, 168, 217
-//   Dark SKY Blue 46, 139, 204
-    // Border Dark++ Blue 40, 94, 142
 
-//    static Color getColor(Color color, double[] rgb) {
-//        return new Color((int) (color.getRed() * rgb[0]), (int) (color.getGreen() * rgb[1]), (int) (color.getBlue() * rgb[2]));
-//    }getColor(CONST,new double[1,1,1]);
-    public static final Color CONST = new Color(98, 168, 217);
+    private final Color CONST;
 
-    protected static final Color WIDGET_BORDER_COLOR = new Color(63, 54, 49);//DEFAULT BORDER
-    public static final Color WIDGET_SELECT_BORDER_COLOR = new Color(50, 54, 39);//SELECTED BORDER
-    public static final Color WIDGET_HOVER_BORDER_COLOR = new Color(87, 74, 68);//HOVER BORDER
+    private final Color WIDGET_BORDER_COLOR;
+    private final Color WIDGET_SELECT_BORDER_COLOR;
+    private final Color WIDGET_HOVER_BORDER_COLOR;
 
-    protected static final Color COLOR_HIGHLIGHTED = new Color(222, 0, 0);//(46,139,204);
+    private final Color COLOR_HIGHLIGHTED;
 
-    public static final Color WIDGET_HOVER_BACKGROUND = new Color(87, 74, 68);//HOVER BackGround//(98, 168, 217);
-    public static final Color WIDGET_SELECT_BACKGROUND = new Color(50, 54, 39);//HOVER BackGround//(98, 168, 217);
-    public static final Color WIDGET_BACKGROUND = new Color(63, 54, 49);// BackGround//(98, 168, 217);
+    private final Color WIDGET_HOVER_BACKGROUND;
+    private final Color WIDGET_SELECT_BACKGROUND;
+    private final Color WIDGET_BACKGROUND;
 
-    public static final Color WIDGET_HOVER_LBACKGROUND = new Color(92, 79, 71);//HOVER BackGround//(98, 168, 217);
-    public static final Color WIDGET_SELECT_LBACKGROUND = new Color(60, 51, 47);//HOVER BackGround//(98, 168, 217);
-    public static final Color WIDGET_LBACKGROUND = new Color(79, 68, 62);// BackGround//(98, 168, 217);
+    private final Color WIDGET_HOVER_LBACKGROUND;
+    private final Color WIDGET_SELECT_LBACKGROUND;
+    private final Color WIDGET_LBACKGROUND;
 
-    public static final Color PIN_WIDGET_HOVER_BACKGROUND = new Color(218, 148, 81);//HOVER BackGround//(98, 168, 217);
-    public static final Color PIN_WIDGET_SELECT_BACKGROUND = new Color(236, 170, 110);// BackGround//(98, 168, 217);
+    private final Color PIN_WIDGET_HOVER_BACKGROUND;
+    private final Color PIN_WIDGET_SELECT_BACKGROUND;
 
-    public static final Color PIN_WIDGET_TEXT = new Color(187, 175, 160);
+    private final Color PIN_WIDGET_TEXT;
 
-    static final Color COLOR1 = new Color(89, 73, 64);
-    static final Color COLOR2 = new Color(79, 63, 54);
-    static final Color COLOR3 = new Color(109, 93, 84);
-    static final Color COLOR4 = new Color(89, 73, 64);
-    static final Color COLOR5 = new Color(109, 93, 84);
+    private final Color COLOR1;
+    private final Color COLOR2;
+    private final Color COLOR3;
+    private final Color COLOR4;
+    private final Color COLOR5;
 
-    static final Color PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(50, 52, 38);//(94, 156, 210);
-    static final Color PIN_SEPERATOR_WIDGET_FOREGROUND = Color.WHITE;
-    static final org.netbeans.api.visual.border.Border BORDER_PIN = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
+    private final Color PIN_SEPERATOR_WIDGET_BACKGROUND;
+    private final Color PIN_SEPERATOR_WIDGET_FOREGROUND;
+    private final org.netbeans.api.visual.border.Border BORDER_PIN;
 
-    private static final Border WIDGET_BORDER = new ShadowBorder(new Color(255, 255, 255), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-    private static final Border WIDGET_SELECT_BORDER = new ShadowBorder(new Color(230, 230, 230), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-    private static final Border WIDGET_HOVER_BORDER = new ShadowBorder(new Color(200, 200, 200), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+    private final Border WIDGET_BORDER;
+    private final Border WIDGET_SELECT_BORDER;
+    private final Border WIDGET_HOVER_BORDER;
 
-    private static final org.netbeans.api.visual.border.Border PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+    private final org.netbeans.api.visual.border.Border PIN_WIDGET_SELECT_BORDER;
+    private static PWoodColorScheme instance;
+
+    public static PWoodColorScheme getInstance() {
+        if (instance == null) {
+            synchronized (PWoodColorScheme.class) {
+                if (instance == null) {
+                    instance = new PWoodColorScheme();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private PWoodColorScheme() {
+        CONST = new Color(98, 168, 217);
+
+        WIDGET_BORDER_COLOR = new Color(63, 54, 49);//DEFAULT BORDER
+        WIDGET_SELECT_BORDER_COLOR = new Color(50, 54, 39);//SELECTED BORDER
+        WIDGET_HOVER_BORDER_COLOR = new Color(87, 74, 68);//HOVER BORDER
+
+        COLOR_HIGHLIGHTED = new Color(222, 0, 0);//(46,139,204);
+
+        WIDGET_HOVER_BACKGROUND = new Color(87, 74, 68);//HOVER BackGround//(98, 168, 217);
+        WIDGET_SELECT_BACKGROUND = new Color(50, 54, 39);//HOVER BackGround//(98, 168, 217);
+        WIDGET_BACKGROUND = new Color(63, 54, 49);// BackGround//(98, 168, 217);
+
+        WIDGET_HOVER_LBACKGROUND = new Color(92, 79, 71);//HOVER BackGround//(98, 168, 217);
+        WIDGET_SELECT_LBACKGROUND = new Color(60, 51, 47);//HOVER BackGround//(98, 168, 217);
+        WIDGET_LBACKGROUND = new Color(79, 68, 62);// BackGround//(98, 168, 217);
+
+        PIN_WIDGET_HOVER_BACKGROUND = new Color(218, 148, 81);//HOVER BackGround//(98, 168, 217);
+        PIN_WIDGET_SELECT_BACKGROUND = new Color(236, 170, 110);// BackGround//(98, 168, 217);
+
+        PIN_WIDGET_TEXT = new Color(187, 175, 160);
+
+        COLOR1 = new Color(89, 73, 64);
+        COLOR2 = new Color(79, 63, 54);
+        COLOR3 = new Color(109, 93, 84);
+        COLOR4 = new Color(89, 73, 64);
+        COLOR5 = new Color(109, 93, 84);
+
+        PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(50, 52, 38);//(94, 156, 210);
+        PIN_SEPERATOR_WIDGET_FOREGROUND = Color.WHITE;
+        BORDER_PIN = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
+
+        WIDGET_BORDER = new ShadowBorder(new Color(255, 255, 255), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_SELECT_BORDER = new ShadowBorder(new Color(230, 230, 230), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_HOVER_BORDER = new ShadowBorder(new Color(200, 200, 200), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+
+        PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+
+    }
 
     @Override
     public void installUI(IPNodeWidget widget) {
@@ -171,7 +217,7 @@ public class PWoodColorScheme implements IColorScheme {
 
     @Override
     public void installUI(IPinWidget widget) {
-        widget.setBorder(PWoodColorScheme.BORDER_PIN);
+        widget.setBorder(BORDER_PIN);
         widget.setBackground(PIN_WIDGET_HOVER_BACKGROUND);
         widget.getPinNameWidget().setForeground(WIDGET_HOVER_BACKGROUND);
     }
@@ -202,7 +248,7 @@ public class PWoodColorScheme implements IColorScheme {
         if (state.isSelected()) {
             widget.setBorder(PIN_WIDGET_SELECT_BORDER);
         } else {
-            widget.setBorder(PWoodColorScheme.BORDER_PIN);
+            widget.setBorder(BORDER_PIN);
         }
     }
 
@@ -217,6 +263,7 @@ public class PWoodColorScheme implements IColorScheme {
 //                ? ImageUtilities.loadImage("org/netbeans/modeler/widget/resource/cf_plus.gif") // NOI18N
 //                : ImageUtilities.loadImage("org/netbeans/modeler/widget/resource/cf_minus.gif"); // NOI18N
 //    }
+    @Override
     public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized()
                 ? ImageUtilities.loadImage("org/netbeans/modeler/widget/node/vmd/internal/resource/ex1/expand.png") // NOI18N
@@ -229,16 +276,6 @@ public class PWoodColorScheme implements IColorScheme {
         IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
         installUI(label);
         return label;
-    }
-
-    @Override
-    public String getId() {
-        return "METRO";
-    }
-
-    @Override
-    public String getName() {
-        return "Metro";
     }
 
     @Override

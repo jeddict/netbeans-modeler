@@ -42,22 +42,21 @@ public class DiagramNavigatorContent extends JPanel implements PropertyChangeLis
 
     public void navigate(final JComponent satelliteView) {
 //        System.err.println(" navigate().. ");
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JComponent view = satelliteView;
-                if (view != null) {
-                    if (currentView != null) {
-                        remove(currentView);
-                    }
-                    add(view, BorderLayout.CENTER);
-                    currentView = view;
-                    invalidate();
-                    validate();
+        SwingUtilities.invokeLater(() -> {
+            JComponent view = satelliteView;
+            if (view != null) {
+                if (currentView != null) {
+                    remove(currentView);
                 }
+                add(view, BorderLayout.CENTER);
+                currentView = view;
+                invalidate();
+                validate();
             }
         });
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String property = evt.getPropertyName();
         if (property.equals(TopComponent.Registry.PROP_ACTIVATED)) {

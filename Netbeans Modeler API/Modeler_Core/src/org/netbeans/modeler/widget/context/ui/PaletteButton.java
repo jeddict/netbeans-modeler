@@ -356,11 +356,13 @@ public class PaletteButton extends ContextPaletteButton {
             delegatedAction = action;
         }
 
+        @Override
         public State mouseClicked(Widget widget, WidgetMouseEvent event) {
             State state = delegatedAction.mouseClicked(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State mousePressed(Widget widget, WidgetMouseEvent event) {
             if (widget != actionTarget) {
                 Point tmp = widget.convertLocalToScene(event.getPoint());
@@ -372,6 +374,7 @@ public class PaletteButton extends ContextPaletteButton {
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State mouseReleased(Widget widget, WidgetMouseEvent event) {
             State state = delegatedAction.mouseReleased(widget, event);
             if (recordedCurrentTool) {
@@ -381,76 +384,91 @@ public class PaletteButton extends ContextPaletteButton {
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State mouseEntered(Widget widget, WidgetMouseEvent event) {
             State state = delegatedAction.mouseEntered(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State mouseExited(Widget widget, WidgetMouseEvent event) {
             State state = delegatedAction.mouseExited(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State mouseDragged(Widget widget, WidgetMouseEvent event) {
             State state = delegatedAction.mouseDragged(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State mouseMoved(Widget widget, WidgetMouseEvent event) {
             State state = delegatedAction.mouseMoved(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State mouseWheelMoved(Widget widget, WidgetMouseWheelEvent event) {
             State state = delegatedAction.mouseWheelMoved(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State keyTyped(Widget widget, WidgetKeyEvent event) {
             State state = delegatedAction.keyTyped(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State keyPressed(Widget widget, WidgetKeyEvent event) {
             State state = delegatedAction.keyPressed(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State keyReleased(Widget widget, WidgetKeyEvent event) {
             State state = delegatedAction.keyReleased(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State focusGained(Widget widget, WidgetFocusEvent event) {
             State state = delegatedAction.focusGained(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State focusLost(Widget widget, WidgetFocusEvent event) {
             State state = delegatedAction.focusLost(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State dragEnter(Widget widget, WidgetDropTargetDragEvent event) {
             State state = delegatedAction.dragEnter(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State dragOver(Widget widget, WidgetDropTargetDragEvent event) {
             State state = delegatedAction.dragOver(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State dropActionChanged(Widget widget, WidgetDropTargetDragEvent event) {
             State state = delegatedAction.dropActionChanged(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State dragExit(Widget widget, WidgetDropTargetEvent event) {
             State state = delegatedAction.dragExit(widget, event);
             return fireWidgetActionHandedEvent(state);
         }
 
+        @Override
         public State drop(Widget widget, WidgetDropTargetDropEvent event) {
             State state = delegatedAction.drop(widget, event);
             return fireWidgetActionHandedEvent(state);

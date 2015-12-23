@@ -133,5 +133,4 @@ public class CategoryNodeConfig {
         return img;
     }
 
-
 }

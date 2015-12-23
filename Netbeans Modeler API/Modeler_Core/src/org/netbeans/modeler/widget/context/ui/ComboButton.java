@@ -91,6 +91,7 @@ public class ComboButton extends ContextPaletteButton {
         getActionMap().put("RightAction", new RightMoveButtonAction());
     }
 
+    @Override
     protected Border getFocusBorder() {
         Border retVal = BorderFactory.createLineBorder(Color.PINK, 2);
 //        if (isExpanded() == true) {
@@ -100,6 +101,7 @@ public class ComboButton extends ContextPaletteButton {
         return retVal;
     }
 
+    @Override
     protected Border getNonFocusedBorder() {
         return BorderFactory.createLineBorder(Color.GREEN, 2);//1, 1, 1, 1);
     }
@@ -168,10 +170,12 @@ public class ComboButton extends ContextPaletteButton {
                             curDesc,
                             getDirection(),
                             false) {
+                                @Override
                                 protected Border getFocusBorder() {
                                     return RIGHT_POPOUT_FOCUSBORDER;
                                 }
 
+                                @Override
                                 protected Border getNonFocusedBorder() {
                                     return RIGHT_POPOUT_BORDER;
                                 }
@@ -201,10 +205,12 @@ public class ComboButton extends ContextPaletteButton {
                             curDesc,
                             getDirection(),
                             false) {
+                                @Override
                                 protected Border getFocusBorder() {
                                     return LEFT_POPOUT_FOCUSBORDER;
                                 }
 
+                                @Override
                                 protected Border getNonFocusedBorder() {
                                     return LEFT_POPOUT_BORDER;
                                 }
@@ -440,6 +446,7 @@ public class ComboButton extends ContextPaletteButton {
      */
     public class LeftMoveButtonAction extends AbstractAction {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (isExpanded() == false) {
                 if (getDirection() == PaletteDirection.LEFT) {
@@ -465,6 +472,7 @@ public class ComboButton extends ContextPaletteButton {
 
     public class RightMoveButtonAction extends AbstractAction {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             if (isExpanded() == false) {
                 if (getDirection() == PaletteDirection.LEFT) {
@@ -490,6 +498,7 @@ public class ComboButton extends ContextPaletteButton {
 
     public class ButtonListener implements ContextButtonListener {
 
+        @Override
         public void actionPerformed(PaletteButton source, boolean locked) {
             //System.out.println("Combo ButtonListener actionPerformed");
             for (ContextButtonListener listener : buttonListeners) {

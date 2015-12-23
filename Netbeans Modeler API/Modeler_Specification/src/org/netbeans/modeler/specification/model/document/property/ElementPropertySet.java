@@ -62,7 +62,7 @@ public class ElementPropertySet {
         set.get(id).setName(id);// Sheet.Set : name is required work as key [otherwise set is replaced]
     }
 
-    public synchronized Node.Property<?> put(String id, Node.Property<?> p , boolean replace) {
+    public synchronized Node.Property<?> put(String id, Node.Property<?> p, boolean replace) {
         if (set.get(id) == null) {
             Group group = elementConfig.getGroup(id);
             if (group == null) {
@@ -71,13 +71,14 @@ public class ElementPropertySet {
             createGroup(id);
             setGroupDisplayName(id, group.getName());
         }
-         if(replace && set.get(id).get(p.getName()) != null){
+        if (replace && set.get(id).get(p.getName()) != null) {
             set.get(id).remove(p.getName());
         }
         return set.get(id).put(p);
     }
+
     public synchronized Node.Property<?> put(String id, Node.Property<?> p) {
-        return put(id,  p , false);
+        return put(id, p, false);
     }
 
     public void setGroupDisplayName(String id, String displayName) {
@@ -104,7 +105,7 @@ public class ElementPropertySet {
     public Sheet.Set getGroup(String id) {
         return set.get(id);
     }
-    
+
     public Set<String> getGroupKey() {
         return set.keySet();
     }
@@ -126,55 +127,54 @@ public class ElementPropertySet {
     public void setModelerFile(ModelerFile modelerFile) {
         this.modelerFile = modelerFile;
     }
-    
-    
-    
-    
 
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object) {
         createPropertySet(baseElementWidget, object, null, null, true, false);
     }
+
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers) {
         createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, false);
     }
+
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers,
             final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
         createPropertySet(baseElementWidget, object, propertyChangeHandlers, propertyVisiblityHandlers, true, false);
     }
+
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers, boolean inherit) {
         createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, false);
     }
 
-    
-    /** Replace Property Start
-     * @param baseElementWidget 
-     * @param object 
-     * @param propertyChangeHandlers **/ 
+    /**
+     * Replace Property Start
+     *
+     * @param baseElementWidget
+     * @param object
+     * @param propertyChangeHandlers *
+     */
     public void replacePropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers) {
         createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, true);
     }
-    
-   
 
-    private void createPropertySet( IBaseElementWidget baseElementWidget , final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
-     ElementConfigFactory elementConfigFactory = modelerFile.getVendorSpecification().getElementConfigFactory();
+    private void createPropertySet(IBaseElementWidget baseElementWidget, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
+        ElementConfigFactory elementConfigFactory = modelerFile.getVendorSpecification().getElementConfigFactory();
         if (inherit) {
             for (Element element : elementConfigFactory.getElements(object.getClass())) {
-                createPropertySetInternal( baseElementWidget,object, element, propertyChangeHandlers, propertyVisiblityHandlers,  replaceProperty);
+                createPropertySetInternal(baseElementWidget, object, element, propertyChangeHandlers, propertyVisiblityHandlers, replaceProperty);
             }
         } else {
             Element element = elementConfigFactory.getElement(object.getClass());
             if (element != null) {
-                createPropertySetInternal( baseElementWidget,object, element, propertyChangeHandlers, propertyVisiblityHandlers,  replaceProperty);
+                createPropertySetInternal(baseElementWidget, object, element, propertyChangeHandlers, propertyVisiblityHandlers, replaceProperty);
             }
         }
     }
 
-    private void createPropertySetInternal( final IBaseElementWidget baseElementWidget ,final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers , boolean replaceProperty) {
+    private void createPropertySetInternal(final IBaseElementWidget baseElementWidget, final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean replaceProperty) {
 
 //        PropertyChangeHandler p = new PropertyChangeHandler<Object>() {
 //    public void manage(Object value){}
@@ -207,9 +207,9 @@ public class ElementPropertySet {
                                         if (propertyChangeHandlers != null && propertyChangeHandlers.get(name) != null) {
                                             propertyChangeHandlers.get(name).changePerformed(value);
                                         }
-                                        if(attribute.isRefreshOnChange()){
-                                                baseElementWidget.refreshProperties();
-                                         }
+                                        if (attribute.isRefreshOnChange()) {
+                                            baseElementWidget.refreshProperties();
+                                        }
                                     }
                                 }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())), replaceProperty);
 
@@ -222,13 +222,13 @@ public class ElementPropertySet {
                             this.put(attribute.getGroupId(), new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()), replaceProperty);
                         } else {
                             PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
-                            
-                            if(propertyVisibilityHandler==null && attribute.getVisible()!=null && !attribute.getVisible().trim().isEmpty()){
-                                propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile,baseElementWidget, object, attribute.getVisibilityExpression());
+
+                            if (propertyVisibilityHandler == null && attribute.getVisible() != null && !attribute.getVisible().trim().isEmpty()) {
+                                propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile, baseElementWidget, object, attribute.getVisibilityExpression());
                             }
-                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent()!=null && !attribute.getOnChangeEvent().trim().isEmpty()) {
-                                         propertyChangeHandlers.put(attribute.getId() ,  createPropertyChangeHandler(modelerFile,baseElementWidget, object, attribute.getChangeListenerExpression()));
-                             }
+                            if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent() != null && !attribute.getOnChangeEvent().trim().isEmpty()) {
+                                propertyChangeHandlers.put(attribute.getId(), createPropertyChangeHandler(modelerFile, baseElementWidget, object, attribute.getChangeListenerExpression()));
+                            }
                             this.put(attribute.getGroupId(), new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
                                     attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
                                     new PropertyChangeListener<Object>() {
@@ -256,7 +256,7 @@ public class ElementPropertySet {
                                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
                                                 propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
                                             }
-                                            if(attribute.isRefreshOnChange()){
+                                            if (attribute.isRefreshOnChange()) {
                                                 baseElementWidget.refreshProperties();
                                             }
                                         }
@@ -278,7 +278,7 @@ public class ElementPropertySet {
 
     }
 
-    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile,final IBaseElementWidget baseElementWidget , final Object object, final Serializable exp) {
+    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
         final IRootElement root = modelerFile.getRootElement();
         return new PropertyVisibilityHandler() {
             @Override
@@ -294,7 +294,8 @@ public class ElementPropertySet {
             }
         };
     }
-        public static PropertyChangeListener createPropertyChangeHandler(final ModelerFile modelerFile,final IBaseElementWidget baseElementWidget , final Object object, final Serializable exp) {
+
+    public static PropertyChangeListener createPropertyChangeHandler(final ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
         final IRootElement root = modelerFile.getRootElement();
         return new PropertyChangeListener() {
             @Override
@@ -310,11 +311,8 @@ public class ElementPropertySet {
             }
         };
     }
-    
-    
-    
-    
-     public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final String exp) { //this method should be removed // created cuz of MVEL BUG
+
+    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final String exp) { //this method should be removed // created cuz of MVEL BUG
         final IRootElement root = modelerFile.getRootElement();
         return new PropertyVisibilityHandler() {
             @Override
@@ -326,7 +324,8 @@ public class ElementPropertySet {
             }
         };
     }
-       public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final Serializable exp) { //this method should be removed // created cuz of MVEL BUG
+
+    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final Serializable exp) { //this method should be removed // created cuz of MVEL BUG
         final IRootElement root = modelerFile.getRootElement();
         return new PropertyVisibilityHandler() {
             @Override
@@ -338,7 +337,5 @@ public class ElementPropertySet {
             }
         };
     }
-    
-    
 
 }

@@ -39,6 +39,7 @@ public class DefaultGroupButtonModel extends DefaultPaletteButtonModel {
 
     ///////////////////////////////////////////////////////////////
     // RapidButtonDescription Overrides
+    @Override
     public boolean isGroup() {
         return true;
     }
@@ -49,12 +50,14 @@ public class DefaultGroupButtonModel extends DefaultPaletteButtonModel {
         return null;
     }
 
+    @Override
     public ArrayList<ContextPaletteButtonModel> getChildren() {
         return buttonList;
     }
 
     ///////////////////////////////////////////////////////////////
     // Data Accessors
+    @Override
     public Image getImage() {
         Image retVal = super.getImage();
 
@@ -73,6 +76,7 @@ public class DefaultGroupButtonModel extends DefaultPaletteButtonModel {
 //            active.setImage(image);
 //        }
 //    }
+    @Override
     public String getName() {
         String retVal = super.getName();
 

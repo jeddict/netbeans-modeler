@@ -40,6 +40,7 @@ public abstract class PEdgeWidget extends EdgeWidget implements IPEdgeWidget {
         setState(ObjectState.createNormal());
     }
 
+    @Override
     public void notifyStateChanged(ObjectState previousState, ObjectState state) {
 //        super.notifyStateChanged(previousState, state);
         if (!highlightStatus) {
@@ -51,6 +52,7 @@ public abstract class PEdgeWidget extends EdgeWidget implements IPEdgeWidget {
     /**
      * @return the colorScheme
      */
+    @Override
     public IColorScheme getColorScheme() {
         return colorScheme;
     }
@@ -58,15 +60,18 @@ public abstract class PEdgeWidget extends EdgeWidget implements IPEdgeWidget {
     /**
      * @param colorScheme the colorScheme to set
      */
+    @Override
     public void setColorScheme(IColorScheme colorScheme) {
         this.colorScheme = colorScheme;
     }
     private int anchorGap;
 
+    @Override
     public int getAnchorGap() {
         return anchorGap;
     }
 
+    @Override
     public void setAnchorGap(int anchorGap) {
         this.anchorGap = anchorGap;
     }
@@ -74,6 +79,7 @@ public abstract class PEdgeWidget extends EdgeWidget implements IPEdgeWidget {
     /**
      * @return the highlightStatus
      */
+    @Override
     public boolean isHighlightStatus() {
         return highlightStatus;
     }
@@ -81,6 +87,7 @@ public abstract class PEdgeWidget extends EdgeWidget implements IPEdgeWidget {
     /**
      * @param highlightStatus the highlightStatus to set
      */
+    @Override
     public void setHighlightStatus(boolean highlightStatus) {
         this.highlightStatus = highlightStatus;
     }

@@ -44,8 +44,8 @@ public interface IModelerPanel {
     void changePersistenceState(boolean state);
 
     boolean isPersistenceState();
-    
+
     String getToolTipText();
-    
+
     void forceClose();
 }

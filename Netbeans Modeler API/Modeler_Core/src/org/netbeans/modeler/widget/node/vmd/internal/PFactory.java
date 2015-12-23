@@ -16,8 +16,13 @@
 package org.netbeans.modeler.widget.node.vmd.internal;
 
 import java.awt.Color;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.openide.util.Exceptions;
 
 /**
  * Used as a factory class for objects defined in P visualization style.
@@ -26,54 +31,50 @@ import org.netbeans.modeler.specification.model.document.IColorScheme;
  */
 public final class PFactory {
 
-    private static final IColorScheme SCHEME_ORIGINAL = new POriginalColorScheme();
-    private static final IColorScheme SCHEME_NB60 = new PNBColorScheme();
-    private static final IColorScheme SCHEME_METRO = new PMetroColorScheme();
-    private static final IColorScheme SCHEME_MAC = new PMacColorScheme();
-    private static final IColorScheme SCHEME_WOOD = new PWoodColorScheme();
+    private static final Map<Class<? extends IColorScheme>, IColorScheme> SCHEME = new HashMap<Class<? extends IColorScheme>, IColorScheme>();
+
+    public static IColorScheme getColorScheme(Class<? extends IColorScheme> colorSchemeClass) {
+        IColorScheme scheme = SCHEME.get(colorSchemeClass);
+        if (scheme == null) {
+            try {
+                scheme = (IColorScheme) colorSchemeClass.getMethod("getInstance").invoke(null);
+                SCHEME.put(colorSchemeClass, scheme);
+            } catch (NoSuchMethodException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (SecurityException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (IllegalAccessException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (IllegalArgumentException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (InvocationTargetException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+        return scheme;
+    }
 
     private PFactory() {
     }
 
-    /**
-     * Creates the original vmd color scheme. Used by default.
-     *
-     * @return the color scheme
-     * @since 2.5
-     */
-    public static IColorScheme getOriginalScheme() {
-        return SCHEME_ORIGINAL;
+    public static Class<? extends IColorScheme> getOriginalScheme() {
+        return POriginalColorScheme.class;
     }
 
-    /**
-     * Creates the NetBeans 6.0 vmd color scheme.
-     *
-     * @return the color scheme
-     * @since 2.5
-     */
-    public static IColorScheme getNetBeans60Scheme() {
-        return SCHEME_NB60;
+    public static Class<? extends IColorScheme> getNetBeans60Scheme() {
+        return PNBColorScheme.class;
     }
 
-    public static IColorScheme getMetroScheme() {
-        return SCHEME_METRO;
+    public static Class<? extends IColorScheme> getMetroScheme() {
+        return PMetroColorScheme.class;
     }
 
-    public static IColorScheme getMacScheme() {
-        return SCHEME_MAC;
+    public static Class<? extends IColorScheme> getMacScheme() {
+        return PMacColorScheme.class;
     }
 
-    public static IColorScheme getWoodScheme() {
-        return SCHEME_WOOD;
-    }
-
-    /**
-     * Creates a border used by P node.
-     *
-     * @return the P node border
-     */
-    public static Border createPNodeBorder() {
-        return POriginalColorScheme.BORDER_NODE;
+    public static Class<? extends IColorScheme> getWoodScheme() {
+        return PWoodColorScheme.class;
     }
 
     /**

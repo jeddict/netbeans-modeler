@@ -40,6 +40,7 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         this.provider = provider;
     }
 
+    @Override
     protected boolean isLocked() {
         return editor != null;
     }
@@ -96,10 +97,12 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         return State.REJECTED;
     }
 
+    @Override
     public final boolean isEditorVisible() {
         return editor != null;
     }
 
+    @Override
     public final boolean openEditor(Widget widget) {
         return openEditor(widget, InplaceEditorProvider.EditorInvocationType.CODE);
     }
@@ -166,6 +169,7 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         }
     }
 
+    @Override
     public final void closeEditor(boolean commit) {
         if (editor == null) {
             return;
@@ -191,6 +195,7 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         invocationType = null;
     }
 
+    @Override
     public void notifyEditorComponentBoundsChanged() {
         EnumSet<InplaceEditorProvider.ExpansionDirection> directions = provider.getExpansionDirections(this, widget, editor);
         if (directions == null) {
@@ -253,6 +258,7 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         editor.repaint();
     }
 
+    @Override
     public InplaceEditorProvider.EditorInvocationType getEditorInvocationType() {
         return invocationType;
     }

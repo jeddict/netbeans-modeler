@@ -49,6 +49,7 @@ public final class TextPaneInplaceEditorProvider implements InplaceEditorProvide
     }
     JTextPane jTextPane1;
 
+    @Override
     public JScrollPane createEditorComponent(EditorController controller, Widget widget) {
         if (!editor.isEnabled(widget)) {
             return null;
@@ -77,9 +78,11 @@ public final class TextPaneInplaceEditorProvider implements InplaceEditorProvide
         return jScrollPane2;
     }
 
+    @Override
     public void notifyOpened(final EditorController controller, Widget widget, JScrollPane editor) {
 //        editor.setMinimumSize(new Dimension(64, 1d9));
         keyListener = new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyChar()) {
                     case KeyEvent.VK_ESCAPE:
@@ -94,19 +97,23 @@ public final class TextPaneInplaceEditorProvider implements InplaceEditorProvide
             }
         };
         focusListener = new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent e) {
                 controller.closeEditor(true);
             }
         };
         documentListener = new DocumentListener() {
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 controller.notifyEditorComponentBoundsChanged();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 controller.notifyEditorComponentBoundsChanged();
             }
 
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 controller.notifyEditorComponentBoundsChanged();
             }
@@ -117,6 +124,7 @@ public final class TextPaneInplaceEditorProvider implements InplaceEditorProvide
         jTextPane1.selectAll();
     }
 
+    @Override
     public void notifyClosing(EditorController controller, Widget widget, JScrollPane editor, boolean commit) {
         jTextPane1.getDocument().removeDocumentListener(documentListener);
         jTextPane1.removeFocusListener(focusListener);
@@ -129,10 +137,12 @@ public final class TextPaneInplaceEditorProvider implements InplaceEditorProvide
         }
     }
 
+    @Override
     public Rectangle getInitialEditorComponentBounds(EditorController controller, Widget widget, JScrollPane editor, Rectangle viewBounds) {
         return null;
     }
 
+    @Override
     public EnumSet<ExpansionDirection> getExpansionDirections(EditorController controller, Widget widget, JScrollPane editor) {
         return expansionDirections;
     }

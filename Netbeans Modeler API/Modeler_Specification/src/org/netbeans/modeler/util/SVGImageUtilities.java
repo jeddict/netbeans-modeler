@@ -121,8 +121,7 @@ public class SVGImageUtilities {
      * <p>
      * Since version 8.12 the returned image object responds to call
      * <code>image.getProperty("url", null)</code> by returning the internal
-     * {@link URL} of the found and loaded
-     * <code>resource</code>.
+     * {@link URL} of the found and loaded <code>resource</code>.
      *
      * @param resource resource path of the image (no initial slash)
      * @param localized true for localized search
@@ -337,11 +336,12 @@ public class SVGImageUtilities {
             loaderQuery = Lookup.getDefault().lookup(new Lookup.Template<ClassLoader>(ClassLoader.class));
             loaderQuery.addLookupListener(
                     new LookupListener() {
-                public void resultChanged(LookupEvent ev) {
-                    ERR.fine("Loader cleared"); // NOI18N
-                    currentLoader = null;
-                }
-            });
+                        @Override
+                        public void resultChanged(LookupEvent ev) {
+                            ERR.fine("Loader cleared"); // NOI18N
+                            currentLoader = null;
+                        }
+                    });
         }
 
         Iterator it = loaderQuery.allInstances().iterator();
@@ -357,7 +357,7 @@ public class SVGImageUtilities {
                 noLoaderWarned = true;
                 ERR.warning(
                         "No ClassLoader instance found in " + Lookup.getDefault() // NOI18N
-                        );
+                );
             }
             return null;
         }
@@ -743,6 +743,7 @@ public class SVGImageUtilities {
             this.key = key;
         }
 
+        @Override
         public void run() {
             synchronized (holder) {
                 holder.remove(key);
@@ -799,14 +800,17 @@ public class SVGImageUtilities {
             return imageIcon;
         }
 
+        @Override
         public int getIconHeight() {
             return super.getHeight();
         }
 
+        @Override
         public int getIconWidth() {
             return super.getWidth();
         }
 
+        @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             g.drawImage(this, x, y, null);
         }
@@ -838,14 +842,17 @@ public class SVGImageUtilities {
             this.img = img;
         }
 
+        @Override
         public void paintIcon(Component c, Graphics g, int x, int y) {
             getDisabledIcon().paintIcon(c, g, x, y);
         }
 
+        @Override
         public int getIconWidth() {
             return getDisabledIcon().getIconWidth();
         }
 
+        @Override
         public int getIconHeight() {
             return getDisabledIcon().getIconHeight();
         }
@@ -869,6 +876,7 @@ public class SVGImageUtilities {
             canFilterIndexColorModel = true;
         }
 
+        @Override
         public int filterRGB(int x, int y, int rgb) {
             // Reduce the color bandwidth in quarter (>> 2) and Shift 0x88.
             return (rgb & 0xff000000) + 0x888888 + ((((rgb >> 16) & 0xff) >> 2) << 16) + ((((rgb >> 8) & 0xff) >> 2) << 8) + (((rgb) & 0xff) >> 2);

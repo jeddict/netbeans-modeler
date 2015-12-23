@@ -17,14 +17,11 @@ package org.netbeans.modeler.core;
 
 import java.awt.BasicStroke;
 import javax.swing.JToolBar;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 
 public interface IModelerDiagramEngine {
-
-    BasicStroke ALIGN_STROKE = new BasicStroke(1.0f, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 5.0f, new float[]{6.0f, 3.0f}, 0.0f);
 
     void buildToolBar(JToolBar bar);
 
@@ -35,10 +32,6 @@ public interface IModelerDiagramEngine {
     void setEdgeWidgetAction(IEdgeWidget edgeWidget);
 
     void setPinWidgetAction(IPinWidget pinWidget);
-
-    IModelerScene getScene();
-
-    void setScene(IModelerScene scene);
 
     void setModelerSceneAction();
 

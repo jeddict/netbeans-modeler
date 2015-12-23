@@ -16,8 +16,8 @@
 package org.netbeans.modeler.tool.writer;
 
 import java.io.File;
-import org.netbeans.modeler.specification.export.ExportManager;
-import org.netbeans.modeler.specification.export.ExportManager.FileType;
+import org.netbeans.modeler.specification.export.IExportManager;
+import org.netbeans.modeler.specification.export.IExportManager.FileType;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 
 public class DocumentWriter {
@@ -25,8 +25,8 @@ public class DocumentWriter {
     public static void write(IModelerScene scene,
             FileType format,
             File file) {
-            ExportManager exportManager = scene.getModelerFile().getVendorSpecification().getModelerDiagramModel().getExportManager();
-            exportManager.export(scene, format, file);
+        IExportManager exportManager = scene.getModelerFile().getVendorSpecification().getModelerDiagramModel().getExportManager();
+        exportManager.export(scene, format, file);
 
     }
 

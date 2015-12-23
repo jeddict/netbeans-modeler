@@ -25,17 +25,13 @@ import org.netbeans.modeler.widget.pin.IPinWidget;
 
 public interface IColorScheme {
 
-    String getId();
-
-    String getName();
-
     /**
      * Called to install UI to a node widget.
      *
      * @param widget the node widget
      *
      */
-    public abstract void installUI(IPNodeWidget widget);
+    void installUI(IPNodeWidget widget);
 
     /**
      * Called to update UI of a node widget. Called from
@@ -46,7 +42,7 @@ public interface IColorScheme {
      * @param state the new state
      *
      */
-    public abstract void updateUI(IPNodeWidget widget, ObjectState previousState, ObjectState state);
+    void updateUI(IPNodeWidget widget, ObjectState previousState, ObjectState state);
 
     /**
      * Returns whether the node minimize button is on the right side of the node
@@ -57,7 +53,7 @@ public interface IColorScheme {
      * on the left side
      *
      */
-    public abstract boolean isNodeMinimizeButtonOnRight(IPNodeWidget widget);
+    boolean isNodeMinimizeButtonOnRight(IPNodeWidget widget);
 
     /**
      * Returns an minimize-widget image for a specific node widget.
@@ -66,7 +62,7 @@ public interface IColorScheme {
      * @return the minimize-widget image
      *
      */
-    public abstract Image getMinimizeWidgetImage(IPNodeWidget widget);
+    Image getMinimizeWidgetImage(IPNodeWidget widget);
 
     /**
      * Called to create a pin-category widget.
@@ -76,7 +72,7 @@ public interface IColorScheme {
      * @return the pin-category widget
      *
      */
-    public abstract IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName);
+    IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName);
 
     /**
      * Called to install UI to a connection widget.
@@ -84,7 +80,7 @@ public interface IColorScheme {
      * @param widget the connection widget
      *
      */
-    public abstract void installUI(IPEdgeWidget widget);
+    void installUI(IPEdgeWidget widget);
 
     /**
      * Called to update UI of a connection widget. Called from
@@ -95,7 +91,7 @@ public interface IColorScheme {
      * @param state the new state
      *
      */
-    public abstract void updateUI(IPEdgeWidget widget, ObjectState previousState, ObjectState state);
+    void updateUI(IPEdgeWidget widget, ObjectState previousState, ObjectState state);
 
     /**
      * Called to install UI to a pin widget.
@@ -103,11 +99,11 @@ public interface IColorScheme {
      * @param widget the pin widget
      *
      */
-    public abstract void installUI(IPinWidget widget);
+    void installUI(IPinWidget widget);
 
-    public abstract void installUI(IPinSeperatorWidget widget);
+    void installUI(IPinSeperatorWidget widget);
 
-    public abstract void installUI(IModelerScene widget);
+    void installUI(IModelerScene widget);
 
     /**
      * Called to update UI of a pin widget. Called from
@@ -118,12 +114,12 @@ public interface IColorScheme {
      * @param state the new state
      *
      */
-    public abstract void updateUI(IPinWidget widget, ObjectState previousState, ObjectState state);
+    void updateUI(IPinWidget widget, ObjectState previousState, ObjectState state);
 
-    public abstract void highlightUI(IPNodeWidget widget);
+    void highlightUI(IPNodeWidget widget);
 
-    public abstract void highlightUI(IEdgeWidget widget);
+    void highlightUI(IEdgeWidget widget);
 
-    public abstract void highlightUI(IPinWidget widget);
+    void highlightUI(IPinWidget widget);
 
 }

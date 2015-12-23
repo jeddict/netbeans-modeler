@@ -43,7 +43,6 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
         this(modelerFile, object, classType, propertyName, displayName, description, propertyChangeListener, null);
     }
 
-
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
         super(object, classType, propertyName);
         this.modelerFile = modelerFile;

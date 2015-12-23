@@ -42,6 +42,7 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.SeparatorWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.anchors.PNodeAnchor;
+import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
@@ -152,6 +153,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @return true, if minimized
      */
+    @Override
     public boolean isMinimized() {
         return stateModel.getBooleanState();
     }
@@ -162,6 +164,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param minimized if true, then the widget is going to be minimized
      */
+    @Override
     public void setMinimized(boolean minimized) {
         stateModel.setBooleanState(minimized);
     }
@@ -170,6 +173,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * Toggles the minimized state. This method will show/hide child widgets of
      * this Widget and switches anchors between node and pin widgets.
      */
+    @Override
     public void toggleMinimized() {
         stateModel.toggleBooleanState();
     }
@@ -179,6 +183,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * child widgets of this Widget and switches anchors between node and pin
      * widgets.
      */
+    @Override
     public void stateChanged() {
         boolean minimized = stateModel.getBooleanState();
         Rectangle rectangle = minimized ? new Rectangle(0, 0, (int) getBounds().getWidth(), 0) : null;  //getBounds().getWidth() dont need to change width
@@ -197,6 +202,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * @param previousState the previous state
      * @param state the new state
      */
+    @Override
     protected void notifyStateChanged(ObjectState previousState, ObjectState state) {
         if (!this.isHighlightStatus()) {
             colorScheme.updateUI(this, previousState, state);
@@ -208,6 +214,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param image the image
      */
+    @Override
     public void setNodeImage(Image image) {
         getImageWidget().setImage(image);
         revalidate();
@@ -218,6 +225,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @return the node name
      */
+    @Override
     public String getNodeName() {
         return nameWidget.getLabel();
     }
@@ -227,6 +235,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param nodeName the node name
      */
+    @Override
     public void setNodeName(String nodeName) {
         nameWidget.setLabel(nodeName);
     }
@@ -236,6 +245,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param nodeType the node type
      */
+    @Override
     public void setNodeType(String nodeType) {
         typeWidget.setLabel(nodeType != null ? "[" + nodeType + "]" : null);
     }
@@ -245,6 +255,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param widget the pin widget
      */
+    @Override
     public void attachPinWidget(Widget widget) {
         widget.setCheckClipping(true);
         addChild(widget);
@@ -258,6 +269,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param glyphs the list of images
      */
+    @Override
     public void setGlyphs(List<Image> glyphs) {
         glyphSetWidget.setGlyphs(glyphs);
     }
@@ -270,6 +282,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * @param nodeType the node type (secondary name)
      * @param glyphs the node glyphs
      */
+    @Override
     public void setNodeProperties(Image image, String nodeName, String nodeType, List<Image> glyphs) {
         setNodeImage(image);
         setNodeName(nodeName);
@@ -282,6 +295,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @return the node name widget
      */
+    @Override
     public LabelWidget getNodeNameWidget() {
         return nameWidget;
     }
@@ -291,6 +305,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @return the node anchor
      */
+    @Override
     public Anchor getNodeAnchor() {
         return nodeAnchor;
     }
@@ -304,6 +319,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * @return the extended pin anchor, the returned anchor is cached and
      * returns a single extended pin anchor instance of each original pin anchor
      */
+    @Override
     public Anchor createAnchorPin(Anchor anchor) {
         Anchor proxyAnchor = proxyAnchorCache.get(anchor);
         if (proxyAnchor == null) {
@@ -331,19 +347,20 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * @param pinsCategories the map of category name as key and a list of pin
      * widgets as value
      */
-    public void sortPins(Map<String, List<Widget>> pinsCategories) {
+    @Override
+    public void sortPins(Map<String, List<Widget>> pinsCategories) {//gg sync
 
         List<Widget> previousPins = getPinWidgets();
-        ArrayList<Widget> unresolvedPins = new ArrayList<Widget>(previousPins);
+        List<Widget> unresolvedPins = new ArrayList<>(previousPins);
 
         for (Iterator<Widget> iterator = unresolvedPins.iterator(); iterator.hasNext();) {
             Widget widget = iterator.next();
-            if (getPinCategoryWidgets().containsValue(widget)) {
+            if (pinCategoryWidgets.containsValue(widget)) {
                 iterator.remove();
             }
         }
 
-        ArrayList<String> unusedCategories = new ArrayList<String>(getPinCategoryWidgets().keySet());
+        ArrayList<String> unusedCategories = new ArrayList<String>(pinCategoryWidgets.keySet());
 
         ArrayList<String> categoryNames = new ArrayList<String>(pinsCategories.keySet());
 //        Collections.sort(categoryNames);
@@ -362,6 +379,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
                 }
             }
         }
+     
 
         if (!unresolvedPins.isEmpty()) {
             newWidgets.addAll(0, unresolvedPins);
@@ -373,11 +391,11 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
 
         removeChildren(previousPins);
         addChildren(newWidgets);
-        this.getScene().validate();
+        ((AbstractPModelerScene)this.getScene()).validateComponent();//.validateComponent();
     }
 
     private IPinSeperatorWidget createPinCategoryWidget(String categoryDisplayName) {
-        IPinSeperatorWidget w = getPinCategoryWidgets().get(categoryDisplayName);
+        IPinSeperatorWidget w = pinCategoryWidgets.get(categoryDisplayName);
         if (w != null) {
             return w;
         }
@@ -385,13 +403,14 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         if (stateModel.getBooleanState()) {
             label.setPreferredBounds(new Rectangle());
         }
-        getPinCategoryWidgets().put(categoryDisplayName, label);
+        pinCategoryWidgets.put(categoryDisplayName, label);
         return label;
     }
 
     /**
      * Collapses the widget.
      */
+    @Override
     public void collapseWidget() {
         stateModel.setBooleanState(true);
     }
@@ -399,6 +418,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     /**
      * Expands the widget.
      */
+    @Override
     public void expandWidget() {
         stateModel.setBooleanState(false);
     }
@@ -408,6 +428,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @return the header widget
      */
+    @Override
     public Widget getHeader() {
         return header;
     }
@@ -417,6 +438,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @return the miminize button widget
      */
+    @Override
     public ImageWidget getMinimizeButton() {
         return minimizeWidget;
     }
@@ -426,6 +448,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @return the pins separator
      */
+    @Override
     public Widget getPinsSeparator() {
         return pinsSeparator;
     }
@@ -440,6 +463,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     /**
      * @return the pinCategoryWidgets
      */
+    @Override
     public HashMap<String, IPinSeperatorWidget> getPinCategoryWidgets() {
         return pinCategoryWidgets;
     }
@@ -447,12 +471,14 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     /**
      * @param pinCategoryWidgets the pinCategoryWidgets to set
      */
+    @Override
     public void setPinCategoryWidgets(HashMap<String, IPinSeperatorWidget> pinCategoryWidgets) {
         this.pinCategoryWidgets = pinCategoryWidgets;
     }
 
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {
 
+        @Override
         public WidgetAction.State mousePressed(Widget widget, WidgetAction.WidgetMouseEvent event) {
             if (event.getButton() == MouseEvent.BUTTON1 || event.getButton() == MouseEvent.BUTTON2) {
                 stateModel.toggleBooleanState();
@@ -465,6 +491,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     /*__________________________________________VMDNodeWidget Impl End___________________________*/ /**
      * @return the colorScheme
      */
+    @Override
     public IColorScheme getColorScheme() {
         return colorScheme;
     }
@@ -472,6 +499,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     /**
      * @param colorScheme the colorScheme to set
      */
+    @Override
     public void setColorScheme(IColorScheme colorScheme) {
         this.colorScheme = colorScheme;
     }

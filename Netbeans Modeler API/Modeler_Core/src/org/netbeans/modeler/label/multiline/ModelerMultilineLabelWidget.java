@@ -82,22 +82,27 @@ public class ModelerMultilineLabelWidget extends MultilineLabelWidget
     public void refresh(boolean resizetocontent) {
     }
 
+    @Override
     public String getDisplayName() {
         return propDisplayName;
     }
 
+    @Override
     public String getID() {
         return propId;
     }
 
+    @Override
     public void update() {
         ResourceValue.initResources(propId, this);
     }
 
+    @Override
     public ResourceType[] getCustomizableResourceTypes() {
         return customizableResTypes;
     }
 
+    @Override
     public void setCustomizableResourceTypes(ResourceType[] resTypes) {
         customizableResTypes = resTypes;
     }

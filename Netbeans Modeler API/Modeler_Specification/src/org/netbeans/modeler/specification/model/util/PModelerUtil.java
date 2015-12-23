@@ -21,7 +21,7 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 
-public interface PModelerUtil extends ModelerUtil {
+public interface PModelerUtil extends IModelerUtil {
 
     public IPinWidget attachPinWidget(IModelerScene scene, INodeWidget nodeWidget, PinWidgetInfo widgetInfo);
 

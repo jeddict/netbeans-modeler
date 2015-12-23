@@ -34,6 +34,7 @@ public class PinWidgetSelectProvider implements SelectProvider {
         return false;
     }
 
+    @Override
     public boolean isSelectionAllowed(Widget widget, Point localLocation, boolean invertSelection) {
         return true;
     }

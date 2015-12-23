@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.widget.properties.handler;
 
+@FunctionalInterface
 public interface PropertyVisibilityHandler<T> {
 
     boolean isVisible();

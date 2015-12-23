@@ -37,6 +37,7 @@ public class ContextPaletteConnectDecorator implements ConnectDecorator {
     public ContextPaletteConnectDecorator() {
     }
 
+    @Override
     public ConnectionWidget createConnectionWidget(Scene scene) {
         ConnectionWidget widget = new ConnectionWidget(scene);
         BasicStroke DEFAULT_DASH = new BasicStroke(1.2f,
@@ -49,14 +50,17 @@ public class ContextPaletteConnectDecorator implements ConnectDecorator {
         return widget;
     }
 
+    @Override
     public Anchor createSourceAnchor(Widget sourceWidget) {
         return NBModelerUtil.getAnchor((INodeWidget) sourceWidget);
     }
 
+    @Override
     public Anchor createTargetAnchor(Widget targetWidget) {
         return NBModelerUtil.getAnchor((INodeWidget) targetWidget);
     }
 
+    @Override
     public Anchor createFloatAnchor(Point location) {
         return AnchorFactory.createFixedAnchor(location);
     }

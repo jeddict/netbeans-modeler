@@ -41,6 +41,7 @@ import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.vmd.internal.AbstractPinWidget;
+import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
@@ -69,10 +70,12 @@ public abstract class PinWidget extends AbstractPinWidget {
         this.setProperties(pinWidgetInfo.getName(), null);
     }
 
+    @Override
     public void setLabel(String label) {
         this.setPinName(label);
     }
 
+    @Override
     public String getLabel() {
         return this.getPinName();
     }
@@ -81,6 +84,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @return the scene
      */
+    @Override
     public IModelerScene getModelerScene() {
         return scene;
     }
@@ -100,12 +104,9 @@ public abstract class PinWidget extends AbstractPinWidget {
         List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
-        baseProperty.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PinWidget.this.showProperties();
-                PinWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        baseProperty.addActionListener((ActionEvent e) -> {
+            PinWidget.this.showProperties();
+            PinWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         menuItemList.add(baseProperty);
@@ -127,30 +128,26 @@ public abstract class PinWidget extends AbstractPinWidget {
                 popupMenu.add(menuItem);
             }
         }
-        popupMenuProvider = new PopupMenuProvider() {
-            @Override
-            public JPopupMenu getPopupMenu(final Widget widget, final Point location) {
-                return popupMenu;
-            }
-        };
+        popupMenuProvider = (final Widget widget, final Point location1) -> popupMenu;
 
         return popupMenuProvider;
     }
 
     private BasePropertyViewManager node;
+
     @Override
     public void exploreProperties() {
-        if(node==null){
+        if (node == null) {
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getPinName(), propertyVisibilityHandlers);
     }
-    
+
     @Override
     public void refreshProperties() {
         org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(node, this.getPinName(), propertyVisibilityHandlers);
     }
-    
+
     @Override
     public void showProperties() {
         org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node, this.getPinName(), propertyVisibilityHandlers);
@@ -172,6 +169,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @return the pinWidgetInfo
      */
+    @Override
     public PinWidgetInfo getPinWidgetInfo() {
         return pinWidgetInfo;
     }
@@ -218,6 +216,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @return the nodeWidget
      */
+    @Override
     public IPNodeWidget getPNodeWidget() {
         return nodeWidget;
     }
@@ -225,6 +224,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @param nodeWidget the nodeWidget to set
      */
+    @Override
     public void setPNodeWidget(IPNodeWidget nodeWidget) {
         this.nodeWidget = nodeWidget;
     }
@@ -263,6 +263,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @return the exist
      */
+    @Override
     public boolean isLocked() {
         return locked;
     }
@@ -270,6 +271,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @param locked the locked to set
      */
+    @Override
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
@@ -277,6 +279,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @return the highlightStatus
      */
+    @Override
     public boolean isHighlightStatus() {
         return highlightStatus;
     }
@@ -284,6 +287,7 @@ public abstract class PinWidget extends AbstractPinWidget {
     /**
      * @param highlightStatus the highlightStatus to set
      */
+    @Override
     public void setHighlightStatus(boolean highlightStatus) {
         this.highlightStatus = highlightStatus;
     }

@@ -58,14 +58,14 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
 //                entity.getDataListener().setData(obj);
 //                getModelerFile().getModelerPanelTopComponent().changePersistenceState(false);
 //            }
-            
-            try{
-                 entity.getDataListener().setData(this.getValue());
+
+            try {
+                entity.getDataListener().setData(this.getValue());
                 getModelerFile().getModelerPanelTopComponent().changePersistenceState(false);
-            }catch(IllegalStateException ise){
-                  this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
+            } catch (IllegalStateException ise) {
+                this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
             }
-            
+
         }
     }
 

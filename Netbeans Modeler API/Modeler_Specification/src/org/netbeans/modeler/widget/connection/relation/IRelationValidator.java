@@ -13,10 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package org.netbeans.modeler.widget.connection.relation;
 
-
 public interface IRelationValidator {
-      public boolean validateRelation(IRelationProxy proxy);
+
+    public boolean validateRelation(IRelationProxy proxy);
 }

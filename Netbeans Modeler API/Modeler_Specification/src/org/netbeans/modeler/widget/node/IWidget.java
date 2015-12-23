@@ -154,6 +154,7 @@ public interface IWidget extends Accessible, Lookup.Provider {
      * @param object the object
      * @return true if the object reference is the same as the widget
      */
+    @Override
     boolean equals(Object object);
 
     /**
@@ -161,6 +162,7 @@ public interface IWidget extends Accessible, Lookup.Provider {
      *
      * @return the accessible context
      */
+    @Override
     AccessibleContext getAccessibleContext();
 
     /**
@@ -290,6 +292,7 @@ public interface IWidget extends Accessible, Lookup.Provider {
      *
      * @return the lookup
      */
+    @Override
     Lookup getLookup();
 
     /**
@@ -379,6 +382,7 @@ public interface IWidget extends Accessible, Lookup.Provider {
      *
      * @return the object hash code
      */
+    @Override
     int hashCode();
 
     /**
@@ -685,6 +689,5 @@ public interface IWidget extends Accessible, Lookup.Provider {
 
     // custom added
     ContextPaletteModel getContextPaletteModel();//moved from INodeWidget to cover all Widget
-    
 
 }

@@ -1,18 +1,19 @@
-/** Copyright [2014] Gaurav Gupta
-   *
-   *Licensed under the Apache License, Version 2.0 (the "License");
-   *you may not use this file except in compliance with the License.
-   *You may obtain a copy of the License at
-   *
-   *    http://www.apache.org/licenses/LICENSE-2.0
-   *
-   *Unless required by applicable law or agreed to in writing, software
-   *distributed under the License is distributed on an "AS IS" BASIS,
-   *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   *See the License for the specific language governing permissions and
-   *limitations under the License.
-   */
- package org.netbeans.modeler.widget.transferable;
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.netbeans.modeler.widget.transferable;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 
 /**
- * 
+ *
  */
 public class TransAlignWithSupport {
 
@@ -37,15 +38,15 @@ public class TransAlignWithSupport {
 
     private ConnectionWidget lineWidget1, lineWidget2;
 
-    public TransAlignWithSupport (AlignWithWidgetCollector collector, LayerWidget interractionLayer, AlignWithMoveDecorator decorator) {
+    public TransAlignWithSupport(AlignWithWidgetCollector collector, LayerWidget interractionLayer, AlignWithMoveDecorator decorator) {
         this.collector = collector;
         this.interractionLayer = interractionLayer;
         this.decorator = decorator;
     }
 
-    protected Point locationSuggested (Widget widget, Rectangle sceneWidgetBounds, Point suggestedLocation, boolean horizontal, boolean vertical, boolean bothSides, boolean snapHack) {
-        Point point = new Point (suggestedLocation);
-        Collection<Rectangle> regions = collector.getRegions (widget);
+    protected Point locationSuggested(Widget widget, Rectangle sceneWidgetBounds, Point suggestedLocation, boolean horizontal, boolean vertical, boolean bothSides, boolean snapHack) {
+        Point point = new Point(suggestedLocation);
+        Collection<Rectangle> regions = collector.getRegions(widget);
 
         if (horizontal) {
             boolean snap = false;
@@ -61,7 +62,7 @@ public class TransAlignWithSupport {
                 int d;
                 boolean snapNow = false;
 
-                d = Math.abs (a1 - b1);
+                d = Math.abs(a1 - b1);
                 if ((snap && d < dx) || (!snap && d < GRAVITY)) {
                     snap = snapNow = true;
                     x = xs = a1;
@@ -69,7 +70,7 @@ public class TransAlignWithSupport {
                 }
 
                 if (bothSides) {
-                    d = Math.abs (a1 - b2);
+                    d = Math.abs(a1 - b2);
                     if ((snap && d < dx) || (!snap && d < GRAVITY)) {
                         snap = snapNow = true;
                         x = a1;
@@ -78,7 +79,7 @@ public class TransAlignWithSupport {
                     }
                 }
 
-                d = Math.abs (a2 - b1);
+                d = Math.abs(a2 - b1);
                 if ((snap && d < dx) || (!snap && d < GRAVITY)) {
                     snap = snapNow = true;
                     x = xs = a2;
@@ -86,7 +87,7 @@ public class TransAlignWithSupport {
                 }
 
                 if (bothSides) {
-                    d = Math.abs (a2 - b2);
+                    d = Math.abs(a2 - b2);
                     if ((snap && d < dx) || (!snap && d < GRAVITY)) {
                         snap = snapNow = true;
                         x = a2;
@@ -103,16 +104,17 @@ public class TransAlignWithSupport {
 
             if (snap) {
                 point.x = xs;
-                if (snapHack)
-                    point.x -= widget.getBounds ().x;
+                if (snapHack) {
+                    point.x -= widget.getBounds().x;
+                }
             }
 
-
-            if (interractionLayer != null)
-                lineWidget1.setControlPoints (snap ? Arrays.asList (
-                    new Point (x, Math.min (sceneWidgetBounds.y, y1)),
-                    new Point (x, Math.max (sceneWidgetBounds.y + sceneWidgetBounds.height, y2))
-                ) : Collections.<Point>emptyList (), true);
+            if (interractionLayer != null) {
+                lineWidget1.setControlPoints(snap ? Arrays.asList(
+                        new Point(x, Math.min(sceneWidgetBounds.y, y1)),
+                        new Point(x, Math.max(sceneWidgetBounds.y + sceneWidgetBounds.height, y2))
+                ) : Collections.<Point>emptyList(), true);
+            }
         }
 
         if (vertical) {
@@ -129,14 +131,14 @@ public class TransAlignWithSupport {
                 int d;
                 boolean snapNow = false;
 
-                d = Math.abs (a1 - b1);
+                d = Math.abs(a1 - b1);
                 if ((snap && d < dy) || (!snap && d < GRAVITY)) {
                     snap = snapNow = true;
                     y = ys = a1;
                     dy = d;
                 }
 
-                d = Math.abs (a1 - b2);
+                d = Math.abs(a1 - b2);
                 if ((snap && d < dy) || (!snap && d < GRAVITY)) {
                     snap = snapNow = true;
                     ys = a1 - sceneWidgetBounds.height;
@@ -144,14 +146,14 @@ public class TransAlignWithSupport {
                     dy = d;
                 }
 
-                d = Math.abs (a2 - b1);
+                d = Math.abs(a2 - b1);
                 if ((snap && d < dy) || (!snap && d < GRAVITY)) {
                     snap = snapNow = true;
                     y = ys = a2;
                     dy = d;
                 }
 
-                d = Math.abs (a2 - b2);
+                d = Math.abs(a2 - b2);
                 if ((snap && d < dy) || (!snap && d < GRAVITY)) {
                     snap = snapNow = true;
                     ys = a2 - sceneWidgetBounds.height;
@@ -166,37 +168,41 @@ public class TransAlignWithSupport {
             }
             if (snap) {
                 point.y = ys;
-                if (snapHack)
-                    point.y -= widget.getBounds ().y;
+                if (snapHack) {
+                    point.y -= widget.getBounds().y;
+                }
             }
 
-            if (interractionLayer != null)
-                lineWidget2.setControlPoints (snap ? Arrays.asList (
-                    new Point (Math.min (sceneWidgetBounds.x, x1), y),
-                    new Point (Math.max (sceneWidgetBounds.x + sceneWidgetBounds.width, x2), y)
-                ) : Collections.<Point>emptyList (), true);
+            if (interractionLayer != null) {
+                lineWidget2.setControlPoints(snap ? Arrays.asList(
+                        new Point(Math.min(sceneWidgetBounds.x, x1), y),
+                        new Point(Math.max(sceneWidgetBounds.x + sceneWidgetBounds.width, x2), y)
+                ) : Collections.<Point>emptyList(), true);
+            }
         }
 
         return point;
     }
 
-    public void show () {
+    public void show() {
         if (interractionLayer != null) {
-            if (lineWidget1 == null)
-                lineWidget1 = decorator.createLineWidget (interractionLayer.getScene ());
-            if (lineWidget2 == null)
-                lineWidget2 = decorator.createLineWidget (interractionLayer.getScene ());
-            interractionLayer.addChild (lineWidget1);
-            interractionLayer.addChild (lineWidget2);
-            lineWidget1.setControlPoints (Collections.<Point>emptySet (), true);
-            lineWidget2.setControlPoints (Collections.<Point>emptySet (), true);
+            if (lineWidget1 == null) {
+                lineWidget1 = decorator.createLineWidget(interractionLayer.getScene());
+            }
+            if (lineWidget2 == null) {
+                lineWidget2 = decorator.createLineWidget(interractionLayer.getScene());
+            }
+            interractionLayer.addChild(lineWidget1);
+            interractionLayer.addChild(lineWidget2);
+            lineWidget1.setControlPoints(Collections.<Point>emptySet(), true);
+            lineWidget2.setControlPoints(Collections.<Point>emptySet(), true);
         }
     }
 
-    public void hide () {
+    public void hide() {
         if (interractionLayer != null) {
-            interractionLayer.removeChild (lineWidget1);
-            interractionLayer.removeChild (lineWidget2);
+            interractionLayer.removeChild(lineWidget1);
+            interractionLayer.removeChild(lineWidget2);
         }
     }
 

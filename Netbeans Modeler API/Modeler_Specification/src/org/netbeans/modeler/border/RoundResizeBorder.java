@@ -77,6 +77,7 @@ public class RoundResizeBorder implements ResizeBorder {
         this(thickness, color, new ResizeProvider.ControlPoint[]{}, new ResizeProvider.ControlPoint[]{}, outer, arcWidth, arcHeight, cornerPoint, 0, 0, null, drawColor, null);
     }
 
+    @Override
     public Insets getInsets() {
         return new Insets(thickness, thickness, thickness, thickness);//new Insets (thickness, thickness, thickness, thickness);
     }
@@ -85,6 +86,7 @@ public class RoundResizeBorder implements ResizeBorder {
         return outer;
     }
 
+    @Override
     public void paint(Graphics2D gr, Rectangle bounds) {
 //  thickness=2;
         gr.setColor(color);
@@ -158,6 +160,7 @@ public class RoundResizeBorder implements ResizeBorder {
 
     }
 
+    @Override
     public boolean isOpaque() {
         return outer;
     }
@@ -191,6 +194,7 @@ public class RoundResizeBorder implements ResizeBorder {
     /**
      * @return the widgetArea
      */
+    @Override
     public Rectangle getWidgetArea() {
         return widgetArea;
     }
@@ -198,6 +202,7 @@ public class RoundResizeBorder implements ResizeBorder {
     /**
      * @param widgetArea the widgetArea to set
      */
+    @Override
     public void setWidgetArea(Rectangle widgetArea) {
         this.widgetArea = widgetArea;
     }

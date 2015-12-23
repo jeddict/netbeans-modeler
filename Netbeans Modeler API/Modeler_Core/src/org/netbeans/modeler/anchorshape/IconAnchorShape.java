@@ -29,7 +29,8 @@ public class IconAnchorShape implements AnchorShape {
     public IconAnchorShape(Image image, boolean lineOriented) {
         this(image, lineOriented, image.getWidth(null), image.getHeight(null));
     }
-  public IconAnchorShape(Image image) {
+
+    public IconAnchorShape(Image image) {
         this(image, false, image.getWidth(null), image.getHeight(null));
     }
 
@@ -44,18 +45,22 @@ public class IconAnchorShape implements AnchorShape {
         this.y = -(y / 2);
     }
 
+    @Override
     public boolean isLineOriented() {
         return lineOriented;
     }
 
+    @Override
     public int getRadius() {
         return radius;
     }
 
+    @Override
     public double getCutDistance() {
         return 0.0;
     }
 
+    @Override
     public void paint(Graphics2D graphics, boolean source) {
         graphics.drawImage(getImage(), x, y, null);
     }

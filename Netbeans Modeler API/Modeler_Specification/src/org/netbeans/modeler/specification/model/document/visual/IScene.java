@@ -165,6 +165,7 @@ public interface IScene extends IWidget {
      */
     WidgetAction.Chain getPriorActions();
 
+    @Override
     ResourceTable getResourceTable();
 
     /**
@@ -194,6 +195,7 @@ public interface IScene extends IWidget {
      *
      * @return true, if the whole scene is validated
      */
+    @Override
     boolean isValidated();
 
     /**
@@ -250,6 +252,7 @@ public interface IScene extends IWidget {
      */
     void setMaximumBounds(Rectangle maximumBounds);
 
+    @Override
     void setResourceTable(ResourceTable table);
 
     /**

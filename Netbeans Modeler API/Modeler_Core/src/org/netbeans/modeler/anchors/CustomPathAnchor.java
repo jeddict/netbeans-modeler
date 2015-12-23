@@ -48,6 +48,7 @@ public class CustomPathAnchor extends Anchor {
         this.includeBorders = includeBorders;
     }
 
+    @Override
     public boolean allowsArbitraryConnectionPlacement() {
         return false;
     }

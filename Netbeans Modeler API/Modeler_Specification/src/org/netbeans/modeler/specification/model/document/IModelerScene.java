@@ -22,7 +22,6 @@ import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.component.IModelerPanel;
-import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
@@ -33,7 +32,6 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
-import org.openide.nodes.AbstractNode;
 
 public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
@@ -79,8 +77,6 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     public IBaseElementWidget getBaseElement(String id);
 
-  
-    /* Abstract Modeler Scene */
     public ModelerFile getModelerFile();
 
     public void setModelerFile(ModelerFile modelerFile);
@@ -127,12 +123,6 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     public void setAlignSupport(boolean alignSupport);
 
-
-
-//    AbstractNode getNode();
-//
-//    void setNode(AbstractNode node);
-
     LayerWidget getLabelLayer();
 
     void setLabelLayer(LayerWidget labelLayer);
@@ -158,13 +148,13 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     public void autoLayout();
 
-    public void setModelerDiagramEngine(IModelerDiagramEngine modelerDiagramEngine);
-
-    
-        //custom added
+    //custom added
+    @Override
     void showProperties();
 
+    @Override
     void exploreProperties();
 
+    @Override
     void refreshProperties();
 }

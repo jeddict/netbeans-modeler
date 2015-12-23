@@ -51,8 +51,6 @@ public class LockSelectionAction extends WidgetAction.Adapter {
                     }
                 }
 
-
-
                 if ((event.isControlDown() == true)/* && (event.isShiftDown() == true)*/) {
                     if (event.getKeyCode() == KeyEvent.VK_EQUALS) {
                         IFlowElementWidget data = getWidgetDataObject(scene, widget);

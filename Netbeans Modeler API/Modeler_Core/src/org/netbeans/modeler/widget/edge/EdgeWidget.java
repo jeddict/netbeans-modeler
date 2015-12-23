@@ -42,7 +42,7 @@ import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
-import org.netbeans.modeler.specification.model.util.ModelerUtil;
+import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.specification.model.util.NModelerUtil;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
@@ -172,22 +172,16 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
         List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
         JMenuItem delete = new JMenuItem("Delete");
         delete.setIcon(ImageUtil.getInstance().getIcon("delete.png"));
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                EdgeWidget.this.remove(true);
-                scene.getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        delete.addActionListener((ActionEvent e) -> {
+            EdgeWidget.this.remove(true);
+            scene.getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         JMenuItem propsMenu = new JMenuItem("Properties");
         propsMenu.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
-        propsMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                EdgeWidget.this.showProperties();
-                EdgeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        propsMenu.addActionListener((ActionEvent e) -> {
+            EdgeWidget.this.showProperties();
+            EdgeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         menuItemList.add(delete);
@@ -211,34 +205,29 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
                 popupMenu.add(menuItem);
             }
         }
-        popupMenuProvider = new PopupMenuProvider() {
-            @Override
-            public JPopupMenu getPopupMenu(final Widget widget, final Point location) {
-                return popupMenu;
-            }
-        };
+        popupMenuProvider = (final Widget widget, final Point location1) -> popupMenu;
 
         return popupMenuProvider;
     }
 
-   
     private BasePropertyViewManager node;
+
     @Override
     public void exploreProperties() {
-        if(node==null){
+        if (node == null) {
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
-        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
-    
+
     @Override
     public void refreshProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.refreshProperties(node, this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
-    
+
     @Override
     public void showProperties() {
-        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node,  this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
+        org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node, this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
     }
 
     @Override
@@ -340,10 +329,12 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
 //
 //
 
+    @Override
     public boolean remove() {
         return remove(false);
     }
 
+    @Override
     public boolean remove(boolean notification) {
         if (notification) {
             NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Edge?", "Delete Edge", NotifyDescriptor.OK_CANCEL_OPTION);
@@ -363,7 +354,7 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
 //            this.setLabel("");
             this.hideLabel();
 
-            ModelerUtil modelerUtil = this.getModelerScene().getModelerFile().getModelerUtil();
+            IModelerUtil modelerUtil = this.getModelerScene().getModelerFile().getModelerUtil();
             if (modelerUtil instanceof NModelerUtil) {
                 NModelerUtil nModelerUtil = (NModelerUtil) modelerUtil;
                 nModelerUtil.dettachEdgeSourceAnchor(scene, this, (INodeWidget) this.getSourceAnchor().getRelatedWidget().getParentWidget());
@@ -380,6 +371,7 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
     /**
      * @return the exist
      */
+    @Override
     public boolean isLocked() {
         return locked;
     }
@@ -387,6 +379,7 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
     /**
      * @param locked the locked to set
      */
+    @Override
     public void setLocked(boolean locked) {
         this.locked = locked;
     }

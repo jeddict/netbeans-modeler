@@ -18,21 +18,19 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.lis
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
 
-
 public interface ActionHandler<T> {
-    
+
 //    Component getActionPanel();
     EntityComponent getItemPanel();
+
     int showRemoveItemDialog();
+
     void createItem(ComboBoxValue<T> comboBoxValue);
+
     void updateItem(ComboBoxValue<T> comboBoxValue);
-    
-     void deleteItem(ComboBoxValue<T> comboBoxValue);
-    
+
+    void deleteItem(ComboBoxValue<T> comboBoxValue);
+
 //    CreateItemComponent getCreateItemPanel();
 //    UpdateItemComponent getUpdateItemPanel();
-    
-    
-    
-    
 }

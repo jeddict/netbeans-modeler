@@ -212,6 +212,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         return labelManager;
     }
 
+    @Override
     public NodeWidgetInfo getNodeWidgetInfo() {
         return nodeWidgetInfo;
     }
@@ -248,6 +249,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
 
     }
 
+    @Override
     public void showResizeBorder() {
         Border border = this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this);
         if (border != null) {
@@ -255,6 +257,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         }
     }
 
+    @Override
     public void hideResizeBorder() {
         this.setBorder(DEFAULT_BORDER);
     }
@@ -263,24 +266,17 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
         JMenuItem visualProperty = new JMenuItem(I18n.getString("Customize"));
         visualProperty.setIcon(ImageUtil.getInstance().getIcon("customize.png"));
-        visualProperty.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                AbstractNode node = new VisualPropertyViewManager((IBaseElementWidget) NodeWidget.this);
-                NodeOperation.getDefault().showProperties(node);
-                NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-
-            }
+        visualProperty.addActionListener((ActionEvent e) -> {
+            AbstractNode node1 = new VisualPropertyViewManager((IBaseElementWidget) NodeWidget.this);
+            NodeOperation.getDefault().showProperties(node1);
+            NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         JMenuItem delete = new JMenuItem("Delete");
         delete.setIcon(ImageUtil.getInstance().getIcon("delete.png"));
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                NodeWidget.this.remove(true);
-                NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        delete.addActionListener((ActionEvent e) -> {
+            NodeWidget.this.remove(true);
+            NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         JMenu position = new JMenu("Position");
@@ -288,34 +284,25 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
 
         JMenuItem itemFront = new JMenuItem("Bring to Front");
         itemFront.setIcon(ImageUtil.getInstance().getIcon("front.png"));
-        itemFront.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                NodeWidget.this.bringToFront();
-                NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        itemFront.addActionListener((ActionEvent e) -> {
+            NodeWidget.this.bringToFront();
+            NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
         position.add(itemFront);
 
         JMenuItem itemBack = new JMenuItem("Send to Back");
         itemBack.setIcon(ImageUtil.getInstance().getIcon("back.png"));
-        itemBack.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                NodeWidget.this.bringToBack();
-                NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        itemBack.addActionListener((ActionEvent e) -> {
+            NodeWidget.this.bringToBack();
+            NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
         position.add(itemBack);
 
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
-        baseProperty.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                NodeWidget.this.showProperties();
-                NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-            }
+        baseProperty.addActionListener((ActionEvent e) -> {
+            NodeWidget.this.showProperties();
+            NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         menuItemList.add(visualProperty);
@@ -342,20 +329,16 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
                 popupMenu.add(menuItem);
             }
         }
-        popupMenuProvider = new PopupMenuProvider() {
-            @Override
-            public JPopupMenu getPopupMenu(final Widget widget, final Point location) {
-                return popupMenu;
-            }
-        };
+        popupMenuProvider = (final Widget widget, final Point location1) -> popupMenu;
 
         return popupMenuProvider;
     }
 
     private BasePropertyViewManager node;
+
     @Override
     public void exploreProperties() {
-        if(node==null){
+        if (node == null) {
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getLabel(), propertyVisibilityHandlers);
@@ -711,6 +694,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     /**
      * @return the activeStatus
      */
+    @Override
     public boolean isActiveStatus() {
         return activeStatus;
     }
@@ -718,6 +702,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     /**
      * @param activeStatus the activeStatus to set
      */
+    @Override
     public void setActiveStatus(boolean activeStatus) {
         this.activeStatus = activeStatus;
     }
@@ -732,6 +717,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     /**
      * @param status the status to set
      */
+    @Override
     public void setStatus(NodeWidgetStatus status) {
 
         if (status == NodeWidgetStatus.INVALID & this.getStatus() != NodeWidgetStatus.INVALID) {
@@ -769,6 +755,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     /**
      * @return the widgetBorder
      */
+    @Override
     public ResizeBorder getWidgetBorder() {
         return widgetBorder;
     }
@@ -816,18 +803,22 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
 //        }
 //        return menuItem;
 //    }
+    @Override
     public boolean isAnchorEnable() {
         return anchorState;
     }
 
+    @Override
     public void setAnchorState(boolean state) {
         this.anchorState = state;
     }
 
+    @Override
     public Rectangle getSceneViewBound() {
         return this.convertLocalToScene(this.getPreferredBounds());
     }
 
+    @Override
     public Point getSceneViewLocation() {
         return this.convertLocalToScene(this.getPreferredLocation());
     }
@@ -890,10 +881,12 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         return getCursor();
     }
 
+    @Override
     public boolean remove() {
         return remove(false);
     }
 
+    @Override
     public boolean remove(boolean notification) {
         if (notification) {
             NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Node ?", "Delete Node", NotifyDescriptor.OK_CANCEL_OPTION);
@@ -931,6 +924,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     /**
      * @return the exist
      */
+    @Override
     public boolean isLocked() {
         return locked;
     }
@@ -938,10 +932,12 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     /**
      * @param locked the locked to set
      */
+    @Override
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
 
+    @Override
     public INodeWidget addSiblingWidget(NodeWidgetInfo newNodeWidgetInfo, int xPadding, int yPadding, boolean connect, boolean horizontal) {
         NodeWidget nodeWidget = this;
         Rectangle sceneBound = nodeWidget.getSceneViewBound();

@@ -79,10 +79,12 @@ public class PNodeBorder implements Border {
         this.color5 = color5;
     }
 
+    @Override
     public Insets getInsets() {
         return insets;
     }
 
+    @Override
     public void paint(Graphics2D gr, Rectangle bounds) {
         Shape previousClip = gr.getClip();
         gr.clip(new RoundRectangle2D.Float(bounds.x, bounds.y, bounds.width, bounds.height, 4, 4));
@@ -108,6 +110,7 @@ public class PNodeBorder implements Border {
         gr.fill(new Rectangle.Float(bounds.x, y1, bounds.x + bounds.width, y2));
     }
 
+    @Override
     public boolean isOpaque() {
         return true;
     }

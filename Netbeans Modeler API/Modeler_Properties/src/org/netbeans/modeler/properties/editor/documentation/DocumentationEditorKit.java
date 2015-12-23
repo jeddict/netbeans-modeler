@@ -41,7 +41,6 @@
  * Version 2 license, then the option applies only if the new code is
  * made subject to such option by the copyright holder.
  */
-
 package org.netbeans.modeler.properties.editor.documentation;
 
 import javax.swing.text.ComponentView;
@@ -57,40 +56,36 @@ import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
  *
  * @author Sheryl
  */
-public class DocumentationEditorKit extends HTMLEditorKit
-{
-    
-    /** Creates a new instance of DocumentationEditorKit */
-    public DocumentationEditorKit()
-    {
+public class DocumentationEditorKit extends HTMLEditorKit {
+
+    /**
+     * Creates a new instance of DocumentationEditorKit
+     */
+    public DocumentationEditorKit() {
     }
-    
-    public ViewFactory getViewFactory()
-    {
+
+    @Override
+    public ViewFactory getViewFactory() {
         return new HTMLFactoryExtended();
     }
-    
-    public static class HTMLFactoryExtended extends HTMLFactory implements ViewFactory
-    {
-        public HTMLFactoryExtended()
-        {
+
+    public static class HTMLFactoryExtended extends HTMLFactory implements ViewFactory {
+
+        public HTMLFactoryExtended() {
         }
-        
+
         // override default behavior, do not display html comment
-        public View create(Element elem)
-        {
+        @Override
+        public View create(Element elem) {
             Object obj = elem.getAttributes().getAttribute(StyleConstants.NameAttribute);
-            if(obj instanceof HTML.Tag)
-            {
-                HTML.Tag tagType = (HTML.Tag)obj;
-                if(tagType == HTML.Tag.COMMENT)
-                {
+            if (obj instanceof HTML.Tag) {
+                HTML.Tag tagType = (HTML.Tag) obj;
+                if (tagType == HTML.Tag.COMMENT) {
                     return new ComponentView(elem);
                 }
             }
             return super.create(elem);
         }
     }
-    
-    
+
 }

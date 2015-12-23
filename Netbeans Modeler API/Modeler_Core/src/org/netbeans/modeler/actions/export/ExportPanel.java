@@ -30,8 +30,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.specification.export.ExportManager;
-import org.netbeans.modeler.specification.export.ExportManager.FileType;
+import org.netbeans.modeler.specification.export.IExportManager;
+import org.netbeans.modeler.specification.export.IExportManager.FileType;
 import org.netbeans.modeler.specification.export.ExportType;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.tool.writer.DiagramImageWriter;
@@ -69,7 +69,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
 
     private void setQualityComponentsEnabled(boolean enabled) {
         jPanel3.setEnabled(enabled);
-        
+
         qualitySlider.setEnabled(enabled);
         qualityField.setEnabled(enabled);
         qualityLbl.setEnabled(enabled);
@@ -84,7 +84,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
     public void initValue(IModelerScene scene) {
         this.scene = scene;
 
-        ExportManager exportManager = scene.getModelerFile().getVendorSpecification().getModelerDiagramModel().getExportManager();
+        IExportManager exportManager = scene.getModelerFile().getVendorSpecification().getModelerDiagramModel().getExportManager();
         DefaultComboBoxModel boxModel = new DefaultComboBoxModel(
                 new Object[]{ExportType.png, ExportType.jpg});
         imageTypeComboBox.setModel(boxModel);
@@ -122,7 +122,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
         if (imageTypeComboBox.getSelectedItem() instanceof ExportType) {
             ext = ((ExportType) imageTypeComboBox.getSelectedItem()).getName();
         } else {
-            ext = ((ExportManager.FileType) imageTypeComboBox.getSelectedItem()).getExtension();
+            ext = ((IExportManager.FileType) imageTypeComboBox.getSelectedItem()).getExtension();
         }
 
         String imageFile = file.getParent() + File.separator + file.getName() + "." + ext;
@@ -144,8 +144,8 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
     public void exportImage() {
         try {
 
-            if (imageTypeComboBox.getSelectedItem() instanceof ExportManager.FileType) {
-                DocumentWriter.write(scene, (ExportManager.FileType) imageTypeComboBox.getSelectedItem(), new File(fileNameField.getText()));
+            if (imageTypeComboBox.getSelectedItem() instanceof IExportManager.FileType) {
+                DocumentWriter.write(scene, (IExportManager.FileType) imageTypeComboBox.getSelectedItem(), new File(fileNameField.getText()));
             } else {
 //            File file = new File(fileNameField.getText());
                 FileImageOutputStream os = new FileImageOutputStream(new File(fileNameField.getText()));
@@ -186,14 +186,17 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
         descriptor.setValid(valid);
     }
 
+    @Override
     public void insertUpdate(DocumentEvent e) {
         changedUpdate(e);
     }
 
+    @Override
     public void removeUpdate(DocumentEvent e) {
         changedUpdate(e);
     }
 
+    @Override
     public void changedUpdate(DocumentEvent e) {
         if (e.getDocument() == widthField.getDocument()) {
             try {
@@ -228,6 +231,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
         }
     }
 
+    @Override
     public void stateChanged(ChangeEvent event) {
         if (event.getSource() == qualitySlider) {
             qualityField.getDocument().removeDocumentListener(this);
@@ -236,6 +240,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
         }
     }
 
+    @Override
     public void itemStateChanged(ItemEvent event) {
         Rectangle sceneRec = scene.getPreferredBounds();
         Rectangle viewRect = scene.getView().getVisibleRect();
@@ -554,7 +559,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
         if (imageTypeComboBox.getSelectedItem() instanceof ExportType) {
             ext = ((ExportType) imageTypeComboBox.getSelectedItem()).getName();
         } else {
-            ext = ((ExportManager.FileType) imageTypeComboBox.getSelectedItem()).getExtension();
+            ext = ((IExportManager.FileType) imageTypeComboBox.getSelectedItem()).getExtension();
         }
 
         FileFilter filter = new ExportFilter(ext);
@@ -569,7 +574,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
 
     }//GEN-LAST:event_browseBtnActionPerformed
 
-    private void manageVisibilityState(){
+    private void manageVisibilityState() {
         if (imageTypeComboBox.getSelectedItem() instanceof ExportType) {
             setQualityComponentsEnabled(imageTypeComboBox.getSelectedItem() == ExportType.jpg);
             jPanel2.setEnabled(true);
@@ -593,13 +598,13 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
 
         }
     }
-    
+
     private void imageTypeComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_imageTypeComboBoxItemStateChanged
         manageVisibilityState();
         if (imageTypeComboBox.getSelectedItem() instanceof ExportType) {
             setFileName(((ExportType) imageTypeComboBox.getSelectedItem()).getName());
         } else {
-            setFileName(((ExportManager.FileType) imageTypeComboBox.getSelectedItem()).getExtension());
+            setFileName(((IExportManager.FileType) imageTypeComboBox.getSelectedItem()).getExtension());
         }
     }//GEN-LAST:event_imageTypeComboBoxItemStateChanged
 
@@ -626,6 +631,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
             this.imageType = imageType;
         }
 
+        @Override
         public boolean accept(File f) {
             if (f.isDirectory()) {
                 return true;
@@ -659,6 +665,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
         }
 
         //The description of this filter
+        @Override
         public String getDescription() {
             return imageType;
         }

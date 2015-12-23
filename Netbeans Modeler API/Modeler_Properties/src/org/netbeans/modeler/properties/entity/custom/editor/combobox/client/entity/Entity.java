@@ -15,13 +15,14 @@
  */
 package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity;
 
-
 public abstract class Entity<T> {
+
     private String id;
-   
+
     public Entity(String id) {
         this.id = id;
     }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -44,8 +45,6 @@ public abstract class Entity<T> {
         return true;
     }
 
-
-
     /**
      * @return the id
      */
@@ -60,6 +59,4 @@ public abstract class Entity<T> {
         this.id = id;
     }
 
-   
-  
 }

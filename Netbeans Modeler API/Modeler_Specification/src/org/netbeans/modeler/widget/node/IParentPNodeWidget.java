@@ -37,6 +37,7 @@ public interface IParentPNodeWidget extends StateModel.Listener, VMDMinimizeAbil
     /**
      * Collapses the widget.
      */
+    @Override
     void collapseWidget();
 
     /**
@@ -53,6 +54,7 @@ public interface IParentPNodeWidget extends StateModel.Listener, VMDMinimizeAbil
     /**
      * Expands the widget.
      */
+    @Override
     void expandWidget();
 
     /**
@@ -163,6 +165,7 @@ public interface IParentPNodeWidget extends StateModel.Listener, VMDMinimizeAbil
      * child widgets of this Widget and switches anchors between node and pin
      * widgets.
      */
+    @Override
     void stateChanged();
 
     /**

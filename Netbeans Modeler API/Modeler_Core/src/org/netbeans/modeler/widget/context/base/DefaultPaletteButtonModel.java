@@ -125,20 +125,24 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
         paletteModel = model;
     }
 
+    @Override
     public ContextPaletteModel getPaletteModel() {
         return paletteModel;
     }
 
     ///////////////////////////////////////////////////////////////
     // Data Accessors
+    @Override
     public Image getImage() {
         return image;
     }
 
+    @Override
     public void setImage(Image image) {
         this.image = image;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -155,18 +159,22 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
         return defaultTargetType;
     }
 
+    @Override
     public String getTooltip() {
         return tooltip;
     }
 
+    @Override
     public void setTooltip(String tooltip) {
         this.tooltip = tooltip;
     }
 
+    @Override
     public RelationshipFactory getFactory() {
         return factory;
     }
 
+    @Override
     public void setFactory(RelationshipFactory factory) {
         this.factory = factory;
     }
@@ -178,6 +186,7 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
     /**
      * @return the contextActionType
      */
+    @Override
     public ContextActionType getContextActionType() {
         return contextActionType;
     }
@@ -185,6 +194,7 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
     /**
      * @param contextActionType the contextActionType to set
      */
+    @Override
     public void setContextActionType(ContextActionType contextActionType) {
         this.contextActionType = contextActionType;
     }
@@ -247,10 +257,10 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
 //    public void setContextActionId(String contextActionId) {
 //        this.contextActionId = contextActionId;
 //    }
-
     /**
      * @return the id
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -258,6 +268,7 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
     /**
      * @param id the id to set
      */
+    @Override
     public void setId(String id) {
         this.id = id;
     }

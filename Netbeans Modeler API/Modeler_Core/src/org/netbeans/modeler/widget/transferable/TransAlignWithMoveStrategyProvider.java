@@ -66,6 +66,7 @@ public class TransAlignWithMoveStrategyProvider extends TransAlignWithSupport im
         moveWidgetInitialized = false;
     }
 
+    @Override
     public Point locationSuggested(Widget widget, Point originalLocation, Point suggestedLocation) {
 
         if (movingWidgets.size() > 1) {
@@ -94,6 +95,7 @@ public class TransAlignWithMoveStrategyProvider extends TransAlignWithSupport im
         return localPt;
     }
 
+    @Override
     public void movementStarted(Widget widget) {
         show();
 
@@ -105,6 +107,7 @@ public class TransAlignWithMoveStrategyProvider extends TransAlignWithSupport im
         moveWidgetInitialized = false;
     }
 
+    @Override
     public void movementFinished(Widget widget) {
         hide();
 
@@ -147,6 +150,7 @@ public class TransAlignWithMoveStrategyProvider extends TransAlignWithSupport im
         original = null;
     }
 
+    @Override
     public Point getOriginalLocation(Widget widget) {
 
         original = widget.getPreferredLocation();
@@ -175,6 +179,7 @@ public class TransAlignWithMoveStrategyProvider extends TransAlignWithSupport im
 
     Point lastPoint = null;
 
+    @Override
     public void setNewLocation(Widget widget, Point location) {
 
         if (location != null && original != null) {
@@ -482,11 +487,7 @@ public class TransAlignWithMoveStrategyProvider extends TransAlignWithSupport im
                     }
                 }
                 //need to sort in order to return back properly without indexOutOfBounds
-                Collections.sort(movingWidgets, new Comparator<MovingWidgetDetails>() {
-                    public int compare(TransAlignWithMoveStrategyProvider.MovingWidgetDetails o1, TransAlignWithMoveStrategyProvider.MovingWidgetDetails o2) {
-                        return o1.getOriginalIndex() - o2.getOriginalIndex();
-                    }
-                });
+                Collections.sort(movingWidgets, (TransAlignWithMoveStrategyProvider.MovingWidgetDetails o1, TransAlignWithMoveStrategyProvider.MovingWidgetDetails o2) -> o1.getOriginalIndex() - o2.getOriginalIndex());
             } else {
                 MovingWidgetDetails details = new MovingWidgetDetails(widget, widget.getParentWidget(), widget.getPreferredLocation());
 

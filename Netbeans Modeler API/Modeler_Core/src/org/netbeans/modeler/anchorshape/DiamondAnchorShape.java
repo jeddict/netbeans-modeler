@@ -86,18 +86,22 @@ public class DiamondAnchorShape implements AnchorShape {
         generalPath.lineTo(0.0f, 0.0f);
     }
 
+    @Override
     public boolean isLineOriented() {
         return true;
     }
 
+    @Override
     public int getRadius() {
         return (int) Math.ceil(1.5f * size);
     }
 
+    @Override
     public double getCutDistance() {
         return cutDistance;
     }
 
+    @Override
     public void paint(Graphics2D graphics, boolean source) {
         graphics.setColor(color);
         if (filled) {

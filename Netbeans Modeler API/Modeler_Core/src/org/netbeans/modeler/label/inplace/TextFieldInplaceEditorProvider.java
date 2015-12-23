@@ -67,82 +67,94 @@ public final class TextFieldInplaceEditorProvider implements InplaceEditorProvid
     private FocusListener focusListener;
     private DocumentListener documentListener;
 
-    public TextFieldInplaceEditorProvider (TextFieldInplaceEditor editor, EnumSet<InplaceEditorProvider.ExpansionDirection> expansionDirections) {
+    public TextFieldInplaceEditorProvider(TextFieldInplaceEditor editor, EnumSet<InplaceEditorProvider.ExpansionDirection> expansionDirections) {
         this.editor = editor;
         this.expansionDirections = expansionDirections;
     }
 
-    public JTextField createEditorComponent (EditorController controller, Widget widget) {
-        if (! editor.isEnabled (widget))
+    @Override
+    public JTextField createEditorComponent(EditorController controller, Widget widget) {
+        if (!editor.isEnabled(widget)) {
             return null;
-        JTextField field = new JTextField (editor.getText (widget));
-        field.selectAll ();
+        }
+        JTextField field = new JTextField(editor.getText(widget));
+        field.selectAll();
         Scene scene = widget.getScene();
-        double zoomFactor = scene.getZoomFactor ();
+        double zoomFactor = scene.getZoomFactor();
         if (zoomFactor > 1.0) {
             Font font = scene.getDefaultFont();
             font = font.deriveFont((float) (font.getSize2D() * zoomFactor));
-            field.setFont (font);
+            field.setFont(font);
         }
         return field;
     }
 
-    public void notifyOpened (final EditorController controller, Widget widget, JTextField editor) {
-        editor.setMinimumSize (new Dimension (64, 19));
+    @Override
+    public void notifyOpened(final EditorController controller, Widget widget, JTextField editor) {
+        editor.setMinimumSize(new Dimension(64, 19));
         keyListener = new KeyAdapter() {
-            public void keyPressed (KeyEvent e) {
-                switch (e.getKeyChar ()) {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyChar()) {
                     case KeyEvent.VK_ESCAPE:
-                        e.consume ();
-                        controller.closeEditor (false);
+                        e.consume();
+                        controller.closeEditor(false);
                         break;
                     case KeyEvent.VK_ENTER:
-                        e.consume ();
-                        controller.closeEditor (true);
+                        e.consume();
+                        controller.closeEditor(true);
                         break;
                 }
             }
         };
         focusListener = new FocusAdapter() {
-            public void focusLost (FocusEvent e) {
-                controller.closeEditor (true);
+            @Override
+            public void focusLost(FocusEvent e) {
+                controller.closeEditor(true);
             }
         };
-        documentListener = new DocumentListener () {
-            public void insertUpdate (DocumentEvent e) {
-                controller.notifyEditorComponentBoundsChanged ();
+        documentListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                controller.notifyEditorComponentBoundsChanged();
             }
 
-            public void removeUpdate (DocumentEvent e) {
-                controller.notifyEditorComponentBoundsChanged ();
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                controller.notifyEditorComponentBoundsChanged();
             }
 
-            public void changedUpdate (DocumentEvent e) {
-                controller.notifyEditorComponentBoundsChanged ();
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                controller.notifyEditorComponentBoundsChanged();
             }
         };
-        editor.addKeyListener (keyListener);
-        editor.addFocusListener (focusListener);
-        editor.getDocument ().addDocumentListener (documentListener);
-        editor.selectAll ();
+        editor.addKeyListener(keyListener);
+        editor.addFocusListener(focusListener);
+        editor.getDocument().addDocumentListener(documentListener);
+        editor.selectAll();
     }
 
-    public void notifyClosing (EditorController controller, Widget widget, JTextField editor, boolean commit) {
-        editor.getDocument ().removeDocumentListener (documentListener);
-        editor.removeFocusListener (focusListener);
-        editor.removeKeyListener (keyListener);
+    @Override
+    public void notifyClosing(EditorController controller, Widget widget, JTextField editor, boolean commit) {
+        editor.getDocument().removeDocumentListener(documentListener);
+        editor.removeFocusListener(focusListener);
+        editor.removeKeyListener(keyListener);
         if (commit) {
-            this.editor.setText (widget, editor.getText ());
-            if (widget != null)
-                widget.getScene ().validate ();
+            this.editor.setText(widget, editor.getText());
+            if (widget != null) {
+                widget.getScene().validate();
+            }
         }
     }
 
+    @Override
     public Rectangle getInitialEditorComponentBounds(EditorController controller, Widget widget, JTextField editor, Rectangle viewBounds) {
         return null;
     }
 
-    public EnumSet<ExpansionDirection> getExpansionDirections (EditorController controller, Widget widget, JTextField editor) {
+    @Override
+    public EnumSet<ExpansionDirection> getExpansionDirections(EditorController controller, Widget widget, JTextField editor) {
         return expansionDirections;
     }
 

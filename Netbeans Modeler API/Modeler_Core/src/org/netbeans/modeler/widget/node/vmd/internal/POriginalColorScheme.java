@@ -73,33 +73,65 @@ import org.openide.util.ImageUtilities;
  */
 public class POriginalColorScheme implements IColorScheme {
 
-    static final Color COLOR_NORMAL = new Color(0xBACDF0);
-    private static final Color COLOR_HOVERED = Color.BLACK;
-    private static final Color COLOR_SELECTED = new Color(0x748CC0);
-    static final Color COLOR_HIGHLIGHTED = new Color(0x316AC5);
+    private final Color COLOR_NORMAL;
+    private final Color COLOR_HOVERED;
+    private final Color COLOR_SELECTED;
+    private final Color COLOR_HIGHLIGHTED;
 
-//    private static final Color COLOR0 = new Color (169, 197, 235);
-    static final Color COLOR1 = new Color(221, 235, 246);
-    static final Color COLOR2 = new Color(255, 255, 255);
-    static final Color COLOR3 = new Color(214, 235, 255);
-    static final Color COLOR4 = new Color(241, 249, 253);
-    static final Color COLOR5 = new Color(255, 255, 255);
+    private final Color COLOR1;
+    private final Color COLOR2;
+    private final Color COLOR3;
+    private final Color COLOR4;
+    private final Color COLOR5;
 
-    public static final Border BORDER_NODE = PFactory.createPNodeBorder(COLOR_NORMAL, 1, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+    private final Border BORDER_NODE;
 
-    static final Color BORDER_CATEGORY_BACKGROUND = new Color(0xCDDDF8);
-    static final Border BORDER_MINIMIZE = BorderFactory.createRoundedBorder(2, 2, null, COLOR_NORMAL);
-    static final Border BORDER_PIN = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
-    private static final Border BORDER_PIN_HOVERED = BorderFactory.createLineBorder(2, 8, 2, 8, Color.BLACK);
+    private final Color BORDER_CATEGORY_BACKGROUND;
+    private final Border BORDER_MINIMIZE;
+    private final Border BORDER_PIN;
+    private final Border BORDER_PIN_HOVERED;
 
-    static final PointShape POINT_SHAPE_IMAGE = PointShapeFactory.createImagePointShape(ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-pin.png")); // NOI18N
+    private final PointShape POINT_SHAPE_IMAGE;
 
-    public POriginalColorScheme() {
+    private static POriginalColorScheme instance;
+
+    public static POriginalColorScheme getInstance() {
+        if (instance == null) {
+            synchronized (POriginalColorScheme.class) {
+                if (instance == null) {
+                    instance = new POriginalColorScheme();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private POriginalColorScheme() {
+        COLOR_NORMAL = new Color(0xBACDF0);
+        COLOR_HOVERED = Color.BLACK;
+        COLOR_SELECTED = new Color(0x748CC0);
+        COLOR_HIGHLIGHTED = new Color(0x316AC5);
+
+        COLOR1 = new Color(221, 235, 246);
+        COLOR2 = new Color(255, 255, 255);
+        COLOR3 = new Color(214, 235, 255);
+        COLOR4 = new Color(241, 249, 253);
+        COLOR5 = new Color(255, 255, 255);
+
+        BORDER_NODE = PFactory.createPNodeBorder(COLOR_NORMAL, 1, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+
+        BORDER_CATEGORY_BACKGROUND = new Color(0xCDDDF8);
+        BORDER_MINIMIZE = BorderFactory.createRoundedBorder(2, 2, null, COLOR_NORMAL);
+        BORDER_PIN = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
+        BORDER_PIN_HOVERED = BorderFactory.createLineBorder(2, 8, 2, 8, Color.BLACK);
+
+        POINT_SHAPE_IMAGE = PointShapeFactory.createImagePointShape(ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-pin.png")); // NOI18N
+
     }
 
     @Override
     public void installUI(IPNodeWidget widget) {
-        widget.setBorder(PFactory.createPNodeBorder());
+        widget.setBorder(BORDER_NODE);
         widget.setOpaque(false);
 
         Widget header = widget.getHeader();
@@ -140,6 +172,7 @@ public class POriginalColorScheme implements IColorScheme {
                 : ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-collapse.png"); // NOI18N
     }
 
+    @Override
     public void installUI(IPEdgeWidget widget) {
         widget.setSourceAnchorShape(AnchorShape.NONE);
         widget.setTargetAnchorShape(AnchorShape.TRIANGLE_FILLED);
@@ -190,6 +223,7 @@ public class POriginalColorScheme implements IColorScheme {
         return 8;
     }
 
+    @Override
     public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
         Scene scene = widget.getScene();
         IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
@@ -206,16 +240,6 @@ public class POriginalColorScheme implements IColorScheme {
         label.setFont(fontPinCategory);
         label.setAlignment(LabelWidget.Alignment.CENTER);
         label.setCheckClipping(true);
-    }
-
-    @Override
-    public String getId() {
-        return "ORIGINAL";
-    }
-
-    @Override
-    public String getName() {
-        return "Original";
     }
 
     @Override

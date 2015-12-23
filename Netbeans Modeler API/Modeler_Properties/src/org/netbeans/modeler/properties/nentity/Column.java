@@ -26,7 +26,7 @@ public class Column {
     private boolean editable;
     private boolean hidden = false;
     private boolean autoIncrement = false;
-    private String  autoIncrementSufix = "";
+    private String autoIncrementSufix = "";
     private Class clazz;
     private List<? extends Object> values = new LinkedList();
 
@@ -47,7 +47,7 @@ public class Column {
         this.clazz = clazz;
     }
 
-     public Column(String name, boolean editable, Class clazz, boolean autoIncrement ,String autoIncrementSufix  ) {
+    public Column(String name, boolean editable, Class clazz, boolean autoIncrement, String autoIncrementSufix) {
         this.name = name;
         this.editable = editable;
         this.clazz = clazz;

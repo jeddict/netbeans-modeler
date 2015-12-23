@@ -1,18 +1,19 @@
-/** Copyright [2014] Gaurav Gupta
-   *
-   *Licensed under the Apache License, Version 2.0 (the "License");
-   *you may not use this file except in compliance with the License.
-   *You may obtain a copy of the License at
-   *
-   *    http://www.apache.org/licenses/LICENSE-2.0
-   *
-   *Unless required by applicable law or agreed to in writing, software
-   *distributed under the License is distributed on an "AS IS" BASIS,
-   *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   *See the License for the specific language governing permissions and
-   *limitations under the License.
-   */
- package org.netbeans.modeler.label.multiline;
+/**
+ * Copyright [2014] Gaurav Gupta
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.netbeans.modeler.label.multiline;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -59,147 +60,131 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
 import org.netbeans.api.visual.action.InplaceEditorProvider;
 
+public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMethodListener {
 
+    static final JTextComponent.KeyBinding[] defaultBindings
+            = {
+                new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK), DefaultEditorKit.copyAction),
+                new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, InputEvent.CTRL_MASK), DefaultEditorKit.copyAction), //new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK), DefaultEditorKit.pasteAction),
+            //new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK), DefaultEditorKit.cutAction)
+            };
 
-public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMethodListener
-{
-   static final JTextComponent.KeyBinding[] defaultBindings =
-   {
-      new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK), DefaultEditorKit.copyAction),
-      new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, InputEvent.CTRL_MASK), DefaultEditorKit.copyAction),
-      //new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK), DefaultEditorKit.pasteAction),
-      //new JTextComponent.KeyBinding(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK), DefaultEditorKit.cutAction)
-   };
-
-   private JTextComponent m_Field = null;
-   private JButton m_Button = null;
-   private JPanel m_Panel = null;
-   private JPopupMenu m_TooltipMenu = null;
+    private JTextComponent m_Field = null;
+    private JButton m_Button = null;
+    private JPanel m_Panel = null;
+    private JPopupMenu m_TooltipMenu = null;
 
 //   private ITranslator m_Translator = null;//gg2
 //   private IEditControlEventDispatcher m_EventDispatcher = null;
 //    private IStrings m_List = null;
-   private String m_InitialData = "";
-   private boolean m_Modified = false;
-   private String m_SeparatorList = "";
+    private String m_InitialData = "";
+    private boolean m_Modified = false;
+    private String m_SeparatorList = "";
 
-   private boolean m_VeryFirstTime = false;
-   private boolean m_IgnoreTextUpdate = false;
-   private boolean m_UpdatingField = false;
-   private Point m_LocationOnScreen = null;
-   private String m_TooltipText = "";
-   //private Color m_TooltipBGColor = UIManager.getColor("ToolTip.foreground");
-   private Color m_TooltipBGColor = new Color(232, 228, 232); //UIManager.getColor("controlLtHighlight");
+    private boolean m_VeryFirstTime = false;
+    private boolean m_IgnoreTextUpdate = false;
+    private boolean m_UpdatingField = false;
+    private Point m_LocationOnScreen = null;
+    private String m_TooltipText = "";
+    //private Color m_TooltipBGColor = UIManager.getColor("ToolTip.foreground");
+    private Color m_TooltipBGColor = new Color(232, 228, 232); //UIManager.getColor("controlLtHighlight");
 
-   private WeakReference m_Parent = null;
+    private WeakReference m_Parent = null;
 
-   private int m_SelectionStartPos = 0;
-   private int m_SelectionEndPos = 0;
+    private int m_SelectionStartPos = 0;
+    private int m_SelectionEndPos = 0;
 
-   private int m_InitialLoc = 0;
+    private int m_InitialLoc = 0;
 
-   private boolean m_ShiftDown = false;
-   private boolean m_ControlDown = false;
-   private int m_LastKey = 0;
-   private Color m_BackgroundColor = null;
+    private boolean m_ShiftDown = false;
+    private boolean m_ControlDown = false;
+    private int m_LastKey = 0;
+    private Color m_BackgroundColor = null;
 
-   private boolean m_IsMultiline = false;
-   private boolean m_ShowTooltips = true;
+    private boolean m_IsMultiline = false;
+    private boolean m_ShowTooltips = true;
 
-  
+    // state maintenance variables for in-between InputMethodTextChanged calls
+    private int ime_SelectionStartPos = 0;
+    private int ime_SelectionEndPos = 0;
+    private int ime_InitialLoc = 0;
+    private boolean ime_Cached = false;
+    private StringBuffer ime_CachedChars = null;
 
+    /**
+     *
+     */
+    public EditControlImpl(Object parent) {
+        this(parent, false);
+    }
 
-   // state maintenance variables for in-between InputMethodTextChanged calls
-   private int ime_SelectionStartPos = 0;
-   private int ime_SelectionEndPos = 0;
-   private int ime_InitialLoc = 0;
-   private boolean ime_Cached = false; 
-   private StringBuffer ime_CachedChars = null;
-   
-   /**
-    * 
-    */
-   public EditControlImpl(Object parent)
-   {
-       this(parent, false);
-   }
-   
-   public EditControlImpl(Object parent, boolean multiline)
-   {
-      super();
+    public EditControlImpl(Object parent, boolean multiline) {
+        super();
 
-      m_IsMultiline = multiline;
-      setAssociatedParent(parent);
-      establishPreferences();
-      initComponents();
-      initControl();
-   }
+        m_IsMultiline = multiline;
+        setAssociatedParent(parent);
+        establishPreferences();
+        initComponents();
+        initControl();
+    }
 
-   public EditControlImpl()
-   {
-      this(false);
-   }
-   
-   public EditControlImpl(boolean multiline)
-   {
-      super();
-      
-      m_IsMultiline = multiline;
-      establishPreferences();
-      initComponents();
-      initControl();
-   }
+    public EditControlImpl() {
+        this(false);
+    }
 
-   public void addDocumentListener(DocumentListener listener)
-   {
-       if(m_Field != null)
-       {
-           m_Field.getDocument().addDocumentListener(listener);
-       }
-   }
-   
-   public void removeDocumentListener(DocumentListener listener)
-   {
-       if(m_Field != null)
-       {
-           m_Field.getDocument().removeDocumentListener(listener);
-       }
-   }
-   
-   private void establishPreferences()
-   {
-      //kris richards - "ShowEditToolTip" pref expunged. Set to "PSK_YES".
-       //this method no longer does anything.
-   }
+    public EditControlImpl(boolean multiline) {
+        super();
 
-   private class CutAction extends AbstractAction
-   {
-      /* (non-Javadoc)
-       * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-       */
-      public void actionPerformed(ActionEvent e)
-      {
-         setSel(m_Field.getSelectionStart(), m_Field.getSelectionEnd());
-         //m_Translator.cutToClipboard();
-         //         m_Field.paste();
-      }
-   }
+        m_IsMultiline = multiline;
+        establishPreferences();
+        initComponents();
+        initControl();
+    }
 
-   private class PasteAction extends AbstractAction
-   {
-      /* (non-Javadoc)
-       * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-       */
-      public void actionPerformed(ActionEvent e)
-      {
-         setSel(m_Field.getSelectionStart(), m_Field.getSelectionEnd());
-        // m_Translator.pasteFromClipboard();
-         //         m_Field.paste();
-      }
-   }
+    public void addDocumentListener(DocumentListener listener) {
+        if (m_Field != null) {
+            m_Field.getDocument().addDocumentListener(listener);
+        }
+    }
 
-   protected void initControl()
-   {
+    public void removeDocumentListener(DocumentListener listener) {
+        if (m_Field != null) {
+            m_Field.getDocument().removeDocumentListener(listener);
+        }
+    }
+
+    private void establishPreferences() {
+        //kris richards - "ShowEditToolTip" pref expunged. Set to "PSK_YES".
+        //this method no longer does anything.
+    }
+
+    private class CutAction extends AbstractAction {
+        /* (non-Javadoc)
+         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+         */
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setSel(m_Field.getSelectionStart(), m_Field.getSelectionEnd());
+            //m_Translator.cutToClipboard();
+            //         m_Field.paste();
+        }
+    }
+
+    private class PasteAction extends AbstractAction {
+        /* (non-Javadoc)
+         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+         */
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setSel(m_Field.getSelectionStart(), m_Field.getSelectionEnd());
+            // m_Translator.pasteFromClipboard();
+            //         m_Field.paste();
+        }
+    }
+
+    protected void initControl() {
 //      //now instantiate the event dispatcher   //gg2
 //      ICoreProduct prod = ProductRetriever.retrieveProduct();
 //      if (prod != null)
@@ -210,65 +195,58 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //         putEventDispatcher(dispatcher);
 //      }
 
-      // Added support for copy, cut & paste
-      Keymap map = m_Field.getKeymap();
-      JTextComponent.loadKeymap(map, defaultBindings, m_Field.getActions());
-      {
-         KeyStroke keyStroke = KeyStroke.getKeyStroke( KeyEvent.VK_V, InputEvent.CTRL_MASK );
-         map.addActionForKeyStroke( keyStroke, new PasteAction());
-         map.addActionForKeyStroke( KeyStroke.getKeyStroke( KeyEvent.VK_INSERT, InputEvent.SHIFT_MASK ), new PasteAction());
-         keyStroke = KeyStroke.getKeyStroke( KeyEvent.VK_X, InputEvent.CTRL_MASK );
-         map.addActionForKeyStroke( keyStroke, new CutAction() );
-         
-         m_Field.setKeymap(map);
-      }
-      
-      addFocusListener(new FocusListener()
-      {
+        // Added support for copy, cut & paste
+        Keymap map = m_Field.getKeymap();
+        JTextComponent.loadKeymap(map, defaultBindings, m_Field.getActions());
+        {
+            KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK);
+            map.addActionForKeyStroke(keyStroke, new PasteAction());
+            map.addActionForKeyStroke(KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, InputEvent.SHIFT_MASK), new PasteAction());
+            keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK);
+            map.addActionForKeyStroke(keyStroke, new CutAction());
 
-         public void focusGained(FocusEvent e)
-         {
-            m_Field.requestFocusInWindow();
-         }
+            m_Field.setKeymap(map);
+        }
 
-         public void focusLost(FocusEvent e)
-         {
-            
-         }
-      });
+        addFocusListener(new FocusListener() {
 
-      m_Field.addKeyListener(new KeyListener()
-          {
-             //we want this key listener to handle "ENTER" and "ESCAPE" key presses -
-             // "ENTER" - commits the changes
-             // "ESCAPE" - cancels the changes.
+            @Override
+            public void focusGained(FocusEvent e) {
+                m_Field.requestFocusInWindow();
+            }
 
-             public void keyTyped(KeyEvent e)
-             {
+            @Override
+            public void focusLost(FocusEvent e) {
+
+            }
+        });
+
+        m_Field.addKeyListener(new KeyListener() {
+            //we want this key listener to handle "ENTER" and "ESCAPE" key presses -
+            // "ENTER" - commits the changes
+            // "ESCAPE" - cancels the changes.
+
+            @Override
+            public void keyTyped(KeyEvent e) {
                 handleTypedKey(e);
                 e.consume();
-             }
+            }
 
-             public void keyPressed(KeyEvent e)
-             {
+            @Override
+            public void keyPressed(KeyEvent e) {
                 handleKeyDown(e);
                 //e.consume();
-             }
+            }
 
-             public void keyReleased(KeyEvent e)
-             {
+            @Override
+            public void keyReleased(KeyEvent e) {
                 e.consume();
                 //handleKey(e);
-             }
-          });
-          
-      if(m_IsMultiline == false)
-      {
-          m_Field.addCaretListener(new CaretListener()
-          {
+            }
+        });
 
-             public void caretUpdate(CaretEvent e)
-             {
+        if (m_IsMultiline == false) {
+            m_Field.addCaretListener((CaretEvent e) -> {
 //                if (m_Translator != null)
 //                {
 //                   if (m_ShowTooltips)
@@ -276,114 +254,103 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //                      m_Translator.updateHints();
 //                   }
 //                }
-             }
-          });
+            });
 
-          //		m_Field.getDocument().addDocumentListener(m_docListener);
+            //		m_Field.getDocument().addDocumentListener(m_docListener);
+            //I want the tooltips to show continuously.
+            ToolTipManager.sharedInstance().setInitialDelay(0);
+            ToolTipManager.sharedInstance().setDismissDelay(1000000);
 
-          //I want the tooltips to show continuously.
-          ToolTipManager.sharedInstance().setInitialDelay(0);
-          ToolTipManager.sharedInstance().setDismissDelay(1000000);
+            m_Field.addFocusListener(new FocusListener() {
 
-          m_Field.addFocusListener(new FocusListener()
-          {
-
-             public void focusGained(FocusEvent e)
-             {
-                try
-                {
-                   showToolTip(e);
+                @Override
+                public void focusGained(FocusEvent e) {
+                    try {
+                        showToolTip(e);
+                    } catch (Exception exp) {
+                        exp.printStackTrace();
+                    }
                 }
-                catch (Exception exp)
-                {
-                   exp.printStackTrace();
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    hideToolTip(e);
                 }
-             }
+            });
 
-             public void focusLost(FocusEvent e)
-             {
-                hideToolTip(e);
-             }
-          });
+            m_Field.addMouseListener(new MouseListener() {
 
-          m_Field.addMouseListener(new MouseListener()
-          {
-
-             public void mouseClicked(MouseEvent arg0)
-             {
-                //				if (arg0.getClickCount() == 2)
-                //				{
-                //					//some field will be selected, so set the selection start and end accordingly.
-                //					Object source = arg0.getSource();
-                //					if (source != null && source instanceof JTextField)
-                //					{
-                //						JTextField field = (JTextField)source;
-                //						int start = field.getSelectionStart();
-                //						int end = field.getSelectionEnd();
-                //						setSel(start, end);
-                //					}
-                //				}
-                arg0.consume();
-             }
-
-             public void mousePressed(MouseEvent arg0)
-             {
-                //I want to set the selection start and end positions if its single click.
-                if (arg0.getClickCount() == 1)
-                {
-                   int pos = getCurrentPosition();
-                   setSel(pos, pos);
+                @Override
+                public void mouseClicked(MouseEvent arg0) {
+                    //				if (arg0.getClickCount() == 2)
+                    //				{
+                    //					//some field will be selected, so set the selection start and end accordingly.
+                    //					Object source = arg0.getSource();
+                    //					if (source != null && source instanceof JTextField)
+                    //					{
+                    //						JTextField field = (JTextField)source;
+                    //						int start = field.getSelectionStart();
+                    //						int end = field.getSelectionEnd();
+                    //						setSel(start, end);
+                    //					}
+                    //				}
+                    arg0.consume();
                 }
-             }
 
-             public void mouseReleased(MouseEvent arg0)
-             {
-                arg0.consume();
-             }
+                @Override
+                public void mousePressed(MouseEvent arg0) {
+                    //I want to set the selection start and end positions if its single click.
+                    if (arg0.getClickCount() == 1) {
+                        int pos = getCurrentPosition();
+                        setSel(pos, pos);
+                    }
+                }
 
-             public void mouseEntered(MouseEvent arg0)
-             {
-                arg0.consume();
-             }
+                @Override
+                public void mouseReleased(MouseEvent arg0) {
+                    arg0.consume();
+                }
 
-             public void mouseExited(MouseEvent arg0)
-             {
-                arg0.consume();
-             }
-          });
+                @Override
+                public void mouseEntered(MouseEvent arg0) {
+                    arg0.consume();
+                }
 
-      }
-      m_Field.addInputMethodListener(this);
-   }
+                @Override
+                public void mouseExited(MouseEvent arg0) {
+                    arg0.consume();
+                }
+            });
 
-   private void handleTypedKey(KeyEvent e)
-   {
-       if ( ! (e.isAltDown() || e.isControlDown() || e.isMetaDown())) 
-       {
-	   char ch = e.getKeyChar();
-	   if ((int)ch != 8       // don't need backspace key_typed 
-	       && (int)ch != 127  // don't need delete key_typed, see 4904441
-	       && (int)ch != 10)  // don't need enter key_typed either
-	   {
-	       handleTypedChar(ch);
-	   }
-       }
-   }
+        }
+        m_Field.addInputMethodListener(this);
+    }
 
-   public void handleTypedChar(char ch) {
-      //something is typed
-      int currPos = getCurrentPosition();
-      m_InitialLoc = currPos;
-      
-      //IEditControlField field = getCurrentField();
-      String toIns = Character.toString(ch);
-      boolean selectedText = false;
-      setSel(m_Field.getSelectionStart(), m_Field.getSelectionEnd());
-      if (m_SelectionEndPos != m_SelectionStartPos)
-      {
-         selectedText = true;
-         currPos = m_SelectionStartPos;
-      }
+    private void handleTypedKey(KeyEvent e) {
+        if (!(e.isAltDown() || e.isControlDown() || e.isMetaDown())) {
+            char ch = e.getKeyChar();
+            if ((int) ch != 8 // don't need backspace key_typed 
+                    && (int) ch != 127 // don't need delete key_typed, see 4904441
+                    && (int) ch != 10) // don't need enter key_typed either
+            {
+                handleTypedChar(ch);
+            }
+        }
+    }
+
+    public void handleTypedChar(char ch) {
+        //something is typed
+        int currPos = getCurrentPosition();
+        m_InitialLoc = currPos;
+
+        //IEditControlField field = getCurrentField();
+        String toIns = Character.toString(ch);
+        boolean selectedText = false;
+        setSel(m_Field.getSelectionStart(), m_Field.getSelectionEnd());
+        if (m_SelectionEndPos != m_SelectionStartPos) {
+            selectedText = true;
+            currPos = m_SelectionStartPos;
+        }
 //      if (m_Translator != null)
 //      {
 //         int index = m_SeparatorList.indexOf(toIns);
@@ -398,149 +365,114 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //
 //            if (isHandled)
 //            {
-               //if I have handled here, then we are going to move caret position by one.
-               String text = m_Field.getText();
-               if (text != null)
-               {
-                  if (selectedText)
-                  {
-                     m_Field.setCaretPosition(currPos + 1);
-                  }
-                  else
-                  {
-                     if (text.length() > m_InitialLoc)
-                     {
-                        m_Field.setCaretPosition(m_InitialLoc + 1);
-                     }
-                     else
-                     {
-                        m_Field.setCaretPosition(text.length());
-                     }
-                  }
-               }
+        //if I have handled here, then we are going to move caret position by one.
+        String text = m_Field.getText();
+        if (text != null) {
+            if (selectedText) {
+                m_Field.setCaretPosition(currPos + 1);
+            } else {
+                if (text.length() > m_InitialLoc) {
+                    m_Field.setCaretPosition(m_InitialLoc + 1);
+                } else {
+                    m_Field.setCaretPosition(text.length());
+                }
+            }
+        }
 //            }
 //         }
 //      }
-   }
+    }
 
-   public void handleKeyDown(int keyCode, int nShift)
-   {
-      m_InitialLoc = getCurrentPosition();
-      boolean consumeEvent = true;
-      boolean selectedText = false;
-      Object associateParents = getAssociatedParent();
-      
-      if (m_SelectionEndPos != m_SelectionStartPos)
-      {
-         selectedText = true;
-      }
-      int pos = getCurrentPosition();
-      if (keyCode == KeyEvent.VK_ENTER)
-      {
-         //commit the changes to the edit control
-         if (associateParents != null)
-         {
+    public void handleKeyDown(int keyCode, int nShift) {
+        m_InitialLoc = getCurrentPosition();
+        boolean consumeEvent = true;
+        boolean selectedText = false;
+        Object associateParents = getAssociatedParent();
+
+        if (m_SelectionEndPos != m_SelectionStartPos) {
+            selectedText = true;
+        }
+        int pos = getCurrentPosition();
+        if (keyCode == KeyEvent.VK_ENTER) {
+            //commit the changes to the edit control
+            if (associateParents != null) {
 //            if (associateParents instanceof ProjectTreeCellEditor)
 //            {
 //               ((ProjectTreeCellEditor)associateParents).stopCellEditing();
 //            }
 //            else 
-                if (associateParents instanceof InplaceEditorProvider.EditorController)
-            {
-                Container parent = getParent();
-                ((InplaceEditorProvider.EditorController)associateParents).closeEditor(true);
-                parent.requestFocusInWindow ();
+                if (associateParents instanceof InplaceEditorProvider.EditorController) {
+                    Container parent = getParent();
+                    ((InplaceEditorProvider.EditorController) associateParents).closeEditor(true);
+                    parent.requestFocusInWindow();
+                }
             }
-         }
-         consumeEvent = false;
-      }
-      else if (keyCode == KeyEvent.VK_ESCAPE)
-      {
-         //cancel out the changes made to edit control
-         if (associateParents != null)
-         {
+            consumeEvent = false;
+        } else if (keyCode == KeyEvent.VK_ESCAPE) {
+            //cancel out the changes made to edit control
+            if (associateParents != null) {
 //             if (associateParents instanceof ProjectTreeCellEditor)
 //            {
 //               ((ProjectTreeCellEditor)associateParents).cancelCellEditing();
 //            }
 //            else 
-                 if (associateParents instanceof InplaceEditorProvider.EditorController)
-            {
-                Container parent = getParent();
-                ((InplaceEditorProvider.EditorController)associateParents).closeEditor(false);
-                 parent.requestFocusInWindow ();
+                if (associateParents instanceof InplaceEditorProvider.EditorController) {
+                    Container parent = getParent();
+                    ((InplaceEditorProvider.EditorController) associateParents).closeEditor(false);
+                    parent.requestFocusInWindow();
+                }
             }
-         }
-         consumeEvent = false;
-      }
-      else if (keyCode == KeyEvent.VK_DELETE)
-      {
+            consumeEvent = false;
+        } else if (keyCode == KeyEvent.VK_DELETE) {
 //         if (m_Translator != null)
 //         {
 //            m_Translator.handleDelete(true);
 
             //we need to reposition caret at the original position if nothing is selected
-            if (selectedText)
-            {
-               m_Field.setCaretPosition(m_SelectionEndPos);
-            }
-            else
-            {
-               m_Field.setCaretPosition(m_InitialLoc);
+            if (selectedText) {
+                m_Field.setCaretPosition(m_SelectionEndPos);
+            } else {
+                m_Field.setCaretPosition(m_InitialLoc);
             }
 //         }
-      }
-      else if (keyCode == KeyEvent.VK_BACK_SPACE)
-      {
+        } else if (keyCode == KeyEvent.VK_BACK_SPACE) {
 //         if (m_Translator != null)
 //         {
 //            m_Translator.handleDelete(false);
 
             //we need to reposition caret at one less than original position if nothing is selected
-            if (m_InitialLoc > 0)
-            {
-               if (selectedText)
-               {
-                  m_Field.setCaretPosition(m_SelectionEndPos);
-               }
-               else
-               {
-                  m_Field.setCaretPosition(m_InitialLoc - 1);
-               }
+            if (m_InitialLoc > 0) {
+                if (selectedText) {
+                    m_Field.setCaretPosition(m_SelectionEndPos);
+                } else {
+                    m_Field.setCaretPosition(m_InitialLoc - 1);
+                }
+            } else {
+                m_Field.setCaretPosition(m_InitialLoc);
             }
-            else
-            {
-               m_Field.setCaretPosition(m_InitialLoc);
-            }
-       //  }
-      }
-      else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_TAB)
-      {
+            //  }
+        } else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_TAB) {
 //         if (m_Translator != null)
 //         {
 //            m_Translator.handleKeyDown(keyCode);
 //         }
-      }
-      else if (keyCode == KeyEvent.VK_HOME || keyCode == KeyEvent.VK_END ||
-      keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_INSERT ||
-      keyCode == KeyEvent.VK_F1 || keyCode == KeyEvent.VK_F2 ||
-      keyCode == KeyEvent.VK_F3 || keyCode == KeyEvent.VK_F4 ||
-      keyCode == KeyEvent.VK_F5 || keyCode == KeyEvent.VK_F6 ||
-      keyCode == KeyEvent.VK_F7 || keyCode == KeyEvent.VK_F8 ||
-      keyCode == KeyEvent.VK_F9 || keyCode == KeyEvent.VK_F10 ||
-      keyCode == KeyEvent.VK_F11 || keyCode == KeyEvent.VK_F12 ||
-      keyCode == KeyEvent.VK_F13 || keyCode == KeyEvent.VK_F14 ||
-      keyCode == KeyEvent.VK_F15 || keyCode == KeyEvent.VK_F16 ||
-      keyCode == KeyEvent.VK_F17 || keyCode == KeyEvent.VK_F18 ||
-      keyCode == KeyEvent.VK_F19 || keyCode == KeyEvent.VK_F20 ||
-      keyCode == KeyEvent.VK_F21 || keyCode == KeyEvent.VK_F22 ||
-      keyCode == KeyEvent.VK_F23 || keyCode == KeyEvent.VK_F24 ||
-      keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_CONTROL )
-      {
-         consumeEvent = false;
-      }
-      else
-      {
+        } else if (keyCode == KeyEvent.VK_HOME || keyCode == KeyEvent.VK_END
+                || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_INSERT
+                || keyCode == KeyEvent.VK_F1 || keyCode == KeyEvent.VK_F2
+                || keyCode == KeyEvent.VK_F3 || keyCode == KeyEvent.VK_F4
+                || keyCode == KeyEvent.VK_F5 || keyCode == KeyEvent.VK_F6
+                || keyCode == KeyEvent.VK_F7 || keyCode == KeyEvent.VK_F8
+                || keyCode == KeyEvent.VK_F9 || keyCode == KeyEvent.VK_F10
+                || keyCode == KeyEvent.VK_F11 || keyCode == KeyEvent.VK_F12
+                || keyCode == KeyEvent.VK_F13 || keyCode == KeyEvent.VK_F14
+                || keyCode == KeyEvent.VK_F15 || keyCode == KeyEvent.VK_F16
+                || keyCode == KeyEvent.VK_F17 || keyCode == KeyEvent.VK_F18
+                || keyCode == KeyEvent.VK_F19 || keyCode == KeyEvent.VK_F20
+                || keyCode == KeyEvent.VK_F21 || keyCode == KeyEvent.VK_F22
+                || keyCode == KeyEvent.VK_F23 || keyCode == KeyEvent.VK_F24
+                || keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_CONTROL) {
+            consumeEvent = false;
+        } else {
 //         //we will get here when the edit control is not yet shown but the user keeps typing/ a fast typer.
 //         if (m_Translator != null)
 //         {
@@ -555,25 +487,23 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //               m_Translator.handleChar(str);
 //            }
 //         }
-      }
+        }
 
-      //		if (consumeEvent && !e.isConsumed())
-      //		{
-      //			e.consume();
-      //		}
+        //		if (consumeEvent && !e.isConsumed())
+        //		{
+        //			e.consume();
+        //		}
+        //I want to set the selection start and end positions.
+        pos = getCurrentPosition();
+        setSel(pos, pos);
+    }
 
-      //I want to set the selection start and end positions.
-      pos = getCurrentPosition();
-      setSel(pos, pos);
-   }
-
-    public void handleKeyDown(KeyEvent e)
-    {
+    public void handleKeyDown(KeyEvent e) {
         int keyCode = e.getKeyCode();
         m_InitialLoc = getCurrentPosition();
 //        IEditControlField initField = getCurrentField();
         Object associatedParent = getAssociatedParent();
-         
+
         //in case of mouse selection, we will come here with selected text.
         boolean consumeEvent = true;
         boolean resetSel = true;
@@ -582,16 +512,13 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
         m_ShiftDown = e.isShiftDown();
         m_LastKey = keyCode;
         int pos = m_InitialLoc;
-        if (keyCode == KeyEvent.VK_ENTER)
-        {
+        if (keyCode == KeyEvent.VK_ENTER) {
             //Ctrl-Enter create a newline in multi-line editor
-            if (isControlDown())
-            {
-                if( m_IsMultiline)
-                {
+            if (isControlDown()) {
+                if (m_IsMultiline) {
 //                    IEditControlField ecf = getCurrentField();  
                     m_Field.replaceSelection("\n");
-                   
+
 //                    if (ecf != null)
 //                    {
 //                        ecf.setText(m_Field.getText());
@@ -600,12 +527,9 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
                 consumeEvent = true;
                 resetSel = false;
 //                m_Field.setCaretPosition(m_Field.getCaretPosition() + 1);
-            }
-            else
-            {
+            } else {
                 //commit the changes to the edit control
-                if (associatedParent != null)
-                {
+                if (associatedParent != null) {
 //                    if (associatedParent instanceof ProjectTreeCellEditor)
 //                    {
 //                        if (!((ProjectTreeCellEditor) associatedParent).stopCellEditing())
@@ -626,8 +550,7 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //                    }
 //                    else
                     {
-                        if (associatedParent instanceof InplaceEditorProvider.EditorController)
-                        {
+                        if (associatedParent instanceof InplaceEditorProvider.EditorController) {
                             Container parent = getParent();
                             ((InplaceEditorProvider.EditorController) associatedParent).closeEditor(true);
                             parent.requestFocusInWindow();
@@ -636,81 +559,58 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
                 }
                 consumeEvent = true;
             }
-        }
-        else if (keyCode == KeyEvent.VK_ESCAPE)
-        {
+        } else if (keyCode == KeyEvent.VK_ESCAPE) {
             //cancel cell editing and go back to prev state.
             cancelCellEditing();
-            if (associatedParent instanceof InplaceEditorProvider.EditorController)
-            {
+            if (associatedParent instanceof InplaceEditorProvider.EditorController) {
                 Container parent = getParent();
-                ((InplaceEditorProvider.EditorController)associatedParent).closeEditor(false);
-                parent.requestFocusInWindow ();
+                ((InplaceEditorProvider.EditorController) associatedParent).closeEditor(false);
+                parent.requestFocusInWindow();
             }
             consumeEvent = true;
-        }
-        else if (keyCode == KeyEvent.VK_HOME || keyCode == KeyEvent.VK_END ||
-                keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_INSERT ||
-                keyCode == KeyEvent.VK_F1 || keyCode == KeyEvent.VK_F2 ||
-                keyCode == KeyEvent.VK_F3 || keyCode == KeyEvent.VK_F4 ||
-                keyCode == KeyEvent.VK_F5 || keyCode == KeyEvent.VK_F6 ||
-                keyCode == KeyEvent.VK_F7 || keyCode == KeyEvent.VK_F8 ||
-                keyCode == KeyEvent.VK_F9 || keyCode == KeyEvent.VK_F10 ||
-                keyCode == KeyEvent.VK_F11 || keyCode == KeyEvent.VK_F12 ||
-                keyCode == KeyEvent.VK_F13 || keyCode == KeyEvent.VK_F14 ||
-                keyCode == KeyEvent.VK_F15 || keyCode == KeyEvent.VK_F16 ||
-                keyCode == KeyEvent.VK_F17 || keyCode == KeyEvent.VK_F18 ||
-                keyCode == KeyEvent.VK_F19 || keyCode == KeyEvent.VK_F20 ||
-                keyCode == KeyEvent.VK_F21 || keyCode == KeyEvent.VK_F22 ||
-                keyCode == KeyEvent.VK_F23 || keyCode == KeyEvent.VK_F24 ||
-                keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_CONTROL)
-        {
+        } else if (keyCode == KeyEvent.VK_HOME || keyCode == KeyEvent.VK_END
+                || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_INSERT
+                || keyCode == KeyEvent.VK_F1 || keyCode == KeyEvent.VK_F2
+                || keyCode == KeyEvent.VK_F3 || keyCode == KeyEvent.VK_F4
+                || keyCode == KeyEvent.VK_F5 || keyCode == KeyEvent.VK_F6
+                || keyCode == KeyEvent.VK_F7 || keyCode == KeyEvent.VK_F8
+                || keyCode == KeyEvent.VK_F9 || keyCode == KeyEvent.VK_F10
+                || keyCode == KeyEvent.VK_F11 || keyCode == KeyEvent.VK_F12
+                || keyCode == KeyEvent.VK_F13 || keyCode == KeyEvent.VK_F14
+                || keyCode == KeyEvent.VK_F15 || keyCode == KeyEvent.VK_F16
+                || keyCode == KeyEvent.VK_F17 || keyCode == KeyEvent.VK_F18
+                || keyCode == KeyEvent.VK_F19 || keyCode == KeyEvent.VK_F20
+                || keyCode == KeyEvent.VK_F21 || keyCode == KeyEvent.VK_F22
+                || keyCode == KeyEvent.VK_F23 || keyCode == KeyEvent.VK_F24
+                || keyCode == KeyEvent.VK_ALT || keyCode == KeyEvent.VK_CONTROL) {
             consumeEvent = false;
             resetSel = false;
-        }
-        else
-        {
-            if (keyCode == KeyEvent.VK_DOWN)
-            {
-                if (m_IsMultiline)
-                {
+        } else {
+            if (keyCode == KeyEvent.VK_DOWN) {
+                if (m_IsMultiline) {
                     consumeEvent = false;
                     resetSel = false;
-                }
-                else
-                {
-                    if (isControlDown())
-                    {
-                       // handleHint();
+                } else {
+                    if (isControlDown()) {
+                        // handleHint();
                     }
                 }
-            }
-            else if (keyCode == KeyEvent.VK_UP)
-            {
-                if (m_IsMultiline)
-                {
+            } else if (keyCode == KeyEvent.VK_UP) {
+                if (m_IsMultiline) {
                     consumeEvent = false;
                     resetSel = false;
                 }
-            }
-            else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_TAB)
-            {
+            } else if (keyCode == KeyEvent.VK_RIGHT || keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_TAB) {
 
-                if (isShiftDown() && (keyCode != KeyEvent.VK_TAB))
-                {
+                if (isShiftDown() && (keyCode != KeyEvent.VK_TAB)) {
                     //let the text field handle it.
                     resetSel = false;
                     consumeEvent = false;
-                }
-                else
-                {
-                    if (m_IsMultiline)
-                    {
+                } else {
+                    if (m_IsMultiline) {
                         consumeEvent = false;
                         resetSel = false;
-                    }
-                    else
-                    {
+                    } else {
 //                        if (m_Translator != null)
 //                        {
 //                            if (m_Translator.getEditControl() == null)
@@ -719,23 +619,17 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //                        }
                     }
                 }
-            }
-            else if (m_ControlDown)
-            {
+            } else if (m_ControlDown) {
                 // The above condition is a HACK to allow copy, cut & paste to work properly.
                 resetSel = false;
                 consumeEvent = false;
-            }
-            else
-            {
+            } else {
                 //we might have something selected on the field, so reset our selection start and end.
                 setSel(m_Field.getSelectionStart(), m_Field.getSelectionEnd());
-                if (m_SelectionEndPos != m_SelectionStartPos)
-                {
+                if (m_SelectionEndPos != m_SelectionStartPos) {
                     selectedText = true;
                 }
-                if (keyCode == KeyEvent.VK_DELETE)
-                {
+                if (keyCode == KeyEvent.VK_DELETE) {
 //                    if (m_Translator != null)
 //                    {
 //                        int oldStart = -1;
@@ -770,9 +664,7 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //                            }
 //                        }
 //                    }
-                }
-                else if (keyCode == KeyEvent.VK_BACK_SPACE)
-                {
+                } else if (keyCode == KeyEvent.VK_BACK_SPACE) {
 //                    if (m_Translator != null)
 //                    {
 //                        m_Translator.handleKeyDown(keyCode);
@@ -806,9 +698,7 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //                            m_Field.setCaretPosition(m_InitialLoc);
 //                        }
 //                    }
-                }
-                else
-                {
+                } else {
                     //handleTypedKey(e);
                     consumeEvent = false;
                     resetSel = false;
@@ -816,37 +706,31 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
             }
         }
 
-        if (consumeEvent && !e.isConsumed())
-        {
+        if (consumeEvent && !e.isConsumed()) {
             e.consume();
         }
 
-        if (resetSel)
-        {
+        if (resetSel) {
             //I want to set the selection start and end positions.
             pos = getCurrentPosition();
             setSel(pos, pos);
         }
     }
 
-   private void hideToolTip(FocusEvent e)
-   {
-      Component other = e.getOppositeComponent();
-      if (other == null || (!other.equals(m_Button) && !other.equals(m_Panel) && !other.equals(this)))
-      {
-         m_TooltipMenu.setBounds(0, 0, 0, 0);
-         m_TooltipMenu.setVisible(false);
-      }
-   }
+    private void hideToolTip(FocusEvent e) {
+        Component other = e.getOppositeComponent();
+        if (other == null || (!other.equals(m_Button) && !other.equals(m_Panel) && !other.equals(this))) {
+            m_TooltipMenu.setBounds(0, 0, 0, 0);
+            m_TooltipMenu.setVisible(false);
+        }
+    }
 
-   private void cancelCellEditing()
-   {
-      //deactivate the edit control
-      deactivate();
+    private void cancelCellEditing() {
+        //deactivate the edit control
+        deactivate();
 
-      //cancel out the changes made to edit control
-      if (getAssociatedParent() != null)
-      {
+        //cancel out the changes made to edit control
+        if (getAssociatedParent() != null) {
 //         if (getAssociatedParent() instanceof ETCompartment)
 //         {
 //            ((ETCompartment)getAssociatedParent()).cancelEditing();
@@ -856,321 +740,280 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //         {
 //            ((ProjectTreeCellEditor)getAssociatedParent()).cancelCellEditing();
 //         }
-      }
+        }
 
-      return;
-   }
+        return;
+    }
 
-   private void showToolTip(FocusEvent e)
-   {
-      try
-      {
-         if (m_ShowTooltips)
-         {
-            Point p = e.getComponent().getLocationOnScreen();
+    private void showToolTip(FocusEvent e) {
+        try {
+            if (m_ShowTooltips) {
+                Point p = e.getComponent().getLocationOnScreen();
 
-            FontMetrics metrix = m_Field.getFontMetrics(m_Field.getFont());
-            int fieldHeight = metrix.getHeight();
+                FontMetrics metrix = m_Field.getFontMetrics(m_Field.getFont());
+                int fieldHeight = metrix.getHeight();
 
-            metrix = m_TooltipMenu.getFontMetrics(m_TooltipMenu.getFont());
-            int width = metrix.stringWidth(m_TooltipText);
-            int height = metrix.getHeight();
-            
-            m_TooltipMenu.setBounds(p.x, p.y - height - fieldHeight/2, width, height);
-            m_TooltipMenu.setLocation(p.x, p.y - height - fieldHeight/2);
-            m_TooltipMenu.setVisible(true);
-            m_TooltipMenu.updateUI();
-         }
-      }
-      catch (Exception exc)
-      {
-         //do nothing
-      }
-   }
+                metrix = m_TooltipMenu.getFontMetrics(m_TooltipMenu.getFont());
+                int width = metrix.stringWidth(m_TooltipText);
+                int height = metrix.getHeight();
 
-   private void handleFieldModified(DocumentEvent e)
-   {
-      try
-      {
-         m_UpdatingField = true;
-         if (m_VeryFirstTime || m_IgnoreTextUpdate)
-         {
-            m_VeryFirstTime = false;
-            return;
-         }
-         int length = e.getLength();
-         int pos = e.getOffset();
-/*       IEditControlField pField = getCurrentField();
-         if (pField != null)
-         {
-            String text = m_Field.getText();
-            String initText = pField.getText();
-            String newText = "";
-            boolean lastCharDeleted = false;
-            if (e.getType().equals(DocumentEvent.EventType.INSERT))
-            {
-               m_SelectionStartPos = pos;
-               m_SelectionEndPos = pos;
-               //process the insert of text
-               String changedText = text.substring(pos, pos + length);
-
-               //there is a possibility that user is entering an optional field
-               int nEnd = pField.getTextEndPos();
-               boolean isHandled = false;
-               if (m_Translator != null)
-               {
-                  char toIns = changedText.charAt(0);
-                  int index = m_SeparatorList.indexOf(toIns);
-                  if (index >= 0)
-                  {
-                     isHandled = m_Translator.handleTopLevelSeparators(changedText.charAt(0));
-                  }
-                  if (!isHandled)
-                  {
-                     isHandled = m_Translator.handleChar(changedText);
-                  }
-               }
-
-               if (!isHandled)
-               {
-                  if (pos >= nEnd)
-                  {
-                  }
-                  else
-                  {
-                     if (changedText.trim().length() > 0)
-                     {
-                        String leftText = "";
-                        String rightText = "";
-                        int nStart = pField.getTextStartPos();
-                        //we might be adding value for a new field in which case
-                        //initText will be "".
-                        if (pos > nStart && initText.length() > (pos - nStart))
-                        {
-                           leftText = initText.substring(0, pos - nStart);
-                           rightText = initText.substring(pos - nStart);
-                        }
-                        else if (pos == nStart)
-                        {
-                           //we are adding somthing to the start of this field
-                           rightText = initText;
-                        }
-                        newText = leftText + changedText + rightText;
-                        pField.setText(newText);
-                     }
-                  }
-               }
+                m_TooltipMenu.setBounds(p.x, p.y - height - fieldHeight / 2, width, height);
+                m_TooltipMenu.setLocation(p.x, p.y - height - fieldHeight / 2);
+                m_TooltipMenu.setVisible(true);
+                m_TooltipMenu.updateUI();
             }
-            else if (e.getType().equals(DocumentEvent.EventType.REMOVE))
-            {
-               if (m_Translator != null)
-               {
-                  m_SelectionStartPos = pos;
-                  m_SelectionEndPos = pos + length;
-                  m_Translator.handleChar("");
-               }
-               else
-               {
-                  //process the remove of text
-                  String leftText = "";
-                  String rightText = "";
-                  int nStart = pField.getTextStartPos();
-                  //if this is the last character in this field that is removed,
-                  //I cannot do proper substrings
-                  if (pos >= nStart)
-                  {
-                     leftText = initText.substring(0, pos - nStart);
-                  }
-                  if (initText.length() >= (pos - nStart + length))
-                  {
-                     rightText = initText.substring(pos - nStart + length);
-                  }
-                  newText = leftText + rightText;
-                  if (newText.length() == 0)
-                  {
-                     lastCharDeleted = true;
-                  }
-                  pField.setText(newText);
-               }
+        } catch (Exception exc) {
+            //do nothing
+        }
+    }
+
+    private void handleFieldModified(DocumentEvent e) {
+        try {
+            m_UpdatingField = true;
+            if (m_VeryFirstTime || m_IgnoreTextUpdate) {
+                m_VeryFirstTime = false;
+                return;
             }
+            int length = e.getLength();
+            int pos = e.getOffset();
+            /*       IEditControlField pField = getCurrentField();
+             if (pField != null)
+             {
+             String text = m_Field.getText();
+             String initText = pField.getText();
+             String newText = "";
+             boolean lastCharDeleted = false;
+             if (e.getType().equals(DocumentEvent.EventType.INSERT))
+             {
+             m_SelectionStartPos = pos;
+             m_SelectionEndPos = pos;
+             //process the insert of text
+             String changedText = text.substring(pos, pos + length);
 
-            if (!m_Modified)
-            {
-               setModified(true);
-            }
+             //there is a possibility that user is entering an optional field
+             int nEnd = pField.getTextEndPos();
+             boolean isHandled = false;
+             if (m_Translator != null)
+             {
+             char toIns = changedText.charAt(0);
+             int index = m_SeparatorList.indexOf(toIns);
+             if (index >= 0)
+             {
+             isHandled = m_Translator.handleTopLevelSeparators(changedText.charAt(0));
+             }
+             if (!isHandled)
+             {
+             isHandled = m_Translator.handleChar(changedText);
+             }
+             }
 
-            //I need to move all the fields after this field, so that
-            //they have right Text and Field positions
-            if (m_Translator != null)
-            {
-               m_Translator.updateFieldPositions(pField);
-            }
-         }*/
-      }
-      catch (Exception exc)
-      {
-         exc.printStackTrace();
-      }
-      finally
-      {
-         m_UpdatingField = false;
-      }
-   }
+             if (!isHandled)
+             {
+             if (pos >= nEnd)
+             {
+             }
+             else
+             {
+             if (changedText.trim().length() > 0)
+             {
+             String leftText = "";
+             String rightText = "";
+             int nStart = pField.getTextStartPos();
+             //we might be adding value for a new field in which case
+             //initText will be "".
+             if (pos > nStart && initText.length() > (pos - nStart))
+             {
+             leftText = initText.substring(0, pos - nStart);
+             rightText = initText.substring(pos - nStart);
+             }
+             else if (pos == nStart)
+             {
+             //we are adding somthing to the start of this field
+             rightText = initText;
+             }
+             newText = leftText + changedText + rightText;
+             pField.setText(newText);
+             }
+             }
+             }
+             }
+             else if (e.getType().equals(DocumentEvent.EventType.REMOVE))
+             {
+             if (m_Translator != null)
+             {
+             m_SelectionStartPos = pos;
+             m_SelectionEndPos = pos + length;
+             m_Translator.handleChar("");
+             }
+             else
+             {
+             //process the remove of text
+             String leftText = "";
+             String rightText = "";
+             int nStart = pField.getTextStartPos();
+             //if this is the last character in this field that is removed,
+             //I cannot do proper substrings
+             if (pos >= nStart)
+             {
+             leftText = initText.substring(0, pos - nStart);
+             }
+             if (initText.length() >= (pos - nStart + length))
+             {
+             rightText = initText.substring(pos - nStart + length);
+             }
+             newText = leftText + rightText;
+             if (newText.length() == 0)
+             {
+             lastCharDeleted = true;
+             }
+             pField.setText(newText);
+             }
+             }
 
-   DefaultStyledDocument doc = new DefaultStyledDocument();
+             if (!m_Modified)
+             {
+             setModified(true);
+             }
 
-   private void initComponents()
-   {
-      setBorder(null);
-      m_Panel = new JPanel();
-      m_Panel.setBorder(null);
-      m_Panel.setLayout(null);
-      m_Panel.setOpaque(false);
-      //m_Panel.setPreferredSize(new Dimension(200, 3));
+             //I need to move all the fields after this field, so that
+             //they have right Text and Field positions
+             if (m_Translator != null)
+             {
+             m_Translator.updateFieldPositions(pField);
+             }
+             }*/
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        } finally {
+            m_UpdatingField = false;
+        }
+    }
 
-      m_TooltipMenu = new JPopupMenu();
-      m_TooltipMenu.setBackground(m_TooltipBGColor);
-      m_TooltipMenu.setOpaque(true);
-      m_TooltipMenu.setBorder(LineBorder.createGrayLineBorder());
-      m_TooltipMenu.setAlignmentX(0);
-      m_TooltipMenu.setAlignmentY(0);
-      m_TooltipMenu.setBounds(0, 0, 0, 0);
+    DefaultStyledDocument doc = new DefaultStyledDocument();
 
-      setLayout(new BorderLayout());
-      
-      //TBD: see above, not al cases may be covered below
-      
-      if(m_IsMultiline == false)
-      {
-          JTextField field = new JTextField();
-          field.setDocument(doc);
-          m_Field = field;
-          add(m_Field, BorderLayout.CENTER);      
-      }
-      else
-       {
-           JTextArea field = new JTextArea();
-           field.setLineWrap(true);
-           field.setWrapStyleWord(true);
-           //field.setDocument(doc);
-           m_Field = field;
+    private void initComponents() {
+        setBorder(null);
+        m_Panel = new JPanel();
+        m_Panel.setBorder(null);
+        m_Panel.setLayout(null);
+        m_Panel.setOpaque(false);
+        //m_Panel.setPreferredSize(new Dimension(200, 3));
 
-           //Fix 132234
-           // creating the vertical scrolling effect without the vertical scrollbar
-           JScrollPane scrollPane = new JScrollPane(m_Field);
-           scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-           scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-           scrollPane.setBorder(null);
+        m_TooltipMenu = new JPopupMenu();
+        m_TooltipMenu.setBackground(m_TooltipBGColor);
+        m_TooltipMenu.setOpaque(true);
+        m_TooltipMenu.setBorder(LineBorder.createGrayLineBorder());
+        m_TooltipMenu.setAlignmentX(0);
+        m_TooltipMenu.setAlignmentY(0);
+        m_TooltipMenu.setBounds(0, 0, 0, 0);
 
-           scrollPane.setVerticalScrollBar(new javax.swing.JScrollBar()
-           {
-               public java.awt.Dimension getPreferredSize()
-               {
-                   return new java.awt.Dimension(0, 0);
-               }
+        setLayout(new BorderLayout());
 
-               public java.awt.Dimension getMinimumSize()
-               {
-                   return new java.awt.Dimension(0, 0);
-               }
+        //TBD: see above, not al cases may be covered below
+        if (m_IsMultiline == false) {
+            JTextField field = new JTextField();
+            field.setDocument(doc);
+            m_Field = field;
+            add(m_Field, BorderLayout.CENTER);
+        } else {
+            JTextArea field = new JTextArea();
+            field.setLineWrap(true);
+            field.setWrapStyleWord(true);
+            //field.setDocument(doc);
+            m_Field = field;
 
-               public java.awt.Dimension getMaximumSize()
-               {
-                   return new java.awt.Dimension(0, 0);
-               }
-           });
+            //Fix 132234
+            // creating the vertical scrolling effect without the vertical scrollbar
+            JScrollPane scrollPane = new JScrollPane(m_Field);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            scrollPane.setBorder(null);
 
-           add(scrollPane, BorderLayout.CENTER);
-       }
-      
-      m_Field.setBorder(null);
+            scrollPane.setVerticalScrollBar(new javax.swing.JScrollBar() {
+                @Override
+                public java.awt.Dimension getPreferredSize() {
+                    return new java.awt.Dimension(0, 0);
+                }
 
-      m_Button = new JButton();
-      m_Button.setEnabled(true);
-      m_Button.setPreferredSize(new Dimension(2, 2));
-      m_Button.setOpaque(false);
-      m_Button.setBackground(m_TooltipBGColor);
-      m_Button.setFocusable(false); //I do not want this button to steal focus from the field
-      final Point p = this.getLocation();
-      final Component comp = this;
-      m_Button.addActionListener(new ActionListener()
-      {
+                @Override
+                public java.awt.Dimension getMinimumSize() {
+                    return new java.awt.Dimension(0, 0);
+                }
 
-         public void actionPerformed(ActionEvent e)
-         {
+                @Override
+                public java.awt.Dimension getMaximumSize() {
+                    return new java.awt.Dimension(0, 0);
+                }
+            });
+
+            add(scrollPane, BorderLayout.CENTER);
+        }
+
+        m_Field.setBorder(null);
+
+        m_Button = new JButton();
+        m_Button.setEnabled(true);
+        m_Button.setPreferredSize(new Dimension(2, 2));
+        m_Button.setOpaque(false);
+        m_Button.setBackground(m_TooltipBGColor);
+        m_Button.setFocusable(false); //I do not want this button to steal focus from the field
+        final Point p = this.getLocation();
+        final Component comp = this;
+        m_Button.addActionListener((ActionEvent e) -> {
             //handleHint();
-         }
-      });
-      
-      m_Button.setBounds(0, 0, 15, 3);
-      setOpaque(false);
-      add(m_Panel, BorderLayout.SOUTH);
-      m_Panel.setBounds(0, 0, 200, 3);
-      m_Panel.setOpaque(false);
-      
-   }
+        });
 
-   public void setCaretPosition(int pos)
-   {
-      m_Field.setCaretPosition(pos);
-   }
+        m_Button.setBounds(0, 0, 15, 3);
+        setOpaque(false);
+        add(m_Panel, BorderLayout.SOUTH);
+        m_Panel.setBounds(0, 0, 200, 3);
+        m_Panel.setOpaque(false);
 
+    }
 
-   public void setAutoSize(boolean value)
-   {
-      // TODO Auto-generated method stub
+    public void setCaretPosition(int pos) {
+        m_Field.setCaretPosition(pos);
+    }
 
-   }
+    public void setAutoSize(boolean value) {
+        // TODO Auto-generated method stub
 
-  
-   public boolean getAutoSize()
-   {
-      // TODO Auto-generated method stub
-      return false;
-   }
+    }
 
-  
+    public boolean getAutoSize() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
+    public Color getForeColor() {
+        Color retVal = null;
 
-   public Color getForeColor()
-   {
-      Color retVal = null;
+        if (m_Field != null) {
+            retVal = m_Field.getForeground();
+        }
 
-      if (m_Field != null)
-      {
-         retVal = m_Field.getForeground();
-      }
+        return retVal;
+    }
 
-      return retVal;
-   }
+    public void setForeColor(Color value) {
+        if (m_Field != null) {
+            m_Field.setForeground(value);
+        }
+    }
 
-  
-   public void setForeColor(Color value)
-   {
-      if (m_Field != null)
-      {
-         m_Field.setForeground(value);
-      }
-   }
+    public void activate(int KeyCode, int nPos) {
+        // TODO Auto-generated method stub
 
-   
- 
-   public void activate(int KeyCode, int nPos)
-   {
-      // TODO Auto-generated method stub
+    }
 
-   }
-
-   /**
-    * Deactivate the edit control
-    */
-   public void deactivate()
-   {
-      // prevent recursion
-      boolean bInDeactivate = false;
-      if (!bInDeactivate)
-      {
-         bInDeactivate = true;
+    /**
+     * Deactivate the edit control
+     */
+    public void deactivate() {
+        // prevent recursion
+        boolean bInDeactivate = false;
+        if (!bInDeactivate) {
+            bInDeactivate = true;
 
          // notify listeners we're shutting down
 //         if (m_EventDispatcher != null)
@@ -1186,31 +1029,28 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //            m_EventDispatcher.fireDeactivate(this, payload);
 //            m_EventDispatcher = null;
 //         }
+            // Fix for Sun issue #6185901:
+            // When the edit control is completed it needs to remove the key bindings so that,
+            // in this issue as an example, the paste operation is not handled by this edit control.
+            // Remove our key bindings
+            m_Field.getKeymap().removeBindings();
+        }
+    }
 
-         // Fix for Sun issue #6185901:
-         // When the edit control is completed it needs to remove the key bindings so that,
-         // in this issue as an example, the paste operation is not handled by this edit control.
-
-         // Remove our key bindings
-         m_Field.getKeymap().removeBindings();         
-      }
-   }
-
-   /**
-    * Returns the translator attached to this control.
-    *
-    * @param pTranslator
-    */
+    /**
+     * Returns the translator attached to this control.
+     *
+     * @param pTranslator
+     */
 //   public ITranslator getTranslator()
 //   {
 //      return m_Translator;
 //   }
-
-   /**
-    * Attaches a translator to this control.
-    *
-    * @param pTranslator
-    */
+    /**
+     * Attaches a translator to this control.
+     *
+     * @param pTranslator
+     */
 //   public void setTranslator(ITranslator pTranslator)
 //   {
 //      // set our translator then set reverse pointer
@@ -1221,68 +1061,52 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //      m_InitialData = str;
 //      m_Modified = false;
 //   }
-
-   
-   public boolean isMultiline()
-   {
-      return m_IsMultiline;
-   }
+    public boolean isMultiline() {
+        return m_IsMultiline;
+    }
 //   
 //   public void setMultiline(boolean value)
 //   {
 //       m_IsMultiline = value;
 //   }
-   
 
-   public int getSelStartPos()
-   {
-      if (m_SelectionStartPos >= 0)
-      {
-         return m_SelectionStartPos;
-      }
-      else
-      {
-         return getCurrentPosition();
-      }
-   }
+    public int getSelStartPos() {
+        if (m_SelectionStartPos >= 0) {
+            return m_SelectionStartPos;
+        } else {
+            return getCurrentPosition();
+        }
+    }
 
-   public int getSelEndPos()
-   {
-      if (m_SelectionEndPos >= 0)
-      {
-         return m_SelectionEndPos;
-      }
-      else
-      {
-         return getCurrentPosition();
-      }
-   }
+    public int getSelEndPos() {
+        if (m_SelectionEndPos >= 0) {
+            return m_SelectionEndPos;
+        } else {
+            return getCurrentPosition();
+        }
+    }
 
-   public long getSel(int nStartChar, int nEndChar)
-   {
-      // TODO Auto-generated method stub
-      return 0;
-   }
+    public long getSel(int nStartChar, int nEndChar) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-   public long setSel(int startPos, int endPos)
-   {
-      //if (m_Modified)
-      {
-         m_Field.setSelectionStart(startPos);
-         m_Field.setSelectionEnd(endPos);
-         m_SelectionStartPos = startPos;
-         m_SelectionEndPos = endPos;
-      }
-      return 0;
-   }
+    public long setSel(int startPos, int endPos) {
+        //if (m_Modified)
+        {
+            m_Field.setSelectionStart(startPos);
+            m_Field.setSelectionEnd(endPos);
+            m_SelectionStartPos = startPos;
+            m_SelectionEndPos = endPos;
+        }
+        return 0;
+    }
 
-
-
-   /**
-    * Establishes the control's event dispatcher (used internally only).
-    *
-    * @param pDispatcher
-    */
+    /**
+     * Establishes the control's event dispatcher (used internally only).
+     *
+     * @param pDispatcher
+     */
 //   public void putEventDispatcher(IEventDispatcher pDispatcher)
 //   {
 //      m_EventDispatcher = null;
@@ -1301,45 +1125,33 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //   {
 //      return m_EventDispatcher;
 //   }
+    public boolean getModified() {
+        return m_Modified;
+    }
 
+    public void setModified(boolean value) {
+        m_Modified = value;
+    }
 
-   public boolean getModified()
-   {
-      return m_Modified;
-   }
+    public int lineLength(int nLine) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-  
-   public void setModified(boolean value)
-   {
-      m_Modified = value;
-   }
+    public int lineIndex(int nLine) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-  
-   public int lineLength(int nLine)
-   {
-      // TODO Auto-generated method stub
-      return 0;
-   }
+    public int getStyle() {
 
-   public int lineIndex(int nLine)
-   {
-      // TODO Auto-generated method stub
-      return 0;
-   }
+        return 0;
+    }
 
-   public int getStyle()
-   {
-
-      return 0;
-   }
-
-
-   public void setStyle(long value)
-   {
-      if (m_Field instanceof JTextField)
-      {
-         JTextField field = (JTextField)m_Field;
-         int alignment = JTextField.LEFT;
+    public void setStyle(long value) {
+        if (m_Field instanceof JTextField) {
+            JTextField field = (JTextField) m_Field;
+            int alignment = JTextField.LEFT;
 //         if ((value & IADEditableCompartment.RIGHT) == IADEditableCompartment.RIGHT)
 //         {
 //            alignment = JTextField.RIGHT;
@@ -1349,15 +1161,15 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //            alignment = JTextField.CENTER;
 //         }
 
-         field.setHorizontalAlignment(alignment);
-      }
-   }
+            field.setHorizontalAlignment(alignment);
+        }
+    }
 
-   /**
-    * Updates the control's window with the current contents of the translator.
-    *
-    * @return HRESULT
-    */
+    /**
+     * Updates the control's window with the current contents of the translator.
+     *
+     * @return HRESULT
+     */
 //   public void refresh()
 //   {
 //      if (m_Translator != null)
@@ -1367,76 +1179,67 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //         setText(str);
 //      }
 //   }
+    public boolean getOverstrike() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
+    public void setOverstrike(boolean value) {
+        // TODO Auto-generated method stub
 
-   public boolean getOverstrike()
-   {
-      // TODO Auto-generated method stub
-      return false;
-   }
+    }
 
-   public void setOverstrike(boolean value)
-   {
-      // TODO Auto-generated method stub
+    public long getTooltipText(StringBuffer sLeft, StringBuffer sSubject, StringBuffer sRight) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-   }
-
-
-   public long getTooltipText(StringBuffer sLeft, StringBuffer sSubject, StringBuffer sRight)
-   {
-      // TODO Auto-generated method stub
-      return 0;
-   }
-
-   /**
-    *
-    * Update the tooltip's text.  If all 3 text parts are empty the tooltip window is dismissed.
-    *
-    * @param sLeft Left part of the tooltip text
-    * @param sSubject Subject part, this will be displayed in a bold font
-    * @param sRight Right part of the tooltip text.
-    *
-    * @return HRESULT
-    *
-    */
-   public void setTooltipText(String sLeft, String sSubject, String sRight)
-   {
+    /**
+     *
+     * Update the tooltip's text. If all 3 text parts are empty the tooltip
+     * window is dismissed.
+     *
+     * @param sLeft Left part of the tooltip text
+     * @param sSubject Subject part, this will be displayed in a bold font
+     * @param sRight Right part of the tooltip text.
+     *
+     * @return HRESULT
+     *
+     */
+    public void setTooltipText(String sLeft, String sSubject, String sRight) {
 //      sLeft = StringUtilities.replaceAllSubstrings(sLeft, "<", "&lt;");
 //      sSubject = StringUtilities.replaceAllSubstrings(sSubject, "<", "&lt;");
 //      sRight = StringUtilities.replaceAllSubstrings(sRight, "<", "&lt;");
 //      sLeft = StringUtilities.replaceAllSubstrings(sLeft, ">", "&gt;");
 //      sSubject = StringUtilities.replaceAllSubstrings(sSubject, ">", "&gt;");
 //      sRight = StringUtilities.replaceAllSubstrings(sRight, ">", "&gt;");
-      String tooltip = "<html>" + sLeft + "<b>" + sSubject + "</b>" + sRight + "</html>";
+        String tooltip = "<html>" + sLeft + "<b>" + sSubject + "</b>" + sRight + "</html>";
 
-      //m_Field.setToolTipText(tooltip);
-      m_TooltipText = tooltip;
+        //m_Field.setToolTipText(tooltip);
+        m_TooltipText = tooltip;
 
-      //tooltip = sLeft + "<b>" + sSubject + "</b>" + sRight;
+        //tooltip = sLeft + "<b>" + sSubject + "</b>" + sRight;
+        Point p = this.getLocation();
+        if (m_LocationOnScreen != null) {
+            p = m_LocationOnScreen;
+        }
+        m_TooltipMenu.removeAll();
+        Font f = m_TooltipMenu.getFont();
 
-      Point p = this.getLocation();
-      if (m_LocationOnScreen != null)
-      {
-         p = m_LocationOnScreen;
-      }
-      m_TooltipMenu.removeAll();
-      Font f = m_TooltipMenu.getFont();
+        m_TooltipMenu.setFont(f.deriveFont(Font.PLAIN));
+        JMenuItem item = m_TooltipMenu.add(tooltip);
+        item.setFont(f.deriveFont(Font.PLAIN));
+        item.setAlignmentX(0);
+        item.setAlignmentY(0);
+        item.setBorder(null);
+        item.setBackground(m_TooltipBGColor);
+        FontMetrics metrix = item.getFontMetrics(item.getFont());
+        int width = metrix.stringWidth(tooltip);
 
-      m_TooltipMenu.setFont(f.deriveFont(Font.PLAIN));
-      JMenuItem item = m_TooltipMenu.add(tooltip);
-      item.setFont(f.deriveFont(Font.PLAIN));
-      item.setAlignmentX(0);
-      item.setAlignmentY(0);
-      item.setBorder(null);
-      item.setBackground(m_TooltipBGColor);
-      FontMetrics metrix = item.getFontMetrics(item.getFont());
-      int width = metrix.stringWidth(tooltip);
-
-      item.setOpaque(false);
-      p = m_TooltipMenu.getLocation();
-      if (p != null)
-      {
-         m_TooltipMenu.setBounds(p.x, p.y - metrix.getHeight(), width, metrix.getHeight());
+        item.setOpaque(false);
+        p = m_TooltipMenu.getLocation();
+        if (p != null) {
+            m_TooltipMenu.setBounds(p.x, p.y - metrix.getHeight(), width, metrix.getHeight());
 //         IEditControlField pField = m_Translator.getCurrentField();
 //         if (pField != null)
 //         {
@@ -1453,27 +1256,26 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //            }
 //         }
 
-         //m_TooltipMenu.setPreferredSize(new Dimension(width,20));
-         //m_TooltipMenu.updateUI();
-      }
+            //m_TooltipMenu.setPreferredSize(new Dimension(width,20));
+            //m_TooltipMenu.updateUI();
+        }
 
-      //if (!m_TooltipMenu.isVisible())
-      //{
-      //	m_TooltipMenu.setVisible(true);
-      //}
-   }
+        //if (!m_TooltipMenu.isVisible())
+        //{
+        //	m_TooltipMenu.setVisible(true);
+        //}
+    }
 
-   public void setEnableTooltip(boolean value)
-   {
-      m_ShowTooltips = value;
-      m_TooltipMenu.setVisible(value);
-   }
+    public void setEnableTooltip(boolean value) {
+        m_ShowTooltips = value;
+        m_TooltipMenu.setVisible(value);
+    }
 
-   /**
-    * Force the tooltip to be re-loaded and re-displayed.
-    *
-    * @return HRESULT
-    */
+    /**
+     * Force the tooltip to be re-loaded and re-displayed.
+     *
+     * @return HRESULT
+     */
 //   public void updateToolTip()
 //   {
 //      if (m_Translator != null)
@@ -1484,87 +1286,72 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //         }
 //      }
 //   }
+    public void setCurrentPosition(int value) {
+        String text = m_Field.getText();
+        if (text != null && text.length() >= value) {
+            m_Field.setCaretPosition(value);
+        }
+    }
 
+    public int getCurrentPosition() {
+        return m_Field.getCaretPosition();
+    }
 
-   public void setCurrentPosition(int value)
-   {
-      String text = m_Field.getText();
-      if (text != null && text.length() >= value)
-      {
-         m_Field.setCaretPosition(value);
-      }
-   }
+    public void showHintBar(int nPos) {
+        FontMetrics metrix = m_Field.getFontMetrics(m_Field.getFont());
+        String text = m_Field.getText();
+        int length = 0;
+        if (text != null && text.length() >= nPos) {
+            String str = text.substring(0, nPos);
+            length = metrix.stringWidth(str);
+        }
+        m_Panel.removeAll();
+        m_Panel.setBounds(0, 0, 200, 3);
+        m_Panel.repaint();
+        m_Button.setBounds(length, 0, 15, 3);
+        m_Panel.add(m_Button);
+        if (m_BackgroundColor != null) {
+            m_Panel.setForeground(m_BackgroundColor);
+            m_Panel.setBackground(m_BackgroundColor);
+            m_Panel.setUI(this.getUI());
+        }
+        m_Panel.invalidate();
+        m_Panel.repaint();
+    }
 
-   public int getCurrentPosition()
-   {
-      return m_Field.getCaretPosition();
-   }
+    /*
+     * hides the hint bar
+     */
+    public void hideHintBar() {
+        m_Panel.removeAll();
+        m_Panel.invalidate();
+        m_Panel.repaint();
+        if (m_BackgroundColor != null) {
+            m_Panel.setForeground(m_BackgroundColor);
+            m_Panel.setBackground(m_BackgroundColor);
+            m_Panel.setUI(this.getUI());
+        }
+        m_Panel.setBounds(0, 0, 200, 3);
+        m_Panel.repaint();
+        //m_Button.reshape(0,0,0,0);
+        //m_Panel.add(m_Button);
+    }
 
-
-
-
-   public void showHintBar(int nPos)
-   {
-      FontMetrics metrix = m_Field.getFontMetrics(m_Field.getFont());
-      String text = m_Field.getText();
-      int length = 0;
-      if (text != null && text.length() >= nPos)
-      {
-         String str = text.substring(0, nPos);
-         length = metrix.stringWidth(str);
-      }
-      m_Panel.removeAll();
-      m_Panel.setBounds(0, 0, 200, 3);
-      m_Panel.repaint();
-      m_Button.setBounds(length, 0, 15, 3);
-      m_Panel.add(m_Button);
-      if (m_BackgroundColor != null)
-      {
-         m_Panel.setForeground(m_BackgroundColor);
-         m_Panel.setBackground(m_BackgroundColor);
-         m_Panel.setUI(this.getUI());
-      }
-      m_Panel.invalidate();
-      m_Panel.repaint();
-   }
-
-   /*
-    * hides the hint bar
-    */
-   public void hideHintBar()
-   {
-      m_Panel.removeAll();
-      m_Panel.invalidate();
-      m_Panel.repaint();
-      if (m_BackgroundColor != null)
-      {
-         m_Panel.setForeground(m_BackgroundColor);
-         m_Panel.setBackground(m_BackgroundColor);
-         m_Panel.setUI(this.getUI());
-      }
-      m_Panel.setBounds(0, 0, 200, 3);
-      m_Panel.repaint();
-      //m_Button.reshape(0,0,0,0);
-      //m_Panel.add(m_Button);
-   }
-
-   /**
-    * Deactivate the edit control and save any information
-    * edited by user.
-    */
-   public void handleSave()
-   {
-      m_TooltipMenu.setVisible(false);
-      boolean bModified = getModified();
+    /**
+     * Deactivate the edit control and save any information edited by user.
+     */
+    public void handleSave() {
+        m_TooltipMenu.setVisible(false);
+        boolean bModified = getModified();
 //      if (m_Translator != null && bModified)
 //      {
 //         m_Translator.saveModelElement();
 //      }
 
-      //get related element and see if the change was really made
-      //if the element name did not change we have a problem, in which case,
-      //revert back to the old name
-      String sText = getText();
+        //get related element and see if the change was really made
+        //if the element name did not change we have a problem, in which case,
+        //revert back to the old name
+        String sText = getText();
 //      if (m_Translator != null)
 //      {
 //         Object object = m_Translator.getElement();
@@ -1578,28 +1365,25 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //            }
 //         }
 //      }
-      setText(sText);
+        setText(sText);
       // Fix for Sun issue #6185901:
-      // When the edit control is completed it needs to deactivate so
-      // that, in this issue as an example, the paste operation is
-      // not handled by this edit control.
-      // Before fixing this issue there was code to call
-      // m_EventDispatcher.fireDeactivate(), but that is no longer necessary
-      // since that code is in deactivate().
+        // When the edit control is completed it needs to deactivate so
+        // that, in this issue as an example, the paste operation is
+        // not handled by this edit control.
+        // Before fixing this issue there was code to call
+        // m_EventDispatcher.fireDeactivate(), but that is no longer necessary
+        // since that code is in deactivate().
 
-      // notify listeners we're shutting down
-      deactivate();
-   }
+        // notify listeners we're shutting down
+        deactivate();
+    }
 
-   public void handleRollback()
-   {
-      m_TooltipMenu.setVisible(false);
-   }
+    public void handleRollback() {
+        m_TooltipMenu.setVisible(false);
+    }
 
-  
-
-   /* (non-Javadoc)
-    */
+    /* (non-Javadoc)
+     */
 //   public void displayList(boolean bList, String pList, int nStart, String sInitialText)
 //   {
 //      if (pList != null)
@@ -1650,7 +1434,6 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //         menu.show(m_Button, 0, 0);
 //      }
 //   }
-
 //   private String showSelectDialog()
 //   {
 //      String retVal = "";
@@ -1658,13 +1441,10 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //      retVal = chooser.selectClass();
 //      return retVal;
 //   }
-
-   public void performActionOnMenuItemSelected(ActionEvent e)
-   {
-      Object obj = e.getSource();
-      if (obj != null)
-      {
-         String newText = ((JMenuItem)obj).getText();
+    public void performActionOnMenuItemSelected(ActionEvent e) {
+        Object obj = e.getSource();
+        if (obj != null) {
+            String newText = ((JMenuItem) obj).getText();
 
 //         if (newText != null && newText.equals(DrawingPropertyResource.getString("IDS_MOREITEMS")))
 //         {
@@ -1708,9 +1488,8 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //               setSel(newPos, newPos);
 //            }
 //         }
-      }
-   }
-
+        }
+    }
 
 //   public IEditControlField getCurrentField()
 //   {
@@ -1721,19 +1500,16 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //      }
 //      return retField;
 //   }
+    public void registerAccelerator(int nChar, long nModifier) {
+        // TODO Auto-generated method stub
 
- 
-   public void registerAccelerator(int nChar, long nModifier)
-   {
-      // TODO Auto-generated method stub
+    }
 
-   }
-
-   /**
-    * Sets the element this edit control will edit.
-    *
-    * @param pElement [in] The edit control
-    */
+    /**
+     * Sets the element this edit control will edit.
+     *
+     * @param pElement [in] The edit control
+     */
 //   public void setElement(IElement pElement)
 //   {
 //      // I need to block all the events at this point, so that while building property elements, we do not
@@ -1787,65 +1563,53 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //         EventBlocker.stopBlocking(origVal);
 //      }
 //   }
+    /**
+     * A list of separator characters used by the fields
+     *
+     * @param sList
+     *
+     * @return HRESULT
+     */
+    public String getSeparatorList() {
+        return m_SeparatorList;
+    }
 
-   /**
-    * A list of separator characters used by the fields
-    * @param sList
-    *
-    * @return HRESULT
-    */
-   public String getSeparatorList()
-   {
-      return m_SeparatorList;
-   }
+    /**
+     * A list of separator characters used by the fields
+     *
+     * @param sList
+     *
+     * @return HRESULT
+     */
+    public void setSeparatorList(String sList) {
+        m_SeparatorList = sList;
+    }
 
-   /**
-    * A list of separator characters used by the fields
-    * @param sList
-    *
-    * @return HRESULT
-    */
-   public void setSeparatorList(String sList)
-   {
-      m_SeparatorList = sList;
-   }
+    public int calcNewPos(int changeLineBy) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
+    public String getText() {
+        // TODO Auto-generated method stub
+        return m_Field.getText();
+    }
 
-   public int calcNewPos(int changeLineBy)
-   {
-      // TODO Auto-generated method stub
-      return 0;
-   }
-
-
-   public String getText()
-   {
-      // TODO Auto-generated method stub
-      return m_Field.getText();
-   }
-
-   /*
-    * sets the text that is displayed on the edit control.
-    * While setting the text, change events are fired,
-    * I need to prevent them so am setting ignoreTextUpdate.
-    */
-   public void setText(String value)
-   {
-      try
-      {
-         if (m_UpdatingField)
-         {
-            final String str = value;
-            //we are right now updating the text, so do invokeLater
-            SwingUtilities.invokeLater(new Runnable()
-            {
-
-               public void run()
-               {
-//                  if (m_Translator != null)
+    /*
+     * sets the text that is displayed on the edit control.
+     * While setting the text, change events are fired,
+     * I need to prevent them so am setting ignoreTextUpdate.
+     */
+    public void setText(String value) {
+        try {
+            if (m_UpdatingField) {
+                final String str = value;
+                //we are right now updating the text, so do invokeLater
+                SwingUtilities.invokeLater(() -> {
+                    //                  if (m_Translator != null)
 //                  {
-                     //IEditControlField pField = m_Translator.getCurrentField();
-                     int pos = getCurrentPosition();
+                    //IEditControlField pField = m_Translator.getCurrentField();
+                    int pos = getCurrentPosition();
 //                     if (pField != null)
 //                     {
 //                        String name = pField.getName();
@@ -1855,31 +1619,25 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //                           pos = nStart;
 //                        }
 //                     }
-                     m_IgnoreTextUpdate = true;
-                     m_Field.setText(str);
-                     m_IgnoreTextUpdate = false;
-                     setCaretPosition(pos);
+                    m_IgnoreTextUpdate = true;
+                    m_Field.setText(str);
+                    m_IgnoreTextUpdate = false;
+                    setCaretPosition(pos);
 //                  }
-               }
-            });
+                });
 
-         }
-         else
-         {
-            m_Field.setText(value);
-            //select the name field
-            //getNameField();
-         }
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-   }
+            } else {
+                m_Field.setText(value);
+                //select the name field
+                //getNameField();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-   public void setCharacter(int nKeyCode, int nShift)
-   {
-      //if we are editing a lifeline we need to select the representing classifier.
+    public void setCharacter(int nKeyCode, int nShift) {
+        //if we are editing a lifeline we need to select the representing classifier.
 //      IEditControlField field = null;
 //      if (m_Translator != null)
 //      {
@@ -1943,32 +1701,28 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //         setSel(pos, pos);
 //         m_Field.setCaretPosition(pos);
 //      }
-   }
+    }
 
-   protected void assignAction(KeyStroke key, String actionName)
-   {
-       m_Field.getInputMap().put(key, actionName);
-   }
-   
-   protected void assignAction(KeyStroke key, Action action, String actionName)
-   {
-       m_Field.getActionMap().put(actionName, action);
-       m_Field.getInputMap().put(key, actionName);
-   }
-   
-   protected void removeAction(KeyStroke key)
-   {
-       // The remove method only removes the key from this map.  If a parent
-       // map owns the keystroke you have to go up the tree.
-       
-       InputMap map = m_Field.getInputMap();
-       while(map != null)
-       {
-           map.remove(key);
-           map = map.getParent();
-       }
-   }
-   
+    protected void assignAction(KeyStroke key, String actionName) {
+        m_Field.getInputMap().put(key, actionName);
+    }
+
+    protected void assignAction(KeyStroke key, Action action, String actionName) {
+        m_Field.getActionMap().put(actionName, action);
+        m_Field.getInputMap().put(key, actionName);
+    }
+
+    protected void removeAction(KeyStroke key) {
+        // The remove method only removes the key from this map.  If a parent
+        // map owns the keystroke you have to go up the tree.
+
+        InputMap map = m_Field.getInputMap();
+        while (map != null) {
+            map.remove(key);
+            map = map.getParent();
+        }
+    }
+
 //   private IEditControlField getNameField()
 //   {
 //      IEditControlField field = null;
@@ -2080,180 +1834,153 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //
 //      return field;
 //   }
+    public boolean isShiftDown() {
+        return m_ShiftDown;
+    }
 
-   public boolean isShiftDown()
-   {
-      return m_ShiftDown;
-   }
+    public boolean isControlDown() {
+        return m_ControlDown;
+    }
 
-   public boolean isControlDown()
-   {
-      return m_ControlDown;
-   }
+    private class EditControlDocumentListener implements DocumentListener {
 
-   private class EditControlDocumentListener implements DocumentListener
-   {
-       InplaceEditorProvider.EditorController editorController = null;
-       
-      public EditControlDocumentListener(Object controller) 
-      {
-          if (controller  instanceof InplaceEditorProvider.EditorController)
-          {
-              editorController = (InplaceEditorProvider.EditorController) controller;
-          }
-      }
-      public void insertUpdate(DocumentEvent e)
-      {
-          changedUpdate(e);
-      }
+        InplaceEditorProvider.EditorController editorController = null;
 
-      public void removeUpdate(DocumentEvent e)
-      {
-          changedUpdate(e);
-      }
+        public EditControlDocumentListener(Object controller) {
+            if (controller instanceof InplaceEditorProvider.EditorController) {
+                editorController = (InplaceEditorProvider.EditorController) controller;
+            }
+        }
 
-      public void changedUpdate(DocumentEvent e)
-      {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            changedUpdate(e);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            changedUpdate(e);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
 //         handleFieldModified(e);
-          setModified(true);
+            setModified(true);
 //          m_Translator.setModified(true);
 //          getCurrentField().setText(m_Field.getText());
-          if (editorController != null && editorController.isEditorVisible())
-            {
+            if (editorController != null && editorController.isEditorVisible()) {
                 editorController.notifyEditorComponentBoundsChanged();
             }
-      }
-   }
+        }
+    }
 
-   public void setEditControlBackground(Color c)
-   {
-      m_Field.setBackground(c);
-      m_Panel.setBackground(c);
-      m_Button.setBackground(c);
-      this.setBackground(c);
-      m_BackgroundColor = c;
-   }
+    public void setEditControlBackground(Color c) {
+        m_Field.setBackground(c);
+        m_Panel.setBackground(c);
+        m_Button.setBackground(c);
+        this.setBackground(c);
+        m_BackgroundColor = c;
+    }
 
-   /**
-    * 
-   */
-   @Override
-   public void setFont(Font value)
-   {
-      if (m_Field != null)
-      {
-         m_Field.setFont(value);
-      }
-   }
+    /**
+     *
+     */
+    @Override
+    public void setFont(Font value) {
+        if (m_Field != null) {
+            m_Field.setFont(value);
+        }
+    }
 
-   /**
-    * 
-   */
-   @Override
-   public Font getFont()
-   {
-      Font retVal = null;
-      if (m_Field != null)
-      {
-         retVal = m_Field.getFont();
-      }
+    /**
+     *
+     */
+    @Override
+    public Font getFont() {
+        Font retVal = null;
+        if (m_Field != null) {
+            retVal = m_Field.getFont();
+        }
 
-      return retVal;
-   }
+        return retVal;
+    }
 
+    public Object getAssociatedParent() {
+        return (m_Parent != null) ? m_Parent.get() : null;
+    }
 
-   public Object getAssociatedParent()
-   {
-      return (m_Parent != null) ? m_Parent.get() : null;
-   }
+    public void setAssociatedParent(Object parent) {
+        if (parent != null) {
+            m_Parent = new WeakReference(parent);
+        }
+    }
 
-   public void setAssociatedParent(Object parent)
-   {
-       if(parent != null)
-       {
-           m_Parent = new WeakReference( parent );
-       }
-   }
-   
-   /* (non-Javadoc)
-    * @see java.awt.event.InputMethodListener#caretPositionChanged(java.awt.event.InputMethodEvent)
-    */
-   public void caretPositionChanged(InputMethodEvent event)
-   {
-      // TODO Auto-generated method stub
+    /* (non-Javadoc)
+     * @see java.awt.event.InputMethodListener#caretPositionChanged(java.awt.event.InputMethodEvent)
+     */
+    @Override
+    public void caretPositionChanged(InputMethodEvent event) {
+        // TODO Auto-generated method stub
 
-   }
+    }
 
-   /* (non-Javadoc)
-    * @see java.awt.event.InputMethodListener# (java.awt.event.InputMethodEvent)
-    */
-   public void inputMethodTextChanged(InputMethodEvent event)
-   {
-       if (!ime_Cached) 
-       {
-	   ime_SelectionStartPos = m_Field.getSelectionStart();
-	   ime_SelectionEndPos = m_Field.getSelectionEnd();
-	   if (ime_SelectionStartPos != ime_SelectionEndPos) 
-           {
-	       ime_InitialLoc = Math.min(ime_SelectionStartPos, ime_SelectionEndPos);
-	   } 
-	   else 
-	   {
-	       ime_InitialLoc = m_Field.getCaretPosition();
-	   }
-	   ime_Cached = true;
-	   ime_CachedChars = new StringBuffer();
-       }
+    /* (non-Javadoc)
+     * @see java.awt.event.InputMethodListener# (java.awt.event.InputMethodEvent)
+     */
+    @Override
+    public void inputMethodTextChanged(InputMethodEvent event) {
+        if (!ime_Cached) {
+            ime_SelectionStartPos = m_Field.getSelectionStart();
+            ime_SelectionEndPos = m_Field.getSelectionEnd();
+            if (ime_SelectionStartPos != ime_SelectionEndPos) {
+                ime_InitialLoc = Math.min(ime_SelectionStartPos, ime_SelectionEndPos);
+            } else {
+                ime_InitialLoc = m_Field.getCaretPosition();
+            }
+            ime_Cached = true;
+            ime_CachedChars = new StringBuffer();
+        }
 
-      int committedCharacterCount = event.getCommittedCharacterCount();
-      CharacterIterator iter = event.getText();
-      if (iter != null && ( (iter.getEndIndex() - iter.getBeginIndex()) > committedCharacterCount)) 
-      {
-	  if (ime_CachedChars != null) 
-	  { 
-	      char ch = iter.first();
-	      for (int i = 0; i < committedCharacterCount; i++)
-	      {	      
-		  ime_CachedChars.append(ch);
-		  ch = iter.next();
-	      }
-	  }
-      } 
-      else 
-      {
+        int committedCharacterCount = event.getCommittedCharacterCount();
+        CharacterIterator iter = event.getText();
+        if (iter != null && ((iter.getEndIndex() - iter.getBeginIndex()) > committedCharacterCount)) {
+            if (ime_CachedChars != null) {
+                char ch = iter.first();
+                for (int i = 0; i < committedCharacterCount; i++) {
+                    ime_CachedChars.append(ch);
+                    ch = iter.next();
+                }
+            }
+        } else {
 
-	 // Push the caret back as part of faking the text input.
-	 int pos = ime_InitialLoc;
-	 setCurrentPosition(pos);
-	 // Fake the key input since handleTypedChar() does the right things.
-	   
-	 if (ime_CachedChars != null) 
-	 { 
-	     for (int i = 0; i < ime_CachedChars.length() ; i++) 
-	     {
-		 handleTypedChar(ime_CachedChars.charAt(i));
-		 setCurrentPosition(++pos);	       
-	     }
-	 }
+            // Push the caret back as part of faking the text input.
+            int pos = ime_InitialLoc;
+            setCurrentPosition(pos);
+            // Fake the key input since handleTypedChar() does the right things.
 
-	 if (iter != null) 
-	 {
-	     for (char ch = iter.first(); ch != CharacterIterator.DONE; ch = iter.next())
-	     {
-		 handleTypedChar(ch);
-		 setCurrentPosition(++pos);
-	     }
-	 }	 
+            if (ime_CachedChars != null) {
+                for (int i = 0; i < ime_CachedChars.length(); i++) {
+                    handleTypedChar(ime_CachedChars.charAt(i));
+                    setCurrentPosition(++pos);
+                }
+            }
+
+            if (iter != null) {
+                for (char ch = iter.first(); ch != CharacterIterator.DONE; ch = iter.next()) {
+                    handleTypedChar(ch);
+                    setCurrentPosition(++pos);
+                }
+            }
 //	 for(int i = ime_SelectionStartPos; i < ime_SelectionEndPos; i++) {
 //	     m_Translator.handleKeyDown(127);
 //	 }	   
-	 ime_Cached = false;
-	 ime_CachedChars = null;
-        
-	 event.consume();
-       
-         //commit the changes to the edit control
-         setModified(true);
+            ime_Cached = false;
+            ime_CachedChars = null;
+
+            event.consume();
+
+            //commit the changes to the edit control
+            setModified(true);
 //         m_Translator.setModified(true);
 //         if (getCurrentField() != null)
 //         {
@@ -2266,6 +1993,6 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
 //               ((ProjectTreeCellEditor)getAssociatedParent()).stopCellEditing();
 //            }
 //         }
-      }
-   }
+        }
+    }
 }

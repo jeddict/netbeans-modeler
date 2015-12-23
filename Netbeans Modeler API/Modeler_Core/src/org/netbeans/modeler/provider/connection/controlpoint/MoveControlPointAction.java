@@ -38,6 +38,7 @@ public final class MoveControlPointAction extends WidgetAction.LockedAdapter {
         this.routingPolicy = routingPolicy;
     }
 
+    @Override
     protected boolean isLocked() {
         return movingWidget != null;
     }

@@ -41,7 +41,6 @@
  * Version 2 license, then the option applies only if the new code is
  * made subject to such option by the copyright holder.
  */
-
 package org.netbeans.modeler.component.save.ui;
 
 import java.awt.Dialog;
@@ -59,109 +58,100 @@ import org.openide.util.NbBundle;
  *
  * @author Craig Conover, craig.conover@sun.com
  */
-public class SaveNotifierOkCancel 
-{
-    private static  SaveNotifierOkCancel instance = null;
-    
-    public static SaveNotifierOkCancel getDefault()
-    {
-        if (instance == null)
+public class SaveNotifierOkCancel {
+
+    private static SaveNotifierOkCancel instance = null;
+
+    public static SaveNotifierOkCancel getDefault() {
+        if (instance == null) {
             instance = new SaveNotifierOkCancel();
-        
+        }
+
         return instance;
     }
-    
+
     /**
      * Creates a new instance of SaveNotifier
      */
-    private SaveNotifierOkCancel() 
-    {
+    private SaveNotifierOkCancel() {
     }
-    
 
     public Object displayNotifier(
-            String title, String message) 
-    {
+            String title, String message) {
         DialogManager dmgr = new DialogManager(title, message);
         dmgr.prompt();
-        
+
         return dmgr.getResult();
     }
-    
-    
-    private static class DialogManager implements ActionListener 
-    {
+
+    private static class DialogManager implements ActionListener {
+
         private DialogDescriptor dialogDesc = null;
         private Dialog dialog = null;
         private Object result = DialogDescriptor.CANCEL_OPTION;
 
-        private final Object[] closeOptions =
-        {
-            DialogDescriptor.OK_OPTION,
-            DialogDescriptor.CANCEL_OPTION
-        };
+        private final Object[] closeOptions
+                = {
+                    DialogDescriptor.OK_OPTION,
+                    DialogDescriptor.CANCEL_OPTION
+                };
 
-        public DialogManager(String title, String message) 
-        {
+        public DialogManager(String title, String message) {
             JButton saveButton = new JButton(NbBundle.getMessage(
-                SaveNotifier.class, "LBL_SaveButton")); // NOI18N
+                    SaveNotifier.class, "LBL_SaveButton")); // NOI18N
             saveButton.setActionCommand(NbBundle.getMessage(
-                SaveNotifier.class, "LBL_SaveButton")); // NOI18N
+                    SaveNotifier.class, "LBL_SaveButton")); // NOI18N
             saveButton.getAccessibleContext().setAccessibleDescription(
-                NbBundle.getMessage(
-                SaveNotifier.class, "ACSD_SaveButton")); // NOI18N
+                    NbBundle.getMessage(
+                            SaveNotifier.class, "ACSD_SaveButton")); // NOI18N
             Mnemonics.setLocalizedText(
-                saveButton, NbBundle.getMessage(
-                SaveNotifier.class, "LBL_SaveButton")); // NOI18N
+                    saveButton, NbBundle.getMessage(
+                            SaveNotifier.class, "LBL_SaveButton")); // NOI18N
 
-            Object[] buttonOptions =
-            {
-                saveButton,
-                DialogDescriptor.CANCEL_OPTION
-            };
-            
+            Object[] buttonOptions
+                    = {
+                        saveButton,
+                        DialogDescriptor.CANCEL_OPTION
+                    };
+
             dialogDesc = new DialogDescriptor(
-                message, // message
-                title, // title
-                true, // modal?
-                buttonOptions,
-                DialogDescriptor.OK_OPTION, // default option
-                DialogDescriptor.DEFAULT_ALIGN,
-                null, // help context
-                this, // button action listener
-                false); // leaf?
-            
+                    message, // message
+                    title, // title
+                    true, // modal?
+                    buttonOptions,
+                    DialogDescriptor.OK_OPTION, // default option
+                    DialogDescriptor.DEFAULT_ALIGN,
+                    null, // help context
+                    this, // button action listener
+                    false); // leaf?
+
             dialogDesc.setMessageType(NotifyDescriptor.QUESTION_MESSAGE);
             dialogDesc.setClosingOptions(closeOptions);
             dialog = DialogDisplayer.getDefault().createDialog(dialogDesc);
         }
-        
-        
-        
-        private void prompt() 
-        {
+
+        private void prompt() {
             dialog.setVisible(true);
         }
-        
-        public void actionPerformed(ActionEvent actionEvent) 
-        {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getActionCommand().equalsIgnoreCase(
-                NbBundle.getMessage(SaveNotifier.class, "LBL_SaveButton"))) // NOI18N
+                    NbBundle.getMessage(SaveNotifier.class, "LBL_SaveButton"))) // NOI18N
             {
                 result = DialogDescriptor.OK_OPTION;
-            }
-            
-            else // Cancel or 'x' box close
+            } else // Cancel or 'x' box close
+            {
                 result = DialogDescriptor.CANCEL_OPTION;
-            
+            }
+
             dialog.setVisible(false);
             dialog.dispose();
         }
-        
-        public Object getResult() 
-        {
+
+        public Object getResult() {
             return result;
         }
     }
-    
+
 }

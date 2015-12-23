@@ -72,8 +72,7 @@ public interface IPinWidget extends IParentPinWidget {
 
     void setHighlightStatus(boolean highlightStatus);
 
-    
-            //custom added
+    //custom added
     void showProperties();
 
     void exploreProperties();
