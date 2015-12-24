@@ -28,6 +28,8 @@ public interface ComboBoxListener<T> {
 
     List<ComboBoxValue<T>> getItemList();
 
-    ActionHandler getActionHandler();
+    default public ActionHandler getActionHandler(){
+        return null;
+    }
 
 }

@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.properties.entity.custom.editor.combobox.internal;
 
+import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.JComboBoxPanel;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;

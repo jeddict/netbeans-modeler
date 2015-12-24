@@ -84,6 +84,7 @@
                 <package>org.netbeans.modeler.properties.nentity</package>
                 <package>org.netbeans.modeler.properties.util</package>
                 <package>org.netbeans.modeler.properties.view.manager</package>
+                <package>org.netbeans.modeler.properties.window</package>
                 <package>org.netbeans.modeler.widget.properties.customattr</package>
             </public-packages>
             <class-path-extension>
