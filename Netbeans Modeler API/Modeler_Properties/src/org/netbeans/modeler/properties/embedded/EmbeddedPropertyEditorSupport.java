@@ -39,7 +39,7 @@ public class EmbeddedPropertyEditorSupport extends PropertyEditorSupport impleme
 
     @Override
     public boolean supportsCustomEditor() {
-        return entity.getEntityEditor() != null ? true : false;
+        return entity.getEntityEditor() != null;
     }
 
     @Override

@@ -17,7 +17,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jComboBox1" pref="97" max="32767" attributes="0"/>
+              <Component id="comboBox" pref="97" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
               <Component id="setting_Button" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -26,12 +26,12 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="setting_Button" alignment="0" min="-2" max="-2" attributes="0"/>
-          <Component id="jComboBox1" min="-2" pref="17" max="-2" attributes="0"/>
+          <Component id="comboBox" min="-2" pref="17" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JComboBox" name="jComboBox1">
+    <Component class="javax.swing.JComboBox" name="comboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
@@ -46,7 +46,7 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/org/netbeans/jbpmn/modeler/widget/properties/resource/settings.png"/>
+          <Image iconType="3" name="/org/netbeans/modeler/widget/properties/resource/settings.png"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="org/netbeans/modeler/properties/entity/custom/editor/combobox/client/listener/Bundle.properties" key="JComboBoxPanel.setting_Button.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
@@ -59,9 +59,8 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[16, 17]"/>
+          <Dimension value="[16, 16]"/>
         </Property>
-        <Property name="verticalAlignment" type="int" value="1"/>
       </Properties>
       <Events>
         <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="setting_ButtonMousePressed"/>

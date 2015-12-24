@@ -47,20 +47,19 @@ public class JComboBoxPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox();
+        comboBox = new javax.swing.JComboBox();
         setting_Button = new javax.swing.JButton();
 
-        jComboBox1.setAlignmentX(0.0F);
-        jComboBox1.setAlignmentY(0.0F);
+        comboBox.setAlignmentX(0.0F);
+        comboBox.setAlignmentY(0.0F);
 
         setting_Button.setForeground(new java.awt.Color(255, 255, 255));
-        setting_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/jbpmn/modeler/widget/properties/resource/settings.png"))); // NOI18N
+        setting_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/modeler/widget/properties/resource/settings.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(setting_Button, org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.setting_Button.text")); // NOI18N
         setting_Button.setToolTipText(org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.setting_Button.toolTipText")); // NOI18N
         setting_Button.setAlignmentY(0.0F);
         setting_Button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        setting_Button.setPreferredSize(new java.awt.Dimension(16, 17));
-        setting_Button.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        setting_Button.setPreferredSize(new java.awt.Dimension(16, 16));
         setting_Button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 setting_ButtonMousePressed(evt);
@@ -72,14 +71,14 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jComboBox1, 0, 97, Short.MAX_VALUE)
+                .addComponent(comboBox, 0, 97, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(setting_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(setting_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -88,7 +87,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_setting_ButtonMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox comboBox;
     private javax.swing.JButton setting_Button;
     // End of variables declaration//GEN-END:variables
 
@@ -102,7 +101,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         setting_PopupMenu = new javax.swing.JPopupMenu();
         if (actionHandler.getCreateAction() != null) {
             createItem_MenuItem = new javax.swing.JMenuItem();
-            createItem_MenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/jbpmn/modeler/widget/properties/resource/icon_plus.png"))); // NOI18N
+            createItem_MenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/modeler/widget/properties/resource/icon_plus.png"))); // NOI18N
             org.openide.awt.Mnemonics.setLocalizedText(createItem_MenuItem, org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.createItem_MenuItem.text")); // NOI18N
             createItem_MenuItem.setToolTipText(org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.createItem_MenuItem.toolTipText")); // NOI18N
             createItem_MenuItem.addActionListener(this::createItem_MenuItemActionPerformed);
@@ -110,7 +109,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         }
         if (actionHandler.getUpdateAction() != null) {
             editItem_MenuItem = new javax.swing.JMenuItem();
-            editItem_MenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/jbpmn/modeler/widget/properties/resource/edit.png"))); // NOI18N
+            editItem_MenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/modeler/widget/properties/resource/edit.png"))); // NOI18N
             org.openide.awt.Mnemonics.setLocalizedText(editItem_MenuItem, org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.editItem_MenuItem.text")); // NOI18N
             editItem_MenuItem.setToolTipText(org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.editItem_MenuItem.toolTipText")); // NOI18N
             editItem_MenuItem.addActionListener(this::editItem_MenuItemActionPerformed);
@@ -119,7 +118,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
 
         if (actionHandler.getDeleteAction() != null) {
             deleteItem_MenuItem = new javax.swing.JMenuItem();
-            deleteItem_MenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/jbpmn/modeler/widget/properties/resource/delete.png"))); // NOI18N
+            deleteItem_MenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/modeler/widget/properties/resource/delete.png"))); // NOI18N
             org.openide.awt.Mnemonics.setLocalizedText(deleteItem_MenuItem, org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.deleteItem_MenuItem.text")); // NOI18N
             deleteItem_MenuItem.setToolTipText(org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.deleteItem_MenuItem.toolTipText")); // NOI18N
             deleteItem_MenuItem.addActionListener(this::deleteItem_MenuItemActionPerformed);
@@ -128,7 +127,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
     }
 
     private void deleteItem_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {
-        ComboBoxValue comboBoxValue = (ComboBoxValue) jComboBox1.getSelectedItem();
+        ComboBoxValue comboBoxValue = (ComboBoxValue) comboBox.getSelectedItem();
         if (comboBoxValue.getValue() == null) {
             JOptionPane.showMessageDialog(null, "No element selected !", "", JOptionPane.INFORMATION_MESSAGE);
             return;
@@ -136,22 +135,22 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         int option = actionHandler.getRemoveMessage().getAsInt();
         if (option == JOptionPane.OK_OPTION) {
             actionHandler.getDeleteAction().accept(comboBoxValue);
-            jComboBox1.removeItem(comboBoxValue);
+            comboBox.removeItem(comboBoxValue);
             modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
         }
     }
 
     private void editItem_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {
-        ComboBoxValue comboBoxValue = (ComboBoxValue) jComboBox1.getSelectedItem();
+        ComboBoxValue comboBoxValue = (ComboBoxValue) comboBox.getSelectedItem();
         if (comboBoxValue.getValue() == null) {
             JOptionPane.showMessageDialog(null, "No element selected !", "", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         EntityComponent itemComponent = actionHandler.getItemProducer();
-        if(itemComponent!=null){
-        itemComponent.init();
-        itemComponent.updateEntity(comboBoxValue);
-        itemComponent.setVisible(true);
+        if (itemComponent != null) {
+            itemComponent.init();
+            itemComponent.updateEntity(comboBoxValue);
+            itemComponent.setVisible(true);
         } else {
             throw new IllegalStateException("EntityComponent required for update action");
         }
@@ -175,20 +174,21 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         }
 
         if (comboBoxValue != null) {
-            jComboBox1.addItem(comboBoxValue);
-            jComboBox1.setSelectedItem(comboBoxValue);
+            comboBox.addItem(comboBoxValue);
+            comboBox.getModel().setSelectedItem(comboBoxValue);
             repaint();
             updateUI();
+
             actionHandler.getCreateAction().accept(comboBoxValue);//.createItem(comboBoxValue);
             modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
         }
-    
+
     }
 
     /**
-     * @return the jComboBox1
+     * @return the comboBox
      */
     public javax.swing.JComboBox getComboBox() {
-        return jComboBox1;
+        return comboBox;
     }
 }
