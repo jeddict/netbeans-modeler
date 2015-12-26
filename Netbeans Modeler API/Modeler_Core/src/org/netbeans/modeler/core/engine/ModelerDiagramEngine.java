@@ -30,6 +30,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import org.netbeans.api.visual.action.ActionFactory;
+import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.model.ObjectScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
@@ -44,13 +45,16 @@ import org.netbeans.modeler.actions.ZoomManager.ZoomEvent;
 import org.netbeans.modeler.actions.export.ExportAction;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.provider.EdgeWidgetSelectProvider;
 import org.netbeans.modeler.provider.ModelerSceneSelectProvider;
+import org.netbeans.modeler.provider.NodeWidgetSelectProvider;
 import org.netbeans.modeler.provider.PinWidgetSelectProvider;
 import org.netbeans.modeler.provider.connection.SequenceFlowReconnectProvider;
 import org.netbeans.modeler.provider.connection.controlpoint.FreeMoveControlPointProvider;
 import org.netbeans.modeler.provider.connection.controlpoint.MoveControlPointAction;
 import org.netbeans.modeler.provider.node.move.AlignStrategyProvider;
+import org.netbeans.modeler.provider.node.move.MoveAction;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.tool.DesignerTools;
@@ -58,20 +62,73 @@ import org.netbeans.modeler.tool.DiagramSelectToolAction;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.vmd.PEdgeWidget;
+import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Utilities;
 
-public abstract class ModelerDiagramEngine implements IModelerDiagramEngine {
+public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     private ModelerFile file;
     private ZoomManager zoomManager;
-    public static AlignStrategyProvider alignStrategyProvider = null;
+    public static AlignStrategyProvider ALIGNSTRATEGY_PROVIDER = null;
+        private static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {
+        private boolean locationChanged = false;
+        private Point original;
+
+        @Override
+        public void movementStarted(Widget widget) {
+            INodeWidget nodeWidget = (INodeWidget) widget;
+            NBModelerUtil.hideContextPalette(nodeWidget.getModelerScene());
+            locationChanged = false;
+        }
+
+        @Override
+        public void movementFinished(Widget widget) {
+            INodeWidget nodeWidget = (INodeWidget) widget;
+            NBModelerUtil.showContextPalette(nodeWidget.getModelerScene(), nodeWidget);
+            if (locationChanged) {
+                ((IModelerScene) widget.getScene()).getModelerPanelTopComponent().changePersistenceState(false);
+            }
+            locationChanged = false;
+        }
+
+        @Override
+        public Point getOriginalLocation(Widget widget) {
+            original = widget.getPreferredLocation();
+            return original;
+        }
+
+        @Override
+        public void setNewLocation(Widget widget, Point location) {
+            widget.setPreferredLocation(location);
+            if (original != null) {
+                locationChanged = true;
+            }
+        }
+    };
+
+    @Override
+    public void setNodeWidgetAction(final INodeWidget nodeWidget) {
+        if(nodeWidget.getModelerScene().getModelerFile().getId() == null){
+        WidgetAction selectAction = ActionFactory.createSelectAction(new NodeWidgetSelectProvider(nodeWidget.getModelerScene()));
+        WidgetAction moveAction = new MoveAction(nodeWidget,null, MOVE_PROVIDER_DEFAULT,ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
+        WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
+        WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
+        WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
+        selectActionTool.addAction(selectAction);
+        selectActionTool.addAction(moveAction);
+        selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
+        selectActionTool.addAction(popupMenuAction);
+        selectActionTool.addAction(snapMoveAction);
+        }
+    }
+
 
     @Override
     public void init(ModelerFile file) {
         this.setFile(file);
-        alignStrategyProvider = new AlignStrategyProvider(file.getModelerScene());
+        ALIGNSTRATEGY_PROVIDER = new AlignStrategyProvider(file.getModelerScene());
     }
 
     @Override

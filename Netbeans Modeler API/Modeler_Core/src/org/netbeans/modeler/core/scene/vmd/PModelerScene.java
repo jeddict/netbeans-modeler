@@ -19,9 +19,9 @@ import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 
-public abstract class PModelerScene extends AbstractPModelerScene {
+public abstract class PModelerScene<E extends IBaseElement,R extends IRootElement> extends AbstractPModelerScene <E,R> {
 
-    private IRootElement rootElementSpec;
+    private R rootElementSpec;
     protected String id;
     protected String name;
     protected String documentation;
@@ -58,7 +58,7 @@ public abstract class PModelerScene extends AbstractPModelerScene {
      * @return the rootElementSpec
      */
     @Override
-    public IRootElement getRootElementSpec() {
+    public R getRootElementSpec() {
         return rootElementSpec;
     }
 
@@ -66,18 +66,18 @@ public abstract class PModelerScene extends AbstractPModelerScene {
      * @param rootElementSpec the rootElementSpec to set
      */
     @Override
-    public void setRootElementSpec(IRootElement rootElementSpec) {
+    public void setRootElementSpec(R rootElementSpec) {
         this.rootElementSpec = rootElementSpec;
     }
 
     @Override
-    public void setBaseElementSpec(IBaseElement baseElementSpec) {
-        setRootElementSpec((IRootElement) baseElementSpec);
+    public void setBaseElementSpec(E baseElementSpec) {
+        setRootElementSpec((R) baseElementSpec);
     }
 
     @Override
-    public IBaseElement getBaseElementSpec() {
-        return rootElementSpec;
+    public E getBaseElementSpec() {
+        return (E)rootElementSpec;
     }
 
 }

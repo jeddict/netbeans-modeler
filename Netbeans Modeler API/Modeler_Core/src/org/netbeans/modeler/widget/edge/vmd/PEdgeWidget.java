@@ -17,22 +17,21 @@ package org.netbeans.modeler.widget.edge.vmd;
 
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.widget.edge.EdgeWidget;
 import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 
-public abstract class PEdgeWidget extends EdgeWidget implements IPEdgeWidget {
+public abstract class PEdgeWidget<S extends IPModelerScene> extends EdgeWidget implements IPEdgeWidget {
 
     private IColorScheme colorScheme;
     private boolean highlightStatus = false;
 
-    public PEdgeWidget(IModelerScene scene, EdgeWidgetInfo edge) {
-        this(scene, edge, ((IPModelerScene) scene).getColorScheme());
+    public PEdgeWidget(S scene, EdgeWidgetInfo edge) {
+        this(scene, edge,  scene.getColorScheme());
     }
 
-    public PEdgeWidget(IModelerScene scene, EdgeWidgetInfo edge, IColorScheme colorScheme) {
+    public PEdgeWidget(S scene, EdgeWidgetInfo edge, IColorScheme colorScheme) {
         super(scene, edge);
         setAnchorGap(0);
         this.colorScheme = colorScheme;

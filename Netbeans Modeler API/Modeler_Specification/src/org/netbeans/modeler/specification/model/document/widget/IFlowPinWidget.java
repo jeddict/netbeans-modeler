@@ -15,7 +15,9 @@
  */
 package org.netbeans.modeler.specification.model.document.widget;
 
-public interface IFlowPinWidget extends IFlowElementWidget {
+import org.netbeans.modeler.specification.model.document.core.IFlowPin;
+
+public interface IFlowPinWidget<E extends IFlowPin> extends IFlowElementWidget<E> {
 
     public String getName();
 

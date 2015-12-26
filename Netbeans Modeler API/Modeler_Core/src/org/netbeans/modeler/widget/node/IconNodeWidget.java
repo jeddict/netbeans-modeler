@@ -29,7 +29,6 @@ import org.netbeans.modeler.widget.node.image.NodeImageWidget;
  */
 public class IconNodeWidget extends Widget {
 
-    private IModelerScene scene;
 
     /**
      * @param labelWidget the labelWidget to set
@@ -138,18 +137,6 @@ public class IconNodeWidget extends Widget {
         return nodeImageWidget;
     }
 
-    /**
-     * @return the scene
-     */
-    public IModelerScene getModelerScene() {
-        return scene;
-    }
 
-    /**
-     * @param scene the scene to set
-     */
-    public void setModelerScene(IModelerScene scene) {
-        this.scene = scene;
-    }
 
 }

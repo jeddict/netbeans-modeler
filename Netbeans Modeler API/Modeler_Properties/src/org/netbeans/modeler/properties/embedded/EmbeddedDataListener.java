@@ -15,8 +15,6 @@
  */
 package org.netbeans.modeler.properties.embedded;
 
-import java.util.List;
-
 public interface EmbeddedDataListener<T> {
 
     void init();

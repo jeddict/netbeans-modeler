@@ -17,12 +17,13 @@ package org.netbeans.modeler.specification.model.document;
 
 import java.util.Map;
 import org.netbeans.api.visual.anchor.Anchor;
+import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 
-public interface IPModelerScene extends IModelerScene {
+public interface IPModelerScene<E extends IBaseElement,R extends IRootElement> extends IModelerScene<E,R> {
 
     IPinWidget createPinWidget(NodeWidgetInfo node, PinWidgetInfo pin);
 

@@ -55,6 +55,8 @@ import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
+import org.netbeans.modeler.specification.model.document.IRootElement;
+import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
@@ -74,7 +76,7 @@ import org.openide.util.lookup.InstanceContent;
  *
  *
  */
-public abstract class AbstractModelerScene extends GraphScene<NodeWidgetInfo, EdgeWidgetInfo> implements INModelerScene {
+public abstract class AbstractModelerScene<E extends IBaseElement,R extends IRootElement> extends GraphScene<NodeWidgetInfo, EdgeWidgetInfo> implements INModelerScene<E,R> {
 
     private LayerWidget backgroundLayer; //  rectangular selection
     private LayerWidget mainLayer;

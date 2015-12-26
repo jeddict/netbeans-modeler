@@ -30,7 +30,7 @@ import org.netbeans.api.visual.widget.Widget;
 
 public final class InplaceEditorAction<C extends JComponent> extends WidgetAction.LockedAdapter implements InplaceEditorProvider.TypedEditorController {
 
-    private InplaceEditorProvider<C> provider;
+    private final InplaceEditorProvider<C> provider;
     private C editor = null;
     private Widget widget = null;
     private Rectangle rectangle = null;

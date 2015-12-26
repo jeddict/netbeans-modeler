@@ -19,10 +19,10 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 
-public interface NModelerUtil extends IModelerUtil {
+public interface NModelerUtil<S extends IModelerScene> extends IModelerUtil<S> {
 
-    public void dettachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget);
+    public void dettachEdgeSourceAnchor(S scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget);
 
-    public void dettachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget);
+    public void dettachEdgeTargetAnchor(S scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget);
 
 }

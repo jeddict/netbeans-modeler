@@ -147,6 +147,10 @@ public class ModelerFile {
      * @return the modelerVendorSpecification
      */
     public ModelerVendorSpecification getVendorSpecification() {
+        if(modelerVendorSpecification == null){
+            modelerVendorSpecification = new ModelerVendorSpecification();
+            modelerVendorSpecification.setModelerSpecificationDiagramModel(new ModelerDiagramSpecification());
+        }
         return modelerVendorSpecification;
     }
 

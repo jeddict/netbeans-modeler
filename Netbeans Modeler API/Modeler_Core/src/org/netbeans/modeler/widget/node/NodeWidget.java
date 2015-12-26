@@ -23,7 +23,6 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,7 +71,7 @@ import org.w3c.dom.svg.SVGDocument;
  *
  *
  */
-public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget {
+public abstract class NodeWidget<S extends IModelerScene>  extends IconNodeWidget implements INNodeWidget {
 
     public static final int WIDGET_BORDER_PADDING = 4;
     private static final ResizeProvider.ControlPoint[] CIRCLE_RESIZE_BORDER_DISABLE_POINT = new ResizeProvider.ControlPoint[]{ResizeProvider.ControlPoint.TOP_CENTER, ResizeProvider.ControlPoint.CENTER_LEFT};
@@ -84,7 +83,6 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     private ResizeBorder widgetBorder;
 
     private NodeWidgetStatus status;
-//    private static final Border RESIZE_BORDER = BorderFactory.createResizeBorder(4, new Color(242, 132, 0), false);//BorderFactory.createResizeBorder(6,Color.GRAY,true);
     private final NodeWidgetInfo nodeWidgetInfo;
     private boolean activeStatus = true;
     private boolean anchorState = false;
@@ -143,8 +141,8 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         return new Dimension(x, y);
     }
 
-    public NodeWidget(IModelerScene scene, NodeWidgetInfo nodeWidgetInfo) {
-        super((ModelerScene) scene);
+    public NodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
+        super(scene);
         this.setModelerScene(scene);
 
         this.nodeWidgetInfo = nodeWidgetInfo;
@@ -169,11 +167,8 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
 
         this.getModelerScene().getModelerFile().getModelerDiagramEngine().setNodeWidgetAction(this);
 
-        setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
+        this.setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
 
-//        labelManager.showLabel("", LabelManager.LabelType.EDGE);//, edgeLabel.getPosition());
-//        labelManager.hideLabel("");
-//        setLabel(nodeWidgetInfo.getName());
     }
     private LabelManager labelManager;
 
@@ -830,9 +825,6 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
         if (!(border instanceof ResizeBorder)) {
             return getCursor();
         }
-//        if(!isBorderVisible){
-//            return getCursor();
-//        }
 
         Rectangle bounds = getBounds();
         Insets insets = border.getInsets();
@@ -889,7 +881,7 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
     @Override
     public boolean remove(boolean notification) {
         if (notification) {
-            NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Node ?", "Delete Node", NotifyDescriptor.OK_CANCEL_OPTION);
+            NotifyDescriptor d = new NotifyDescriptor.Confirmation(String.format("are you sure you want to delete %s ?", this.getLabel()), String.format("Delete ", this.getLabel()), NotifyDescriptor.OK_CANCEL_OPTION);
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
                 removeNode();
                 return true;
@@ -970,5 +962,23 @@ public abstract class NodeWidget extends IconNodeWidget implements INNodeWidget 
 //                        }
         nodeWidget.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         return new_nodewidget;
+    }
+    
+    
+        private S scene;
+
+    
+        /**
+     * @return the scene
+     */
+    public S getModelerScene() {
+        return scene;
+    }
+
+    /**
+     * @param scene the scene to set
+     */
+    public void setModelerScene(S scene) {
+        this.scene = scene;
     }
 }

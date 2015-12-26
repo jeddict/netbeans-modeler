@@ -23,14 +23,12 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.ResizeProvider;
 import org.netbeans.api.visual.action.WidgetAction;
@@ -41,6 +39,7 @@ import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.border.RoundResizeBorder;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
+import org.netbeans.modeler.core.scene.ModelerScene;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
@@ -55,20 +54,19 @@ import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.node.vmd.internal.AbstractPNodeWidget;
-import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.nodes.AbstractNode;
 
 /**
  *
  *
+ * @param <S>
  */
-public abstract class PNodeWidget extends AbstractPNodeWidget {
+public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNodeWidget {
 
     private PinWidgetInfo internalPinWidgetInfo;
     public static final int WIDGET_BORDER_PADDING = 4;
@@ -135,7 +133,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         return new Dimension(x, y);
     }
 
-    public PNodeWidget(IModelerScene scene, NodeWidgetInfo nodeWidgetInfo) {
+    public PNodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
         super((Scene) scene, ((IPModelerScene) scene).getColorScheme());
         this.setModelerScene(scene);
         this.nodeWidgetInfo = nodeWidgetInfo;
@@ -144,7 +142,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         IModelerDocument modelerDoc = nodeWidgetInfo.getModelerDocument();
         Dimension dimension = new Dimension((int) modelerDoc.getBounds().getWidth().getValue(), (int) modelerDoc.getBounds().getHeight().getValue());
         nodeWidgetInfo.setDimension(dimension);
-        WidgetAction editAction = new InplaceEditorAction<JTextField>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getNodeNameWidget().getActions().addAction(editAction);
         getHeader().getActions().addAction(scene.createObjectHoverAction());
 
@@ -481,7 +479,7 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
     @Override
     public boolean remove(boolean notification) {
         if (notification) {
-            NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Node ?", "Delete Node", NotifyDescriptor.OK_CANCEL_OPTION);
+            NotifyDescriptor d = new NotifyDescriptor.Confirmation(String.format("are you sure you want to delete %s ?", this.getLabel()), String.format("Delete ", this.getLabel()), NotifyDescriptor.OK_CANCEL_OPTION);
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
                 removeNode();
                 return true;
@@ -497,7 +495,6 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         if (!locked) {
             this.setLabel("");
             this.hideLabel();
-//            ((IBaseElementWidget) this).destroy();
             if (((IFlowNodeWidget) this).getFlowElementsContainer() instanceof IModelerSubScene) {
                 IModelerSubScene modelerSubScene = (IModelerSubScene) ((IFlowNodeWidget) this).getFlowElementsContainer();
                 modelerSubScene.deleteBaseElement((IBaseElementWidget) this);
@@ -509,20 +506,20 @@ public abstract class PNodeWidget extends AbstractPNodeWidget {
         }
     }
 
-    private IModelerScene scene;
+    private S scene;
 
     /**
      * @return the scene
      */
     @Override
-    public IModelerScene getModelerScene() {
+    public S getModelerScene() {
         return scene;
     }
 
     /**
      * @param scene the scene to set
      */
-    public void setModelerScene(IModelerScene scene) {
+    public void setModelerScene(S scene) {
         this.scene = scene;
     }
 

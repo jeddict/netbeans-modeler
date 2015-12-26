@@ -24,13 +24,13 @@ import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.AbstractNode;
 
-public interface IEdgeWidget extends IConnectionWidget {
+public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget {
 
     void createVisualPropertySet(ElementPropertySet elementPropertySet);
 
     EdgeWidgetInfo getEdgeWidgetInfo();
 
-    IModelerScene getModelerScene();
+    S getModelerScene();
 
 //    AbstractNode getNode();
     PopupMenuProvider getPopupMenuProvider();
@@ -41,7 +41,7 @@ public interface IEdgeWidget extends IConnectionWidget {
 
     void setLabel(String label);
 
-    void setModelerScene(IModelerScene scene);
+    void setModelerScene(S scene);
 
 //    void setNode(AbstractNode node);
     void showLabel();

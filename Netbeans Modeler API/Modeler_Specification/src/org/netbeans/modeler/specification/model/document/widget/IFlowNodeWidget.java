@@ -18,13 +18,12 @@ package org.netbeans.modeler.specification.model.document.widget;
 import java.util.List;
 import org.netbeans.modeler.specification.model.document.core.IFlowNode;
 
-public interface IFlowNodeWidget<E extends IFlowNode> extends IFlowElementWidget<IFlowNode> {
+public interface IFlowNodeWidget<E extends IFlowNode> extends IFlowElementWidget<E> {
 
     public String getName();
 
     public void setName(String name);
 
-//    public JMenuItem getConvertWidgetSetting();
     public List<? extends IFlowEdgeWidget> getIncommingFlowEdgeWidget();
 
     public List<? extends IFlowEdgeWidget> getOutgoingFlowEdgeWidget();

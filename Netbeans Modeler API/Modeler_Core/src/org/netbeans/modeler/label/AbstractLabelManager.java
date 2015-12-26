@@ -60,9 +60,9 @@ public abstract class AbstractLabelManager implements LabelManager {
 
     private final static BasicStroke ALIGN_STROKE = new BasicStroke(1.0f, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 5.0f, new float[]{6.0f, 3.0f}, 0.0f);
     private final static Border NON_SELECTED_BORDER = BorderFactory.createOpaqueBorder(1, 1, 1, 1);
-    private final static Border SELECTED_BORDER = BorderFactory.createLineBorder(1, new Color(0xFFA400));
-    private Widget connector = null;
-    LabelWidget label;
+//    private final static Border SELECTED_BORDER = BorderFactory.createLineBorder(1, new Color(0xFFA400));
+    private final Widget connector;
+    private LabelWidget label;
     private ILabelConnectionWidget labelConnectionWidget;
     private EdgeLabelMoveSupport labelMoveSupport;
 
@@ -70,6 +70,7 @@ public abstract class AbstractLabelManager implements LabelManager {
      * Creates an AbstractLabelManager and associates it to a connection widget.
      *
      * @param widget
+     * @param label
      */
     public AbstractLabelManager(Widget widget, String label) {
         connector = widget;
@@ -112,10 +113,8 @@ public abstract class AbstractLabelManager implements LabelManager {
 
     public void init(final String name) {
         ObjectScene scene = (ObjectScene) getConnector().getScene();
-//        label = createLabel(name);
 
         labelConnectionWidget = new LabelConnectionWidget(scene, name);
-
         labelMoveSupport = new EdgeLabelMoveSupport(connector);
 
         //Action for LabelWidget
@@ -153,9 +152,7 @@ public abstract class AbstractLabelManager implements LabelManager {
         }
 
         scene.validate();
-
         setDefaultPosition();
-
     }
 
     @Override
@@ -163,13 +160,6 @@ public abstract class AbstractLabelManager implements LabelManager {
         ObjectScene scene = (ObjectScene) getConnector().getScene();
         if (connector instanceof IEdgeWidget) {
             labelMoveSupport.setAnchorLocation(0.5f);
-            /* LabelType.Source/Target
-             ((ConnectionWidget) connector).setConstraint(child,
-             getDefaultAlignment(name, type),
-             getAlignmentDistance(type));
-             labelMoveSupport.setAnchorLocation(getAlignmentPrecent(type));
-             */
-
         } else if (connector instanceof INodeWidget) {
             INodeWidget nodeWidget = (INodeWidget) connector;
             Rectangle rec = nodeWidget.getSceneViewBound();
@@ -247,7 +237,7 @@ public abstract class AbstractLabelManager implements LabelManager {
 
     /**
      * The createLineWidget method is used to create a line widget that can be
-     * used to connect a label to the associated connnection widget.
+     * used to connect a label to the associated connection widget.
      *
      * @param scene The scene that will own the line widget.
      * @return The line widget.
@@ -277,16 +267,13 @@ public abstract class AbstractLabelManager implements LabelManager {
 
         LabelWidget labelWidget;
 
-//        private Color previousColor = Color.BLACK;
         public LabelConnectionWidget(Scene scene, String name) {
             super(scene);
-//            labelWidget = new LabelWidget(scene, name);
-
             labelWidget = new MultilineEditableCompartmentWidget(scene, name, null,
                     this, "getResourcePath()", name);
             labelWidget.setAlignment(LabelWidget.Alignment.CENTER);
             label = labelWidget;
-            WidgetAction action = new InplaceEditorAction<JScrollPane>(new TextPaneInplaceEditorProvider(new LabelInplaceEditor(connector), null));
+            WidgetAction action = new InplaceEditorAction<>(new TextPaneInplaceEditorProvider(new LabelInplaceEditor(connector), null));
             WidgetAction.Chain actions = labelWidget.createActions(DesignerTools.SELECT);
             actions.addAction(action);
             actions.addAction(new WidgetAction.Adapter() {

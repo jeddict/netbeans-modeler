@@ -21,25 +21,20 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 
-public interface PModelerUtil extends IModelerUtil {
+public interface PModelerUtil<S extends IModelerScene> extends IModelerUtil<S> {
 
-    public IPinWidget attachPinWidget(IModelerScene scene, INodeWidget nodeWidget, PinWidgetInfo widgetInfo);
+    public IPinWidget attachPinWidget(S scene, INodeWidget nodeWidget, PinWidgetInfo widgetInfo);
 
-    public void dettachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget sourcePinWidget);
+    public void dettachEdgeSourceAnchor(S scene, IEdgeWidget edgeWidget, IPinWidget sourcePinWidget);
 
-    public void dettachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget targetPinWidget);
+    public void dettachEdgeTargetAnchor(S scene, IEdgeWidget edgeWidget, IPinWidget targetPinWidget);
 
-    public void attachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget sourcePinWidget);
-//
-////    public void attachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeidget);
+    public void attachEdgeSourceAnchor(S scene, IEdgeWidget edgeWidget, IPinWidget sourcePinWidget);
 
-    public void attachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget targetPinWidget);
-//
-////    public void attachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget);
+    public void attachEdgeTargetAnchor(S scene, IEdgeWidget edgeWidget, IPinWidget targetPinWidget);
 
     PinWidgetInfo getEdgeSourcePinWidget(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, IEdgeWidget edgeWidget);
 
     PinWidgetInfo getEdgeTargetPinWidget(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, IEdgeWidget edgeWidget);
 
-//    IPinWidget generatedPinWidget(IPNodeWidget nodeWidget);
 }

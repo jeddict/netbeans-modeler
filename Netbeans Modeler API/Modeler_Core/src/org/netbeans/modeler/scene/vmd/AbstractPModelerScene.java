@@ -60,6 +60,8 @@ import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
+import org.netbeans.modeler.specification.model.document.IRootElement;
+import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
@@ -86,7 +88,7 @@ import org.openide.util.lookup.InstanceContent;
  *
  *
  */
-public abstract class AbstractPModelerScene extends GraphPinScene<NodeWidgetInfo, EdgeWidgetInfo, PinWidgetInfo> implements IPModelerScene {
+public abstract class AbstractPModelerScene<E extends IBaseElement,R extends IRootElement> extends GraphPinScene<NodeWidgetInfo, EdgeWidgetInfo, PinWidgetInfo> implements IPModelerScene<E,R> {
 
     private LayerWidget backgroundLayer; //  rectangular selection
     private LayerWidget mainLayer;

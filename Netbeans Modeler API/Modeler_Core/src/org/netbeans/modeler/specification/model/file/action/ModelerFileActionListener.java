@@ -27,6 +27,7 @@ import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerCore;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
+import org.netbeans.modeler.core.engine.ModelerDiagramEngine;
 import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.specification.Vendor;
 import org.netbeans.modeler.specification.annotaton.ModelerConfig;
@@ -228,7 +229,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
                 modelerFile.getVendorSpecification().createElementConfig(vendorConfig.id(), modelerConfig.element());//130 sec
 //both lines A & B are parallel now
                 // #B
-                modelerFile.getVendorSpecification().getModelerDiagramModel().init(modelerFile);//load empty configuration //override it in loadModelerFile() if already have //depends on ModelerScene,ElementConfigFactory
+//                modelerFile.getVendorSpecification().getModelerDiagramModel().init(modelerFile);//load empty configuration //override it in loadModelerFile() if already have //depends on ModelerScene,ElementConfigFactory
                 System.out.println("E2 B3B Total time : " + (new Date().getTime() - st) + " sec");
                 st = new Date().getTime();
                 cb3.await();
@@ -270,7 +271,12 @@ public abstract class ModelerFileActionListener implements ActionListener {
                 long st = new Date().getTime();
                 
                 Class<? extends IModelerDiagramEngine> modelerDiagramEngine = diagramModelConfig.modelerDiagramEngine();
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerDiagramEngine(modelerDiagramEngine.newInstance());
+                if (modelerDiagramEngine != IModelerDiagramEngine.class) {
+                    modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerDiagramEngine(modelerDiagramEngine.newInstance());
+                } else {
+                    modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerDiagramEngine(new ModelerDiagramEngine());
+                }
+                
                 modelerFile.getModelerDiagramEngine().init(modelerFile);
                 modelerFile.getModelerDiagramEngine().setModelerSceneAction();
                 

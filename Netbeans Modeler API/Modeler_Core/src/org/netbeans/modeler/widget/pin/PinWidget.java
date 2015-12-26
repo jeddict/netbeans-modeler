@@ -17,8 +17,6 @@ package org.netbeans.modeler.widget.pin;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,41 +28,34 @@ import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.vmd.internal.AbstractPinWidget;
-import org.netbeans.modeler.widget.node.vmd.internal.PFactory;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Node;
-import org.openide.nodes.NodeOperation;
-import org.openide.util.Exceptions;
 
-public abstract class PinWidget extends AbstractPinWidget {
+public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWidget {
 
     private IPNodeWidget nodeWidget;
     private PinWidgetInfo pinWidgetInfo;
     private boolean activeStatus = true;
     private boolean highlightStatus = false;
 
-    public PinWidget(IModelerScene scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
-        super((Scene) scene, ((IPModelerScene) scene).getColorScheme());
+    public PinWidget(S scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
+        super((Scene) scene,  scene.getColorScheme());
         this.setModelerScene(scene);
         this.pinWidgetInfo = pinWidgetInfo;
         this.nodeWidget = nodeWidget;
-        WidgetAction editAction = new InplaceEditorAction<JTextField>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getPinNameWidget().getActions().addAction(editAction);
         scene.getModelerFile().getModelerDiagramEngine().setPinWidgetAction(this);
         this.setProperties(pinWidgetInfo.getName(), null);
@@ -79,25 +70,21 @@ public abstract class PinWidget extends AbstractPinWidget {
     public String getLabel() {
         return this.getPinName();
     }
-    private IPModelerScene scene;
+    private S scene;
 
     /**
      * @return the scene
      */
     @Override
-    public IModelerScene getModelerScene() {
+    public S getModelerScene() {
         return scene;
     }
 
     /**
      * @param scene the scene to set
      */
-    public void setModelerScene(IModelerScene scene) {
-        if (scene instanceof IPModelerScene) {
-            this.scene = (IPModelerScene) scene;
-        } else {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+    public void setModelerScene(S scene) {
+         this.scene = scene;
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {

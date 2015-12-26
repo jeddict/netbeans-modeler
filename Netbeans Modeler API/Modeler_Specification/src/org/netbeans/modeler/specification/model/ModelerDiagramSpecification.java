@@ -26,7 +26,7 @@ import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 
-public abstract class ModelerDiagramSpecification {
+public class ModelerDiagramSpecification {
 
     private DiagramModel diagramModel;
     private IModelerUtil modelerUtil;
@@ -40,8 +40,6 @@ public abstract class ModelerDiagramSpecification {
 
     private IExportManager exportManager;
     private IRelationValidator relationValidator;
-
-    public abstract void init(ModelerFile modelerFile);//Load Default Value Like Definition , RootElement , Design , will be raplaced if XML Content exist
 
     /**
      * @return the modelerScene

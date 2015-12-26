@@ -19,11 +19,11 @@ import java.io.File;
 import java.util.List;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 
-public interface IExportManager {
+public interface IExportManager<S extends IModelerScene> {
 
     List<FileType> getExportType();
 
-    void export(IModelerScene scene, FileType format, File file);
+    void export(S scene, FileType format, File file);
 
     class FileType {
 

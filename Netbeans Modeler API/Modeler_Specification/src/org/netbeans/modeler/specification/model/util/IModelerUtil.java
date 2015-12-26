@@ -27,7 +27,7 @@ import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 
-public interface IModelerUtil {
+public interface IModelerUtil<S extends IModelerScene> {
     
     void init();
 
@@ -39,9 +39,9 @@ public interface IModelerUtil {
 
     Anchor getAnchor(INodeWidget nodeWidget);
 
-    IEdgeWidget attachEdgeWidget(IModelerScene scene, EdgeWidgetInfo widgetInfo);
+    IEdgeWidget attachEdgeWidget(S scene, EdgeWidgetInfo widgetInfo);
 
-    INodeWidget attachNodeWidget(IModelerScene scene, NodeWidgetInfo widgetInfo);
+    INodeWidget attachNodeWidget(S scene, NodeWidgetInfo widgetInfo);
 
     String getEdgeType(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, String connectionContextToolId);
 
@@ -49,7 +49,7 @@ public interface IModelerUtil {
 
     void transformNode(IFlowNodeWidget flowNodeWidget, IModelerDocument document);
 
-    void attachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget);
+    void attachEdgeSourceAnchor(S scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget);
 
-    void attachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget);
+    void attachEdgeTargetAnchor(S scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget);
 }

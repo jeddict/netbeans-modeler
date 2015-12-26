@@ -16,23 +16,12 @@
 package org.netbeans.modeler.specification.model.document.widget;
 
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.core.IFlowElement;
 
-public interface IFlowElementWidget<E extends IFlowElement> extends IBaseElementWidget<IFlowElement> {
+public interface IFlowElementWidget<E extends IFlowElement> extends IBaseElementWidget<E> {
 
     public Widget getFlowElementsContainer();
 
     public void setFlowElementsContainer(Widget flowElementsContainer);
-
-    /**
-     * @return the scene
-     */
-    public IModelerScene getModelerScene();
-
-    /**
-     * @param scene the scene to set
-     */
-    public void setModelerScene(IModelerScene scene);
 
 }

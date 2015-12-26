@@ -19,8 +19,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +31,6 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.label.BasicLabelManager;
 import org.netbeans.modeler.label.LabelManager;
@@ -50,18 +47,14 @@ import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Node;
-import org.openide.nodes.NodeOperation;
-import org.openide.util.Exceptions;
 
 /**
  *
  *
  */
-public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget {
+public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidget implements IEdgeWidget<S> {
 
-    private IModelerScene scene;
+    private S scene;
     private LabelManager labelManager;
     private EdgeWidgetInfo edgeWidgetInfo;
     private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
@@ -99,7 +92,7 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
 
     //private static WidgetAction deleteAction = new KeyEventLoggerAction();
 //    private WidgetAction editorAction = ActionFactory.createInplaceEditorAction(new LabelTextFieldEditor());
-    public EdgeWidget(IModelerScene scene, EdgeWidgetInfo edge) {
+    public EdgeWidget(S scene, EdgeWidgetInfo edge) {
         super((Scene) scene);
         this.setModelerScene(scene);
 
@@ -156,7 +149,7 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
      * @return the scene
      */
     @Override
-    public IModelerScene getModelerScene() {
+    public S getModelerScene() {
         return scene;
     }
 
@@ -164,7 +157,7 @@ public abstract class EdgeWidget extends ConnectionWidget implements IEdgeWidget
      * @param scene the scene to set
      */
     @Override
-    public void setModelerScene(IModelerScene scene) {
+    public void setModelerScene(S scene) {
         this.scene = scene;
     }
 

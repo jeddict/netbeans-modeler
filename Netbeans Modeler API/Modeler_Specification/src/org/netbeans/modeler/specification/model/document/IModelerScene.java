@@ -23,6 +23,7 @@ import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
@@ -33,95 +34,93 @@ import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 
-public interface IModelerScene extends IBaseElementWidget, IObjectScene {
+public interface IModelerScene<E extends IBaseElement,R extends IRootElement>  extends IBaseElementWidget<E>, IObjectScene {
 
-    public String getName();
+     String getName();
 
-    public void setName(String name);
+     void setName(String name);
 
-    public IRootElement getRootElementSpec();
+     R getRootElementSpec();
 
-    public void setRootElementSpec(IRootElement rootElementSpec);
+     void setRootElementSpec(R rootElementSpec);
 
     /**
      * To move INodeWidget from IModelerSubScene to IModelerScene
      *
      * @param baseElementWidget
      */
-    public void addBaseElement(IBaseElementWidget baseElementWidget);
+     void addBaseElement(IBaseElementWidget baseElementWidget);
 
     /**
      * To move INodeWidget from IModelerScene to IModelerSubScene
      *
      * @param baseElementWidget
      */
-    public void removeBaseElement(IBaseElementWidget baseElementWidget);
+     void removeBaseElement(IBaseElementWidget baseElementWidget);
 
     /**
      * To create INodeWidget in IModelerScene
      *
      * @param baseElementWidget
      */
-    public void createBaseElement(IBaseElementWidget baseElementWidget);
+     void createBaseElement(IBaseElementWidget baseElementWidget);
 
     /**
      * To delete INodeWidget in IModelerScene
      *
      * @param baseElementWidget
      */
-    public void deleteBaseElement(IBaseElementWidget baseElementWidget);
+     void deleteBaseElement(IBaseElementWidget baseElementWidget);
 
-    public IBaseElementWidget findBaseElement(String id);
+     List<IBaseElementWidget> getBaseElements();
 
-    public List<IBaseElementWidget> getBaseElements();
+     IBaseElementWidget getBaseElement(String id);
 
-    public IBaseElementWidget getBaseElement(String id);
+     ModelerFile getModelerFile();
 
-    public ModelerFile getModelerFile();
+     void setModelerFile(ModelerFile modelerFile);
 
-    public void setModelerFile(ModelerFile modelerFile);
+     ContextPaletteManager getContextPaletteManager();
 
-    public ContextPaletteManager getContextPaletteManager();
+     IModelerPanel getModelerPanelTopComponent();
 
-    public IModelerPanel getModelerPanelTopComponent();
+     void setModelerPanelTopComponent(IModelerPanel topComponent);
 
-    public void setModelerPanelTopComponent(IModelerPanel topComponent);
+     LayerWidget getConnectionLayer();
 
-    public LayerWidget getConnectionLayer();
+     LayerWidget getInterractionLayer();
 
-    public LayerWidget getInterractionLayer();
+     LayerWidget getMainLayer();
 
-    public LayerWidget getMainLayer();
+     LayerWidget getBackgroundLayer();
 
-    public LayerWidget getBackgroundLayer();
-
-    public LayerWidget getBoundaryWidgetLayer();
+     LayerWidget getBoundaryWidgetLayer();
 
     PopupMenuProvider getPopupMenuProvider();
 
-    public void manageLayerWidget();
+    void manageLayerWidget();
 
-    public Router getRouter();
+    Router getRouter();
 
-    public INodeWidget getValidNodeWidget();
+    INodeWidget getValidNodeWidget();
 
-    public void setValidNodeWidget(INodeWidget validNodeWidget);
+    void setValidNodeWidget(INodeWidget validNodeWidget);
 
-    public INodeWidget getInvalidNodeWidget();
+    INodeWidget getInvalidNodeWidget();
 
-    public void setInvalidNodeWidget(INodeWidget invalidNodeWidget);
+    void setInvalidNodeWidget(INodeWidget invalidNodeWidget);
 
-    public INodeWidget createNodeWidget(NodeWidgetInfo node);
+    INodeWidget createNodeWidget(NodeWidgetInfo node);
 
-    public IEdgeWidget createEdgeWidget(EdgeWidgetInfo edge);
+     IEdgeWidget createEdgeWidget(EdgeWidgetInfo edge);
 
     void deleteNodeWidget(INodeWidget nodeWidget);
 
     void deleteEdgeWidget(IEdgeWidget edgeWidget);
 
-    public boolean isAlignSupport();
+    boolean isAlignSupport();
 
-    public void setAlignSupport(boolean alignSupport);
+    void setAlignSupport(boolean alignSupport);
 
     LayerWidget getLabelLayer();
 
@@ -132,7 +131,7 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
     /* GraphScene & GraphPinScene */
     boolean isNode(Object object);
 
-    public boolean isEdge(Object object);
+    boolean isEdge(Object object);
 
     void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
 
@@ -146,15 +145,13 @@ public interface IModelerScene extends IBaseElementWidget, IObjectScene {
 
     Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
 
-    public void autoLayout();
+    void autoLayout();
 
     //custom added
-    @Override
+    
     void showProperties();
 
-    @Override
     void exploreProperties();
 
-    @Override
     void refreshProperties();
 }

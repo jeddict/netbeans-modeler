@@ -70,6 +70,8 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     private IColorScheme colorScheme;
 
     private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<Anchor, Anchor>();
+    
+//    private boolean loaded;
 
     /**
      * Creates a node widget with a specific color scheme.
@@ -475,6 +477,20 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     public void setPinCategoryWidgets(HashMap<String, IPinSeperatorWidget> pinCategoryWidgets) {
         this.pinCategoryWidgets = pinCategoryWidgets;
     }
+
+//    /**
+//     * @return the loaded
+//     */
+//   public boolean isLoaded() {
+//        return loaded;
+//    }
+//
+//    /**
+//     * @param loaded the loaded to set
+//     */
+//   protected void setLoaded(boolean loaded) {
+//        this.loaded = loaded;
+//    }
 
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {
 

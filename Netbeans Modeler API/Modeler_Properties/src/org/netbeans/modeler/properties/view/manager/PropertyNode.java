@@ -24,16 +24,16 @@ import org.openide.nodes.Node;
 import org.openide.nodes.Sheet;
 import org.openide.util.Lookup;
 
-public abstract class PropertyNode extends AbstractNode {
+public abstract class PropertyNode<S extends IModelerScene> extends AbstractNode {
 
-    private IModelerScene modelerScene;
+    private S modelerScene;
 
-    public PropertyNode(IModelerScene modelerScene, Children children, Lookup lookup) {
+    public PropertyNode(S modelerScene, Children children, Lookup lookup) {
         super(children, lookup);
         this.modelerScene = modelerScene;
     }
 
-    public PropertyNode(IModelerScene modelerScene, Children children) {
+    public PropertyNode(S modelerScene, Children children) {
         super(children);
         this.modelerScene = modelerScene;
     }
@@ -69,7 +69,7 @@ public abstract class PropertyNode extends AbstractNode {
     /**
      * @return the modelerScene
      */
-    public IModelerScene getModelerScene() {
+    public S getModelerScene() {
         return modelerScene;
     }
 }

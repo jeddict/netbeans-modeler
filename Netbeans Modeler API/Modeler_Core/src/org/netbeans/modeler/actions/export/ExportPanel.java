@@ -86,12 +86,12 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
 
         IExportManager exportManager = scene.getModelerFile().getVendorSpecification().getModelerDiagramModel().getExportManager();
         DefaultComboBoxModel boxModel = new DefaultComboBoxModel(
-                new Object[]{ExportType.png, ExportType.jpg});
+                new ExportType[]{ExportType.png, ExportType.jpg});
         imageTypeComboBox.setModel(boxModel);
         if (exportManager != null) {
-            for (FileType file : exportManager.getExportType()) {
+            exportManager.getExportType().stream().forEach((file) -> {
                 boxModel.addElement(file);
-            }
+            });
         }
         manageVisibilityState();
 
