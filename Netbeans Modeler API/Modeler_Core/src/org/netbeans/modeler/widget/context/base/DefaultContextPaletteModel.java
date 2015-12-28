@@ -15,10 +15,9 @@
  */
 package org.netbeans.modeler.widget.context.base;
 
+import java.util.ArrayList;
 import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
-import java.util.ArrayList;
-import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.IWidget;
 
 /**

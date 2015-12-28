@@ -39,8 +39,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.component.IModelerPanel;
-import org.netbeans.modeler.component.ModelerPanelTopComponent;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.scene.AbstractModelerScene;
 import org.netbeans.modeler.tool.DesignerTools;

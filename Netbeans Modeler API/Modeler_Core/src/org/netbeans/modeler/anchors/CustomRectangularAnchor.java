@@ -28,7 +28,7 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
-import org.netbeans.modeler.widget.node.image.NodeImageWidget;
+import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 import org.netbeans.modeler.widget.node.image.svg.ResizeType;
 import test.ClosestSegment;
 import test.GeometryClosestPointManager;
@@ -184,8 +184,8 @@ public class CustomRectangularAnchor extends Anchor {
         }
 
         Point movePo;
-        if (widget instanceof NodeImageWidget) {
-            NodeImageWidget imageWidget = (NodeImageWidget) widget;
+        if (widget instanceof SvgNodeWidget) {
+            SvgNodeWidget imageWidget = (SvgNodeWidget) widget;
 
             if (imageWidget.getTransform() != null) {
                 Shape shape;

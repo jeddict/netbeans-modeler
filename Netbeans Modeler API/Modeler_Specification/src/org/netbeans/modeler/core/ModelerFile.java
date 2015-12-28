@@ -29,9 +29,7 @@ import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.specification.ModelerVendorSpecification;
 import org.netbeans.modeler.specification.model.ModelerDiagramSpecification;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
-import org.netbeans.modeler.specification.model.document.IDiagramElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
-import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.specification.model.util.NModelerUtil;
 import org.netbeans.modeler.specification.model.util.PModelerUtil;
@@ -207,19 +205,6 @@ public class ModelerFile {
         return this.getVendorSpecification().getModelerDiagramModel().getDefinitionElement();
     }
 
-    /**
-     * @return the diagramElement
-     */
-    public IDiagramElement getDiagramElement() {
-        return this.getVendorSpecification().getModelerDiagramModel().getDiagramElement();
-    }
-
-    /**
-     * @return the rootElement
-     */
-    public IRootElement getRootElement() {
-        return this.getVendorSpecification().getModelerDiagramModel().getRootElement();
-    }
 
     public ModelerDiagramSpecification getModelerDiagramModel() {
         return this.getVendorSpecification().getModelerDiagramModel();

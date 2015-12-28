@@ -17,7 +17,6 @@ package org.netbeans.modeler.widget.node.vmd.internal;
 
 import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import org.netbeans.api.visual.border.Border;

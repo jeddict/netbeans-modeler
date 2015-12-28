@@ -52,7 +52,7 @@ import org.openide.util.Exceptions;
  */
 public class CustomAcceptAction implements AcceptProvider {
 
-    IModelerScene scene;
+    private final IModelerScene scene;
 
     public CustomAcceptAction(IModelerScene scene) {
         this.scene = scene;
@@ -61,7 +61,6 @@ public class CustomAcceptAction implements AcceptProvider {
     @Override
     public ConnectorState isAcceptable(Widget widget, Point point, Transferable transferable) {
         ConnectorState retVal = ConnectorState.ACCEPT;
-//((MoveDropTargetDropEvent)transferable).
         if (isWidgetMove(transferable)) {
             Widget[] target = new Widget[]{getWidget(transferable)};
             for (Widget curWidget : target) {
@@ -139,7 +138,7 @@ public class CustomAcceptAction implements AcceptProvider {
                     subProcessWidget.removeBaseElementElement(newNodeWidget);
                     scene.addBaseElement(newNodeWidget);
 
-                    IRootElement rootElementSpec = scene.getRootElementSpec();
+                    IRootElement rootElementSpec = (IRootElement)scene.getBaseElementSpec();
                     IContainerElement subProcessSpec = (IContainerElement) subProcessWidget.getBaseElementSpec();
                     IBaseElement baseElementSpec = newNodeWidget.getBaseElementSpec();
 

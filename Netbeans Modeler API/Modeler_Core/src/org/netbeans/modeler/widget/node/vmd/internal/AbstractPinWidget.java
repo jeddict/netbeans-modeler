@@ -32,7 +32,7 @@ import org.netbeans.modeler.widget.pin.IPinWidget;
 public abstract class AbstractPinWidget extends Widget implements IPinWidget {
 
     private IColorScheme colorScheme;
-    private ImageWidget imageWidget;
+    private AdvanceImageWidget imageWidget;
     private LabelWidget nameWidget;
     private VMDGlyphSetWidget glyphsWidget;
     private PNodeAnchor anchor;
@@ -50,7 +50,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
 
         setLayout(LayoutFactory.createHorizontalFlowLayout(LayoutFactory.SerialAlignment.CENTER, 8));
 
-        addChild(imageWidget = new ImageWidget(scene));
+        addChild(imageWidget = new AdvanceImageWidget(scene));
         addChild(nameWidget = new LabelWidget(scene));
         addChild(glyphsWidget = new VMDGlyphSetWidget(scene));
 
@@ -63,9 +63,25 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      *
      * @param image the image
      */
-    public void setPinImage(Image image) {  // method added by gaurav gupta
+    public void setImage(Image image) {
         getImageWidget().setImage(image);
-        revalidate();
+    }
+    
+    
+    /**
+     * @return the errorState
+     */
+    @Override
+    public boolean isErrorState() {
+        return getImageWidget().isErrorState();
+    }
+
+    /**
+     * @param state the errorState to set
+     */
+    @Override
+    public void setErrorState(boolean state) {
+       getImageWidget().setErrorState(state);
     }
 
     /**
@@ -150,7 +166,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     /**
      * @return the imageWidget
      */
-    public ImageWidget getImageWidget() {
+    public AdvanceImageWidget getImageWidget() {
         return imageWidget;
     }
 

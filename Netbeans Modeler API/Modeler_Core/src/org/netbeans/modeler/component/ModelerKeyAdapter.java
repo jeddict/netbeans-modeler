@@ -17,8 +17,6 @@ package org.netbeans.modeler.component;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
-import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 

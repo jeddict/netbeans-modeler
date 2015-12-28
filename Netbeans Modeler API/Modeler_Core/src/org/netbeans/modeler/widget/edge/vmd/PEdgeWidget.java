@@ -28,7 +28,7 @@ public abstract class PEdgeWidget<S extends IPModelerScene> extends EdgeWidget i
     private boolean highlightStatus = false;
 
     public PEdgeWidget(S scene, EdgeWidgetInfo edge) {
-        this(scene, edge,  scene.getColorScheme());
+        this(scene, edge, scene.getColorScheme());
     }
 
     public PEdgeWidget(S scene, EdgeWidgetInfo edge, IColorScheme colorScheme) {

@@ -15,12 +15,11 @@
  */
 package org.netbeans.modeler.provider.connection.controlpoint;
 
-import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.action.MoveControlPointProvider;
-
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import org.netbeans.api.visual.action.MoveControlPointProvider;
+import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.modeler.specification.model.document.widget.IArtifactEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;

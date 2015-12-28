@@ -15,12 +15,11 @@
  */
 package org.netbeans.modeler.provider.node.move;
 
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import org.netbeans.api.visual.action.AlignWithWidgetCollector;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.api.visual.action.AlignWithWidgetCollector;
-
-import java.awt.*;
-import java.util.ArrayList;
 
 public final class SingleLayerAlignWithWidgetCollector implements AlignWithWidgetCollector {
 

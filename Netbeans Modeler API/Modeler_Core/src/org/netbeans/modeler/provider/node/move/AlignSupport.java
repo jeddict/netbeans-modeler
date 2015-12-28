@@ -43,16 +43,16 @@
  */
 package org.netbeans.modeler.provider.node.move;
 
-import org.netbeans.api.visual.action.AlignWithWidgetCollector;
-import org.netbeans.api.visual.action.AlignWithMoveDecorator;
-import org.netbeans.api.visual.widget.LayerWidget;
-import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.widget.Widget;
-
-import java.awt.*;
-import java.util.Collection;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import org.netbeans.api.visual.action.AlignWithMoveDecorator;
+import org.netbeans.api.visual.action.AlignWithWidgetCollector;
+import org.netbeans.api.visual.widget.ConnectionWidget;
+import org.netbeans.api.visual.widget.LayerWidget;
+import org.netbeans.api.visual.widget.Widget;
 
 /**
  * @author David Kaspar Unmodified file

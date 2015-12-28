@@ -21,7 +21,6 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
-import org.openide.windows.TopComponent;
 
 /**
  *

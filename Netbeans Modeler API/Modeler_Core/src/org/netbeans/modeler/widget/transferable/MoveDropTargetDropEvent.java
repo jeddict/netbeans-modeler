@@ -1,6 +1,5 @@
 package org.netbeans.modeler.widget.transferable;
 
-import org.netbeans.modeler.widget.transferable.MoveWidgetTransferable;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

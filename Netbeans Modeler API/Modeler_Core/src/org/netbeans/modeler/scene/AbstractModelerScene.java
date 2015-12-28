@@ -76,7 +76,7 @@ import org.openide.util.lookup.InstanceContent;
  *
  *
  */
-public abstract class AbstractModelerScene<E extends IBaseElement,R extends IRootElement> extends GraphScene<NodeWidgetInfo, EdgeWidgetInfo> implements INModelerScene<E,R> {
+public abstract class AbstractModelerScene<E extends IRootElement> extends GraphScene<NodeWidgetInfo, EdgeWidgetInfo> implements INModelerScene<E> {
 
     private LayerWidget backgroundLayer; //  rectangular selection
     private LayerWidget mainLayer;
@@ -259,6 +259,7 @@ public abstract class AbstractModelerScene<E extends IBaseElement,R extends IRoo
     public LayerWidget getMainLayer() {
         return mainLayer;
     }
+
     @Override
     public void paintChildren() {
         Object anti = getGraphics().getRenderingHint(RenderingHints.KEY_ANTIALIASING);

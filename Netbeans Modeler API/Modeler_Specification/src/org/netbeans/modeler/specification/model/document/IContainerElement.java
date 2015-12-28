@@ -18,8 +18,6 @@ package org.netbeans.modeler.specification.model.document;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 
 public interface IContainerElement extends IBaseElement {
-//    public IDefinitionElement getDefinitionElement();
-//    public void setDefinitionElement(IDefinitionElement definitionElement);
 
     public void removeBaseElement(IBaseElement baseElement_In);
 

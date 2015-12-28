@@ -41,7 +41,7 @@ public final class AlignStrategyProvider extends AlignSupport implements MoveStr
         widget.setForeground(new Color(120, 120, 150));
         return widget;
     } // ActionFactory.createDefaultAlignWithMoveDecorator()
-    ;
+            ;
 
     public AlignStrategyProvider(IModelerScene scene) {
         super(new SingleLayerAlignWithWidgetCollector(scene.getMainLayer(), true), scene.getInterractionLayer(), ALIGN_WITH_MOVE_DECORATOR_DEFAULT);

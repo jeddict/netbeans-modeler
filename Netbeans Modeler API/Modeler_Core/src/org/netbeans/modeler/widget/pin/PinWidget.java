@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Scene;
@@ -51,7 +50,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     private boolean highlightStatus = false;
 
     public PinWidget(S scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
-        super((Scene) scene,  scene.getColorScheme());
+        super((Scene) scene, scene.getColorScheme());
         this.setModelerScene(scene);
         this.pinWidgetInfo = pinWidgetInfo;
         this.nodeWidget = nodeWidget;
@@ -84,7 +83,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
      * @param scene the scene to set
      */
     public void setModelerScene(S scene) {
-         this.scene = scene;
+        this.scene = scene;
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {

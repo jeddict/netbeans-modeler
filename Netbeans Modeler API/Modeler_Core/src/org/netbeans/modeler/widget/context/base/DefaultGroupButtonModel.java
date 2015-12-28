@@ -15,11 +15,11 @@
  */
 package org.netbeans.modeler.widget.context.base;
 
-import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
 import java.awt.Image;
 import java.util.ArrayList;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.modeler.core.scene.ModelerScene;
+import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
 
 public class DefaultGroupButtonModel extends DefaultPaletteButtonModel {
 

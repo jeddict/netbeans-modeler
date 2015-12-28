@@ -30,7 +30,7 @@ import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 //import org.netbeans.modules.visual.border.ResizeBorder;
 
-public interface INodeWidget extends IWidget {
+public interface INodeWidget extends IWidget , WidgetStateHandler {
 
     public static final Border DEFAULT_BORDER = BorderFactory.createEmptyBorder(0);
 

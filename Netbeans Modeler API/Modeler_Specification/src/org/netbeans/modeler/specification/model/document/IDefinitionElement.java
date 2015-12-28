@@ -15,6 +15,26 @@
  */
 package org.netbeans.modeler.specification.model.document;
 
+/**
+ * IDefinitionElement contains multiple IRootElement (e.g jBatchSuite , JBMPN (subprocess in process) ) 
+ * IRootElement contains IBaseElement children
+ * <definition-element>
+ * <root-element>
+ * <child-element>...</child-element><child-element>...</child-element><child-element>...</child-element>
+ * <diagram-element>...</diagram-element>
+ * </root-element>
+ * <root-element>
+ * <child-element>...</child-element><child-element>...</child-element><child-element>...</child-element>
+ * <diagram-element>...</diagram-element>
+ * </root-element>
+ * <root-element>
+ * <child-element>...</child-element><child-element>...</child-element><child-element>...</child-element>
+ * <diagram-element>...</diagram-element>
+ * </root-element>
+ * </definition-element>
+ *
+ * @author Gaurav Gupta
+ */
 public interface IDefinitionElement {
 
     /**

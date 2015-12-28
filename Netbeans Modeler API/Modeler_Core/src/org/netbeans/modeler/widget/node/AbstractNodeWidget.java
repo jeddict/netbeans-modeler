@@ -21,14 +21,13 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
-import org.netbeans.modeler.widget.node.image.NodeImageWidget;
+import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 
 /**
  *
  *
  */
-public class IconNodeWidget extends Widget {
-
+public abstract class AbstractNodeWidget extends Widget {
 
     /**
      * @param labelWidget the labelWidget to set
@@ -50,15 +49,14 @@ public class IconNodeWidget extends Widget {
 
     }
 
-    private NodeImageWidget nodeImageWidget;
-//    private LabelWidget labelWidget;
+    private SvgNodeWidget nodeImageWidget;
 
     /**
      * Creates an icon node widget with bottom-center orientation.
      *
      * @param scene the scene
      */
-    public IconNodeWidget(IModelerScene scene) {
+    public AbstractNodeWidget(IModelerScene scene) {
         this(scene, TextOrientation.BOTTOM_CENTER);
     }
 
@@ -68,7 +66,7 @@ public class IconNodeWidget extends Widget {
      * @param scene the scene
      * @param orientation the text orientation
      */
-    public IconNodeWidget(IModelerScene scene, TextOrientation orientation) {
+    public AbstractNodeWidget(IModelerScene scene, TextOrientation orientation) {
         super((Scene) scene);
         LookFeel lookFeel = getScene().getLookFeel();
 
@@ -105,7 +103,7 @@ public class IconNodeWidget extends Widget {
      *
      * @param image the image
      */
-    public final void setNodeImageWidget(NodeImageWidget nodeImageWidget) {
+    public final void setNodeImageWidget(SvgNodeWidget nodeImageWidget) {
         this.nodeImageWidget = nodeImageWidget;
         addChild(nodeImageWidget);
 
@@ -133,10 +131,8 @@ public class IconNodeWidget extends Widget {
      *
      * @return the image widget
      */
-    public final NodeImageWidget getNodeImageWidget() {
+    public final SvgNodeWidget getNodeImageWidget() {
         return nodeImageWidget;
     }
-
-
 
 }

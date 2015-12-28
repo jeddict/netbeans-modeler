@@ -16,12 +16,10 @@
 package org.netbeans.modeler.widget.context.action;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Point;
 import org.netbeans.api.visual.action.ConnectDecorator;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.anchor.AnchorFactory;
-import org.netbeans.api.visual.anchor.AnchorShape;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;

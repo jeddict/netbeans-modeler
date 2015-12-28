@@ -56,7 +56,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     /*__________________________________________VMDNodeWidget Impl Start___________________________*/
     private Widget header;
     private ImageWidget minimizeWidget;
-    private ImageWidget imageWidget;
+    private AdvanceImageWidget imageWidget;
     private LabelWidget nameWidget;
     private LabelWidget typeWidget;
     private VMDGlyphSetWidget glyphSetWidget;
@@ -70,9 +70,8 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     private IColorScheme colorScheme;
 
     private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<Anchor, Anchor>();
-    
-//    private boolean loaded;
 
+//    private boolean loaded;
     /**
      * Creates a node widget with a specific color scheme.
      *
@@ -101,7 +100,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
             header.addChild(minimizeWidget);
         }
 
-        imageWidget = new ImageWidget(scene);
+        imageWidget = new AdvanceImageWidget(scene);
         header.addChild(imageWidget);
 
         nameWidget = new LabelWidget(scene);
@@ -216,12 +215,30 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param image the image
      */
-    @Override
-    public void setNodeImage(Image image) {
+    public void setImage(Image image) {
         getImageWidget().setImage(image);
-        revalidate();
+    }
+    
+
+    /**
+     * @return the errorState
+     */
+    @Override
+    public boolean isErrorState() {
+        return getImageWidget().isErrorState();
     }
 
+    /**
+     * @param state the errorState to set
+     */
+    @Override
+    public void setErrorState(boolean state) {
+       getImageWidget().setErrorState(state);
+    }
+    
+    
+    
+    
     /**
      * Returns a node name.
      *
@@ -286,7 +303,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      */
     @Override
     public void setNodeProperties(Image image, String nodeName, String nodeType, List<Image> glyphs) {
-        setNodeImage(image);
+        setImage(image);
         setNodeName(nodeName);
         setNodeType(nodeType);
         setGlyphs(glyphs);
@@ -381,7 +398,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
                 }
             }
         }
-     
 
         if (!unresolvedPins.isEmpty()) {
             newWidgets.addAll(0, unresolvedPins);
@@ -393,7 +409,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
 
         removeChildren(previousPins);
         addChildren(newWidgets);
-        ((AbstractPModelerScene)this.getScene()).validateComponent();//.validateComponent();
+        ((AbstractPModelerScene) this.getScene()).validateComponent();//.validateComponent();
     }
 
     private IPinSeperatorWidget createPinCategoryWidget(String categoryDisplayName) {
@@ -458,7 +474,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     /**
      * @return the imageWidget
      */
-    public ImageWidget getImageWidget() {
+    public AdvanceImageWidget getImageWidget() {
         return imageWidget;
     }
 
@@ -491,7 +507,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
 //   protected void setLoaded(boolean loaded) {
 //        this.loaded = loaded;
 //    }
-
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {
 
         @Override

@@ -39,7 +39,6 @@ import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.border.RoundResizeBorder;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
-import org.netbeans.modeler.core.scene.ModelerScene;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
@@ -68,6 +67,9 @@ import org.openide.NotifyDescriptor;
  */
 public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNodeWidget {
 
+    /**
+     * internalPinWidgetInfo is the pin widget that is not visible , helps to connect other pin directly with the node
+     */
     private PinWidgetInfo internalPinWidgetInfo;
     public static final int WIDGET_BORDER_PADDING = 4;
     private static final ResizeProvider.ControlPoint[] RECTANGLE_RESIZE_BORDER_DISABLE_POINT = new ResizeProvider.ControlPoint[]{ResizeProvider.ControlPoint.BOTTOM_LEFT, ResizeProvider.ControlPoint.TOP_LEFT, ResizeProvider.ControlPoint.TOP_RIGHT, ResizeProvider.ControlPoint.TOP_CENTER, ResizeProvider.ControlPoint.CENTER_LEFT};
@@ -139,9 +141,9 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         this.nodeWidgetInfo = nodeWidgetInfo;
         setAnchorGap(0);
 
-        IModelerDocument modelerDoc = nodeWidgetInfo.getModelerDocument();
-        Dimension dimension = new Dimension((int) modelerDoc.getBounds().getWidth().getValue(), (int) modelerDoc.getBounds().getHeight().getValue());
-        nodeWidgetInfo.setDimension(dimension);
+//        IModelerDocument modelerDoc = nodeWidgetInfo.getModelerDocument();
+//        Dimension dimension = new Dimension((int) modelerDoc.getBounds().getWidth().getValue(), (int) modelerDoc.getBounds().getHeight().getValue());
+//        nodeWidgetInfo.setDimension(dimension);
         WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getNodeNameWidget().getActions().addAction(editAction);
         getHeader().getActions().addAction(scene.createObjectHoverAction());
@@ -223,7 +225,7 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {
-        List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
+        List<JMenuItem> menuItemList = new LinkedList<>();
 //        JMenuItem visualProperty = new JMenuItem(I18n.getString("Customize"));
 //        visualProperty.setIcon(ImageUtil.getInstance().getIcon("customize.png"));
 //        visualProperty.addActionListener(new ActionListener() {

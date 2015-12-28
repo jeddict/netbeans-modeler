@@ -23,7 +23,6 @@ import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
@@ -34,15 +33,11 @@ import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 
-public interface IModelerScene<E extends IBaseElement,R extends IRootElement>  extends IBaseElementWidget<E>, IObjectScene {
+public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidget<E>, IObjectScene {
 
      String getName();
 
      void setName(String name);
-
-     R getRootElementSpec();
-
-     void setRootElementSpec(R rootElementSpec);
 
     /**
      * To move INodeWidget from IModelerSubScene to IModelerScene
@@ -59,7 +54,7 @@ public interface IModelerScene<E extends IBaseElement,R extends IRootElement>  e
      void removeBaseElement(IBaseElementWidget baseElementWidget);
 
     /**
-     * To create INodeWidget in IModelerScene
+     * To create new INodeWidget in IModelerScene
      *
      * @param baseElementWidget
      */

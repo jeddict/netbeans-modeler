@@ -22,7 +22,6 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.core.NBModelerUtil;
-import org.netbeans.modeler.core.scene.ModelerScene;
 import org.netbeans.modeler.scene.AbstractModelerScene;
 import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -32,9 +31,8 @@ import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
-import org.netbeans.modeler.widget.node.image.NodeImageWidget;
+import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
-import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 
 /**
  *
@@ -108,7 +106,7 @@ public class SequenceFlowReconnectProvider implements ReconnectProvider {
     @Override
     public void reconnect(ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource) {
         EdgeWidget edgeWidget = (EdgeWidget) connectionWidget;
-        NodeWidget nodeWidget = (NodeWidget) ((NodeImageWidget) replacementWidget).getParentNodeWidget();
+        NodeWidget nodeWidget = (NodeWidget) ((SvgNodeWidget) replacementWidget).getParentNodeWidget();
 //       EdgeWidget edgeWidget = (EdgeWidget)sequenceWidget;
         if (replacementWidget == null) {
             ((IEdgeWidget) edgeWidget).remove(true);

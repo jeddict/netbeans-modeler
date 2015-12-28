@@ -279,62 +279,48 @@ public class ElementPropertySet {
     }
 
     public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
-        final IRootElement root = modelerFile.getRootElement();
-        return new PropertyVisibilityHandler() {
-            @Override
-            public boolean isVisible() {
-                Map vars = new HashMap();
-                vars.put("root", root);
-                vars.put("widget", baseElementWidget);
-                vars.put("_this", object);
-                vars.put("node", baseElementWidget.getBaseElementSpec());
-//                                        System.out.println("getVisible().replaceAll(\"this\", \"_this\") " + attribute.getVisible().replaceAll("this", "_this"));
-//                                        System.out.println("attributeattributeattribute " + attribute.getName() + " : " + attribute.getVisible() + " : " +  MVEL.executeExpression(attribute.getVisibilityExpression(), vars));
-                return (Boolean) MVEL.executeExpression(exp, vars);
-            }
+        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
+        return (PropertyVisibilityHandler) () -> {
+            Map vars = new HashMap();
+            vars.put("root", root);
+            vars.put("widget", baseElementWidget);
+            vars.put("_this", object);
+            vars.put("node", baseElementWidget.getBaseElementSpec());
+            return (Boolean) MVEL.executeExpression(exp, vars);
         };
     }
 
     public static PropertyChangeListener createPropertyChangeHandler(final ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
-        final IRootElement root = modelerFile.getRootElement();
-        return new PropertyChangeListener() {
-            @Override
-            public void changePerformed(Object value) {
-                Map vars = new HashMap();
-                vars.put("root", root);
-                vars.put("widget", baseElementWidget);
-                vars.put("_this", object);
-                vars.put("node", baseElementWidget.getBaseElementSpec());
-                vars.put("value", value);
-                vars.put("scene", modelerFile.getModelerScene());
-                MVEL.executeExpression(exp, vars);
-            }
+        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
+        return (PropertyChangeListener) (Object value) -> {
+            Map vars = new HashMap();
+            vars.put("root", root);
+            vars.put("widget", baseElementWidget);
+            vars.put("_this", object);
+            vars.put("node", baseElementWidget.getBaseElementSpec());
+            vars.put("value", value);
+            vars.put("scene", modelerFile.getModelerScene());
+            MVEL.executeExpression(exp, vars);
         };
     }
 
     public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final String exp) { //this method should be removed // created cuz of MVEL BUG
-        final IRootElement root = modelerFile.getRootElement();
-        return new PropertyVisibilityHandler() {
-            @Override
-            public boolean isVisible() {
-                Map vars = new HashMap();
-                vars.put("root", root);
-                vars.put("widget", object);
-                return (Boolean) MVEL.executeExpression(MVEL.compileExpression(exp), vars);
-            }
+        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
+        return (PropertyVisibilityHandler) () -> {
+            Map vars = new HashMap();
+            vars.put("root", root);
+            vars.put("widget", object);
+            return (Boolean) MVEL.executeExpression(MVEL.compileExpression(exp), vars);
         };
     }
 
     public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final Serializable exp) { //this method should be removed // created cuz of MVEL BUG
-        final IRootElement root = modelerFile.getRootElement();
-        return new PropertyVisibilityHandler() {
-            @Override
-            public boolean isVisible() {
-                Map vars = new HashMap();
-                vars.put("root", root);
-                vars.put("widget", object);
-                return (Boolean) MVEL.executeExpression(exp, vars);
-            }
+        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
+        return (PropertyVisibilityHandler) () -> {
+            Map vars = new HashMap();
+            vars.put("root", root);
+            vars.put("widget", object);
+            return (Boolean) MVEL.executeExpression(exp, vars);
         };
     }
 

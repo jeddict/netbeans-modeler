@@ -17,6 +17,7 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.internal;
 
 import java.beans.PropertyEditorSupport;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.InplaceEditor;
@@ -24,9 +25,9 @@ import org.openide.explorer.propertysheet.PropertyEnv;
 
 public class ComboBoxPropertyEditorSupport extends PropertyEditorSupport implements ExPropertyEditor, InplaceEditor.Factory {
 
-    private String defaultText;
-    private ComboBoxListener comboBoxListener;
-    private ModelerFile modelerFile;
+    private final String defaultText;
+    private final ComboBoxListener comboBoxListener;
+    private final ModelerFile modelerFile;
 
     public ComboBoxPropertyEditorSupport(ModelerFile modelerFile, final ComboBoxListener comboBoxListener) {
         this.modelerFile = modelerFile;
@@ -36,7 +37,8 @@ public class ComboBoxPropertyEditorSupport extends PropertyEditorSupport impleme
 
     @Override
     public String getAsText() {
-        String text = comboBoxListener.getItem() == null ? defaultText : comboBoxListener.getItem().getDisplayValue() == null ? "" : comboBoxListener.getItem().getDisplayValue();
+        ComboBoxValue value = comboBoxListener.getItem();
+        String text =  value == null ? defaultText :value.getDisplayValue() == null ? "" : value.getDisplayValue();
         return text;
 
     }

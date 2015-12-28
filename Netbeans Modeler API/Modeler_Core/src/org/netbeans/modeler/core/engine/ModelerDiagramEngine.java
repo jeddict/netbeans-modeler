@@ -19,8 +19,6 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -72,7 +70,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     private ModelerFile file;
     private ZoomManager zoomManager;
     public static AlignStrategyProvider ALIGNSTRATEGY_PROVIDER = null;
-        private static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {
+    private static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {
         private boolean locationChanged = false;
         private Point original;
 
@@ -110,20 +108,19 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     @Override
     public void setNodeWidgetAction(final INodeWidget nodeWidget) {
-        if(nodeWidget.getModelerScene().getModelerFile().getId() == null){
-        WidgetAction selectAction = ActionFactory.createSelectAction(new NodeWidgetSelectProvider(nodeWidget.getModelerScene()));
-        WidgetAction moveAction = new MoveAction(nodeWidget,null, MOVE_PROVIDER_DEFAULT,ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
-        WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
-        WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
-        WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
-        selectActionTool.addAction(selectAction);
-        selectActionTool.addAction(moveAction);
-        selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
-        selectActionTool.addAction(popupMenuAction);
-        selectActionTool.addAction(snapMoveAction);
+        if (nodeWidget.getModelerScene().getModelerFile().getId() == null) {
+            WidgetAction selectAction = ActionFactory.createSelectAction(new NodeWidgetSelectProvider(nodeWidget.getModelerScene()));
+            WidgetAction moveAction = new MoveAction(nodeWidget, null, MOVE_PROVIDER_DEFAULT, ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
+            WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
+            WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
+            WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
+            selectActionTool.addAction(selectAction);
+            selectActionTool.addAction(moveAction);
+            selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
+            selectActionTool.addAction(popupMenuAction);
+            selectActionTool.addAction(snapMoveAction);
         }
     }
-
 
     @Override
     public void init(ModelerFile file) {
@@ -154,9 +151,9 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         selectTool.addAction(new WidgetAction.Adapter() {
             @Override
             public WidgetAction.State mouseMoved(Widget widget, WidgetAction.WidgetMouseEvent event) {
-                 if(positionLabel!=null){
-                Point point = widget.convertLocalToScene(event.getPoint());
-                positionLabel.setText("[" + point.x + "," + point.y + "]");
+                if (positionLabel != null) {
+                    Point point = widget.convertLocalToScene(event.getPoint());
+                    positionLabel.setText("[" + point.x + "," + point.y + "]");
                 }
                 return WidgetAction.State.REJECTED;
             }
@@ -290,7 +287,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         bar.add(new JToolBar.Separator());
 
     }
-    
+
     /**
      * @return the file
      */

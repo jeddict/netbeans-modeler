@@ -37,7 +37,6 @@ import org.netbeans.modeler.label.LabelManager;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
-import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.specification.model.util.NModelerUtil;
@@ -111,11 +110,6 @@ public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidg
         setControlPointCutDistance(2);
         setForeground(new Color(120, 120, 120));
 
-    }
-
-    @Override
-    public void createVisualPropertySet(ElementPropertySet elementPropertySet) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

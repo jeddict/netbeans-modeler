@@ -15,14 +15,10 @@
  */
 package org.netbeans.modeler.specification.model;
 
-import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
-import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
-import org.netbeans.modeler.specification.model.document.IDiagramElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
-import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 
@@ -35,8 +31,6 @@ public class ModelerDiagramSpecification {
     private IModelerDiagramEngine modelerDiagramEngine;
 
     private IDefinitionElement definitionElement;
-    private IDiagramElement diagramElement;
-    private IRootElement rootElement;
 
     private IExportManager exportManager;
     private IRelationValidator relationValidator;
@@ -54,20 +48,6 @@ public class ModelerDiagramSpecification {
     public void setModelerScene(IModelerScene modelerScene) {
         this.modelerScene = modelerScene;
     }
-
-//    /**
-//     * @return the ModelerPanelTopComponent
-//     */
-//    public IModelerPanel getModelerPanelTopComponent() {
-//        return modelerPanel;
-//    }
-//
-//    /**
-//     * @param modelerPanel the ModelerPanelTopComponent to set
-//     */
-//    public void setModelerPanelTopComponent(IModelerPanel modelerPanel) {
-//        this.modelerPanel = modelerPanel;
-//    }
 
     /**
      * @return the modelerDiagramEngine
@@ -95,34 +75,6 @@ public class ModelerDiagramSpecification {
      */
     public void setDefinitionElement(IDefinitionElement definitionElement) {
         this.definitionElement = definitionElement;
-    }
-
-    /**
-     * @return the diagramElement
-     */
-    public IDiagramElement getDiagramElement() {
-        return diagramElement;
-    }
-
-    /**
-     * @param diagramElement the diagramElement to set
-     */
-    public void setDiagramElement(IDiagramElement diagramElement) {
-        this.diagramElement = diagramElement;
-    }
-
-    /**
-     * @return the rootElement
-     */
-    public IRootElement getRootElement() {
-        return rootElement;
-    }
-
-    /**
-     * @param rootElement the rootElement to set
-     */
-    public void setRootElement(IRootElement rootElement) {
-        this.rootElement = rootElement;
     }
 
     /**

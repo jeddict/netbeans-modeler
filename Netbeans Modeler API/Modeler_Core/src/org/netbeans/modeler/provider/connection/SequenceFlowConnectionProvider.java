@@ -25,7 +25,7 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.specification.model.document.widget.IEndFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IStartFlowNodeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
-import org.netbeans.modeler.widget.node.IconNodeWidget;
+import org.netbeans.modeler.widget.node.AbstractNodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
 
 /**
@@ -42,7 +42,7 @@ public class SequenceFlowConnectionProvider implements ConnectProvider {
 
     @Override
     public boolean isSourceWidget(Widget source) {
-        return source != null && source instanceof IconNodeWidget ? true : false;
+        return source != null && source instanceof AbstractNodeWidget ? true : false;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class SequenceFlowConnectionProvider implements ConnectProvider {
         if (trg instanceof IStartFlowNodeWidget || src instanceof IEndFlowNodeWidget) {
             return ConnectorState.REJECT;
         } else {
-            return src != trg && trg instanceof IconNodeWidget ? ConnectorState.ACCEPT : ConnectorState.REJECT;
+            return src != trg && trg instanceof AbstractNodeWidget ? ConnectorState.ACCEPT : ConnectorState.REJECT;
         }
     }
 

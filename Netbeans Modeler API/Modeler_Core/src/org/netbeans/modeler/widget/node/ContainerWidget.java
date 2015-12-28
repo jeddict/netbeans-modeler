@@ -87,11 +87,6 @@ public abstract class ContainerWidget extends Widget implements IBaseElementWidg
     }
 
     @Override
-    public void createVisualPropertySet(ElementPropertySet elementPropertySet) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public ContextPaletteModel getContextPaletteModel() {
         return null;
     }

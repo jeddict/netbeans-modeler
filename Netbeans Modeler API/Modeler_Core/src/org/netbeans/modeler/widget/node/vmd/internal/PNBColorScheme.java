@@ -58,7 +58,6 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
-
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;

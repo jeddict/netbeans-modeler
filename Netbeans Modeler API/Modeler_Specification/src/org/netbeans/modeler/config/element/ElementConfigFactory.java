@@ -34,7 +34,7 @@ public class ElementConfigFactory {
     }
 
     public List<Element> getElements(String id) {
-        List<Element> elements = new LinkedList<Element>();
+        List<Element> elements = new LinkedList<>();
         for (Element element_TMP : elementConfig.getElements()) {
             if (element_TMP.getId().equals(id)) {
                 elements.add(element_TMP);
@@ -44,7 +44,7 @@ public class ElementConfigFactory {
     }
 
     public List<Element> getElements(Class classType) {
-        List<Element> elements = new LinkedList<Element>();
+        List<Element> elements = new LinkedList<>();
         for (Element element_TMP : elementConfig.getElements()) {
             if (element_TMP.getClassType().isAssignableFrom(classType)) { //all super class
                 elements.add(element_TMP);
@@ -71,9 +71,7 @@ public class ElementConfigFactory {
                     }
                 }
             }
-        } catch (IllegalAccessException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (InvocationTargetException ex) {
+        } catch (IllegalAccessException | InvocationTargetException ex) {
             Exceptions.printStackTrace(ex);
         }
     }

@@ -15,7 +15,8 @@
  */
 package org.netbeans.modeler.label;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.logging.Logger;
 

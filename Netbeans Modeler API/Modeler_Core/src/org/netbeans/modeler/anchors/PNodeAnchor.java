@@ -46,7 +46,6 @@ package org.netbeans.modeler.anchors;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 import org.netbeans.api.visual.anchor.Anchor;

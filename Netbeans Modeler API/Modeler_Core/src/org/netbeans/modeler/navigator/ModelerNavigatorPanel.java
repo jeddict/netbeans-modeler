@@ -16,7 +16,6 @@
 package org.netbeans.modeler.navigator;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Collection;
 import org.netbeans.modeler.component.ModelerPanelTopComponent;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.spi.navigator.NavigatorPanel;

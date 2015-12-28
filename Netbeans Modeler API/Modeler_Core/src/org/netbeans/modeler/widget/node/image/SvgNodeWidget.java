@@ -32,12 +32,12 @@ import org.w3c.dom.svg.SVGDocument;
  *
  *
  */
-public class NodeImageWidget extends SvgWidget {
+public class SvgNodeWidget extends SvgWidget {
 
     private IModelerScene scene;
     private INodeWidget nodeWidget;
 
-    public NodeImageWidget(IModelerScene scene, INodeWidget nodeWidget, SVGDocument doc, Dimension dimension) {
+    public SvgNodeWidget(IModelerScene scene, INodeWidget nodeWidget, SVGDocument doc, Dimension dimension) {
         super(scene, doc, dimension);
         this.scene = scene;
         this.nodeWidget = nodeWidget;
@@ -59,12 +59,13 @@ public class NodeImageWidget extends SvgWidget {
 
     public void updateWidget(double width, double height, double dimX, double dimY) {
         NodeWidgetInfo nodeWidgetInfo = nodeWidget.getNodeWidgetInfo();
-        NodeImageWidget imageWidget = this;
+        SvgNodeWidget imageWidget = this;
 
         nodeWidgetInfo.setDimension(new Dimension((int) width, (int) height));
         imageWidget.setDimension(new Dimension((int) width, (int) height));
 
-        if (nodeWidgetInfo.getModelerDocument().getDocumentModel().equals("EVENT")) {//Major Bug : Based on BPN event dependecy for circle shape :  getDocumentModel() == DocumentModelType.EVENT
+        // TODO
+        if ("EVENT".equals(nodeWidgetInfo.getModelerDocument().getDocumentModel())) {//Major Bug : Based on BPN event dependecy for circle shape :  getDocumentModel() == DocumentModelType.EVENT
             Iterator<? extends IFlowEdgeWidget> itr = ((IFlowNodeWidget) nodeWidget).getIncommingFlowEdgeWidget().iterator();
             while (itr.hasNext()) {
                 EdgeWidget sequenceFlowWidget = (EdgeWidget) itr.next();

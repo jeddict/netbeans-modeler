@@ -22,7 +22,6 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
-import org.openide.nodes.AbstractNode;
 
 public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget {
 

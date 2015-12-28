@@ -15,11 +15,10 @@
  */
 package org.netbeans.modeler.widget.action.doubleclick;
 
-import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.api.visual.action.WidgetAction;
-
+import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.*;
+import org.netbeans.api.visual.action.WidgetAction;
+import org.netbeans.api.visual.widget.Widget;
 
 public final class DoubleClickAction extends WidgetAction.LockedAdapter {
 

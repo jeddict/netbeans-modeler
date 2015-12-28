@@ -17,7 +17,6 @@ package org.netbeans.modeler.component;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.util.Date;
 import javax.swing.ActionMap;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
@@ -205,7 +204,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         });
 
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -245,7 +243,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
             modelerFile.getModelerFileDataObject().removeSaveCookie();
         }
     }
-
 
     /**
      * @return the modelerFile

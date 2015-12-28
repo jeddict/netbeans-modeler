@@ -21,7 +21,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -38,9 +37,8 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.widget.context.PaletteDirection;
 import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
+import org.netbeans.modeler.widget.context.PaletteDirection;
 import org.netbeans.modeler.widget.node.IWidget;
 
 /**

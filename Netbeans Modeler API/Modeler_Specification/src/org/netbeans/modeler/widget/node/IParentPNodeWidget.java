@@ -122,13 +122,6 @@ public interface IParentPNodeWidget extends StateModel.Listener, VMDMinimizeAbil
     void setMinimized(boolean minimized);
 
     /**
-     * Sets a node image.
-     *
-     * @param image the image
-     */
-    void setNodeImage(Image image);
-
-    /**
      * Sets a node name.
      *
      * @param nodeName the node name

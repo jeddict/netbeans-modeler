@@ -61,7 +61,6 @@ import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
@@ -88,7 +87,7 @@ import org.openide.util.lookup.InstanceContent;
  *
  *
  */
-public abstract class AbstractPModelerScene<E extends IBaseElement,R extends IRootElement> extends GraphPinScene<NodeWidgetInfo, EdgeWidgetInfo, PinWidgetInfo> implements IPModelerScene<E,R> {
+public abstract class AbstractPModelerScene<E extends IRootElement> extends GraphPinScene<NodeWidgetInfo, EdgeWidgetInfo, PinWidgetInfo> implements IPModelerScene<E> {
 
     private LayerWidget backgroundLayer; //  rectangular selection
     private LayerWidget mainLayer;
@@ -237,6 +236,10 @@ public abstract class AbstractPModelerScene<E extends IBaseElement,R extends IRo
     @Override
     protected Widget attachPinWidget(NodeWidgetInfo nodeWidgetInfo, PinWidgetInfo pinWidgetInfo) {
         INodeWidget nodeWidget = (INodeWidget) findWidget(nodeWidgetInfo);
+        
+        if (pinWidgetInfo.getDocumentId().equals("INTERNAL")){
+            return null;
+        }
         PinWidget pinWidget = (PinWidget) this.getModelerFile().getPModelerUtil().attachPinWidget(this, nodeWidget, pinWidgetInfo);
         if (pinWidget == null) {
             return null;
@@ -921,25 +924,26 @@ public abstract class AbstractPModelerScene<E extends IBaseElement,R extends IRo
     public ContextPaletteModel getContextPaletteModel() {
         return null;
     }
-    
-    
-    public void validateComponent(){
+
+    public void validateComponent() {
 //        if(!isSceneGenerating()){
 //          synchronized(AbstractPModelerScene.class){
-            this.validate();
+        this.validate();
 //          }
 //        }
     }
     private boolean sceneGeneration = false; //to improve the effciency and thread-safety in parrallel processing of ui generation (scene.validate() called at the end instead of after each element creation)
-    
-    public void startSceneGeneration(){
+
+    public void startSceneGeneration() {
         sceneGeneration = true;
     }
-    public void commitSceneGeneration(){
+
+    public void commitSceneGeneration() {
         sceneGeneration = true;
         validateComponent();
     }
-    public boolean isSceneGenerating(){
+
+    public boolean isSceneGenerating() {
         return sceneGeneration;
     }
 }

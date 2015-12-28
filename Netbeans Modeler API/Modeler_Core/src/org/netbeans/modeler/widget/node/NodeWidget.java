@@ -56,7 +56,7 @@ import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidg
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene;
 import org.netbeans.modeler.widget.context.action.SceneConnectProvider;
-import org.netbeans.modeler.widget.node.image.NodeImageWidget;
+import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.generic.ElementPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
@@ -71,7 +71,7 @@ import org.w3c.dom.svg.SVGDocument;
  *
  *
  */
-public abstract class NodeWidget<S extends IModelerScene>  extends IconNodeWidget implements INNodeWidget {
+public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWidget implements INNodeWidget {
 
     public static final int WIDGET_BORDER_PADDING = 4;
     private static final ResizeProvider.ControlPoint[] CIRCLE_RESIZE_BORDER_DISABLE_POINT = new ResizeProvider.ControlPoint[]{ResizeProvider.ControlPoint.TOP_CENTER, ResizeProvider.ControlPoint.CENTER_LEFT};
@@ -151,7 +151,7 @@ public abstract class NodeWidget<S extends IModelerScene>  extends IconNodeWidge
         Dimension dimension = new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue());
         nodeWidgetInfo.setDimension(dimension);
 
-        this.setNodeImageWidget(new NodeImageWidget(scene, this,
+        this.setNodeImageWidget(new SvgNodeWidget(scene, this,
                 modelerDocument.generateDocument(),
                 new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue())));
 
@@ -258,7 +258,7 @@ public abstract class NodeWidget<S extends IModelerScene>  extends IconNodeWidge
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {
-        List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
+        List<JMenuItem> menuItemList = new LinkedList<>();
         JMenuItem visualProperty = new JMenuItem(I18n.getString("Customize"));
         visualProperty.setIcon(ImageUtil.getInstance().getIcon("customize.png"));
         visualProperty.addActionListener((ActionEvent e) -> {
@@ -963,14 +963,13 @@ public abstract class NodeWidget<S extends IModelerScene>  extends IconNodeWidge
         nodeWidget.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         return new_nodewidget;
     }
-    
-    
-        private S scene;
 
-    
-        /**
+    private S scene;
+
+    /**
      * @return the scene
      */
+    @Override
     public S getModelerScene() {
         return scene;
     }

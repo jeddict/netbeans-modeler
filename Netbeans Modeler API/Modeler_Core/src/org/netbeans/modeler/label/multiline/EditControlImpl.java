@@ -24,7 +24,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
@@ -51,7 +50,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultEditorKit;
@@ -1015,7 +1013,7 @@ public class EditControlImpl extends JPanel implements /*IEditControl,*/ InputMe
         if (!bInDeactivate) {
             bInDeactivate = true;
 
-         // notify listeners we're shutting down
+            // notify listeners we're shutting down
 //         if (m_EventDispatcher != null)
 //         {
 //            IEditEventPayload payload = m_EventDispatcher.createEventPayload();

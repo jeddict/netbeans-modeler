@@ -15,7 +15,8 @@
  */
 package org.netbeans.modeler.widget.transferable;
 
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

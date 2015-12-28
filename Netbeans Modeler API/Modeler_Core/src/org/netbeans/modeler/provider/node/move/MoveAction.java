@@ -15,13 +15,12 @@
  */
 package org.netbeans.modeler.provider.node.move;
 
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.MoveStrategy;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Widget;
-
-import java.awt.*;
-import java.awt.event.MouseEvent;
 import org.netbeans.modeler.widget.node.INodeWidget;
 
 public final class MoveAction extends WidgetAction.LockedAdapter {

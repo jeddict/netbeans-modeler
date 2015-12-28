@@ -17,11 +17,10 @@ package org.netbeans.modeler.core.scene.vmd;
 
 import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 
-public abstract class PModelerScene<E extends IBaseElement,R extends IRootElement> extends AbstractPModelerScene <E,R> {
+public abstract class PModelerScene<E extends IRootElement> extends AbstractPModelerScene<E> {
 
-    private R rootElementSpec;
+    private E baseElementSpec;
     protected String id;
     protected String name;
     protected String documentation;
@@ -54,30 +53,15 @@ public abstract class PModelerScene<E extends IBaseElement,R extends IRootElemen
         this.documentation = documentation;
     }
 
-    /**
-     * @return the rootElementSpec
-     */
-    @Override
-    public R getRootElementSpec() {
-        return rootElementSpec;
-    }
-
-    /**
-     * @param rootElementSpec the rootElementSpec to set
-     */
-    @Override
-    public void setRootElementSpec(R rootElementSpec) {
-        this.rootElementSpec = rootElementSpec;
-    }
 
     @Override
     public void setBaseElementSpec(E baseElementSpec) {
-        setRootElementSpec((R) baseElementSpec);
+         this.baseElementSpec = baseElementSpec;
     }
 
     @Override
     public E getBaseElementSpec() {
-        return (E)rootElementSpec;
+        return baseElementSpec;
     }
 
 }

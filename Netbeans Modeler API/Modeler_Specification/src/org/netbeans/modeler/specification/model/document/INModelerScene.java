@@ -15,11 +15,10 @@
  */
 package org.netbeans.modeler.specification.model.document;
 
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 
-public interface INModelerScene<E extends IBaseElement,R extends IRootElement> extends IModelerScene<E,R> {
+public interface INModelerScene<E extends IRootElement> extends IModelerScene<E> {
 
     public void setEdgeWidgetSource(EdgeWidgetInfo edge, NodeWidgetInfo node);
 

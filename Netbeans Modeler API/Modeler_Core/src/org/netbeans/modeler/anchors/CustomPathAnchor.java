@@ -28,7 +28,7 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
-import org.netbeans.modeler.widget.node.image.NodeImageWidget;
+import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 import test.ClosestSegment;
 import test.GeometryClosestPointManager;
 
@@ -179,7 +179,7 @@ public class CustomPathAnchor extends Anchor {
 //        } else if(direction== Direction.RIGHT){
 //            point.x = point.x - margin;
 //        }
-        NodeImageWidget imageWidget = (NodeImageWidget) widget;
+        SvgNodeWidget imageWidget = (SvgNodeWidget) widget;
         Point movePo = null;
         if (imageWidget.getTransform() != null) {
 
