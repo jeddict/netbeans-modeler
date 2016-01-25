@@ -258,7 +258,7 @@ public class PMacColorScheme implements IColorScheme {
     public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized() ? BUTTON_G : BUTTON_Y;
     }
-
+  
     @Override
     public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
         Scene scene = widget.getScene();

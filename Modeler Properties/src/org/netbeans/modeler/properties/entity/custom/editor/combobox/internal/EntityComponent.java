@@ -44,10 +44,17 @@ public abstract class EntityComponent<T> extends GenericDialog {
     private Entity<T> entity;
 
     public abstract void init();
+    
+    private boolean loaded = false;
+    public void postConstruct(){
+        
+    }
 
     public abstract void createEntity(Class<? extends Entity> entityWrapperType);
 
     public abstract void updateEntity(Entity<T> entity);
+    
+    
 
     public Entity<T> getEntity() {
         return entity;
@@ -71,6 +78,17 @@ public abstract class EntityComponent<T> extends GenericDialog {
      */
     public void setRootComponent(Component rootComponent) {
         this.rootComponent = rootComponent;
+    }
+
+    /**
+     * @return the loaded
+     */
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(){
+        this.loaded = true;
     }
 
 }

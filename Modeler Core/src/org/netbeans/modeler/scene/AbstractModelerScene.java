@@ -649,6 +649,9 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
             this.validate();
         }
         if (nodeWidget instanceof IBaseElementWidget) {
+            if (node.getBaseElementSpec() != null) {
+                ((IBaseElementWidget) nodeWidget).setBaseElementSpec(node.getBaseElementSpec());
+            }
             ((IBaseElementWidget) nodeWidget).init();
         }
         return nodeWidget;
@@ -658,6 +661,9 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     public IEdgeWidget createEdgeWidget(EdgeWidgetInfo edge) {
         IEdgeWidget edgeWidget = (IEdgeWidget) this.addEdge(edge);
         if (edgeWidget instanceof IBaseElementWidget) {
+            if (edge.getBaseElementSpec() != null) {
+                ((IBaseElementWidget) edgeWidget).setBaseElementSpec(edge.getBaseElementSpec());
+            }
             if (edgeWidget instanceof IFlowEdgeWidget) {
                 ((IFlowEdgeWidget) edgeWidget).setName(edge.getName());
             }

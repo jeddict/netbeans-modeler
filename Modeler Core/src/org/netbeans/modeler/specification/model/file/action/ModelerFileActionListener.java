@@ -41,10 +41,13 @@ import org.openide.util.Exceptions;
 
 public abstract class ModelerFileActionListener implements ActionListener {
 
-    private final IModelerFileDataObject context;
+    protected IModelerFileDataObject context;
 
     public ModelerFileActionListener(IModelerFileDataObject context) {
         this.context = context;
+    }
+
+    public ModelerFileActionListener() {
     }
 
     @Override
@@ -59,11 +62,23 @@ public abstract class ModelerFileActionListener implements ActionListener {
     public void openModelerFile() {
         openModelerFile(null, null, null);
     }
-public void openModelerFile(String id, String name, String tooltip) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
-    openModelerFile(id, name, tooltip , null);
-}
-    public void openModelerFile(String id, String name, String tooltip , IRootElement rootElement) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
+
+    public void openModelerFile(ModelerFile parentFile) {
+        openModelerFile(null, null, null, parentFile);
+    }
+
+    public void openModelerFile(String id, String name, String tooltip) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
+        openModelerFile(id, name, tooltip, null);
+    }
+
+    public void openModelerFile(String id, String name, String tooltip, ModelerFile parentFile) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
         long st = new Date().getTime();
+        if (context == null) {
+            if (parentFile == null) {
+                throw new IllegalStateException("ModelerFileDataObject(context) and Parent Modeler file does not exist");
+            }
+            context = parentFile.getModelerFileDataObject();
+        }
         FileObject fileObject = context.getPrimaryFile();
         String path = fileObject.getPath();
         String absolutePath;
@@ -79,6 +94,10 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
                 CountDownLatch latch = new CountDownLatch(5);
 
                 modelerFile.setId(id);
+                modelerFile.setParentFile(parentFile);
+                if (parentFile != null) {
+                    parentFile.addChildrenFile(modelerFile);
+                }
                 modelerFile.setModelerFileDataObject(context);
                 modelerFile.setTooltip(path);
                 modelerFile.setPath(absolutePath);
@@ -92,7 +111,7 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
 
                 System.out.println("TLTIP Total time : " + (new Date().getTime() - st) + " sec");
                 st = new Date().getTime();
-                initSpecification(modelerFile);//VendorSpecification,ModelerDiagramSpecification
+                //VendorSpecification,ModelerDiagramSpecification
 
                 Class _class = this.getClass();
                 final ModelerConfig modelerConfig = (ModelerConfig) _class.getAnnotation(ModelerConfig.class);
@@ -102,13 +121,12 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
                 Class<? extends IModelerScene> modelerScene = diagramModelConfig.modelerScene();//ModelerScene
                 IModelerScene scene = modelerScene.newInstance();
                 scene.setModelerFile(modelerFile);
-                scene.setBaseElementSpec(rootElement);
                 modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerScene(scene);
 
                 System.out.println("InSpec I Total time : " + (new Date().getTime() - st) + " sec");
                 st = new Date().getTime();
-                new InitExecuter( latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                new ModelerUtilExecuter( latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
+                new InitExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
+                new ModelerUtilExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
                 new PaletteConfigExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
                 new InstanceExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();//Top Component
                 new DiagramEngineExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
@@ -119,9 +137,10 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
                 //5    3921,  2966     3022
                 //===========================
                 //final 4192,  3326     3214
+
                 latch.await();
                 System.out.println("CountDownLatch Total time : " + (new Date().getTime() - st) + " sec");
-
+                initSpecification(modelerFile);
                 st = new Date().getTime();
                 scene.getModelerPanelTopComponent().init(modelerFile);
                 scene.getModelerPanelTopComponent().open();
@@ -186,7 +205,7 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
             } catch (InstantiationException | IllegalAccessException ex) {
                 Exceptions.printStackTrace(ex);
             } finally {
-               long st = new Date().getTime();
+                long st = new Date().getTime();
                 latch.countDown();
                 System.out.println("E1 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }
@@ -213,7 +232,7 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
 
         @Override
         public void run() {
-         try{
+            try {
                 long st = new Date().getTime();
                 // #A
                 modelerFile.getVendorSpecification().createElementConfig(vendorConfig.id(), modelerConfig.element());//130 sec
@@ -222,9 +241,8 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
 //                modelerFile.getVendorSpecification().getModelerDiagramModel().init(modelerFile);//load empty configuration //override it in loadModelerFile() if already have //depends on ModelerScene,ElementConfigFactory
                 System.out.println("E2 B3B Total time : " + (new Date().getTime() - st) + " sec");
 
-
-        } finally {
-               long st = new Date().getTime();
+            } finally {
+                long st = new Date().getTime();
                 latch.countDown();
                 System.out.println("E2 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }
@@ -268,8 +286,8 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
 
             } catch (InstantiationException | IllegalAccessException ex) {
                 Exceptions.printStackTrace(ex);
-            }finally {
-               long st = new Date().getTime();
+            } finally {
+                long st = new Date().getTime();
                 latch.countDown();
                 System.out.println("E3 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }
@@ -297,16 +315,16 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
 
         @Override
         public void run() {
-            try{
+            try {
                 long st = new Date().getTime();
 
                 modelerFile.getVendorSpecification().createModelerDocumentConfig(vendorConfig.id(), modelerConfig.document());//141 sec
                 modelerFile.getVendorSpecification().createPaletteConfig(vendorConfig.id(), diagramModelConfig.id(), modelerConfig.palette());//67 sec //depends on docFac
 
                 System.out.println("E4 B3B Total time : " + (new Date().getTime() - st) + " sec");
-                
+
             } finally {
-               long st = new Date().getTime();
+                long st = new Date().getTime();
                 latch.countDown();
                 System.out.println("E4 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }
@@ -344,7 +362,7 @@ public void openModelerFile(String id, String name, String tooltip) { //id :=> i
             } catch (InstantiationException | IllegalAccessException ex) {
                 Exceptions.printStackTrace(ex);
             } finally {
-               long st = new Date().getTime();
+                long st = new Date().getTime();
                 latch.countDown();
                 System.out.println("E5 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }

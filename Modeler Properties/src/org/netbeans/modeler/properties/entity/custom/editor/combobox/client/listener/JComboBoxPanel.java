@@ -148,6 +148,10 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         }
         EntityComponent itemComponent = actionHandler.getItemProducer();
         if (itemComponent != null) {
+            if (!itemComponent.isLoaded()) {
+                itemComponent.postConstruct();
+                itemComponent.setLoaded();
+            }
             itemComponent.init();
             itemComponent.updateEntity(comboBoxValue);
             itemComponent.setVisible(true);
@@ -162,6 +166,10 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         EntityComponent itemComponent = actionHandler.getItemProducer();
         ComboBoxValue comboBoxValue = null;
         if (itemComponent != null) {
+             if (!itemComponent.isLoaded()) {
+                itemComponent.postConstruct();
+                itemComponent.setLoaded();
+            }
             itemComponent.init();
             itemComponent.createEntity(ComboBoxValue.class);
             itemComponent.setVisible(true);

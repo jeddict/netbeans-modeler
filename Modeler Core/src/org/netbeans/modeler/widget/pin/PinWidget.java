@@ -223,7 +223,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     @Override
     public boolean remove(boolean notification) {
         if (notification) {
-            NotifyDescriptor d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Node ?", "Delete Node", NotifyDescriptor.OK_CANCEL_OPTION);
+            NotifyDescriptor d = new NotifyDescriptor.Confirmation(String.format("are you sure you want to delete %s ?", this.getLabel()), String.format("Delete ", this.getLabel()), NotifyDescriptor.OK_CANCEL_OPTION);
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
                 removePin();
                 return true;

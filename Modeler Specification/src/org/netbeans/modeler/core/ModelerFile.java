@@ -20,8 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
@@ -54,10 +58,14 @@ public class ModelerFile {
     private String tooltip;
     private String extension;
     private String path;
+
+  
     private Image icon;
     private IModelerFileDataObject modelerFileDataObject;
     private ModelerVendorSpecification modelerVendorSpecification;
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private Map<String, Object> attributes = new HashMap<>();
+    private ModelerFile parentFile;
+    private Set<ModelerFile> childrenFile = new HashSet<>();
 
     /**
      * @return the name
@@ -246,9 +254,14 @@ public class ModelerFile {
         }
         NotifyDescriptor d = null;
         if (nodeWidgets.size() + edgeWidgets.size() > 1) {
-            d = new NotifyDescriptor.Confirmation("are you sure you want to delete these Elements?", "Delete Elements", NotifyDescriptor.OK_CANCEL_OPTION);
+            d = new NotifyDescriptor.Confirmation("are you sure you want to delete these Elements ?", "Delete Elements", NotifyDescriptor.OK_CANCEL_OPTION);
         } else if (nodeWidgets.size() + edgeWidgets.size() == 1) {
-            d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Element?", "Delete Element", NotifyDescriptor.OK_CANCEL_OPTION);
+            if(nodeWidgets.size() == 1){
+               d = new NotifyDescriptor.Confirmation(String.format("are you sure you want to delete %s ?", nodeWidgets.get(0).getLabel()), String.format("Delete ", nodeWidgets.get(0).getLabel()), NotifyDescriptor.OK_CANCEL_OPTION);
+            } else { 
+                d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Element ?", "Delete Element", NotifyDescriptor.OK_CANCEL_OPTION);
+            }
+            
         }
         if (nodeWidgets.size() + edgeWidgets.size() >= 1) {
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
@@ -329,4 +342,78 @@ public class ModelerFile {
     public void setId(String id) {
         this.id = id;
     }
+
+    /**
+     * @return the parentFile
+     */
+    public ModelerFile getParentFile() {
+        return parentFile;
+    }
+
+    /**
+     * @param parentFile the parentFile to set
+     */
+    public void setParentFile(ModelerFile parentFile) {
+        this.parentFile = parentFile;
+    }    
+
+    /**
+     * @return the childrenFile
+     */
+    public Set<ModelerFile> getChildrenFile() {
+        return childrenFile;
+    }
+
+    /**
+     * @param childrenFile the childrenFile to set
+     */
+    public void setChildrenFile(Set<ModelerFile> childrenFile) {
+        this.childrenFile = childrenFile;
+    }
+        
+    
+    /**
+     * @param id
+     * @return the childrenFile
+     */
+    public Optional<ModelerFile> getChildrenFile(String id) {
+       return childrenFile.stream().filter(c -> id.equals(c.getId())).findFirst();
+    }
+
+    /**
+     * @param file the childrenFile to add
+     */
+    public void addChildrenFile(ModelerFile file) {
+        this.childrenFile.add(file);
+    }   
+    
+    /**
+     * @param file the childrenFile to add
+     */
+    public void removeChildrenFile(ModelerFile file) {
+        this.childrenFile.remove(file);
+    }
+    
+      @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ModelerFile other = (ModelerFile) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+ 
 }

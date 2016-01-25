@@ -329,6 +329,11 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
     private void jButtonNewPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewPropertyActionPerformed
         EntityComponent attrDialog = attributeEntity.getCustomDialog();//new CustomAttributeDialog(Misc.getMainFrame(), true);
 //        jrpd.setProperties(getPropertiesList());
+        
+        if(!attrDialog.isLoaded()){
+            attrDialog.postConstruct();
+            attrDialog.setLoaded();
+        }
         attrDialog.init();
         attrDialog.createEntity(RowValue.class);
         attrDialog.setVisible(true);
@@ -365,6 +370,10 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         RowValue rowValue = new RowValue(getRow(index));
 //       rowValue.setTableModel(dtm);
 
+        if(!attrDialog.isLoaded()){
+            attrDialog.postConstruct();
+            attrDialog.setLoaded();
+        }
         attrDialog.init();
         attrDialog.updateEntity(rowValue);
 

@@ -30,16 +30,24 @@ public class NodeWidgetInfo implements Cloneable {
     private Point location;
     private Dimension dimension;
     private SubCategoryNodeConfig subCategoryNodeConfig;
+    private IModelerDocument modelerDocument;
     private IBaseElement baseElementSpec;
     private Boolean exist = false;//to Load Element
 
     public NodeWidgetInfo(String id, SubCategoryNodeConfig subCategoryNodeConfig, Point location) {
-
         this.id = id;
         this.location = location;
         this.subCategoryNodeConfig = subCategoryNodeConfig;
+        this.modelerDocument = subCategoryNodeConfig.getModelerDocument();
         this.image = subCategoryNodeConfig.getModelerDocument().getImage();
 
+    }
+    
+     public NodeWidgetInfo(String id, IModelerDocument modelerDocument, Point location) {
+        this.id = id;
+        this.location = location;
+        this.modelerDocument = modelerDocument;
+        this.image = modelerDocument.getImage();
     }
 
     private NodeWidgetInfo() {
@@ -86,7 +94,7 @@ public class NodeWidgetInfo implements Cloneable {
      * @return the modelerDocument
      */
     public IModelerDocument getModelerDocument() {
-        return subCategoryNodeConfig.getModelerDocument();
+        return modelerDocument;
     }
 
     /**

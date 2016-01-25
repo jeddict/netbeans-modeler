@@ -28,14 +28,22 @@ public class PinWidgetInfo {
     private IBaseElement baseElementSpec;
     private Boolean exist = false;
 
+    public PinWidgetInfo(String id,IBaseElement baseElementSpec, String documentId) {
+        this.id = id;
+        this.baseElementSpec=baseElementSpec;
+        this.documentId = documentId;
+
+    }
+
     public PinWidgetInfo(String id, String documentId) {
         this.id = id;
         this.documentId = documentId;
 
     }
 
-    public PinWidgetInfo(String id) {
+    public PinWidgetInfo(String id,IBaseElement baseElementSpec) {
         this.id = id;
+        this.baseElementSpec=baseElementSpec;
     }
 
     private PinWidgetInfo() {

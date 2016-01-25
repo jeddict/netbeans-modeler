@@ -22,7 +22,7 @@ import org.netbeans.modeler.core.NBModelerUtil;
 
 public class ModelerKeyAdapter extends KeyAdapter {
 
-    ModelerFile file;
+    private final ModelerFile file;
 
     public ModelerKeyAdapter(ModelerFile file) {
         this.file = file;

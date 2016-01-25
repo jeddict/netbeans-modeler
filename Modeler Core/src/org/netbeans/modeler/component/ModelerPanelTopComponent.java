@@ -16,8 +16,16 @@
 package org.netbeans.modeler.component;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
 import org.netbeans.modeler.component.save.SaveDiagram;
@@ -69,8 +77,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     @Override
     public void init(ModelerFile modelerFile) {
         initComponents();
-        editorToolbar = new Toolbar("Diagram Toolbar", false);
-        add(editorToolbar, BorderLayout.NORTH);
         saveCookies = new SaveDiagram(modelerFile);
         this.modelerFile = modelerFile;
         modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
@@ -113,7 +119,11 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     private void initLookup() {
 //        paletteController = getAssociatedPalette();
         lookupContent.add(ExplorerUtils.createLookup(explorerManager, getActionMap())); //getActionMap() => setupActionMap(getActionMap()) to apply custom action key // it is commented because KeyAdapter functionality is added for key listener
+        
+        if(!modelerFile.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs().isEmpty()){
         lookupContent.add(PaletteSupport.createPalette(modelerFile));
+        }
+        
         lookupContent.add(modelerFile.getModelerScene());
         lookupContent.add(modelerFile.getModelerFileDataObject());
         lookupContent.add(getNavigatorCookie());
@@ -185,12 +195,9 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         map.put("delete", new javax.swing.AbstractAction() {
 
             @Override
-            public void actionPerformed(ActionEvent ev
-            ) {
+            public void actionPerformed(ActionEvent ev) {
                 System.out.println("Deleted Acion");
-
             }
-
         });
         return map;
     }
@@ -213,10 +220,23 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
-        scrollPane = new javax.swing.JScrollPane();
-
         setLayout(new java.awt.BorderLayout());
+        scrollPane = new javax.swing.JScrollPane();
         add(scrollPane, java.awt.BorderLayout.CENTER);
+        JScrollBar vertical = scrollPane.getVerticalScrollBar();
+        vertical.setUnitIncrement(5);
+        InputMap im = vertical.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        im.put(KeyStroke.getKeyStroke("DOWN"), "positiveUnitIncrement");
+        im.put(KeyStroke.getKeyStroke("UP"), "negativeUnitIncrement");
+
+        JScrollBar horizontal = scrollPane.getHorizontalScrollBar();
+        horizontal.setUnitIncrement(5);
+        im = horizontal.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        im.put(KeyStroke.getKeyStroke("RIGHT"), "positiveUnitIncrement");
+        im.put(KeyStroke.getKeyStroke("LEFT"), "negativeUnitIncrement");
+
+        editorToolbar = new Toolbar("Diagram Toolbar", false);
+        add(editorToolbar, BorderLayout.NORTH);
     }// </editor-fold>
     // Variables declaration - do not modify
     private javax.swing.JScrollPane scrollPane;
