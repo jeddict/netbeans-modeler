@@ -151,6 +151,8 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
                 modelerFile.getModelerScene().init(); //color scehme depends on entitymapping
                 System.out.println("lmf Total time : " + (new Date().getTime() - st) + " sec");
+                
+                modelerFile.loaded();
             } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
                 Exceptions.printStackTrace(ex);
             }

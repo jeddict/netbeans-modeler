@@ -58,6 +58,7 @@ public class ModelerFile {
     private String tooltip;
     private String extension;
     private String path;
+    private boolean loaded = false;
 
   
     private Image icon;
@@ -414,6 +415,21 @@ public class ModelerFile {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the loaded
+     */
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    
+    public void loaded() {
+        if(loaded){
+            throw new IllegalStateException("Modeler File already loaded");
+        }
+        this.loaded = true;
     }
  
 }
