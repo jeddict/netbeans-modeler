@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openide.util.Exceptions;
 
 public class ElementConfigFactory {
@@ -44,18 +45,26 @@ public class ElementConfigFactory {
     }
 
     public List<Element> getElements(Class classType) {
+        return getElements(null , classType);
+    }
+    
+    public List<Element> getElements(String category, Class classType) {
         List<Element> elements = new LinkedList<>();
         for (Element element_TMP : elementConfig.getElements()) {
-            if (element_TMP.getClassType().isAssignableFrom(classType)) { //all super class
+             if (StringUtils.equals(category, element_TMP.getCategory()) &&  element_TMP.getClassType().isAssignableFrom(classType)) { //all super class
                 elements.add(element_TMP);
-            }
+             }
         }
         return elements;
     }
-
+    
     public Element getElement(Class classType) {
+        return getElement(null, classType);
+    }
+    
+    public Element getElement(String category, Class classType) {
         for (Element element_TMP : elementConfig.getElements()) {
-            if (element_TMP.getClassType() == classType) {
+            if (StringUtils.equals(category, element_TMP.getCategory()) &&  element_TMP.getClassType() == classType) {
                 return element_TMP;
             }
         }

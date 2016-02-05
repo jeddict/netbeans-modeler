@@ -129,23 +129,41 @@ public class ElementPropertySet {
     }
 
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object) {
-        createPropertySet(baseElementWidget, object, null, null, true, false);
+        createPropertySet(null,null,baseElementWidget, object, null, null, true, false);
     }
 
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers) {
-        createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, false);
+        createPropertySet(null,null,baseElementWidget, object, propertyChangeHandlers, null, true, false);
     }
+    
+    /*
+    * Override attributes groupId
+    */
+      public void createPropertySet(String groupId, IBaseElementWidget baseElementWidget, final Object object,
+            final Map<String, PropertyChangeListener> propertyChangeHandlers) {
+        createPropertySet(groupId,null,baseElementWidget, object, propertyChangeHandlers, null, true, false);
+    }  
+      
+      
+    /*
+    * Filetr using category  
+    */
+      public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object,
+            final Map<String, PropertyChangeListener> propertyChangeHandlers) {
+        createPropertySet(groupId,category,baseElementWidget, object, propertyChangeHandlers, null, true, false);
+    }
+    
 
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers,
             final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers) {
-        createPropertySet(baseElementWidget, object, propertyChangeHandlers, propertyVisiblityHandlers, true, false);
+        createPropertySet(null,null,baseElementWidget, object, propertyChangeHandlers, propertyVisiblityHandlers, true, false);
     }
 
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers, boolean inherit) {
-        createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, false);
+        createPropertySet(null,null,baseElementWidget, object, propertyChangeHandlers, null, true, false);
     }
 
     /**
@@ -157,38 +175,36 @@ public class ElementPropertySet {
      */
     public void replacePropertySet(IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers) {
-        createPropertySet(baseElementWidget, object, propertyChangeHandlers, null, true, true);
+        createPropertySet(null,null,baseElementWidget, object, propertyChangeHandlers, null, true, true);
     }
 
-    private void createPropertySet(IBaseElementWidget baseElementWidget, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
+    private void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
         ElementConfigFactory elementConfigFactory = modelerFile.getVendorSpecification().getElementConfigFactory();
         if (inherit) {
-            for (Element element : elementConfigFactory.getElements(object.getClass())) {
-                createPropertySetInternal(baseElementWidget, object, element, propertyChangeHandlers, propertyVisiblityHandlers, replaceProperty);
+            for (Element element : elementConfigFactory.getElements(category,object.getClass())) {
+                createPropertySetInternal(groupId,baseElementWidget, object, element, propertyChangeHandlers, propertyVisiblityHandlers, replaceProperty);
             }
         } else {
-            Element element = elementConfigFactory.getElement(object.getClass());
+            Element element = elementConfigFactory.getElement(category,object.getClass());
             if (element != null) {
-                createPropertySetInternal(baseElementWidget, object, element, propertyChangeHandlers, propertyVisiblityHandlers, replaceProperty);
+                createPropertySetInternal(groupId,baseElementWidget, object, element, propertyChangeHandlers, propertyVisiblityHandlers, replaceProperty);
             }
         }
     }
 
-    private void createPropertySetInternal(final IBaseElementWidget baseElementWidget, final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean replaceProperty) {
-
-//        PropertyChangeHandler p = new PropertyChangeHandler<Object>() {
-//    public void manage(Object value){}
-//};
-//        p.manage("");
+    private void createPropertySetInternal(String groupId,final IBaseElementWidget baseElementWidget, final Object object, Element element, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean replaceProperty) {
         try {
             if (element != null) {
                 for (final Attribute attribute : element.getAttributes()) {
+                    if (groupId == null) {
+                        groupId = attribute.getGroupId();
+                    }
                     if (attribute.getClassType() == ITextElement.class) {
                         final String name = attribute.getName();
                         final ITextElement expression = (ITextElement) PropertyUtils.getProperty(object, name);//return must not be null//(TExpression) PropertyUtils.getProperty(object, id) == null ? new TExpression() : (TExpression) PropertyUtils.getProperty(object, id);
 //                        PropertyUtils.setProperty(object, id, expression);
-
-                        this.put(attribute.getGroupId(), new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, "content",
+                        
+                        this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, "content",
                                 attribute.getDisplayName(), attribute.getShortDescription(),
                                 new PropertyChangeListener<String>() {
                                     @Override
@@ -219,7 +235,7 @@ public class ElementPropertySet {
                             if (value == null) {
                                 BeanUtils.setProperty(object, attribute.getName(), attribute.getValue());
                             }
-                            this.put(attribute.getGroupId(), new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()), replaceProperty);
+                            this.put(groupId, new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()), replaceProperty);
                         } else {
                             PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
 
@@ -229,7 +245,7 @@ public class ElementPropertySet {
                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent() != null && !attribute.getOnChangeEvent().trim().isEmpty()) {
                                 propertyChangeHandlers.put(attribute.getId(), createPropertyChangeHandler(modelerFile, baseElementWidget, object, attribute.getChangeListenerExpression()));
                             }
-                            this.put(attribute.getGroupId(), new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
+                            this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
                                     attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
                                     new PropertyChangeListener<Object>() {
                                         @Override
@@ -266,13 +282,7 @@ public class ElementPropertySet {
                     }
                 }
             }
-        } catch (IllegalAccessException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (InvocationTargetException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (NoSuchMethodException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (NoSuchFieldException ex) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException ex) {
             Exceptions.printStackTrace(ex);
         }
 

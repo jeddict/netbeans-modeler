@@ -34,6 +34,8 @@ public class Element {
 
     @XmlAttribute
     private String id;
+    @XmlAttribute
+    private String category;
     @XmlAttribute(name = "class")
     private Class<?> classType;
     @XmlElementWrapper(name = "attributes")
@@ -95,6 +97,20 @@ public class Element {
      */
     public void setClassType(Class<?> classType) {
         this.classType = classType;
+    }
+
+    /**
+     * @return the category
+     */
+    public String getCategory() {
+        return category;
+    }
+
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 }
