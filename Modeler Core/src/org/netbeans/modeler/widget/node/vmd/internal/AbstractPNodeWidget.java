@@ -257,6 +257,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     @Override
     public void setNodeName(String nodeName) {
         nameWidget.setLabel(nodeName);
+         revalidate ();
     }
 
     /**
