@@ -606,7 +606,10 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         }
         menuItemList.add(themeMenu);
 
-        JMenu routeMenu = new JMenu("Router");
+        JMenu container = new JMenu("Container");
+        menuItemList.add(container);
+        
+        JMenuItem routeMenu = new JMenu("Router");
 //        position.setIcon(ImageUtil.getInstance().getIcon("position.png"));
         final JRadioButtonMenuItem freeRoute = new JRadioButtonMenuItem("Free Design");
         final JRadioButtonMenuItem autoRoute = new JRadioButtonMenuItem("Auto Route");
@@ -649,7 +652,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
             autoRoute.setSelected(true);
         }
 
-        menuItemList.add(routeMenu);
+        container.add(routeMenu);
 
         JCheckBoxMenuItem alignMenu = new JCheckBoxMenuItem("Align Support");
         alignMenu.addActionListener((ActionEvent e) -> {
@@ -661,7 +664,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         });
         alignMenu.setSelected(true);
 
-        menuItemList.add(alignMenu);
+        container.add(alignMenu);
 
         JMenuItem propsMenu = new JMenuItem("Properties");
         propsMenu.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));

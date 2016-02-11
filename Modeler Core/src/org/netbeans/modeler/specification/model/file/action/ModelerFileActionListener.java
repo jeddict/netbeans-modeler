@@ -33,7 +33,6 @@ import org.netbeans.modeler.specification.annotaton.ModelerConfig;
 import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.DiagramModel;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
-import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 import org.openide.filesystems.FileObject;
@@ -140,9 +139,9 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
                 latch.await();
                 System.out.println("CountDownLatch Total time : " + (new Date().getTime() - st) + " sec");
-                initSpecification(modelerFile);
                 st = new Date().getTime();
                 scene.getModelerPanelTopComponent().init(modelerFile);
+                initSpecification(modelerFile);
                 scene.getModelerPanelTopComponent().open();
                 scene.getModelerPanelTopComponent().requestActive();
                 System.out.println("TC RA Total time : " + (new Date().getTime() - st) + " sec");

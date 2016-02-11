@@ -57,10 +57,6 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
 
     @Override
     public State mousePressed(Widget widget, WidgetMouseEvent event) {
-//        if (editor != null)
-//            closeEditor (true);
-//        return State.REJECTED;
-
         if (editor != null) {
 //            Container parent = editor.getParent(); //BUG : TopComponent KeyListener not working on textfield blur event
 //            if (parent != null) {
@@ -73,10 +69,6 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
 
     @Override
     public State mouseReleased(Widget widget, WidgetAction.WidgetMouseEvent event) {
-//        if (editor != null)
-//            closeEditor (true);
-//        return State.REJECTED;
-
         if (editor != null) {
             Container parent = editor.getParent();
             if (parent != null) {
@@ -175,7 +167,6 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
             return;
         }
         Container parent = editor.getParent();
-//        boolean hasFocus = editor.hasFocus();
 
         Rectangle bounds = parent != null ? editor.getBounds() : null;
         provider.notifyClosing(this, widget, editor, commit);
@@ -184,11 +175,6 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
             parent.remove(editor);
             parent.repaint(bounds.x, bounds.y, bounds.width, bounds.height);
         }
-//        if (hasFocus) {
-//        if (parent != null) {
-//            parent.requestFocusInWindow();//BUG : TopComponent KeyListener not working on textfield blur event
-//        }
-//        }
         editor = null;
         widget = null;
         rectangle = null;

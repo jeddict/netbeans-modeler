@@ -1,1 +1,2 @@
 Save : ModelerFile > save() > SaveDiagram > ModelerUtil.save();
+KeyEvent : ModelerKeyAdapter

@@ -26,7 +26,7 @@ import org.openide.windows.WindowManager;
 
 public class SaveDiagram implements SaveCookie {
 
-    private ModelerFile file;
+    private final ModelerFile file;
     private static final RequestProcessor RP = new RequestProcessor("Saving Diagram", 1); // NOI18N
 
     public SaveDiagram(ModelerFile file) {

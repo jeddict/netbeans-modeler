@@ -115,6 +115,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     @Override
     public void setPinName(String name) {
         nameWidget.setLabel(name);
+        this.getPNodeWidget().revalidate ();
     }
 
     /**

@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.component;
 
+import java.awt.event.KeyListener;
 import org.netbeans.modeler.core.ModelerFile;
 import org.openide.explorer.ExplorerManager;
 import org.openide.nodes.Node;
@@ -48,4 +49,6 @@ public interface IModelerPanel {
     String getToolTipText();
 
     void forceClose();
+    
+    void addKeyListener(KeyListener listener);
 }

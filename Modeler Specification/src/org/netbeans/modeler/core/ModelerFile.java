@@ -59,7 +59,6 @@ public class ModelerFile {
     private String extension;
     private String path;
     private boolean loaded = false;
-
   
     private Image icon;
     private IModelerFileDataObject modelerFileDataObject;
@@ -430,6 +429,10 @@ public class ModelerFile {
             throw new IllegalStateException("Modeler File already loaded");
         }
         this.loaded = true;
+    }
+    
+    public void unload() {
+        this.loaded = false;
     }
  
 }

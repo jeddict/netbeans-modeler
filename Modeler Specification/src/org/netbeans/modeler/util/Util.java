@@ -16,8 +16,12 @@
 package org.netbeans.modeler.util;
 
 import java.awt.Image;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,7 +33,7 @@ import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import org.xml.sax.SAXException;
 
-public class Util {
+public class Util<E> {
 
     private static volatile Object currentLoader;
     private static Lookup.Result<ClassLoader> loaderQuery = null;
@@ -48,12 +52,12 @@ public class Util {
             loaderQuery = Lookup.getDefault().lookup(new Lookup.Template<ClassLoader>(ClassLoader.class));
             loaderQuery.addLookupListener(
                     new LookupListener() {
-                        @Override
-                        public void resultChanged(LookupEvent ev) {
-                            ERR.fine("Loader cleared"); // NOI18N
-                            currentLoader = null;
-                        }
-                    });
+                @Override
+                public void resultChanged(LookupEvent ev) {
+                    ERR.fine("Loader cleared"); // NOI18N
+                    currentLoader = null;
+                }
+            });
         }
 
         Iterator it = loaderQuery.allInstances().iterator();
@@ -109,5 +113,30 @@ public class Util {
 
     public static Image loadImage(String resource) {
         return ImageUtilities.loadImage(resource);
+    }
+
+    /**
+     * Returns a copy of the object, or null if the object cannot be serialized.
+     * @param original Original object to be cloned
+     * @return The new cloned Object
+     */
+    public static <E> E cloneObject(E original) {
+        E clone = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        try (ObjectOutputStream out = new ObjectOutputStream(bos)) {
+
+            // Write the object out to a byte array
+            out.writeObject(original);
+            out.flush();
+
+            // Make an input stream from the byte array and read a copy of the object back in.
+            ObjectInputStream in = new ObjectInputStream(
+                    new ByteArrayInputStream(bos.toByteArray()));
+            clone = (E)in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return clone;
     }
 }

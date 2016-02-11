@@ -15,9 +15,10 @@
  */
 package org.netbeans.modeler.specification.model.document.core;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public interface IBaseElement {
+public interface IBaseElement extends Serializable {
 
     public String getId();
 
