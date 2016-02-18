@@ -148,7 +148,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         getNodeNameWidget().getActions().addAction(editAction);
         getHeader().getActions().addAction(scene.createObjectHoverAction());
 
-        this.getModelerScene().getModelerFile().getModelerDiagramEngine().setNodeWidgetAction(this);
         setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
 
     }

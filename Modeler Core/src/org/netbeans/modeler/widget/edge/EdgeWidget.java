@@ -94,7 +94,6 @@ public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidg
     public EdgeWidget(S scene, EdgeWidgetInfo edge) {
         super((Scene) scene);
         this.setModelerScene(scene);
-
         this.edgeWidgetInfo = edge;
 
         setPaintControlPoints(true);
@@ -103,9 +102,6 @@ public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidg
         setEndPointShape(PointShape.SQUARE_FILLED_BIG);
         setCursor(Cursor.getDefaultCursor());//default
         setControlPointsCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-
-        this.getModelerScene().getModelerFile().getModelerDiagramEngine().setEdgeWidgetAction(this);
-
         //smoothness
         setControlPointCutDistance(2);
         setForeground(new Color(120, 120, 120));

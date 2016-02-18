@@ -165,8 +165,6 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         setChildConstraint(getNodeImageWidget(), 1);
         setCheckClipping(true);
 
-        this.getModelerScene().getModelerFile().getModelerDiagramEngine().setNodeWidgetAction(this);
-
         this.setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
 
     }

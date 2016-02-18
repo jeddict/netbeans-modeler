@@ -654,6 +654,9 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
             }
             ((IBaseElementWidget) nodeWidget).init();
         }
+        
+        nodeWidget.getModelerScene().getModelerFile().getModelerDiagramEngine().setNodeWidgetAction(nodeWidget);
+
         return nodeWidget;
     }
 
@@ -669,6 +672,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
             }
 //            ((IBaseElementWidget) edgeWidget).init();
         }
+        edgeWidget.getModelerScene().getModelerFile().getModelerDiagramEngine().setEdgeWidgetAction(edgeWidget);
         return edgeWidget;
     }
 
