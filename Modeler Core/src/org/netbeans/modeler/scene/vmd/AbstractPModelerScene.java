@@ -845,7 +845,9 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
             }
             ((IBaseElementWidget) pinWidget).init();
         }
-        pinWidget.getModelerScene().getModelerFile().getModelerDiagramEngine().setPinWidgetAction(pinWidget);
+        if (pinWidget != null) {
+            pinWidget.getModelerScene().getModelerFile().getModelerDiagramEngine().setPinWidgetAction(pinWidget);
+        }
 
         return pinWidget;
     }
