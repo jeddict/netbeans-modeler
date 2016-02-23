@@ -292,8 +292,11 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
             return true;
         }
         IModelerScene modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
-        if (modelerFile == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) != this.saveCookies) {
+        if (modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) != this.saveCookies) {
             modelerScene.destroy();
+            if(modelerFile.getParentFile()!=null){
+                modelerFile.getParentFile().removeChildrenFile(modelerFile);
+            }
             return true;
         }
         //prompt to save before close
@@ -313,6 +316,9 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
         if (safeToClose) {
             modelerScene.destroy();
+            if(modelerFile.getParentFile()!=null){
+                modelerFile.getParentFile().removeChildrenFile(modelerFile);
+            }
         }
 
         return safeToClose;
@@ -327,13 +333,12 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     private int saveDiagram() {
         Vendor vendor = this.getModelerFile().getVendorSpecification().getVendor();
         DiagramModel diagram = this.getModelerFile().getVendorSpecification().getModelerDiagramModel().getDiagramModel();
-        String title = "Save " + vendor.getDisplayName() + " " + diagram.getName() + " Diagram"; // NOI18N
-
-        int result = RESULT_CANCEL;
+        String title = "Save " + diagram.getName() + " Diagram"; // NOI18N
+        int result;
 
         Object response = SaveNotifierYesNo.getDefault().displayNotifier(
                 title, // NOI18N
-                vendor.getName() + " " + diagram.getName(), // NOI18N
+                diagram.getName(), // NOI18N
                 this.getModelerFile().getName());
 
         if (response == SaveNotifierYesNo.SAVE_ALWAYS_OPTION) {

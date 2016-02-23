@@ -244,20 +244,21 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
             PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
 
+        
+        menuItemList.add(delete);
+        menuItemList.add(null);
+        menuItemList.add(getPropertyMenu());
+        return menuItemList;
+    }
+    
+    protected JMenuItem getPropertyMenu(){
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
         baseProperty.addActionListener((ActionEvent e) -> {
             PNodeWidget.this.showProperties();
             PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
-
-//        menuItemList.add(visualProperty);
-//        menuItemList.add(null);
-//        menuItemList.add(position);
-        menuItemList.add(delete);
-        menuItemList.add(null);
-        menuItemList.add(baseProperty);
-        return menuItemList;
+        return baseProperty;
     }
 
     @Override
