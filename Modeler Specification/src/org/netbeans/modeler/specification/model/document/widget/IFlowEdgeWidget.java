@@ -19,10 +19,6 @@ import org.netbeans.modeler.specification.model.document.core.IFlowEdge;
 
 public interface IFlowEdgeWidget<E extends IFlowEdge> extends IFlowElementWidget <E> {
 
-    public String getName();
-
-    public void setName(String name);
-
     public IFlowElementWidget getSourceWidget();
 
     public IFlowElementWidget getTargetWidget();

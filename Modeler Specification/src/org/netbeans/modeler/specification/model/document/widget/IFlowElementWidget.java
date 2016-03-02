@@ -20,6 +20,10 @@ import org.netbeans.modeler.specification.model.document.core.IFlowElement;
 
 public interface IFlowElementWidget<E extends IFlowElement> extends IBaseElementWidget<E> {
 
+    public String getName();
+
+    public void setName(String name);
+    
     public Widget getFlowElementsContainer();
 
     public void setFlowElementsContainer(Widget flowElementsContainer);

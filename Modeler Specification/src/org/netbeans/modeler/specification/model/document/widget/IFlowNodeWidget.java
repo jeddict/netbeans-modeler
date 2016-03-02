@@ -20,10 +20,6 @@ import org.netbeans.modeler.specification.model.document.core.IFlowNode;
 
 public interface IFlowNodeWidget<E extends IFlowNode> extends IFlowElementWidget<E> {
 
-    public String getName();
-
-    public void setName(String name);
-
     public List<? extends IFlowEdgeWidget> getIncommingFlowEdgeWidget();
 
     public List<? extends IFlowEdgeWidget> getOutgoingFlowEdgeWidget();
