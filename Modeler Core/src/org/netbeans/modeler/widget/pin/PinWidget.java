@@ -276,4 +276,16 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     public void setHighlightStatus(boolean highlightStatus) {
         this.highlightStatus = highlightStatus;
     }
+
+    private int anchorGap;
+
+    @Override
+    public int getAnchorGap() {
+        return anchorGap;
+    }
+
+    @Override
+    public void setAnchorGap(int anchorGap) {
+        this.anchorGap = anchorGap;
+    }
 }

@@ -52,6 +52,7 @@ import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 
 /**
  * This class represents a node anchor used in P visualization style. The anchor
@@ -143,14 +144,12 @@ public class PNodeAnchor extends Anchor {
                 } else {
                     topmap.put(entry, dx < 0 ? Float.MAX_VALUE : Float.MIN_VALUE);
                 }
+            } else if (dx > 0) {
+                bottommap.put(entry, (float) dy / (float) dx);
+            } else if (dy < 0) {
+                topmap.put(entry, (float) -dy / (float) dx);
             } else {
-                if (dx > 0) {
-                    bottommap.put(entry, (float) dy / (float) dx);
-                } else if (dy < 0) {
-                    topmap.put(entry, (float) -dy / (float) dx);
-                } else {
-                    topmap.put(entry, dy < 0 ? Float.MAX_VALUE : Float.MIN_VALUE);
-                }
+                topmap.put(entry, dy < 0 ? Float.MAX_VALUE : Float.MIN_VALUE);
             }
         }
 
@@ -159,8 +158,8 @@ public class PNodeAnchor extends Anchor {
         int pinGap = 0;
         if (widget instanceof IPNodeWidget) {
             pinGap = ((IPNodeWidget) widget).getAnchorGap();
-        } else if (widget instanceof IPEdgeWidget) {
-            pinGap = ((IPEdgeWidget) widget).getAnchorGap();
+        } else if (widget instanceof IPinWidget) {
+            pinGap = ((IPinWidget) widget).getAnchorGap();
         }
         int y = bounds.y - pinGap;
         int x = bounds.x - pinGap;

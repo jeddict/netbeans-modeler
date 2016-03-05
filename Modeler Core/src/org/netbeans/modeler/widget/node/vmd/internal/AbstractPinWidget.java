@@ -66,8 +66,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     public void setImage(Image image) {
         getImageWidget().setImage(image);
     }
-    
-    
+
     /**
      * @return the errorState
      */
@@ -81,7 +80,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
      */
     @Override
     public void setErrorState(boolean state) {
-       getImageWidget().setErrorState(state);
+        getImageWidget().setErrorState(state);
     }
 
     /**
@@ -115,7 +114,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     @Override
     public void setPinName(String name) {
         nameWidget.setLabel(name);
-        this.getPNodeWidget().revalidate ();
+        this.getPNodeWidget().revalidate();
     }
 
     /**

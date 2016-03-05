@@ -23,10 +23,6 @@ public interface IPEdgeWidget extends IEdgeWidget {
 
     void setColorScheme(IColorScheme colorScheme);
 
-    int getAnchorGap();
-
-    void setAnchorGap(int gap);
-
     boolean isHighlightStatus();
 
     void setHighlightStatus(boolean highlightStatus);

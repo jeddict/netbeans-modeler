@@ -30,7 +30,7 @@ import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 
-public interface IPinWidget extends IWidget , WidgetStateHandler {
+public interface IPinWidget extends IWidget, WidgetStateHandler {
 
     public PinWidgetInfo getPinWidgetInfo();
 
@@ -84,9 +84,7 @@ public interface IPinWidget extends IWidget , WidgetStateHandler {
     void exploreProperties();
 
     void refreshProperties();
-    
-    
-    
+
     /* Abstract PinWidget */
     /**
      * Creates a horizontally oriented anchor similar to
@@ -131,4 +129,8 @@ public interface IPinWidget extends IWidget , WidgetStateHandler {
      * @param glyphs the pin glyphs
      */
     void setProperties(String name, List<Image> glyphs);
+
+    int getAnchorGap();
+
+    void setAnchorGap(int gap);
 }

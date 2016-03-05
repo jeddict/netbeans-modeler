@@ -33,7 +33,6 @@ public abstract class PEdgeWidget<S extends IPModelerScene> extends EdgeWidget i
 
     public PEdgeWidget(S scene, EdgeWidgetInfo edge, IColorScheme colorScheme) {
         super(scene, edge);
-        setAnchorGap(0);
         this.colorScheme = colorScheme;
         colorScheme.installUI(this);
         setState(ObjectState.createNormal());
@@ -62,17 +61,6 @@ public abstract class PEdgeWidget<S extends IPModelerScene> extends EdgeWidget i
     @Override
     public void setColorScheme(IColorScheme colorScheme) {
         this.colorScheme = colorScheme;
-    }
-    private int anchorGap;
-
-    @Override
-    public int getAnchorGap() {
-        return anchorGap;
-    }
-
-    @Override
-    public void setAnchorGap(int anchorGap) {
-        this.anchorGap = anchorGap;
     }
 
     /**

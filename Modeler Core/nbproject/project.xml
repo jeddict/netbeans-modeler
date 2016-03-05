@@ -184,6 +184,7 @@
                 <package>org.netbeans.modeler.actions.export</package>
                 <package>org.netbeans.modeler.anchors</package>
                 <package>org.netbeans.modeler.anchorshape</package>
+                <package>org.netbeans.modeler.anchorshape.crow</package>
                 <package>org.netbeans.modeler.border</package>
                 <package>org.netbeans.modeler.component</package>
                 <package>org.netbeans.modeler.core.engine</package>
