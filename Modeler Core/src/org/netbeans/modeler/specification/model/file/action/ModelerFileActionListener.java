@@ -17,11 +17,13 @@ package org.netbeans.modeler.specification.model.file.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static java.lang.System.out;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.SwingUtilities;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.component.ModelerPanelTopComponent;
+import org.netbeans.modeler.core.IExceptionHandler;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerCore;
 import org.netbeans.modeler.core.ModelerFile;
@@ -71,93 +73,101 @@ public abstract class ModelerFileActionListener implements ActionListener {
     }
 
     public void openModelerFile(String id, String name, String tooltip, ModelerFile parentFile) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
-        long st = new Date().getTime();
-        if (context == null) {
-            if (parentFile == null) {
-                throw new IllegalStateException("ModelerFileDataObject(context) and Parent Modeler file does not exist");
+        ModelerFile modelerFile = null;
+        try {
+            long st = new Date().getTime();
+            if (context == null) {
+                if (parentFile == null) {
+                    throw new IllegalStateException("ModelerFileDataObject(context) and Parent Modeler file does not exist");
+                }
+                context = parentFile.getModelerFileDataObject();
             }
-            context = parentFile.getModelerFileDataObject();
-        }
-        FileObject fileObject = context.getPrimaryFile();
-        String path = fileObject.getPath();
-        String absolutePath;
-        if (id == null) {
-            absolutePath = path;
-        } else {
-            absolutePath = path + "#" + id;
-        }
-        final ModelerFile modelerFile = ModelerCore.getModelerFile(absolutePath) == null ? new ModelerFile() : ModelerCore.getModelerFile(absolutePath);
+            FileObject fileObject = context.getPrimaryFile();
+            String path = fileObject.getPath();
+            String absolutePath;
+            if (id == null) {
+                absolutePath = path;
+            } else {
+                absolutePath = path + "#" + id;
+            }
+            modelerFile = ModelerCore.getModelerFile(absolutePath) == null ? new ModelerFile() : ModelerCore.getModelerFile(absolutePath);
 
-        if (modelerFile.getPath() == null) { // if new modeler file
-            try {
-                CountDownLatch latch = new CountDownLatch(5);
+            if (modelerFile.getPath() == null) { // if new modeler file
+                try {
+                    CountDownLatch latch = new CountDownLatch(5);
 
-                modelerFile.setId(id);
-                modelerFile.setParentFile(parentFile);
-                if (parentFile != null) {
-                    parentFile.addChildrenFile(modelerFile);
+                    modelerFile.setId(id);
+                    modelerFile.setParentFile(parentFile);
+                    if (parentFile != null) {
+                        parentFile.addChildrenFile(modelerFile);
+                    }
+                    modelerFile.setModelerFileDataObject(context);
+                    modelerFile.setTooltip(path);
+                    modelerFile.setPath(absolutePath);
+                    if (name != null) {
+                        modelerFile.setName(name);
+                    }
+                    if (tooltip != null) {
+                        modelerFile.setTooltip(tooltip);
+                    }
+                    ModelerCore.addModelerFile(absolutePath, modelerFile);
+
+                    System.out.println("TLTIP Total time : " + (new Date().getTime() - st) + " sec");
+                    st = new Date().getTime();
+                    //VendorSpecification,ModelerDiagramSpecification
+
+                    Class _class = this.getClass();
+                    final ModelerConfig modelerConfig = (ModelerConfig) _class.getAnnotation(ModelerConfig.class);
+                    final org.netbeans.modeler.specification.annotaton.Vendor vendorConfig = (org.netbeans.modeler.specification.annotaton.Vendor) _class.getAnnotation(org.netbeans.modeler.specification.annotaton.Vendor.class);
+                    final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig = (org.netbeans.modeler.specification.annotaton.DiagramModel) _class.getAnnotation(org.netbeans.modeler.specification.annotaton.DiagramModel.class);
+
+                    Class<? extends IModelerScene> modelerScene = diagramModelConfig.modelerScene();//ModelerScene
+                    IModelerScene scene = modelerScene.newInstance();
+                    scene.setModelerFile(modelerFile);
+                    modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerScene(scene);
+
+                    System.out.println("InSpec I Total time : " + (new Date().getTime() - st) + " sec");
+                    st = new Date().getTime();
+                    new InitExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
+                    new ModelerUtilExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
+                    new PaletteConfigExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
+                    new InstanceExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();//Top Component
+                    new DiagramEngineExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
+                    //1    260,   428      304
+                    //2    4180,  3314     3206
+                    //3    290,   364      348
+                    //4    1186,  2043     1076
+                    //5    3921,  2966     3022
+                    //===========================
+                    //final 4192,  3326     3214
+
+                    latch.await();
+                    System.out.println("CountDownLatch Total time : " + (new Date().getTime() - st) + " sec");
+                    st = new Date().getTime();
+                    scene.getModelerPanelTopComponent().init(modelerFile);
+                    initSpecification(modelerFile);
+                    scene.getModelerPanelTopComponent().open();
+                    scene.getModelerPanelTopComponent().requestActive();
+                    System.out.println("TC RA Total time : " + (new Date().getTime() - st) + " sec");
+                    st = new Date().getTime();
+                    NBModelerUtil.loadModelerFile(modelerFile);
+
+                    modelerFile.getModelerScene().init(); //color scehme depends on entitymapping
+                    System.out.println("lmf Total time : " + (new Date().getTime() - st) + " sec");
+
+                    modelerFile.loaded();
+                } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
+                    modelerFile.handleException(ex);
                 }
-                modelerFile.setModelerFileDataObject(context);
-                modelerFile.setTooltip(path);
-                modelerFile.setPath(absolutePath);
-                if (name != null) {
-                    modelerFile.setName(name);
-                }
-                if (tooltip != null) {
-                    modelerFile.setTooltip(tooltip);
-                }
-                ModelerCore.addModelerFile(absolutePath, modelerFile);
 
-                System.out.println("TLTIP Total time : " + (new Date().getTime() - st) + " sec");
-                st = new Date().getTime();
-                //VendorSpecification,ModelerDiagramSpecification
-
-                Class _class = this.getClass();
-                final ModelerConfig modelerConfig = (ModelerConfig) _class.getAnnotation(ModelerConfig.class);
-                final org.netbeans.modeler.specification.annotaton.Vendor vendorConfig = (org.netbeans.modeler.specification.annotaton.Vendor) _class.getAnnotation(org.netbeans.modeler.specification.annotaton.Vendor.class);
-                final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig = (org.netbeans.modeler.specification.annotaton.DiagramModel) _class.getAnnotation(org.netbeans.modeler.specification.annotaton.DiagramModel.class);
-
-                Class<? extends IModelerScene> modelerScene = diagramModelConfig.modelerScene();//ModelerScene
-                IModelerScene scene = modelerScene.newInstance();
-                scene.setModelerFile(modelerFile);
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerScene(scene);
-
-                System.out.println("InSpec I Total time : " + (new Date().getTime() - st) + " sec");
-                st = new Date().getTime();
-                new InitExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                new ModelerUtilExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                new PaletteConfigExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                new InstanceExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();//Top Component
-                new DiagramEngineExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                //1    260,   428      304
-                //2    4180,  3314     3206
-                //3    290,   364      348
-                //4    1186,  2043     1076
-                //5    3921,  2966     3022
-                //===========================
-                //final 4192,  3326     3214
-
-                latch.await();
-                System.out.println("CountDownLatch Total time : " + (new Date().getTime() - st) + " sec");
-                st = new Date().getTime();
-                scene.getModelerPanelTopComponent().init(modelerFile);
-                initSpecification(modelerFile);
-                scene.getModelerPanelTopComponent().open();
-                scene.getModelerPanelTopComponent().requestActive();
-                System.out.println("TC RA Total time : " + (new Date().getTime() - st) + " sec");
-                st = new Date().getTime();
-                NBModelerUtil.loadModelerFile(modelerFile);
-
-                modelerFile.getModelerScene().init(); //color scehme depends on entitymapping
-                System.out.println("lmf Total time : " + (new Date().getTime() - st) + " sec");
-                
-                modelerFile.loaded();
-            } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
+            } else {
+                modelerFile.getModelerScene().getModelerPanelTopComponent().requestActive();
             }
 
-        } else {
-            modelerFile.getModelerScene().getModelerPanelTopComponent().requestActive();
+        } catch (Exception ex) {
+            if (modelerFile != null) {
+                modelerFile.handleException(ex);
+            }
         }
 
     }
@@ -201,6 +211,17 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
                 Class<? extends IExportManager> exportManager = diagramModelConfig.exportManager();
                 modelerFile.getVendorSpecification().getModelerDiagramModel().setExportManager(exportManager.newInstance());
+
+                Class<? extends IExceptionHandler> exceptionHandler = diagramModelConfig.exceptionHandler();
+                if (exceptionHandler != IExceptionHandler.class) {
+                    modelerFile.getVendorSpecification().getModelerDiagramModel().setExceptionHandler(exceptionHandler.newInstance());
+                } else if (modelerFile.getParentFile() != null) {
+                    modelerFile.getModelerDiagramModel().setExceptionHandler(modelerFile.getParentFile().getModelerDiagramModel().getExceptionHandler());
+                } else {
+                    modelerFile.getModelerDiagramModel().setExceptionHandler((Throwable throwable, ModelerFile file) -> {
+                        Exceptions.printStackTrace(throwable);
+                    });
+                }
 
                 System.out.println("E1 B3B Total time : " + (new Date().getTime() - st) + " sec");
             } catch (InstantiationException | IllegalAccessException ex) {

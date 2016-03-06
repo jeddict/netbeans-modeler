@@ -20,6 +20,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.netbeans.modeler.component.IModelerPanel;
+import org.netbeans.modeler.core.IExceptionHandler;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -45,5 +46,7 @@ public @interface DiagramModel {
     public Class<? extends IModelerDiagramEngine> modelerDiagramEngine() default IModelerDiagramEngine.class; //for widget event handler
 
     public Class<? extends IRelationValidator> relationValidator();
+
+    public Class<? extends IExceptionHandler> exceptionHandler() default IExceptionHandler.class; //for widget event handler
 
 }

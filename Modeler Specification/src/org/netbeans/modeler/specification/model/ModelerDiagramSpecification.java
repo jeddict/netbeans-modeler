@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.specification.model;
 
+import org.netbeans.modeler.core.IExceptionHandler;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
@@ -34,6 +35,8 @@ public class ModelerDiagramSpecification {
 
     private IExportManager exportManager;
     private IRelationValidator relationValidator;
+
+    private IExceptionHandler exceptionHandler;
 
     /**
      * @return the modelerScene
@@ -131,6 +134,20 @@ public class ModelerDiagramSpecification {
      */
     public void setExportManager(IExportManager exportManager) {
         this.exportManager = exportManager;
+    }
+
+    /**
+     * @return the exceptionHandler
+     */
+    public IExceptionHandler getExceptionHandler() {
+        return exceptionHandler;
+    }
+
+    /**
+     * @param exceptionHandler the exceptionHandler to set
+     */
+    public void setExceptionHandler(IExceptionHandler exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
     }
 
 }

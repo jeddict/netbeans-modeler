@@ -18,6 +18,9 @@ package org.netbeans.modeler.core;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javafx.scene.shape.Shape;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.file.IModelerFileDataObject;
@@ -46,11 +50,8 @@ import org.openide.NotifyDescriptor;
 import org.openide.cookies.SaveCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.util.Exceptions;
 
-/**
- *
- *
- */
 public class ModelerFile {
 
     private String id;
@@ -59,7 +60,7 @@ public class ModelerFile {
     private String extension;
     private String path;
     private boolean loaded = false;
-  
+
     private Image icon;
     private IModelerFileDataObject modelerFileDataObject;
     private ModelerVendorSpecification modelerVendorSpecification;
@@ -153,7 +154,7 @@ public class ModelerFile {
      * @return the modelerVendorSpecification
      */
     public ModelerVendorSpecification getVendorSpecification() {
-        if(modelerVendorSpecification == null){
+        if (modelerVendorSpecification == null) {
             modelerVendorSpecification = new ModelerVendorSpecification();
             modelerVendorSpecification.setModelerSpecificationDiagramModel(new ModelerDiagramSpecification());
         }
@@ -213,9 +214,12 @@ public class ModelerFile {
         return this.getVendorSpecification().getModelerDiagramModel().getDefinitionElement();
     }
 
-
     public ModelerDiagramSpecification getModelerDiagramModel() {
         return this.getVendorSpecification().getModelerDiagramModel();
+    }
+
+    public void handleException(Throwable throwable) {
+        getModelerDiagramModel().getExceptionHandler().handle(throwable, this);
     }
 
     public void save() {
@@ -256,12 +260,12 @@ public class ModelerFile {
         if (nodeWidgets.size() + edgeWidgets.size() > 1) {
             d = new NotifyDescriptor.Confirmation("are you sure you want to delete these Elements ?", "Delete Elements", NotifyDescriptor.OK_CANCEL_OPTION);
         } else if (nodeWidgets.size() + edgeWidgets.size() == 1) {
-            if(nodeWidgets.size() == 1){
-               d = new NotifyDescriptor.Confirmation(String.format("are you sure you want to delete %s ?", nodeWidgets.get(0).getLabel()), String.format("Delete ", nodeWidgets.get(0).getLabel()), NotifyDescriptor.OK_CANCEL_OPTION);
-            } else { 
+            if (nodeWidgets.size() == 1) {
+                d = new NotifyDescriptor.Confirmation(String.format("are you sure you want to delete %s ?", nodeWidgets.get(0).getLabel()), String.format("Delete ", nodeWidgets.get(0).getLabel()), NotifyDescriptor.OK_CANCEL_OPTION);
+            } else {
                 d = new NotifyDescriptor.Confirmation("are you sure you want to delete this Element ?", "Delete Element", NotifyDescriptor.OK_CANCEL_OPTION);
             }
-            
+
         }
         if (nodeWidgets.size() + edgeWidgets.size() >= 1) {
             if (DialogDisplayer.getDefault().notify(d) == NotifyDescriptor.OK_OPTION) {
@@ -355,7 +359,7 @@ public class ModelerFile {
      */
     public void setParentFile(ModelerFile parentFile) {
         this.parentFile = parentFile;
-    }    
+    }
 
     /**
      * @return the childrenFile
@@ -370,14 +374,13 @@ public class ModelerFile {
     public void setChildrenFile(Set<ModelerFile> childrenFile) {
         this.childrenFile = childrenFile;
     }
-        
-    
+
     /**
      * @param id
      * @return the childrenFile
      */
     public Optional<ModelerFile> getChildrenFile(String id) {
-       return childrenFile.stream().filter(c -> id.equals(c.getId())).findFirst();
+        return childrenFile.stream().filter(c -> id.equals(c.getId())).findFirst();
     }
 
     /**
@@ -385,16 +388,16 @@ public class ModelerFile {
      */
     public void addChildrenFile(ModelerFile file) {
         this.childrenFile.add(file);
-    }   
-    
+    }
+
     /**
      * @param file the childrenFile to add
      */
     public void removeChildrenFile(ModelerFile file) {
         this.childrenFile.remove(file);
     }
-    
-      @Override
+
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 61 * hash + Objects.hashCode(this.id);
@@ -423,16 +426,23 @@ public class ModelerFile {
         return loaded;
     }
 
-    
     public void loaded() {
-        if(loaded){
+        if (loaded) {
             throw new IllegalStateException("Modeler File already loaded");
         }
         this.loaded = true;
     }
-    
+
     public void unload() {
         this.loaded = false;
     }
- 
+
+    public String getContent() {
+        try {
+            return new String(this.getFileObject().asBytes(), Charset.defaultCharset());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return null;
+    }
 }

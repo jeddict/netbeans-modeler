@@ -53,21 +53,22 @@ import org.openide.util.Exceptions;
 
 public class NBModelerUtil {
 
-    public static void loadModelerFile(ModelerFile file) {
+    public static void loadModelerFile(ModelerFile file) throws Exception {
         file.getModelerUtil().loadModelerFile(file);
     }
-    
+
     public static void init(ModelerFile file) {
         file.getModelerUtil().init();
     }
 
     /**
      * BUG FIX Method : Remove all resize border
+     *
      * @param file
      */
     public static void hideAllResizeBorder(ModelerFile file) {
         /* BUG : On Save if any widget is Selected with resize border then [NodeWidget + border] width is calculated as bound */
-        /*BUG Fix Start : Hide Resize border of all selected NodeWidget*/
+ /*BUG Fix Start : Hide Resize border of all selected NodeWidget*/
         IModelerScene scene = file.getModelerScene();
         boolean validate = false;
         for (Object o : scene.getSelectedObjects()) {
@@ -193,10 +194,8 @@ public class NBModelerUtil {
                 if (comp.getCursor() != NBModelerUtil.VALID_CONNECTION) {
                     comp.setCursor(NBModelerUtil.VALID_CONNECTION);
                 }
-            } else {
-                if (comp.getCursor() != NBModelerUtil.INVALID_CONNECTION) {
-                    comp.setCursor(NBModelerUtil.INVALID_CONNECTION);
-                }
+            } else if (comp.getCursor() != NBModelerUtil.INVALID_CONNECTION) {
+                comp.setCursor(NBModelerUtil.INVALID_CONNECTION);
             }
 
         }
@@ -264,6 +263,7 @@ public class NBModelerUtil {
         Point hotspot = new Point(0, 0);
         return toolkit.createCustomCursor(image, hotspot, "INVALID_CONNECTION");
     }
+
     /*
      * get align path between two point using horizontal or vetical distance by buffer
      */

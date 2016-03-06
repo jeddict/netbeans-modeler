@@ -28,10 +28,10 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 
 public interface IModelerUtil<S extends IModelerScene> {
-    
+
     void init();
 
-    void loadModelerFile(ModelerFile file);
+    void loadModelerFile(ModelerFile file) throws Exception;
 
     void saveModelerFile(ModelerFile file);
 
