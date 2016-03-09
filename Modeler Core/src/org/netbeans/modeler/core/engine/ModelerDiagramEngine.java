@@ -66,6 +66,7 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Utilities;
+import org.netbeans.modeler.actions.PinDeleteAction;
 
 public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
@@ -168,8 +169,8 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(pinWidget.getPopupMenuProvider());
         WidgetAction.Chain selectActionTool = pinWidget.createActions(DesignerTools.SELECT);
 
-//        WidgetAction deleteAction = new PinDeleteAction();
-//        selectActionTool.addAction(deleteAction);
+        WidgetAction deleteAction = new PinDeleteAction();
+        selectActionTool.addAction(deleteAction);
         selectActionTool.addAction(ActionFactory.createSelectAction(PIN_WIDGET_SELECT_PROVIDER, true));//(getScene().createSelectAction());
         selectActionTool.addAction(file.getModelerScene().createObjectHoverAction());
         selectActionTool.addAction(popupMenuAction);

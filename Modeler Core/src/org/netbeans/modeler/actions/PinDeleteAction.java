@@ -28,10 +28,10 @@ import org.netbeans.modeler.widget.pin.PinWidget;
 public class PinDeleteAction extends WidgetAction.Adapter {
 
     public State keyTyped(Widget widget, WidgetKeyEvent event) {
-        if (event.getKeyChar() == KeyEvent.VK_DELETE) {
+        if (widget instanceof PinWidget && event.getKeyChar() == KeyEvent.VK_DELETE) {
             GraphPinScene scene = (GraphPinScene) widget.getScene();
             if (widget instanceof PinWidget) {
-                scene.removePin(scene.findObject(widget));
+                ((PinWidget) widget).remove(true);
                 return State.CONSUMED;
             }
         }
