@@ -19,7 +19,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -29,6 +28,7 @@ import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.layout.Layout;
@@ -37,6 +37,7 @@ import org.netbeans.api.visual.widget.ResourceTable;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.api.visual.widget.Widget.Dependency;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.openide.util.Lookup;
 
@@ -690,5 +691,9 @@ public interface IWidget extends Accessible, Lookup.Provider {
 
     // custom added
     ContextPaletteModel getContextPaletteModel();//moved from INodeWidget to cover all Widget
+
+    IModelerScene getModelerScene();
+
+    PopupMenuProvider getPopupMenuProvider();
 
 }

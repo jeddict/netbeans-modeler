@@ -46,6 +46,7 @@ import org.netbeans.api.visual.action.InplaceEditorProvider;
 import org.netbeans.api.visual.action.TextFieldInplaceEditor;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 
 public final class TextAreaInplaceEditorProvider implements InplaceEditorProvider<JTextArea> {
 
@@ -87,15 +88,13 @@ public final class TextAreaInplaceEditorProvider implements InplaceEditorProvide
         keyListener = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                IModelerScene modelerScene = (IModelerScene) widget.getScene();
                 switch (e.getKeyChar()) {
                     case KeyEvent.VK_ESCAPE:
                         e.consume();
                         controller.closeEditor(false);
+                        modelerScene.getView().requestFocus();
                         break;
-//                    case KeyEvent.VK_ENTER:
-//                        e.consume();
-//                        controller.closeEditor(true);
-//                        break;
                 }
             }
         };

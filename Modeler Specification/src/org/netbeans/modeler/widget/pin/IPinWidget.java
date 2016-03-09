@@ -34,10 +34,6 @@ public interface IPinWidget extends IWidget, WidgetStateHandler {
 
     public PinWidgetInfo getPinWidgetInfo();
 
-    IModelerScene getModelerScene();
-
-    PopupMenuProvider getPopupMenuProvider();
-
     boolean remove();
 
     boolean remove(boolean notification);

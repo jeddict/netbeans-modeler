@@ -17,10 +17,10 @@ package org.netbeans.modeler.specification.model.file.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.lang.System.out;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.SwingUtilities;
+import org.netbeans.modeler.actions.EventListener;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.component.ModelerPanelTopComponent;
 import org.netbeans.modeler.core.IExceptionHandler;

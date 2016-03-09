@@ -19,7 +19,6 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -33,10 +32,11 @@ import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.model.ObjectScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.actions.CustomAcceptAction;
+import org.netbeans.modeler.actions.CyclePinFocusAction;
+import org.netbeans.modeler.actions.CyclePinFocusProvider;
 import org.netbeans.modeler.actions.InteractiveZoomAction;
 import org.netbeans.modeler.actions.LockSelectionAction;
 import org.netbeans.modeler.actions.PanAction;
@@ -70,9 +70,9 @@ import org.openide.util.Utilities;
 public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     protected ModelerFile file;
-    
+
     public static AlignStrategyProvider ALIGNSTRATEGY_PROVIDER = null;
-    private static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {
+    protected static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {
         private boolean locationChanged = false;
         private Point original;
 
@@ -110,16 +110,16 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     @Override
     public void setNodeWidgetAction(final INodeWidget nodeWidget) {
-            WidgetAction selectAction = ActionFactory.createSelectAction(new NodeWidgetSelectProvider(nodeWidget.getModelerScene()));
-            WidgetAction moveAction = new MoveAction(nodeWidget, null, MOVE_PROVIDER_DEFAULT, ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
-            WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
-            WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
-            WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
-            selectActionTool.addAction(selectAction);
-            selectActionTool.addAction(moveAction);
-            selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
-            selectActionTool.addAction(popupMenuAction);
-            selectActionTool.addAction(snapMoveAction);
+        WidgetAction selectAction = ActionFactory.createSelectAction(new NodeWidgetSelectProvider(nodeWidget.getModelerScene()));
+        WidgetAction moveAction = new MoveAction(nodeWidget, null, MOVE_PROVIDER_DEFAULT, ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
+        WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
+        WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
+        WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
+        selectActionTool.addAction(selectAction);
+        selectActionTool.addAction(moveAction);
+        selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
+        selectActionTool.addAction(popupMenuAction);
+        selectActionTool.addAction(snapMoveAction);
     }
 
     @Override
@@ -130,8 +130,8 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     @Override
     public void setModelerSceneAction() {
-        file.getModelerScene().getActions ().addAction (ActionFactory.createWheelPanAction ());
-        file.getModelerScene().getActions ().addAction (ActionFactory.createMouseCenteredZoomAction (1.5));
+        file.getModelerScene().getActions().addAction(ActionFactory.createWheelPanAction());
+        file.getModelerScene().getActions().addAction(ActionFactory.createMouseCenteredZoomAction(1.5));
         WidgetAction acceptAction = ActionFactory.createAcceptAction(new CustomAcceptAction(file.getModelerScene()));
         WidgetAction.Chain selectTool = file.getModelerScene().createActions(DesignerTools.SELECT);
         selectTool.addAction(new LockSelectionAction());//12  sec
@@ -151,7 +151,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
                 return WidgetAction.State.REJECTED;
             }
         });
-        WidgetAction.Chain panTool = file.getModelerScene().createActions(DesignerTools.PAN); //overall 1 sec
+        WidgetAction.Chain panTool = file.getModelerScene().createActions(DesignerTools.PAN);
         panTool.addAction(new PanAction());
         panTool.addAction(ActionFactory.createZoomAction());
         WidgetAction.Chain interactiveZoomTool = file.getModelerScene().createActions(DesignerTools.INTERACTIVE_ZOOM);
@@ -159,17 +159,22 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         interactiveZoomTool.addAction(ActionFactory.createZoomAction());
         WidgetAction.Chain contextPalette = file.getModelerScene().createActions(DesignerTools.CONTEXT_PALETTE);
         contextPalette.addAction(acceptAction);
+
     }
-    private static final PinWidgetSelectProvider pinWidgetSelectProvider = new PinWidgetSelectProvider();
+    public static final PinWidgetSelectProvider PIN_WIDGET_SELECT_PROVIDER = new PinWidgetSelectProvider();
 
     @Override
     public void setPinWidgetAction(final IPinWidget pinWidget) {
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(pinWidget.getPopupMenuProvider());
         WidgetAction.Chain selectActionTool = pinWidget.createActions(DesignerTools.SELECT);
-        selectActionTool.addAction(ActionFactory.createSelectAction(pinWidgetSelectProvider, true));//(getScene().createSelectAction());
+
+//        WidgetAction deleteAction = new PinDeleteAction();
+//        selectActionTool.addAction(deleteAction);
+        selectActionTool.addAction(ActionFactory.createSelectAction(PIN_WIDGET_SELECT_PROVIDER, true));//(getScene().createSelectAction());
         selectActionTool.addAction(file.getModelerScene().createObjectHoverAction());
         selectActionTool.addAction(popupMenuAction);
-
+        WidgetAction cycleAction = new CyclePinFocusAction(new CyclePinFocusProvider());
+        selectActionTool.addAction(cycleAction);
     }
 
     @Override
@@ -195,11 +200,6 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
             actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
 
         }
-
-//       getActions().addAction(ActionFactory.createFreeMoveControlPointAction());
-        //  getActions ().addAction (ActionFactory.createMoveControlPointAction (ActionFactory.createFreeMoveControlPointProvider (), ConnectionWidget.RoutingPolicy.UPDATE_END_POINTS_ONLY));
-//        getActions().addAction(((GraphScene) file.getModelerScene()).createSelectAction());
-        //ActionFactory.createReconnectAction (new SceneReconnectProvider ());
     }
     public JLabel positionLabel;
 
@@ -221,26 +221,24 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 //        positionLabel = new JLabel();
 //        bar.add(positionLabel);
 //        bar.add(new JToolBar.Separator());
-
     }
-    
-    
-    
-     protected void buildExportDocTool(JToolBar bar){
-         JButton exportImageButton = new JButton(new ExportAction(file.getModelerScene())); // 1150 ms
+
+    protected void buildExportDocTool(JToolBar bar) {
+        JButton exportImageButton = new JButton(new ExportAction(file.getModelerScene())); // 1150 ms
         bar.add(exportImageButton);
-     }
-     
-     protected void buildSaveDocTool(JToolBar bar){
-         JButton saveButton = new JButton(ImageUtil.getInstance().getIcon("save-doc.png"));
+    }
+
+    protected void buildSaveDocTool(JToolBar bar) {
+        JButton saveButton = new JButton(ImageUtil.getInstance().getIcon("save-doc.png"));
         saveButton.setToolTipText("Save");
         bar.add(saveButton);
         saveButton.addActionListener((ActionEvent e) -> {
             file.save();
         });
-     }
-         protected void buildSatelliteTool(JToolBar bar){
-         JButton satelliteViewButton = new JButton(ImageUtil.getInstance().getIcon("satelliteView.png"));
+    }
+
+    protected void buildSatelliteTool(JToolBar bar) {
+        JButton satelliteViewButton = new JButton(ImageUtil.getInstance().getIcon("satelliteView.png"));
         bar.add(satelliteViewButton);
         satelliteViewButton.addActionListener((ActionEvent e) -> {
             JPopupMenu popup = new JPopupMenu();
@@ -249,8 +247,9 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
             popup.add(satelliteView, BorderLayout.CENTER);
             popup.show(satelliteViewButton, (satelliteViewButton.getSize().width - satelliteView.getPreferredSize().width) / 2, satelliteViewButton.getSize().height);
         });
-     }
-     protected void buildZoomTool(JToolBar bar){
+    }
+
+    protected void buildZoomTool(JToolBar bar) {
         ZoomManager zoomManager = new ZoomManager((Scene) file.getModelerScene()); //4 sec
         zoomManager.addZoomListener((ZoomEvent event) -> {
             ContextPaletteManager manager = file.getModelerScene().getContextPaletteManager();
@@ -259,11 +258,11 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
                 manager.selectionChanged(null, null);
             }
         });
-         zoomManager.addToolbarActions(bar);
-     }
-    
-    protected void buildSelectTool(JToolBar bar){
-        
+        zoomManager.addToolbarActions(bar);
+    }
+
+    protected void buildSelectTool(JToolBar bar) {
+
         ButtonGroup selectToolBtnGroup = new ButtonGroup();
 
         JToggleButton selectToolButton = new JToggleButton(

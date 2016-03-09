@@ -20,6 +20,13 @@ import java.awt.event.KeyEvent;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 
+/**
+ * org.netbeans.modeler.actions.EventListener is used now
+ *
+ * @author Gaurav Gupta
+ * @deprecated
+ */
+@Deprecated
 public class ModelerKeyAdapter extends KeyAdapter {
 
     private final ModelerFile file;
@@ -34,11 +41,9 @@ public class ModelerKeyAdapter extends KeyAdapter {
             if (e.getKeyCode() == KeyEvent.VK_S) {
                 file.save();
             }
-        } else {
-            if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                file.deleteSelectedElements();
-                NBModelerUtil.hideContextPalette(file.getModelerScene());
-            }
+        } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+            file.deleteSelectedElements();
+            NBModelerUtil.hideContextPalette(file.getModelerScene());
         }
     }
 }

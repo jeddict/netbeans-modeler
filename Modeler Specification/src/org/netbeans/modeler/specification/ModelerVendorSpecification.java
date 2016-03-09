@@ -94,23 +94,4 @@ public class ModelerVendorSpecification {
         this.vendor = vendor;
     }
 
-//    /**
-//     * @return the paletteConfig
-//     */
-//    public IPaletteConfig getPaletteConfig() {
-//        return paletteConfig;
-//    }
-//
-//    /**
-//     * @param paletteConfig the paletteConfig to set
-//     */
-//    public void setPaletteConfig(IPaletteConfig paletteConfig) {
-//        this.paletteConfig = paletteConfig;
-//    }
-    /**
-     * @return the paletteConfigFactory
-     */
-//    public IPaletteConfigFactory getPaletteConfigFactory() {
-//        return paletteConfigFactory;
-//    }
 }

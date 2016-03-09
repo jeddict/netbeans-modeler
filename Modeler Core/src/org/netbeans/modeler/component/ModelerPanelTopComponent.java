@@ -113,18 +113,15 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     }
 
     private void initLookup() {
-//        paletteController = getAssociatedPalette();
         lookupContent.add(ExplorerUtils.createLookup(explorerManager, getActionMap())); //getActionMap() => setupActionMap(getActionMap()) to apply custom action key // it is commented because KeyAdapter functionality is added for key listener
-        
-        if(!modelerFile.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs().isEmpty()){
-        lookupContent.add(PaletteSupport.createPalette(modelerFile));
+
+        if (!modelerFile.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs().isEmpty()) {
+            lookupContent.add(PaletteSupport.createPalette(modelerFile));
         }
-        
+
         lookupContent.add(modelerFile.getModelerScene());
         lookupContent.add(modelerFile.getModelerFileDataObject());
         lookupContent.add(getNavigatorCookie());
-//        lookupContent.add(editorToolbar);
-//        lookupContent.add(zoomManager);
     }
     private NavigatorHint navigatorCookie = null;
 
@@ -294,7 +291,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         IModelerScene modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
         if (modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) != this.saveCookies) {
             modelerScene.destroy();
-            if(modelerFile.getParentFile()!=null){
+            if (modelerFile.getParentFile() != null) {
                 modelerFile.getParentFile().removeChildrenFile(modelerFile);
             }
             return true;
@@ -316,7 +313,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
         if (safeToClose) {
             modelerScene.destroy();
-            if(modelerFile.getParentFile()!=null){
+            if (modelerFile.getParentFile() != null) {
                 modelerFile.getParentFile().removeChildrenFile(modelerFile);
             }
         }

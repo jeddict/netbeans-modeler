@@ -56,7 +56,6 @@ import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
@@ -384,22 +383,22 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
             } else {
                 // The node or edge can intersect the rectangle.
                 if (widget instanceof ConnectionWidget) {
-                    ConnectionWidget conn = (ConnectionWidget) widget;
-                    java.util.List<Point> points = conn.getControlPoints();
-                    for (int i = points.size() - 2; i >= 0; i--) {
-                        Point p1 = widget.convertLocalToScene(points.get(i));
-                        Point p2 = widget.convertLocalToScene(points.get(i + 1));
-                        if (new Line2D.Float(p1, p2).intersects(rect)) {
-                            set.add((IFlowElementWidget) object);
-                        }
-                    }
-                } else {
-                    Rectangle widgetRect = widget.convertLocalToScene(widget.getBounds());
-                    if (rect.intersects(widgetRect)) {
+                ConnectionWidget conn = (ConnectionWidget) widget;
+                java.util.List<Point> points = conn.getControlPoints();
+                for (int i = points.size() - 2; i >= 0; i--) {
+                    Point p1 = widget.convertLocalToScene(points.get(i));
+                    Point p2 = widget.convertLocalToScene(points.get(i + 1));
+                    if (new Line2D.Float(p1, p2).intersects(rect)) {
                         set.add((IFlowElementWidget) object);
                     }
                 }
+            } else {
+                Rectangle widgetRect = widget.convertLocalToScene(widget.getBounds());
+                if (rect.intersects(widgetRect)) {
+                    set.add((IFlowElementWidget) object);
+                }
             }
+        }
         }
 
         return set;
@@ -654,7 +653,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
             }
             ((IBaseElementWidget) nodeWidget).init();
         }
-        
+
         nodeWidget.getModelerScene().getModelerFile().getModelerDiagramEngine().setNodeWidgetAction(nodeWidget);
 
         return nodeWidget;
@@ -745,5 +744,10 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     @Override
     public ContextPaletteModel getContextPaletteModel() {
         return null;
+    }
+
+    @Override
+    public IModelerScene getModelerScene() {
+        return this;
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.scene.vmd;
 
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -52,6 +53,8 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.EventProcessingType;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.actions.EventListener;
+import org.netbeans.modeler.actions.IEventListener;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
@@ -133,11 +136,12 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         router = RouterFactory.createOrthogonalSearchRouter(mainLayer, connectionLayer);//RouterFactory.createFreeRouter();
         satelliteView = this.createSatelliteView();
         setActiveTool(DesignerTools.SELECT);
-        this.setContextPaletteManager(new SwingPaletteManager((IModelerScene) this));
     }
 
     @Override
     public void init() {
+        this.setContextPaletteManager(new SwingPaletteManager((IModelerScene) this));
+
         IColorScheme scheme = this.getColorScheme();
         scheme.installUI(this);
     }
@@ -236,8 +240,8 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     @Override
     protected Widget attachPinWidget(NodeWidgetInfo nodeWidgetInfo, PinWidgetInfo pinWidgetInfo) {
         INodeWidget nodeWidget = (INodeWidget) findWidget(nodeWidgetInfo);
-        
-        if (pinWidgetInfo.getDocumentId().equals("INTERNAL")){
+
+        if (pinWidgetInfo.getDocumentId().equals("INTERNAL")) {
             return null;
         }
         PinWidget pinWidget = (PinWidget) this.getModelerFile().getPModelerUtil().attachPinWidget(this, nodeWidget, pinWidgetInfo);
@@ -483,7 +487,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
                         set.add((IFlowElementWidget) object);
                     }
                 }
-            }
+        }
         }
 
         return set;
@@ -608,7 +612,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
         JMenu container = new JMenu("Container");
         menuItemList.add(container);
-        
+
         JMenuItem routeMenu = new JMenu("Router");
 //        position.setIcon(ImageUtil.getInstance().getIcon("position.png"));
         final JRadioButtonMenuItem freeRoute = new JRadioButtonMenuItem("Free Design");
@@ -631,7 +635,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         autoRoute.addActionListener((ActionEvent e) -> {
             freeRoute.setSelected(false);
             autoRoute.setSelected(true);
-            router = RouterFactory.createOrthogonalSearchRouter(mainLayer,connectionLayer);
+            router = RouterFactory.createOrthogonalSearchRouter(mainLayer, connectionLayer);
             for (Widget widget : AbstractPModelerScene.this.connectionLayer.getChildren()) {
                 if (widget instanceof ConnectionWidget) {
                     ((ConnectionWidget) widget).setRouter(router);
@@ -838,7 +842,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     @Override
     public IPinWidget createPinWidget(NodeWidgetInfo node, PinWidgetInfo pin) {
         IPinWidget pinWidget = (IPinWidget) this.addPin(node, pin);
-        
+
         if (pinWidget instanceof IBaseElementWidget) {
             if (pin.getBaseElementSpec() != null) {
                 ((IBaseElementWidget) pinWidget).setBaseElementSpec(pin.getBaseElementSpec());
@@ -965,5 +969,49 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
     public boolean isSceneGenerating() {
         return sceneGeneration;
+    }
+
+    @Override
+    public IModelerScene getModelerScene() {
+        return this;
+    }
+
+    @Override
+    public JComponent createView() {
+        super.createView();
+        addKeyboardActions();
+        return getView();
+    }
+
+    /**
+     * Register Keyboard Event //TODO same need to do in AbstractModelerScene
+     */
+    public void addKeyboardActions() {
+        getView().setFocusable(true);
+        getActions().addAction(new MouseClickAction(getView()));
+        getEventListener().registerEvent(getView(), modelerFile);
+    }
+
+    protected IEventListener getEventListener() {
+        return new EventListener();
+    }
+}
+
+/**
+ * When the scene is clicked, sets the the focus to scene's component.
+ */
+class MouseClickAction extends org.netbeans.api.visual.action.WidgetAction.Adapter {
+
+    private final Component component;
+
+    public MouseClickAction(Component aComponent) {
+        component = aComponent;
+    }
+
+    @Override
+    public State mouseClicked(Widget widget, WidgetMouseEvent event) {
+        System.out.println("setting focus to " + component);
+        component.requestFocus();
+        return State.REJECTED;
     }
 }

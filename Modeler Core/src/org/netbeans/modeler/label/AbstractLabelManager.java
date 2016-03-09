@@ -25,6 +25,7 @@ import java.beans.PropertyChangeListener;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.MoveStrategy;
+import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.ResizeProvider;
 import org.netbeans.api.visual.action.SelectProvider;
 import org.netbeans.api.visual.action.WidgetAction;
@@ -41,6 +42,7 @@ import org.netbeans.modeler.border.RoundResizeBorder;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextPaneInplaceEditorProvider;
 import org.netbeans.modeler.label.multiline.MultilineEditableCompartmentWidget;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.tool.DesignerTools;
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
@@ -265,9 +267,11 @@ public abstract class AbstractLabelManager implements LabelManager {
             implements ILabelConnectionWidget, PropertyChangeListener {
 
         LabelWidget labelWidget;
+        private IModelerScene scene;
 
         public LabelConnectionWidget(Scene scene, String name) {
             super(scene);
+            this.scene = (IModelerScene) scene;
             labelWidget = new MultilineEditableCompartmentWidget(scene, name, null,
                     this, "getResourcePath()", name);
             labelWidget.setAlignment(LabelWidget.Alignment.CENTER);
@@ -374,6 +378,17 @@ public abstract class AbstractLabelManager implements LabelManager {
 
         @Override
         public ContextPaletteModel getContextPaletteModel() {
+            return null;
+        }
+
+        @Override
+        public IModelerScene getModelerScene() {
+            return this.scene;
+        }
+
+        @Override
+
+        public PopupMenuProvider getPopupMenuProvider() {
             return null;
         }
     }

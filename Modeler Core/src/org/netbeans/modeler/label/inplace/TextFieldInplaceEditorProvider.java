@@ -60,6 +60,7 @@ import org.netbeans.api.visual.action.InplaceEditorProvider;
 import org.netbeans.api.visual.action.TextFieldInplaceEditor;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 
 /**
  * @author David Kaspar
@@ -96,19 +97,22 @@ public final class TextFieldInplaceEditorProvider implements InplaceEditorProvid
     }
 
     @Override
-    public void notifyOpened(final EditorController controller, Widget widget, JTextField editor) {
+    public void notifyOpened(final EditorController controller, final Widget widget, JTextField editor) {
         editor.setMinimumSize(new Dimension(64, 19));
         keyListener = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                IModelerScene modelerScene = (IModelerScene) widget.getScene();
                 switch (e.getKeyChar()) {
                     case KeyEvent.VK_ESCAPE:
                         e.consume();
                         controller.closeEditor(false);
+                        modelerScene.getView().requestFocus();
                         break;
                     case KeyEvent.VK_ENTER:
                         e.consume();
                         controller.closeEditor(true);
+                        modelerScene.getView().requestFocus();
                         break;
                 }
             }

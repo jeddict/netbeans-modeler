@@ -29,11 +29,6 @@ public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget 
 
     EdgeWidgetInfo getEdgeWidgetInfo();
 
-    S getModelerScene();
-
-//    AbstractNode getNode();
-    PopupMenuProvider getPopupMenuProvider();
-
     void hideLabel();
 
     void manageControlPoint();

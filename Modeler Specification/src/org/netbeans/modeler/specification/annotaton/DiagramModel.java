@@ -47,6 +47,6 @@ public @interface DiagramModel {
 
     public Class<? extends IRelationValidator> relationValidator();
 
-    public Class<? extends IExceptionHandler> exceptionHandler() default IExceptionHandler.class; //for widget event handler
+    public Class<? extends IExceptionHandler> exceptionHandler() default IExceptionHandler.class;
 
 }

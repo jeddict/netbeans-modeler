@@ -281,6 +281,7 @@
                 <package>org.apache.commons.collections</package>
                 <package>org.apache.commons.logging</package>
                 <package>org.apache.commons.logging.impl</package>
+                <package>org.netbeans.modeler.actions</package>
                 <package>org.netbeans.modeler.border</package>
                 <package>org.netbeans.modeler.component</package>
                 <package>org.netbeans.modeler.config.document</package>

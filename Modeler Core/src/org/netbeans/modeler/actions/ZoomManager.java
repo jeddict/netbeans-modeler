@@ -258,7 +258,7 @@ public class ZoomManager implements Scene.SceneListener {
         } else {
             if (percent > MAX_ZOOM_PERCENT) {
                 percent = MAX_ZOOM_PERCENT;
-            }
+        }
         }
 
         // Find the current center point prior to zooming.
@@ -523,7 +523,7 @@ public class ZoomManager implements Scene.SceneListener {
                     } else {
                         if (item instanceof Value) {
                             value = (Value) item;
-                        }
+                    }
                     }
                     if (value == null) {
                         value = new Value(ZoomComboBox.this.manager.getZoom());
@@ -863,16 +863,14 @@ public class ZoomManager implements Scene.SceneListener {
         fireZoomEvent((int) (scene.getZoomFactor() * 100));
         if (scene.getZoomFactor() * 100 >= MAX_ZOOM_PERCENT
                 || scene.getZoomFactor() * 100 <= MIN_ZOOM_PERCENT) {
-            // disable marquee zoom 
+            // disable marquee zoom
             if (scene.getActiveTool().equals(DesignerTools.MARQUEE_ZOOM)) {
                 scene.setCursor(getMarqueeZoomStopCursor());
             }
-        } else {
-            // reset marquee zoom cursor
-            if (scene.getActiveTool().equals(DesignerTools.MARQUEE_ZOOM)) {
+        } else // reset marquee zoom cursor
+         if (scene.getActiveTool().equals(DesignerTools.MARQUEE_ZOOM)) {
                 scene.setCursor(getMarqueeZoomCursor());
             }
-        }
 
     }
 

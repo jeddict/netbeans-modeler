@@ -15,8 +15,10 @@
  */
 package org.netbeans.modeler.widget.node.vmd.internal;
 
+import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
 
@@ -32,6 +34,16 @@ public class PinSeperatorWidget extends LabelWidget implements IPinSeperatorWidg
 
     @Override
     public ContextPaletteModel getContextPaletteModel() {
+        return null;
+    }
+
+    @Override
+    public IModelerScene getModelerScene() {
+        return (IModelerScene) this.getScene();
+    }
+
+    @Override
+    public PopupMenuProvider getPopupMenuProvider() {
         return null;
     }
 

@@ -216,8 +216,8 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         } else {
             if (bottom) {
                 rectangle.height = size.height;
-            } else {
-            }
+        } else {
+        }
         }
 
         boolean left = directions.contains(InplaceEditorProvider.ExpansionDirection.LEFT);
@@ -234,8 +234,8 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         } else {
             if (right) {
                 rectangle.width = size.width;
-            } else {
-            }
+        } else {
+        }
         }
 
         updateRectangleToFitToView(rectangle);

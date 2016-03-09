@@ -30,14 +30,11 @@ public class KeyEventLoggerAction extends WidgetAction.Adapter {
 
     @Override
     public State keyPressed(Widget widget, WidgetKeyEvent event) {
-        //System.out.println("KeyEventLoggerAction keyPressed oooooooooooooooooooooooooooooo" + event.getKeyCode());
-
         return State.REJECTED;
     }
 
     @Override
     public State keyReleased(Widget widget, WidgetKeyEvent event) {
-        //System.out.println("KeyEventLoggerAction keyReleased oooooooooooooooooooooooooooooo" + event.getKeyCode());
         if (event.getKeyCode() == KeyEvent.VK_DELETE) {
             GraphScene s = (GraphScene) widget.getScene();
             if (widget instanceof NodeWidget) {
