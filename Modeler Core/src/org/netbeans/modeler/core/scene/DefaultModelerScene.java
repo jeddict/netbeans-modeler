@@ -16,7 +16,9 @@
 package org.netbeans.modeler.core.scene;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
@@ -24,7 +26,7 @@ import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidg
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
 
 /**
- * DefaultPModelerScene is the default implementation of PModelerScene. You
+ * DefaultPModelerScene is the default implementation of ModelerScene. You
  * should implement your own modeler scene implementation if you want to modify
  * the storage structure of flowElements widget (e.g divide flowElements widget
  * into multiple collection , as in BPMN module Conversation and Artifacts
@@ -36,35 +38,35 @@ import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidg
  */
 public abstract class DefaultModelerScene<E extends IRootElement> extends ModelerScene<E> {
 
-    protected List<IFlowElementWidget> flowElements = new ArrayList<>();
+    protected Map<String, IFlowElementWidget> flowElements = new LinkedHashMap<>();
 
     @Override
     public IBaseElementWidget getBaseElement(String id) {
-        for (IBaseElementWidget baseElementWidget : flowElements) {
-            if (baseElementWidget.getId().equals(id)) {
-                return baseElementWidget;
-            }
-        }
-        return null;
+//        for (IBaseElementWidget baseElementWidget : flowElements) {
+//            if (baseElementWidget.getId().equals(id)) {
+//                return baseElementWidget;
+//            }
+//        }
+        return flowElements.get(id);
     }
 
     @Override
     public List<IBaseElementWidget> getBaseElements() {
-        List<IBaseElementWidget> baseElementWidgets = new ArrayList<>(flowElements);
-        return baseElementWidgets;
+//        List<IBaseElementWidget> baseElementWidgets = new ArrayList<>(flowElements);
+        return new ArrayList<>(flowElements.values());
     }
 
     @Override
     public void removeBaseElement(IBaseElementWidget baseElementWidget) {
         if (baseElementWidget instanceof IFlowElementWidget) {
-            this.flowElements.remove((IFlowElementWidget) baseElementWidget);
+            this.flowElements.remove(baseElementWidget.getId());
         }
     }
 
     @Override
     public void addBaseElement(IBaseElementWidget baseElementWidget) {
         if (baseElementWidget instanceof IFlowElementWidget) {
-            this.flowElements.add((IFlowElementWidget) baseElementWidget);
+            this.flowElements.put(baseElementWidget.getId(), (IFlowElementWidget) baseElementWidget);
         }
     }
 

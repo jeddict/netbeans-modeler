@@ -16,9 +16,10 @@
 package org.netbeans.modeler.core.scene.vmd;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
@@ -36,35 +37,35 @@ import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidg
  */
 public abstract class DefaultPModelerScene<E extends IRootElement> extends PModelerScene<E> {
 
-    protected List<IFlowElementWidget> flowElements = new ArrayList<>();
+    private Map<String, IFlowElementWidget> flowElements = new LinkedHashMap<>();
 
     @Override
     public IBaseElementWidget getBaseElement(String id) {
-        for (IBaseElementWidget baseElementWidget : flowElements) {
-            if (baseElementWidget.getId().equals(id)) {
-                return baseElementWidget;
-            }
-        }
-        return null;
+//        for (IBaseElementWidget baseElementWidget : flowElements) {
+//            if (baseElementWidget.getId().equals(id)) {
+//                return baseElementWidget;
+//            }
+//        }
+        return flowElements.get(id);
     }
 
     @Override
     public List<IBaseElementWidget> getBaseElements() {
-        List<IBaseElementWidget> baseElementWidgets = new ArrayList<>(flowElements);
-        return baseElementWidgets;
+//        List<IBaseElementWidget> baseElementWidgets = new ArrayList<>(flowElements);
+        return new ArrayList<>(flowElements.values());
     }
 
     @Override
     public void removeBaseElement(IBaseElementWidget baseElementWidget) {
         if (baseElementWidget instanceof IFlowElementWidget) {
-            this.flowElements.remove((IFlowElementWidget) baseElementWidget);
+            this.flowElements.remove(baseElementWidget.getId());
         }
     }
 
     @Override
     public void addBaseElement(IBaseElementWidget baseElementWidget) {
         if (baseElementWidget instanceof IFlowElementWidget) {
-            this.flowElements.add((IFlowElementWidget) baseElementWidget);
+            this.flowElements.put(baseElementWidget.getId(), (IFlowElementWidget) baseElementWidget);
         }
     }
 

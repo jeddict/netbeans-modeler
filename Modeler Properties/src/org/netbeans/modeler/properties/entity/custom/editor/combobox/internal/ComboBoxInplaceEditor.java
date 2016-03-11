@@ -47,16 +47,16 @@ public class ComboBoxInplaceEditor implements InplaceEditor {
             comboBoxComponent = new JComboBoxPanel(modelerFile, comboBoxListener.getActionHandler());
             comboBox = ((JComboBoxPanel) comboBoxComponent).getComboBox();
         }
-        comboBox.addItemListener(
-                new java.awt.event.ItemListener() {
-                    @Override
-                    public void itemStateChanged(java.awt.event.ItemEvent event) {
-                        if (event.getStateChange() == ItemEvent.SELECTED && stateActive) {
-                            comboBoxListener.setItem((ComboBoxValue) comboBox.getModel().getSelectedItem());
-                        }
-                        modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
-                    }
-                });
+        comboBox.addItemListener((java.awt.event.ItemEvent event) -> {
+            try {
+                if (event.getStateChange() == ItemEvent.SELECTED && stateActive) {
+                    comboBoxListener.setItem((ComboBoxValue) comboBox.getModel().getSelectedItem());
+                }
+                modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
+            } catch (Exception ex) {
+                modelerFile.handleException(ex);
+            }
+        });
 
     }
 

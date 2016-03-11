@@ -15,12 +15,11 @@
  */
 package org.netbeans.modeler.core;
 
+import org.netbeans.api.project.FileOwnerQuery;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
-import javafx.scene.shape.Shape;
+import org.netbeans.api.project.Project;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.file.IModelerFileDataObject;
@@ -148,6 +147,10 @@ public class ModelerFile {
         this.setName(fileObject.getName());
         this.setExtension(fileObject.getExt());
         this.setIcon(modelerFileDataObject.getIcon());
+    }
+
+    public Project getProject() {
+        return FileOwnerQuery.getOwner(modelerFileDataObject.getPrimaryFile());
     }
 
     /**
@@ -445,4 +448,9 @@ public class ModelerFile {
         }
         return null;
     }
+
+    public float getCurrentVersion() {
+        return getVendorSpecification().getModelerDiagramModel().getDiagramModel().getVersion();
+    }
+
 }

@@ -29,6 +29,7 @@ import org.netbeans.modeler.core.ModelerCore;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.core.engine.ModelerDiagramEngine;
+import org.netbeans.modeler.core.exception.ProcessInterruptedException;
 import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.specification.Vendor;
 import org.netbeans.modeler.specification.annotaton.ModelerConfig;
@@ -164,6 +165,14 @@ public abstract class ModelerFileActionListener implements ActionListener {
                 modelerFile.getModelerScene().getModelerPanelTopComponent().requestActive();
             }
 
+        } catch (ProcessInterruptedException ex) {
+//            if (modelerFile != null) {
+//                modelerFile.handleException(ex);
+//            }
+        } catch (RuntimeException ex) {
+            if (modelerFile != null) {
+                modelerFile.handleException(ex);
+            }
         } catch (Exception ex) {
             if (modelerFile != null) {
                 modelerFile.handleException(ex);
@@ -198,7 +207,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
                 long st = new Date().getTime();
 
                 modelerFile.getVendorSpecification().setVendor(new Vendor(vendorConfig.id(), vendorConfig.version(), vendorConfig.name(), vendorConfig.displayName()));
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setDiagramModel(new DiagramModel(diagramModelConfig.id(), diagramModelConfig.name()));
+                modelerFile.getVendorSpecification().getModelerDiagramModel().setDiagramModel(new DiagramModel(diagramModelConfig.id(), diagramModelConfig.name(), diagramModelConfig.version()));
 
                 Class<? extends IModelerPanel> modelerPanel = diagramModelConfig.modelerPanel();
                 if (modelerPanel != IModelerPanel.class) {

@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
+import org.openide.windows.WindowManager;
 
 public class JComboBoxPanel extends javax.swing.JPanel {
 
@@ -129,7 +130,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
     private void deleteItem_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {
         ComboBoxValue comboBoxValue = (ComboBoxValue) comboBox.getSelectedItem();
         if (comboBoxValue.getValue() == null) {
-            JOptionPane.showMessageDialog(null, "No element selected !", "", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(), "No element selected !", "", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         int option = actionHandler.getRemoveMessage().getAsInt();
@@ -143,7 +144,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
     private void editItem_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {
         ComboBoxValue comboBoxValue = (ComboBoxValue) comboBox.getSelectedItem();
         if (comboBoxValue.getValue() == null) {
-            JOptionPane.showMessageDialog(null, "No element selected !", "", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(WindowManager.getDefault().getMainWindow(), "No element selected !", "", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         EntityComponent itemComponent = actionHandler.getItemProducer();

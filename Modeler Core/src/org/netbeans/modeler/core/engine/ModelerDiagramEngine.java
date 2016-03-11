@@ -37,8 +37,10 @@ import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.actions.CustomAcceptAction;
 import org.netbeans.modeler.actions.CyclePinFocusAction;
 import org.netbeans.modeler.actions.CyclePinFocusProvider;
+import org.netbeans.modeler.actions.EdgeDeleteAction;
 import org.netbeans.modeler.actions.InteractiveZoomAction;
 import org.netbeans.modeler.actions.LockSelectionAction;
+import org.netbeans.modeler.actions.NodeDeleteAction;
 import org.netbeans.modeler.actions.PanAction;
 import org.netbeans.modeler.actions.ZoomManager;
 import org.netbeans.modeler.actions.ZoomManager.ZoomEvent;
@@ -71,6 +73,9 @@ import org.netbeans.modeler.actions.PinDeleteAction;
 public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     protected ModelerFile file;
+    private static final WidgetAction NODE_DELETE_ACTION = new NodeDeleteAction();
+    private static final WidgetAction EDGE_DELETE_ACTION = new EdgeDeleteAction();
+    private static final WidgetAction PIN_DELETE_ACTION = new PinDeleteAction();
 
     public static AlignStrategyProvider ALIGNSTRATEGY_PROVIDER = null;
     protected static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {
@@ -116,6 +121,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
         WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
         WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
+        selectActionTool.addAction(NODE_DELETE_ACTION);
         selectActionTool.addAction(selectAction);
         selectActionTool.addAction(moveAction);
         selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
@@ -169,8 +175,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(pinWidget.getPopupMenuProvider());
         WidgetAction.Chain selectActionTool = pinWidget.createActions(DesignerTools.SELECT);
 
-        WidgetAction deleteAction = new PinDeleteAction();
-        selectActionTool.addAction(deleteAction);
+        selectActionTool.addAction(PIN_DELETE_ACTION);
         selectActionTool.addAction(ActionFactory.createSelectAction(PIN_WIDGET_SELECT_PROVIDER, true));//(getScene().createSelectAction());
         selectActionTool.addAction(file.getModelerScene().createObjectHoverAction());
         selectActionTool.addAction(popupMenuAction);
@@ -183,6 +188,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction.Chain actions = edgeWidget.getActions();
 
         if (edgeWidget instanceof PEdgeWidget) {
+            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(ActionFactory.createMoveControlPointAction(ActionFactory.createFreeMoveControlPointProvider(), ConnectionWidget.RoutingPolicy.DISABLE_ROUTING_UNTIL_END_POINT_IS_MOVED));
 //
@@ -193,6 +199,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
             actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
 
         } else {
+            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(new MoveControlPointAction(new FreeMoveControlPointProvider(), null)); // Working
             actions.addAction(file.getModelerScene().createWidgetHoverAction());

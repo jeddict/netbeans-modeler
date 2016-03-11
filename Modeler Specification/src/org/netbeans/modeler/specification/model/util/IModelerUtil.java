@@ -19,6 +19,7 @@ import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.config.document.IModelerDocument;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.core.exception.ProcessInterruptedException;
 import org.netbeans.modeler.shape.ShapeDesign;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
@@ -31,7 +32,7 @@ public interface IModelerUtil<S extends IModelerScene> {
 
     void init();
 
-    void loadModelerFile(ModelerFile file) throws Exception;
+    void loadModelerFile(ModelerFile file) throws ProcessInterruptedException;
 
     void saveModelerFile(ModelerFile file);
 

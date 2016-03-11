@@ -35,6 +35,8 @@ public @interface DiagramModel {
 
     public String name();
 
+    public float version();
+
     public Class<? extends IModelerPanel> modelerPanel() default IModelerPanel.class;//for widget container component/window
 
     public Class<? extends IModelerUtil> modelerUtil();

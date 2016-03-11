@@ -19,10 +19,12 @@ public class DiagramModel {
 
     private String id;
     private String name;
+    private float version;
 
-    public DiagramModel(String id, String name) {
+    public DiagramModel(String id, String name, float version) {
         this.id = id;
         this.name = name;
+        this.version = version;
     }
 
     /**
@@ -51,5 +53,19 @@ public class DiagramModel {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the version
+     */
+    public float getVersion() {
+        return version;
+    }
+
+    /**
+     * @param version the version to set
+     */
+    public void setVersion(float version) {
+        this.version = version;
     }
 }
