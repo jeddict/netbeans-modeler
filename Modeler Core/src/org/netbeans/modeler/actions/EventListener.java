@@ -40,7 +40,7 @@ public class EventListener implements IEventListener {
                 modelerFile.save();
             }
         });
-        component.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, 0), "DELETE_ITEM");
+        component.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0), "DELETE_ITEM");
         component.getActionMap().put("DELETE_ITEM", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -121,8 +121,8 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
         WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
         WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
-        selectActionTool.addAction(NODE_DELETE_ACTION);
         selectActionTool.addAction(selectAction);
+//        selectActionTool.addAction(NODE_DELETE_ACTION);
         selectActionTool.addAction(moveAction);
         selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
         selectActionTool.addAction(popupMenuAction);
@@ -175,12 +175,12 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(pinWidget.getPopupMenuProvider());
         WidgetAction.Chain selectActionTool = pinWidget.createActions(DesignerTools.SELECT);
 
-        selectActionTool.addAction(PIN_DELETE_ACTION);
         selectActionTool.addAction(ActionFactory.createSelectAction(PIN_WIDGET_SELECT_PROVIDER, true));//(getScene().createSelectAction());
         selectActionTool.addAction(file.getModelerScene().createObjectHoverAction());
         selectActionTool.addAction(popupMenuAction);
         WidgetAction cycleAction = new CyclePinFocusAction(new CyclePinFocusProvider());
         selectActionTool.addAction(cycleAction);
+//        selectActionTool.addAction(PIN_DELETE_ACTION);
     }
 
     @Override
@@ -188,22 +188,20 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction.Chain actions = edgeWidget.getActions();
 
         if (edgeWidget instanceof PEdgeWidget) {
-            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(ActionFactory.createMoveControlPointAction(ActionFactory.createFreeMoveControlPointProvider(), ConnectionWidget.RoutingPolicy.DISABLE_ROUTING_UNTIL_END_POINT_IS_MOVED));
-//
-//            actions.addAction(new MoveControlPointAction(new FreeMoveControlPointProvider(), null)); // Working
             actions.addAction(file.getModelerScene().createWidgetHoverAction());
             actions.addAction(ActionFactory.createSelectAction(new EdgeWidgetSelectProvider(edgeWidget.getModelerScene())));
+//            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createReconnectAction(ActionFactory.createDefaultReconnectDecorator(), new SequenceFlowReconnectProvider(file.getModelerScene())));
             actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
 
         } else {
-            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(new MoveControlPointAction(new FreeMoveControlPointProvider(), null)); // Working
             actions.addAction(file.getModelerScene().createWidgetHoverAction());
             actions.addAction(ActionFactory.createSelectAction(new EdgeWidgetSelectProvider(edgeWidget.getModelerScene())));
+//            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createReconnectAction(ActionFactory.createDefaultReconnectDecorator(), new SequenceFlowReconnectProvider(file.getModelerScene())));
             actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
 
