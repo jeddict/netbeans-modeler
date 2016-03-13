@@ -145,8 +145,8 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     latch.await();
                     System.out.println("CountDownLatch Total time : " + (new Date().getTime() - st) + " sec");
                     st = new Date().getTime();
-                    scene.getModelerPanelTopComponent().init(modelerFile);
                     initSpecification(modelerFile);
+                    scene.getModelerPanelTopComponent().init(modelerFile);
                     scene.getModelerPanelTopComponent().open();
                     scene.getModelerPanelTopComponent().requestActive();
                     System.out.println("TC RA Total time : " + (new Date().getTime() - st) + " sec");
