@@ -25,6 +25,7 @@ import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
+import org.netbeans.modeler.specification.version.SoftwareVersion;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 
 @Retention(value = RetentionPolicy.RUNTIME)
@@ -35,7 +36,9 @@ public @interface DiagramModel {
 
     public String name();
 
-    public float version();
+    public String version();
+    
+    public String architectureVersion();
 
     public Class<? extends IModelerPanel> modelerPanel() default IModelerPanel.class;//for widget container component/window
 

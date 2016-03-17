@@ -315,6 +315,7 @@
                 <package>org.netbeans.modeler.specification.model.document.widget</package>
                 <package>org.netbeans.modeler.specification.model.file.action</package>
                 <package>org.netbeans.modeler.specification.model.util</package>
+                <package>org.netbeans.modeler.specification.version</package>
                 <package>org.netbeans.modeler.task</package>
                 <package>org.netbeans.modeler.util</package>
                 <package>org.netbeans.modeler.widget.connection.relation</package>

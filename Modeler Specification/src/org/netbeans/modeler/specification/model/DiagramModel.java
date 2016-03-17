@@ -15,16 +15,20 @@
  */
 package org.netbeans.modeler.specification.model;
 
+import org.netbeans.modeler.specification.version.SoftwareVersion;
+
 public class DiagramModel {
 
     private String id;
     private String name;
-    private float version;
+    private SoftwareVersion version;
+    private SoftwareVersion architectureVersion;
 
-    public DiagramModel(String id, String name, float version) {
+    public DiagramModel(String id, String name, SoftwareVersion version, SoftwareVersion architectureVersion) {
         this.id = id;
         this.name = name;
         this.version = version;
+        this.architectureVersion = architectureVersion;
     }
 
     /**
@@ -58,14 +62,28 @@ public class DiagramModel {
     /**
      * @return the version
      */
-    public float getVersion() {
+    public SoftwareVersion getVersion() {
         return version;
     }
 
     /**
      * @param version the version to set
      */
-    public void setVersion(float version) {
+    public void setVersion(SoftwareVersion version) {
         this.version = version;
+    }
+
+    /**
+     * @return the architectureVersion
+     */
+    public SoftwareVersion getArchitectureVersion() {
+        return architectureVersion;
+    }
+
+    /**
+     * @param architectureVersion the architectureVersion to set
+     */
+    public void setArchitectureVersion(SoftwareVersion architectureVersion) {
+        this.architectureVersion = architectureVersion;
     }
 }

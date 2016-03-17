@@ -30,12 +30,6 @@ import org.netbeans.modeler.widget.edge.IEdgeWidget;
  */
 public class EdgeWidgetSelectProvider implements SelectProvider {
 
-    AbstractModelerScene scene;
-
-    public EdgeWidgetSelectProvider(IModelerScene scene) {
-//        this.scene = (IModelerScene) scene;
-    }
-
     @Override
     public boolean isAimingAllowed(Widget widget, Point localLocation, boolean invertSelection) {
         return false;

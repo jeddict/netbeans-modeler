@@ -116,7 +116,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     @Override
     public void setNodeWidgetAction(final INodeWidget nodeWidget) {
-        WidgetAction selectAction = ActionFactory.createSelectAction(new NodeWidgetSelectProvider(nodeWidget.getModelerScene()));
+        WidgetAction selectAction = ActionFactory.createSelectAction(NODE_WIDGET_SELECT_PROVIDER);
         WidgetAction moveAction = new MoveAction(nodeWidget, null, MOVE_PROVIDER_DEFAULT, ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
         WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
@@ -168,6 +168,8 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         contextPalette.addAction(acceptAction);
 
     }
+    public static final NodeWidgetSelectProvider NODE_WIDGET_SELECT_PROVIDER = new NodeWidgetSelectProvider();
+    public static final EdgeWidgetSelectProvider EDGE_WIDGET_SELECT_PROVIDER = new EdgeWidgetSelectProvider();
     public static final PinWidgetSelectProvider PIN_WIDGET_SELECT_PROVIDER = new PinWidgetSelectProvider();
 
     @Override
@@ -191,7 +193,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
             actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(ActionFactory.createMoveControlPointAction(ActionFactory.createFreeMoveControlPointProvider(), ConnectionWidget.RoutingPolicy.DISABLE_ROUTING_UNTIL_END_POINT_IS_MOVED));
             actions.addAction(file.getModelerScene().createWidgetHoverAction());
-            actions.addAction(ActionFactory.createSelectAction(new EdgeWidgetSelectProvider(edgeWidget.getModelerScene())));
+            actions.addAction(ActionFactory.createSelectAction(EDGE_WIDGET_SELECT_PROVIDER));
 //            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createReconnectAction(ActionFactory.createDefaultReconnectDecorator(), new SequenceFlowReconnectProvider(file.getModelerScene())));
             actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
@@ -200,7 +202,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
             actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(new MoveControlPointAction(new FreeMoveControlPointProvider(), null)); // Working
             actions.addAction(file.getModelerScene().createWidgetHoverAction());
-            actions.addAction(ActionFactory.createSelectAction(new EdgeWidgetSelectProvider(edgeWidget.getModelerScene())));
+            actions.addAction(ActionFactory.createSelectAction(EDGE_WIDGET_SELECT_PROVIDER));
 //            actions.addAction(EDGE_DELETE_ACTION);
             actions.addAction(ActionFactory.createReconnectAction(ActionFactory.createDefaultReconnectDecorator(), new SequenceFlowReconnectProvider(file.getModelerScene())));
             actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
@@ -283,7 +285,6 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         JToggleButton handToolButton = new JToggleButton(
                 new DiagramSelectToolAction(file.getModelerScene(),
                         DesignerTools.PAN, ImageUtil.getInstance().getIcon("pan.png"), "HandToolAction",
-                        //NbBundle.getMessage(DiagramSelectToolAction.class, "LBL_HandToolAction"),
                         Utilities.createCustomCursor(file.getModelerScene().getView(),
                                 ImageUtilities.icon2Image(ImageUtil.getInstance().getIcon("pan-open-hand.gif")), "PanOpenedHand"),
                         KeyStroke.getKeyStroke("ctrl alt shift N"),

@@ -86,16 +86,19 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {
-        List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
+        List<JMenuItem> menuItemList = new LinkedList<>();
+        menuItemList.add(getPropertyMenu());
+        return menuItemList;
+    }
+
+    protected JMenuItem getPropertyMenu() {
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
         baseProperty.addActionListener((ActionEvent e) -> {
             PinWidget.this.showProperties();
             PinWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
-
-        menuItemList.add(baseProperty);
-        return menuItemList;
+        return baseProperty;
     }
 
     @Override

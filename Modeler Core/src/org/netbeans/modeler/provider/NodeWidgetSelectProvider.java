@@ -30,12 +30,6 @@ import org.netbeans.modeler.widget.node.INodeWidget;
  */
 public class NodeWidgetSelectProvider implements SelectProvider {
 
-    ObjectScene scene;
-
-    public NodeWidgetSelectProvider(IModelerScene scene) {
-        this.scene = (ObjectScene) scene;
-    }
-
     @Override
     public boolean isAimingAllowed(Widget widget, Point localLocation, boolean invertSelection) {
         return false;
@@ -48,6 +42,7 @@ public class NodeWidgetSelectProvider implements SelectProvider {
 
     @Override
     public void select(Widget widget, Point localLocation, boolean invertSelection) {
+        ObjectScene scene = (ObjectScene) widget.getScene();
         INodeWidget nodeWidget = (INodeWidget) widget;
         Object object = scene.findObject(widget);
         if (object != null) {// bug if removed then widget does not move
