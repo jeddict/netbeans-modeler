@@ -15,7 +15,6 @@
  */
 package org.netbeans.modeler.widget.node.vmd;
 
-//import org.netbeans.modeler.widget.INodeWidget;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -63,7 +62,7 @@ import org.openide.NotifyDescriptor;
 /**
  *
  *
- * @param <S>
+ * @param <S> IModelerScene implementation
  */
 public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNodeWidget {
 
