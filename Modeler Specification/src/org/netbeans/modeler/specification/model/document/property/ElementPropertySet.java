@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.mvel2.MVEL;
-import org.mvel2.compiler.CompiledExpression;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.config.element.Element;
 import org.netbeans.modeler.config.element.ElementConfig;

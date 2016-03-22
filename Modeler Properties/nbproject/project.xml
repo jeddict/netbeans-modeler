@@ -16,6 +16,14 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.netbeans.modeler.libs</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.netbeans.modeler.specification</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -68,7 +76,7 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <specification-version>9.6</specification-version>
+                        <specification-version>9.4</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -84,7 +92,6 @@
                 <package>org.netbeans.modeler.node</package>
                 <package>org.netbeans.modeler.properties.editor.documentation</package>
                 <package>org.netbeans.modeler.properties.embedded</package>
-                <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.advance.client.listener</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.client.support</package>
@@ -95,10 +102,6 @@
                 <package>org.netbeans.modeler.properties.window</package>
                 <package>org.netbeans.modeler.widget.properties.customattr</package>
             </public-packages>
-            <class-path-extension>
-                <runtime-relative-path>ext/mvel2-2.2.0.Final.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/mvel2-2.2.0.Final.jar</binary-origin>
-            </class-path-extension>
         </data>
     </configuration>
 </project>
