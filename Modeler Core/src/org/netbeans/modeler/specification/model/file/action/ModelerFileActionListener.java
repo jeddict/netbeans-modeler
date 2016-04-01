@@ -178,6 +178,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
             if (modelerFile != null) {
                 modelerFile.handleException(ex);
             }
+        } catch (Throwable t) {
+            if (modelerFile != null) {
+                modelerFile.handleException(t);
+            }
         }
 
     }

@@ -89,7 +89,7 @@ public final class TextFieldInplaceEditorProvider implements InplaceEditorProvid
         if (!editor.isEnabled(widget)) {
             return null;
         }
-        JTextField field = new JTextField(editor.getText(widget));
+        final JTextField field = new JTextField(editor.getText(widget));
 //        field.setBorder(new CompoundBorder(BorderFactory.createLineBorder(Color.WHITE),new EmptyBorder(0,0,0,0)));
         field.selectAll();
         Scene scene = widget.getScene();
