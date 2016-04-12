@@ -279,8 +279,7 @@ public class Attribute {
 
     public Serializable getChangeListenerExpression() {
         if (onChangeListenerExpression == null && onChangeEvent != null) {
-//            visibilityExpression = MVEL.compileExpression(getVisible().replaceAll("this", "_this"));
-            onChangeListenerExpression = MVEL.compileExpression(getVisible());//this functionality not required currently , may be in future 
+            onChangeListenerExpression = MVEL.compileExpression(getOnChangeEvent().replaceAll("this", "_this"));
         }
         return onChangeListenerExpression;
     }
