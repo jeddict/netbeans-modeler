@@ -52,6 +52,7 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
@@ -550,6 +551,10 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getName(), propertyVisibilityHandlers);
+    }
+    
+    public IPropertyManager getPropertyManager(){
+        return node;
     }
 
     @Override

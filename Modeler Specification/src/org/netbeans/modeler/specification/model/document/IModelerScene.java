@@ -23,6 +23,7 @@ import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
@@ -149,4 +150,6 @@ public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidg
     void exploreProperties();
 
     void refreshProperties();
+    
+    IPropertyManager getPropertyManager();
 }

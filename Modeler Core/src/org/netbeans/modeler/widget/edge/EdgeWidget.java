@@ -35,6 +35,7 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.label.BasicLabelManager;
 import org.netbeans.modeler.label.LabelManager;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
@@ -201,6 +202,10 @@ public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidg
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getLabelManager() == null ? "" : this.getLabelManager().getLabel(), propertyVisibilityHandlers);
+    }
+    
+    public IPropertyManager getPropertyManager(){
+        return node;
     }
 
     @Override

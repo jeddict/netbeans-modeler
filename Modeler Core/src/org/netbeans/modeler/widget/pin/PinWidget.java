@@ -31,6 +31,7 @@ import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
@@ -129,6 +130,10 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getPinName(), propertyVisibilityHandlers);
+    }
+    
+    public IPropertyManager getPropertyManager(){
+        return node;
     }
 
     @Override

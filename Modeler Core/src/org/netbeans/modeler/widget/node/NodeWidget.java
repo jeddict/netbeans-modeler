@@ -47,6 +47,7 @@ import org.netbeans.modeler.label.BasicLabelManager;
 import org.netbeans.modeler.label.LabelManager;
 import org.netbeans.modeler.locale.I18n;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.properties.view.manager.VisualPropertyViewManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.shape.ShapeDesign;
@@ -336,6 +337,11 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getLabel(), propertyVisibilityHandlers);
     }
+    
+    public IPropertyManager getPropertyManager(){
+        return node;
+    }
+    
 
     @Override
     public void refreshProperties() {

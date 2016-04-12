@@ -21,6 +21,7 @@ import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -80,7 +81,7 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
                 value = (T) "";
             } else if (classType == Boolean.class) {
                 value = (T) Boolean.FALSE;
-            }
+            } 
         }
         return value;
     }

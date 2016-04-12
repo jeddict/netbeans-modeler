@@ -29,6 +29,7 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.ConnectionWidget.RoutingPolicy;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.widget.node.IWidget;
 
 public interface IConnectionWidget extends IWidget {
@@ -393,4 +394,6 @@ public interface IConnectionWidget extends IWidget {
     void exploreProperties();
 
     void refreshProperties();
+    
+    IPropertyManager getPropertyManager();
 }
