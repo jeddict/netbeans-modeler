@@ -16,6 +16,7 @@
 package org.netbeans.modeler.widget.properties.generic;
 
 import java.lang.reflect.InvocationTargetException;
+import org.apache.commons.lang.StringUtils;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
@@ -34,19 +35,20 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
     private PropertyChangeListener propertyChangeListener;
     private PropertyVisibilityHandler propertyVisibilityHandler;
     private ModelerFile modelerFile;
+    private String propertyId;
 
-    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
-        this(modelerFile, object, classType, propertyName, propertyName, propertyName, propertyChangeListener);
+    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyId,String propertyName, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
+        this(modelerFile, object, classType, propertyId, propertyName, propertyName, propertyName, propertyChangeListener);
     }
 
-    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
-        this(modelerFile, object, classType, propertyName, displayName, description, propertyChangeListener, null);
+    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyId,String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
+        this(modelerFile, object, classType, propertyId, propertyName, displayName, description, propertyChangeListener, null);
     }
 
-    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
+    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType,String propertyId, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
         super(object, classType, propertyName);
         this.modelerFile = modelerFile;
-//        this.object = object;
+        this.propertyId = propertyId;
 //        this.propertyName = propertyName;
         this.classType = classType;
         this.propertyChangeListener = propertyChangeListener;
@@ -56,9 +58,10 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
 
     }
 
-    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String getter, String setter, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException {
+    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String getter, String setter,String propertyId, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException {
         super(object, classType, getter, setter);
         this.modelerFile = modelerFile;
+        this.propertyId = propertyId;
 //        this.object = object;
         //this.propertyName = propertyName;
         this.classType = classType;
@@ -104,6 +107,13 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
      */
     public void setPropertyVisibilityHandler(PropertyVisibilityHandler propertyVisibilityHandler) {
         this.propertyVisibilityHandler = propertyVisibilityHandler;
+    }
+    
+    public String getName(){
+        if(StringUtils.isBlank(propertyId)){
+            return super.getName();
+        }
+        return propertyId;
     }
 }
 // class BooleanWrapper {

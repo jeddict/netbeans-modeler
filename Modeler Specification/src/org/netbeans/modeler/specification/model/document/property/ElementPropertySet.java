@@ -203,7 +203,7 @@ public class ElementPropertySet {
                         final ITextElement expression = (ITextElement) PropertyUtils.getProperty(object, name);//return must not be null//(TExpression) PropertyUtils.getProperty(object, id) == null ? new TExpression() : (TExpression) PropertyUtils.getProperty(object, id);
 //                        PropertyUtils.setProperty(object, id, expression);
                         
-                        this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, "content",
+                        this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, attribute.getId(),"content",
                                 attribute.getDisplayName(), attribute.getShortDescription(),
                                 new PropertyChangeListener<String>() {
                                     @Override
@@ -211,11 +211,7 @@ public class ElementPropertySet {
                                         if (expression.getContent() == null || expression.getContent().isEmpty()) {
                                             try {
                                                 PropertyUtils.setProperty(object, name, null);
-                                            } catch (IllegalAccessException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (InvocationTargetException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (NoSuchMethodException ex) {
+                                            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                                                 Exceptions.printStackTrace(ex);
                                             }
                                         }
@@ -245,7 +241,7 @@ public class ElementPropertySet {
                                 propertyChangeHandlers.put(attribute.getId(), createPropertyChangeHandler(modelerFile, baseElementWidget, object, attribute.getChangeListenerExpression()));
                             }
                             this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
-                                    attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
+                                    attribute.getId(),attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
                                     new PropertyChangeListener<Object>() {
                                         @Override
                                         public void changePerformed(Object value) {
@@ -263,9 +259,7 @@ public class ElementPropertySet {
                                                 } else {
                                                     BeanUtils.setProperty(object, attribute.getName(), null);
                                                 }
-                                            } catch (IllegalAccessException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (InvocationTargetException ex) {
+                                            } catch (IllegalAccessException | InvocationTargetException ex) {
                                                 Exceptions.printStackTrace(ex);
                                             }
                                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
