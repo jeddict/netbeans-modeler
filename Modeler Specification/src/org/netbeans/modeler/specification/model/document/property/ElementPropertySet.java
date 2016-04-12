@@ -45,9 +45,9 @@ import org.openide.util.Exceptions;
 public class ElementPropertySet {
 
     private ModelerFile modelerFile;
-    private ElementConfig elementConfig;
+    private final ElementConfig elementConfig;
     private Sheet sheet;
-    private Map<String, Sheet.Set> set = new LinkedHashMap<String, Sheet.Set>();
+    private Map<String, Sheet.Set> set = new LinkedHashMap<>();
 
     public ElementPropertySet(ModelerFile modelerFile, Sheet sheet) {
         this.modelerFile = modelerFile;

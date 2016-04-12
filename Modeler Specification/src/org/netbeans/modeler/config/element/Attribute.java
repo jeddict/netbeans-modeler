@@ -16,6 +16,7 @@
 package org.netbeans.modeler.config.element;
 
 import java.io.Serializable;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -240,9 +241,14 @@ public class Attribute {
     private Serializable visibilityExpression;
 
     public Serializable getVisibilityExpression() {
-        if (visibilityExpression == null && visible != null) {
-//            visibilityExpression = MVEL.compileExpression(getVisible().replaceAll("this", "_this"));
-            visibilityExpression = MVEL.compileExpression(getVisible());//this functionality not required currently , may be in future 
+        if (visibilityExpression == null) {
+            if (getElement().getVisible() != null && visible != null) {
+                visibilityExpression = MVEL.compileExpression(getElement().getVisible().replaceAll("this", "_this") + " && " + getVisible().replaceAll("this", "_this"));
+            } else if (getElement().getVisible() == null && visible != null) {
+                visibilityExpression = MVEL.compileExpression(getVisible().replaceAll("this", "_this"));
+            } else if (getElement().getVisible() != null && visible == null) {
+                visibilityExpression = MVEL.compileExpression(getElement().getVisible().replaceAll("this", "_this"));
+            } 
         }
         return visibilityExpression;
     }
@@ -291,6 +297,27 @@ public class Attribute {
      */
     public void setRefreshOnChange(Boolean refreshOnChange) {
         this.refreshOnChange = refreshOnChange;
+    }
+    
+    @XmlTransient
+    private Element element;
+
+    void afterUnmarshal(Unmarshaller u, Object parent) {
+        setElement((Element) parent);
+    }
+
+    /**
+     * @return the element
+     */
+    private Element getElement() {
+        return element;
+    }
+
+    /**
+     * @param element the element to set
+     */
+    private void setElement(Element element) {
+        this.element = element;
     }
 
 }
