@@ -234,8 +234,9 @@ public class ElementPropertySet {
                         } else {
                             PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
 
-                            if (propertyVisibilityHandler == null && attribute.getVisible() != null && !attribute.getVisible().trim().isEmpty()) {
-                                propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile, baseElementWidget, object, attribute.getVisibilityExpression());
+                            Serializable visibilityExpression = attribute.getVisibilityExpression();
+                            if (propertyVisibilityHandler == null && visibilityExpression != null) {
+                                propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile, baseElementWidget, object, visibilityExpression);
                             }
                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent() != null && !attribute.getOnChangeEvent().trim().isEmpty()) {
                                 propertyChangeHandlers.put(attribute.getId(), createPropertyChangeHandler(modelerFile, baseElementWidget, object, attribute.getChangeListenerExpression()));
