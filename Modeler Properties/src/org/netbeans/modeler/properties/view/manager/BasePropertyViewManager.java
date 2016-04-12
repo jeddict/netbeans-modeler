@@ -160,4 +160,8 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
     public IBaseElementWidget getBaseElementWidget() {
         return baseElementWidget;
     }
+    
+    public ElementPropertySet getElementPropertySet() {
+        return elementPropertySet;
+    }
 }

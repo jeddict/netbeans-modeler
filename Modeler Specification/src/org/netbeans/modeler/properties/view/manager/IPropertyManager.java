@@ -16,6 +16,7 @@
 package org.netbeans.modeler.properties.view.manager;
 
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 
 public interface IPropertyManager {
@@ -29,5 +30,7 @@ public interface IPropertyManager {
      * @return the modelerScene
      */
     IModelerScene getModelerScene();
+    
+    ElementPropertySet getElementPropertySet();
 
 }

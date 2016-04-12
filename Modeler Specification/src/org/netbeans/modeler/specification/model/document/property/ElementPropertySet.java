@@ -60,6 +60,10 @@ public class ElementPropertySet {
         set.put(id, sheet.createPropertiesSet());
         set.get(id).setName(id);// Sheet.Set : name is required work as key [otherwise set is replaced]
     }
+    
+    public void deleteGroup(String id) {
+        set.remove(id);
+    }
 
     public synchronized Node.Property<?> put(String id, Node.Property<?> p, boolean replace) {
         if (set.get(id) == null) {
@@ -146,7 +150,7 @@ public class ElementPropertySet {
       
       
     /*
-    * Filetr using category  
+    * Filter using category  
     */
       public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers) {
