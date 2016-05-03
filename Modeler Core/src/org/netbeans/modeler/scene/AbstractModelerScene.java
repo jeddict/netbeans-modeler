@@ -33,6 +33,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import org.netbeans.api.visual.action.PopupMenuProvider;
@@ -54,6 +55,7 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
+import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
@@ -71,6 +73,7 @@ import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.util.lookup.InstanceContent;
+import org.openide.windows.WindowManager;
 
 /**
  *
@@ -454,7 +457,16 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     protected List<JMenuItem> getPopupMenuItemList() {
         List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
 
-        JMenu routeMenu = new JMenu("Router");
+        JMenuItem rerouteMenu = new JMenuItem("Re-Route");
+        rerouteMenu.addActionListener((ActionEvent e) -> {
+            int option = JOptionPane.showConfirmDialog(WindowManager.getDefault().getMainWindow(), "Are you want to re-route the diagram ?", "Re-Route Diagram", JOptionPane.YES_NO_OPTION);
+            if (option == javax.swing.JOptionPane.OK_OPTION) {
+                AbstractModelerScene.this.autoLayout();
+            }
+        });
+        menuItemList.add(rerouteMenu);
+
+        JMenuItem routeMenu = new JMenu("Route types");
 //        position.setIcon(ImageUtil.getInstance().getIcon("position.png"));
         final JRadioButtonMenuItem freeRoute = new JRadioButtonMenuItem("Free Design");
         final JRadioButtonMenuItem autoRoute = new JRadioButtonMenuItem("Auto Route");
