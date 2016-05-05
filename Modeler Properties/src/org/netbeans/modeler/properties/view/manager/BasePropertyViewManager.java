@@ -85,7 +85,6 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
 
     private void createSheet(Sheet sheet, Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
         for (Sheet.Set propertySet : elementPropertySet.getGroups()) {
-//            propertySet.setHidden(false);
             int hiddenPropertyCount = 0;
             for (Node.Property property : propertySet.getProperties()) {
                 property.setHidden(false);
@@ -160,5 +159,9 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
     @Override
     public IBaseElementWidget getBaseElementWidget() {
         return baseElementWidget;
+    }
+    
+    public ElementPropertySet getElementPropertySet() {
+        return elementPropertySet;
     }
 }

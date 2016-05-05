@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
+            <code-name-base>org.netbeans.modeler.libs</code-name-base>
+            <suite-component/>
+            <module-dependencies/>
+            <public-packages>
+                <package>org.mvel2</package>
+                <package>org.mvel2.asm</package>
+                <package>org.mvel2.asm.commons</package>
+                <package>org.mvel2.asm.signature</package>
+                <package>org.mvel2.asm.tree</package>
+                <package>org.mvel2.asm.tree.analysis</package>
+                <package>org.mvel2.asm.util</package>
+                <package>org.mvel2.asm.xml</package>
+                <package>org.mvel2.ast</package>
+                <package>org.mvel2.compiler</package>
+                <package>org.mvel2.conversion</package>
+                <package>org.mvel2.debug</package>
+                <package>org.mvel2.integration</package>
+                <package>org.mvel2.integration.impl</package>
+                <package>org.mvel2.math</package>
+                <package>org.mvel2.optimizers</package>
+                <package>org.mvel2.optimizers.dynamic</package>
+                <package>org.mvel2.optimizers.impl.asm</package>
+                <package>org.mvel2.optimizers.impl.refl</package>
+                <package>org.mvel2.optimizers.impl.refl.collection</package>
+                <package>org.mvel2.optimizers.impl.refl.nodes</package>
+                <package>org.mvel2.sh</package>
+                <package>org.mvel2.sh.command.basic</package>
+                <package>org.mvel2.sh.command.file</package>
+                <package>org.mvel2.sh.text</package>
+                <package>org.mvel2.templates</package>
+                <package>org.mvel2.templates.res</package>
+                <package>org.mvel2.templates.util</package>
+                <package>org.mvel2.templates.util.io</package>
+                <package>org.mvel2.util</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/w3c.jar</runtime-relative-path>
+                <binary-origin>/home/JPA,/Pictures/GAURAV 21 MAR/nbmodeler/Modeler Libraries/release/modules/ext/w3c.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/batik-ext-1.6-1.jar</runtime-relative-path>
+                <binary-origin>/home/JPA,/Pictures/GAURAV 21 MAR/nbmodeler/Modeler Libraries/release/modules/ext/batik-ext-1.6-1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/batik-all-1_7.jar</runtime-relative-path>
+                <binary-origin>/home/JPA,/Pictures/GAURAV 21 MAR/nbmodeler/Modeler Libraries/release/modules/ext/batik-all-1_7.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-beanutils-core-1.8.3.jar</runtime-relative-path>
+                <binary-origin>/home/JPA,/Pictures/GAURAV 21 MAR/nbmodeler/Modeler Libraries/release/modules/ext/commons-beanutils-core-1.8.3.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-beanutils-1.8.3.jar</runtime-relative-path>
+                <binary-origin>/home/JPA,/Pictures/GAURAV 21 MAR/nbmodeler/Modeler Libraries/release/modules/ext/commons-beanutils-1.8.3.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/mvel2-2.2.0.Final.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/mvel2-2.2.0.Final.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-beanutils-bean-collections-1.8.3.jar</runtime-relative-path>
+                <binary-origin>/home/JPA,/Pictures/GAURAV 21 MAR/nbmodeler/Modeler Libraries/release/modules/ext/commons-beanutils-bean-collections-1.8.3.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/gson-2.2.3.jar</runtime-relative-path>
+                <binary-origin>/home/JPA,/Pictures/GAURAV 21 MAR/nbmodeler/Modeler Libraries/release/modules/ext/gson-2.2.3.jar</binary-origin>
+            </class-path-extension>
+        </data>
+    </configuration>
+</project>

@@ -15,7 +15,6 @@
  */
 package org.netbeans.modeler.widget.node.vmd;
 
-//import org.netbeans.modeler.widget.INodeWidget;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -43,6 +42,7 @@ import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
@@ -63,7 +63,7 @@ import org.openide.NotifyDescriptor;
 /**
  *
  *
- * @param <S>
+ * @param <S> IModelerScene implementation
  */
 public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNodeWidget {
 
@@ -289,6 +289,10 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getNodeName(), propertyVisibilityHandlers);
+    }
+    
+    public IPropertyManager getPropertyManager(){
+        return node;
     }
 
     @Override

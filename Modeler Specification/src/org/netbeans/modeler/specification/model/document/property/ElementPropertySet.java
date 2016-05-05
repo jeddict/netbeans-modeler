@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.mvel2.MVEL;
-import org.mvel2.compiler.CompiledExpression;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.config.element.Element;
 import org.netbeans.modeler.config.element.ElementConfig;
@@ -46,9 +45,9 @@ import org.openide.util.Exceptions;
 public class ElementPropertySet {
 
     private ModelerFile modelerFile;
-    private ElementConfig elementConfig;
+    private final ElementConfig elementConfig;
     private Sheet sheet;
-    private Map<String, Sheet.Set> set = new LinkedHashMap<String, Sheet.Set>();
+    private Map<String, Sheet.Set> set = new LinkedHashMap<>();
 
     public ElementPropertySet(ModelerFile modelerFile, Sheet sheet) {
         this.modelerFile = modelerFile;
@@ -60,6 +59,10 @@ public class ElementPropertySet {
     public void createGroup(String id) {
         set.put(id, sheet.createPropertiesSet());
         set.get(id).setName(id);// Sheet.Set : name is required work as key [otherwise set is replaced]
+    }
+    
+    public void deleteGroup(String id) {
+        set.remove(id);
     }
 
     public synchronized Node.Property<?> put(String id, Node.Property<?> p, boolean replace) {
@@ -147,7 +150,7 @@ public class ElementPropertySet {
       
       
     /*
-    * Filetr using category  
+    * Filter using category  
     */
       public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers) {
@@ -204,7 +207,7 @@ public class ElementPropertySet {
                         final ITextElement expression = (ITextElement) PropertyUtils.getProperty(object, name);//return must not be null//(TExpression) PropertyUtils.getProperty(object, id) == null ? new TExpression() : (TExpression) PropertyUtils.getProperty(object, id);
 //                        PropertyUtils.setProperty(object, id, expression);
                         
-                        this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, "content",
+                        this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, attribute.getId(),"content",
                                 attribute.getDisplayName(), attribute.getShortDescription(),
                                 new PropertyChangeListener<String>() {
                                     @Override
@@ -212,11 +215,7 @@ public class ElementPropertySet {
                                         if (expression.getContent() == null || expression.getContent().isEmpty()) {
                                             try {
                                                 PropertyUtils.setProperty(object, name, null);
-                                            } catch (IllegalAccessException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (InvocationTargetException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (NoSuchMethodException ex) {
+                                            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                                                 Exceptions.printStackTrace(ex);
                                             }
                                         }
@@ -239,14 +238,15 @@ public class ElementPropertySet {
                         } else {
                             PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
 
-                            if (propertyVisibilityHandler == null && attribute.getVisible() != null && !attribute.getVisible().trim().isEmpty()) {
-                                propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile, baseElementWidget, object, attribute.getVisibilityExpression());
+                            Serializable visibilityExpression = attribute.getVisibilityExpression();
+                            if (propertyVisibilityHandler == null && visibilityExpression != null) {
+                                propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile, baseElementWidget, object, visibilityExpression);
                             }
                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent() != null && !attribute.getOnChangeEvent().trim().isEmpty()) {
                                 propertyChangeHandlers.put(attribute.getId(), createPropertyChangeHandler(modelerFile, baseElementWidget, object, attribute.getChangeListenerExpression()));
                             }
                             this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
-                                    attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
+                                    attribute.getId(),attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
                                     new PropertyChangeListener<Object>() {
                                         @Override
                                         public void changePerformed(Object value) {
@@ -264,9 +264,7 @@ public class ElementPropertySet {
                                                 } else {
                                                     BeanUtils.setProperty(object, attribute.getName(), null);
                                                 }
-                                            } catch (IllegalAccessException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            } catch (InvocationTargetException ex) {
+                                            } catch (IllegalAccessException | InvocationTargetException ex) {
                                                 Exceptions.printStackTrace(ex);
                                             }
                                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {

@@ -18,11 +18,10 @@ package org.netbeans.modeler.widget.pin;
 import java.awt.Image;
 import java.util.List;
 import java.util.Map;
-import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.WidgetStateHandler;
@@ -80,6 +79,8 @@ public interface IPinWidget extends IWidget, WidgetStateHandler {
     void exploreProperties();
 
     void refreshProperties();
+    
+    IPropertyManager getPropertyManager();
 
     /* Abstract PinWidget */
     /**

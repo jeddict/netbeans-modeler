@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.specification.model.document.widget;
 
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.node.IWidget;
@@ -43,5 +44,7 @@ public interface IBaseElementWidget<E extends IBaseElement> extends IWidget {
     void exploreProperties();
 
     void refreshProperties();
+    
+    IPropertyManager getPropertyManager();
 
 }

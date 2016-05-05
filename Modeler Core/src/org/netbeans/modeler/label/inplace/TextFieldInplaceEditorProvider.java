@@ -43,6 +43,7 @@
  */
 package org.netbeans.modeler.label.inplace;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
@@ -53,11 +54,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.EnumSet;
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.netbeans.api.visual.action.InplaceEditorProvider;
 import org.netbeans.api.visual.action.TextFieldInplaceEditor;
+//import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -84,7 +89,8 @@ public final class TextFieldInplaceEditorProvider implements InplaceEditorProvid
         if (!editor.isEnabled(widget)) {
             return null;
         }
-        JTextField field = new JTextField(editor.getText(widget));
+        final JTextField field = new JTextField(editor.getText(widget));
+//        field.setBorder(new CompoundBorder(BorderFactory.createLineBorder(Color.WHITE),new EmptyBorder(0,0,0,0)));
         field.selectAll();
         Scene scene = widget.getScene();
         double zoomFactor = scene.getZoomFactor();

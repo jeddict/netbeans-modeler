@@ -40,6 +40,7 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.specification.model.util.NModelerUtil;
 import org.netbeans.modeler.specification.model.util.PModelerUtil;
+import org.netbeans.modeler.specification.version.SoftwareVersion;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
@@ -449,8 +450,13 @@ public class ModelerFile {
         return null;
     }
 
-    public float getCurrentVersion() {
+    public SoftwareVersion getCurrentVersion() {
         return getVendorSpecification().getModelerDiagramModel().getDiagramModel().getVersion();
+    }
+
+    
+    public SoftwareVersion getArchitectureVersion() {
+        return getVendorSpecification().getModelerDiagramModel().getDiagramModel().getArchitectureVersion();
     }
 
 }

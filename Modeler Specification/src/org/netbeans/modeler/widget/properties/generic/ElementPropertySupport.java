@@ -69,7 +69,9 @@ public class ElementPropertySupport extends PropertySupport.Reflection {// Prope
         if (value == null) {
             if (classType == String.class) {
                 value = "";
-            }
+            } else if (classType == Boolean.class) {
+                value = Boolean.FALSE;
+            } 
         }
         return value;
     }

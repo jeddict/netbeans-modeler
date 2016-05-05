@@ -17,9 +17,7 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.sup
 
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import java.beans.PropertyEditor;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import org.mvel2.MVEL;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.ComboBoxPropertyEditorSupport;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;

@@ -23,6 +23,7 @@ import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.modeler.border.ResizeBorder;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
@@ -106,4 +107,6 @@ public interface INodeWidget extends IWidget, WidgetStateHandler {
     void exploreProperties();
 
     void refreshProperties();
+    
+    IPropertyManager getPropertyManager();
 }

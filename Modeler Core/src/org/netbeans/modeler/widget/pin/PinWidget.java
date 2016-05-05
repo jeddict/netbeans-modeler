@@ -31,6 +31,7 @@ import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
@@ -86,16 +87,19 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {
-        List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
+        List<JMenuItem> menuItemList = new LinkedList<>();
+        menuItemList.add(getPropertyMenu());
+        return menuItemList;
+    }
+
+    protected JMenuItem getPropertyMenu() {
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
         baseProperty.addActionListener((ActionEvent e) -> {
             PinWidget.this.showProperties();
             PinWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
-
-        menuItemList.add(baseProperty);
-        return menuItemList;
+        return baseProperty;
     }
 
     @Override
@@ -126,6 +130,10 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getPinName(), propertyVisibilityHandlers);
+    }
+    
+    public IPropertyManager getPropertyManager(){
+        return node;
     }
 
     @Override

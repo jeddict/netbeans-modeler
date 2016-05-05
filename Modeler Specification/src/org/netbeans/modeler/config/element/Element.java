@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.config.element;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -23,6 +24,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.mvel2.MVEL;
 
 /**
  *
@@ -40,7 +43,9 @@ public class Element {
     private Class<?> classType;
     @XmlElementWrapper(name = "attributes")
     @XmlElement(name = "attribute")
-    private List<Attribute> attributes = new ArrayList<Attribute>();
+    private List<Attribute> attributes = new ArrayList<>();
+    @XmlElement
+    private String visible;
 
     /**
      * @return the attributes
@@ -111,6 +116,24 @@ public class Element {
      */
     public void setCategory(String category) {
         this.category = category;
+    }
+    
+        /**
+     * @return the visible
+     */
+    public String getVisible() {
+        return visible;
+    }
+
+    @XmlTransient
+    private Serializable visibilityExpression;
+
+
+    /**
+     * @param visible the visible to set
+     */
+    public void setVisible(String visible) {
+        this.visible = visible;
     }
 
 }

@@ -97,6 +97,7 @@ public class CustomAcceptAction implements AcceptProvider {
 
     @Override
     public void accept(Widget modelerScene, Point point, Transferable transferable) {
+        try {
         if (isWidgetMove(transferable)) {
             boolean convertLocation = false;
             Widget[] target;
@@ -166,7 +167,9 @@ public class CustomAcceptAction implements AcceptProvider {
 //            scene.validate();
         }
 
-//        scene.validate();
+        } catch(Throwable t){
+            ((IModelerScene)modelerScene).getModelerFile().handleException(t);
+        }
     }
 
     private SubCategoryNodeConfig getSubCategory(Transferable transferable) {

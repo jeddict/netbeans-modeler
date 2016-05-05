@@ -18,6 +18,7 @@ package org.netbeans.modeler.properties.window;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import org.netbeans.modeler.locale.I18n;
+import org.openide.windows.WindowManager;
 
 /**
  *
@@ -50,7 +51,7 @@ public class GenericDialog extends javax.swing.JDialog {
     }
     
     public GenericDialog() {
-        this(new javax.swing.JFrame(),"", true);
+        this(WindowManager.getDefault().getMainWindow(),"", true);
     }
 
     @Override

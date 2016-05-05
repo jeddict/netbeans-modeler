@@ -37,6 +37,7 @@ import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.DiagramModel;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
+import org.netbeans.modeler.specification.version.SoftwareVersion;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
@@ -177,6 +178,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
             if (modelerFile != null) {
                 modelerFile.handleException(ex);
             }
+        } catch (Throwable t) {
+            if (modelerFile != null) {
+                modelerFile.handleException(t);
+            }
         }
 
     }
@@ -207,7 +212,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
                 long st = new Date().getTime();
 
                 modelerFile.getVendorSpecification().setVendor(new Vendor(vendorConfig.id(), vendorConfig.version(), vendorConfig.name(), vendorConfig.displayName()));
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setDiagramModel(new DiagramModel(diagramModelConfig.id(), diagramModelConfig.name(), diagramModelConfig.version()));
+                modelerFile.getVendorSpecification().getModelerDiagramModel().setDiagramModel(new DiagramModel(diagramModelConfig.id(), diagramModelConfig.name(), new SoftwareVersion(diagramModelConfig.version()), new SoftwareVersion(diagramModelConfig.architectureVersion())));
 
                 Class<? extends IModelerPanel> modelerPanel = diagramModelConfig.modelerPanel();
                 if (modelerPanel != IModelerPanel.class) {

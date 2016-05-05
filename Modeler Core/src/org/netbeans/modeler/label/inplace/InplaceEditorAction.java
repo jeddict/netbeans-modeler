@@ -35,6 +35,7 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
     private Widget widget = null;
     private Rectangle rectangle = null;
     private InplaceEditorProvider.EditorInvocationType invocationType;
+    private static final int DEFAULT_MIN_WIDTH = 118, DEFAULT_MIN_HEIGHT = 27;
 
     public InplaceEditorAction(InplaceEditorProvider<C> provider) {
         this.provider = provider;
@@ -120,7 +121,7 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         provider.notifyOpened(this, widget, editor);
 
         Rectangle rectangle = widget.getScene().convertSceneToView(widget.convertLocalToScene(widget.getBounds()));
-
+        
         Point center = GeomUtil.center(rectangle);
         Dimension size = editor.getMinimumSize();
         if (rectangle.width > size.width) {
@@ -129,8 +130,18 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         if (rectangle.height > size.height) {
             size.height = rectangle.height;
         }
+        
+        if (DEFAULT_MIN_HEIGHT > size.height) {
+            size.height = DEFAULT_MIN_HEIGHT;
+        }
+        
         int x = center.x - size.width / 2;
         int y = center.y - size.height / 2;
+        
+         if (DEFAULT_MIN_WIDTH > size.width) {
+            size.width = DEFAULT_MIN_WIDTH;
+        }
+        
 
         rectangle = new Rectangle(x, y, size.width, size.height);
         updateRectangleToFitToView(rectangle);

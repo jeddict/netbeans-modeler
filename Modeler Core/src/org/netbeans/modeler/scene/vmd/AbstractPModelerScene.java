@@ -36,6 +36,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import org.netbeans.api.visual.action.PopupMenuProvider;
@@ -59,6 +60,7 @@ import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
+import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -85,6 +87,7 @@ import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.util.lookup.InstanceContent;
+import org.openide.windows.WindowManager;
 
 /**
  *
@@ -612,8 +615,17 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
         JMenu container = new JMenu("Container");
         menuItemList.add(container);
+        
+        JMenuItem rerouteMenu = new JMenuItem("Re-Route");
+        rerouteMenu.addActionListener((ActionEvent e) -> {
+            int option = JOptionPane.showConfirmDialog(WindowManager.getDefault().getMainWindow(), "Are you want to re-route the diagram ?", "Re-Route Diagram", JOptionPane.YES_NO_OPTION);
+            if (option == javax.swing.JOptionPane.OK_OPTION) {
+                AbstractPModelerScene.this.autoLayout();
+            }
+        });
+        container.add(rerouteMenu);
 
-        JMenuItem routeMenu = new JMenu("Router");
+        JMenuItem routeMenu = new JMenu("Route types");
 //        position.setIcon(ImageUtil.getInstance().getIcon("position.png"));
         final JRadioButtonMenuItem freeRoute = new JRadioButtonMenuItem("Free Design");
         final JRadioButtonMenuItem autoRoute = new JRadioButtonMenuItem("Auto Route");
@@ -710,6 +722,10 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
             node = new BasePropertyViewManager((IBaseElementWidget) this);
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getName(), propertyVisibilityHandlers);
+    }
+    
+    public IPropertyManager getPropertyManager(){
+        return node;
     }
 
     @Override
