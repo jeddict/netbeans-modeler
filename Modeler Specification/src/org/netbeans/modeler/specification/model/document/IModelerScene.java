@@ -152,4 +152,6 @@ public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidg
     void refreshProperties();
     
     IPropertyManager getPropertyManager();
+    
+    void cleanReference();
 }

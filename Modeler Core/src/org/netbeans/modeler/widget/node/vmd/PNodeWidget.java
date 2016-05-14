@@ -22,10 +22,12 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.netbeans.api.visual.action.PopupMenuProvider;
@@ -38,6 +40,7 @@ import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.border.RoundResizeBorder;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
+import static org.netbeans.modeler.core.engine.ModelerDiagramEngine.cleanActions;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
@@ -141,9 +144,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         this.nodeWidgetInfo = nodeWidgetInfo;
         setAnchorGap(0);
 
-//        IModelerDocument modelerDoc = nodeWidgetInfo.getModelerDocument();
-//        Dimension dimension = new Dimension((int) modelerDoc.getBounds().getWidth().getValue(), (int) modelerDoc.getBounds().getHeight().getValue());
-//        nodeWidgetInfo.setDimension(dimension);
         WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getNodeNameWidget().getActions().addAction(editAction);
         getHeader().getActions().addAction(scene.createObjectHoverAction());
@@ -426,9 +426,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         if (!(border instanceof ResizeBorder)) {
             return getCursor();
         }
-//        if(!isBorderVisible){
-//            return getCursor();
-//        }
 
         Rectangle bounds = getBounds();
         Insets insets = border.getInsets();
@@ -507,8 +504,10 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
             } else {
                 scene.deleteBaseElement((IBaseElementWidget) this);
             }
+            List<Widget> children = new ArrayList<>(this.getChildren());//PinWidget children lost after NodeWidget deleteNodeWidget method called
             scene.deleteNodeWidget(this);
             scene.getModelerPanelTopComponent().changePersistenceState(false);
+            cleanReference(children);
         }
     }
 
@@ -599,5 +598,27 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     @Override
     public void setHighlightStatus(boolean highlightStatus) {
         this.highlightStatus = highlightStatus;
+    }
+    
+    @Override
+    public void cleanReference() {
+         cleanReference(this.getChildren());
+    }
+    
+    
+    private void cleanReference(List<Widget> children) { //PinWidget children lost after NodeWidget remove method called
+        if (this.getPropertyManager() != null) {
+            this.getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+        }
+        for (Widget childWidget : children) {
+            if (childWidget instanceof IPinWidget) {
+                ((IPinWidget) childWidget).cleanReference();
+            }
+        }
+        this.getModelerScene().getModelerFile().getModelerDiagramEngine().clearNodeWidgetAction(this);
+        cleanActions(getNodeNameWidget().getActions());
+        cleanActions(getHeader().getActions());
+        cleanActions(getMinimizeButton().getActions());
+
     }
 }

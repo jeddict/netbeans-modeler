@@ -17,10 +17,12 @@ package org.netbeans.modeler.component;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
@@ -33,7 +35,9 @@ import org.netbeans.modeler.palette.PaletteSupport;
 import org.netbeans.modeler.specification.Vendor;
 import org.netbeans.modeler.specification.model.DiagramModel;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.spi.navigator.NavigatorLookupHint;
+import org.netbeans.spi.palette.PaletteController;
 import org.openide.NotifyDescriptor;
 import org.openide.awt.Toolbar;
 import org.openide.cookies.SaveCookie;
@@ -42,6 +46,7 @@ import org.openide.explorer.ExplorerUtils;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.RequestProcessor;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
@@ -68,11 +73,11 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     private ModelerFile modelerFile;
     private IModelerScene modelerScene;
     private Toolbar editorToolbar;
+    private JScrollPane scrollPane;
     private SaveDiagram saveCookies;
 
     @Override
     public void init(ModelerFile modelerFile) {
-        initComponents();
         saveCookies = new SaveDiagram(modelerFile);
         this.modelerFile = modelerFile;
         modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
@@ -81,47 +86,51 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         this.setToolTipText(modelerFile.getTooltip());
         setFocusable(true);
         addKeyListener(new ModelerKeyAdapter(modelerFile));
-        initializeToolBar();
-        if (modelerScene.getView() == null) {
-            scrollPane.setViewportView(modelerScene.createView());
-        } else {
-            scrollPane.setViewportView(modelerScene.getView());
-        }
-
+        initComponents();
         TopComponent propertiesComponent = WindowManager.getDefault().findTopComponent("properties");
         if (!propertiesComponent.isOpened()) {
             propertiesComponent.open();
         }
-
-        explorerManager = new ExplorerManager();
-
         initLookup();// 60 ms
     }
+
     private InstanceContent lookupContent = new InstanceContent();
     private Lookup lookup = null;
+    private Lookup exploreLookup;
+    private PaletteController paletteController;
 
     @Override
     public Lookup getLookup() {
         if (lookup == null) {
-            Lookup superLookup = super.getLookup();
-
-            Lookup[] content = {superLookup, new AbstractLookup(lookupContent)};
+            Lookup[] content = {super.getLookup(), new AbstractLookup(lookupContent)};
             lookup = new ProxyLookup(content);
         }
-
         return lookup;
     }
 
     private void initLookup() {
-        lookupContent.add(ExplorerUtils.createLookup(explorerManager, getActionMap())); //getActionMap() => setupActionMap(getActionMap()) to apply custom action key // it is commented because KeyAdapter functionality is added for key listener
-
+        explorerManager = new ExplorerManager();
+        lookupContent.add(exploreLookup = ExplorerUtils.createLookup(explorerManager, getActionMap())); //getActionMap() => setupActionMap(getActionMap()) to apply custom action key // it is commented because KeyAdapter functionality is added for key listener
         if (!modelerFile.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs().isEmpty()) {
-            lookupContent.add(PaletteSupport.createPalette(modelerFile));
+            lookupContent.add(paletteController = PaletteSupport.createPalette(modelerFile));
         }
-
         lookupContent.add(modelerFile.getModelerScene());
         lookupContent.add(modelerFile.getModelerFileDataObject());
         lookupContent.add(getNavigatorCookie());
+    }
+
+    private void cleanLookup() {
+        lookupContent.remove(exploreLookup);
+        lookupContent.remove(paletteController);
+        lookupContent.remove(modelerFile.getModelerScene());
+        lookupContent.remove(modelerFile.getModelerFileDataObject());
+        lookupContent.remove(getNavigatorCookie());
+
+        navigatorCookie = null;
+        exploreLookup = null;
+        paletteController = null;
+        this.lookupContent = null;
+        this.lookup = Lookup.EMPTY;
     }
     private NavigatorHint navigatorCookie = null;
 
@@ -230,22 +239,53 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
         editorToolbar = new Toolbar("Diagram Toolbar", false);
         add(editorToolbar, BorderLayout.NORTH);
+
+        if (modelerScene.getView() == null) {
+            scrollPane.setViewportView(modelerScene.createView());
+        } else {
+            scrollPane.setViewportView(modelerScene.getView());
+        }
+
+        initializeToolBar();
     }// </editor-fold>
-    // Variables declaration - do not modify
-    private javax.swing.JScrollPane scrollPane;
-    // End of variables declaration
 
     @Override
     public void componentOpened() {
         super.componentOpened();
     }
 
+    private static final RequestProcessor RP = new RequestProcessor("Closing Diagram", 1); // NOI18N
+
     @Override
     public void componentClosed() {
         super.componentClosed();
+        WindowManager.getDefault().invokeWhenUIReady(() -> {
+            RP.post(() -> {
+                cleanReference();
+            });
+        });
+    }
+
+    private void cleanReference() {
         if (this.getModelerFile() != null) {
             ModelerCore.removeModelerFile(this.getModelerFile().getPath());
         }
+        modelerScene.getBaseElements().stream().filter(element -> element instanceof INodeWidget).forEach(element -> {
+            ((INodeWidget) element).remove(false);
+        });
+        modelerScene.cleanReference();
+
+        for (KeyListener keyListener : this.getKeyListeners()) {
+            this.removeKeyListener(keyListener);
+        }
+        modelerFile.getModelerDiagramEngine().cleanToolBar(editorToolbar);
+        cleanLookup();
+
+        modelerFile.getModelerFileDataObject().removeSaveCookie();
+        modelerFile.setModelerVendorSpecification(null);
+        modelerScene.getBaseElements().clear();
+        modelerScene.setBaseElementSpec(null);
+        System.gc();
     }
 
     @Override

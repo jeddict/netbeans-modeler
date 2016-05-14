@@ -27,11 +27,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.ResizeProvider;
+import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.layout.LayoutFactory;
 import org.netbeans.api.visual.model.ObjectState;
@@ -59,6 +61,7 @@ import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene
 import org.netbeans.modeler.widget.context.action.SceneConnectProvider;
 import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.properties.generic.ElementPropertySupport;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
@@ -84,7 +87,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
     private ResizeBorder widgetBorder;
 
     private NodeWidgetStatus status;
-    private final NodeWidgetInfo nodeWidgetInfo;
+    private NodeWidgetInfo nodeWidgetInfo;
     private boolean activeStatus = true;
     private boolean anchorState = false;
     private static final Float HOVER_BORDER_WIDTH = 0.2F;
@@ -912,6 +915,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
             }
             scene.deleteNodeWidget(this);
             scene.getModelerPanelTopComponent().changePersistenceState(false);
+            cleanReference();
         }
     }
 
@@ -983,5 +987,19 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
      */
     public void setModelerScene(S scene) {
         this.scene = scene;
+    }
+    
+    @Override
+    public void cleanReference() {
+        if (this.getPropertyManager() != null) {
+            this.getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+        }
+        for (Widget childWidget : this.getChildren()) {
+            if (childWidget instanceof IPinWidget) {
+                ((IPinWidget) childWidget).cleanReference();
+            }
+        }
+        this.getModelerScene().getModelerFile().getModelerDiagramEngine().clearNodeWidgetAction(this);
+        this.getLabelManager().getLabelConnectionWidget().clearActions();
     }
 }

@@ -59,5 +59,6 @@ public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget 
     void removePropertyVisibilityHandler(String id);
 
     Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
-
+    
+    void cleanReference();
 }

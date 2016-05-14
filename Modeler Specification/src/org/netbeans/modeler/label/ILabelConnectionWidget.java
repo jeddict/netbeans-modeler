@@ -21,5 +21,7 @@ import org.netbeans.modeler.widget.node.IWidget;
 public interface ILabelConnectionWidget extends IWidget {
 
     public LabelWidget getLabelWidget();
+    
+    void clearActions();
 
 }

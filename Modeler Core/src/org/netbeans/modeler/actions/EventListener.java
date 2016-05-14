@@ -28,11 +28,8 @@ import org.netbeans.modeler.core.NBModelerUtil;
  */
 public class EventListener implements IEventListener {
 
-    protected ModelerFile modelerFile;
-
     @Override
     public void registerEvent(JComponent component, ModelerFile modelerFile) {
-        this.modelerFile = modelerFile;
         component.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, InputEvent.CTRL_MASK), "SAVE_FILE");
         component.getActionMap().put("SAVE_FILE", new AbstractAction() {
             @Override

@@ -19,6 +19,7 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -77,8 +78,10 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     private static final WidgetAction EDGE_DELETE_ACTION = new EdgeDeleteAction();
     private static final WidgetAction PIN_DELETE_ACTION = new PinDeleteAction();
 
-    public static AlignStrategyProvider ALIGNSTRATEGY_PROVIDER = null;
+    protected AlignStrategyProvider ALIGNSTRATEGY_PROVIDER;
+
     protected static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {
+
         private boolean locationChanged = false;
         private Point original;
 
@@ -130,6 +133,11 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     }
 
     @Override
+    public void clearNodeWidgetAction(final INodeWidget nodeWidget) {
+        cleanActions(nodeWidget.createActions(DesignerTools.SELECT));
+    }
+
+    @Override
     public void init(ModelerFile file) {
         this.setFile(file);
         ALIGNSTRATEGY_PROVIDER = new AlignStrategyProvider(file.getModelerScene());
@@ -168,47 +176,62 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         contextPalette.addAction(acceptAction);
 
     }
+
+    @Override
+    public void clearModelerSceneAction() {
+        cleanActions(file.getModelerScene().createActions(DesignerTools.SELECT));
+        cleanActions(file.getModelerScene().createActions(DesignerTools.PAN));
+        cleanActions(file.getModelerScene().createActions(DesignerTools.INTERACTIVE_ZOOM));
+        cleanActions(file.getModelerScene().createActions(DesignerTools.CONTEXT_PALETTE));
+        cleanActions(file.getModelerScene().getActions());
+    }
+
     public static final NodeWidgetSelectProvider NODE_WIDGET_SELECT_PROVIDER = new NodeWidgetSelectProvider();
     public static final EdgeWidgetSelectProvider EDGE_WIDGET_SELECT_PROVIDER = new EdgeWidgetSelectProvider();
     public static final PinWidgetSelectProvider PIN_WIDGET_SELECT_PROVIDER = new PinWidgetSelectProvider();
 
     @Override
     public void setPinWidgetAction(final IPinWidget pinWidget) {
-        WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(pinWidget.getPopupMenuProvider());
         WidgetAction.Chain selectActionTool = pinWidget.createActions(DesignerTools.SELECT);
-
         selectActionTool.addAction(ActionFactory.createSelectAction(PIN_WIDGET_SELECT_PROVIDER, true));//(getScene().createSelectAction());
         selectActionTool.addAction(file.getModelerScene().createObjectHoverAction());
-        selectActionTool.addAction(popupMenuAction);
-        WidgetAction cycleAction = new CyclePinFocusAction(new CyclePinFocusProvider());
-        selectActionTool.addAction(cycleAction);
-//        selectActionTool.addAction(PIN_DELETE_ACTION);
+        selectActionTool.addAction(ActionFactory.createPopupMenuAction(pinWidget.getPopupMenuProvider()));
+        selectActionTool.addAction(new CyclePinFocusAction(new CyclePinFocusProvider()));
+    }
+
+    @Override
+    public void clearPinWidgetAction(final IPinWidget pinWidget) {
+        cleanActions(pinWidget.createActions(DesignerTools.SELECT));
     }
 
     @Override
     public void setEdgeWidgetAction(IEdgeWidget edgeWidget) {
         WidgetAction.Chain actions = edgeWidget.getActions();
+        actions.addAction(ActionFactory.createAddRemoveControlPointAction());
 
         if (edgeWidget instanceof PEdgeWidget) {
-            actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(ActionFactory.createMoveControlPointAction(ActionFactory.createFreeMoveControlPointProvider(), ConnectionWidget.RoutingPolicy.DISABLE_ROUTING_UNTIL_END_POINT_IS_MOVED));
-            actions.addAction(file.getModelerScene().createWidgetHoverAction());
-            actions.addAction(ActionFactory.createSelectAction(EDGE_WIDGET_SELECT_PROVIDER));
-//            actions.addAction(EDGE_DELETE_ACTION);
-            actions.addAction(ActionFactory.createReconnectAction(ActionFactory.createDefaultReconnectDecorator(), new SequenceFlowReconnectProvider(file.getModelerScene())));
-            actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
-
         } else {
-            actions.addAction(ActionFactory.createAddRemoveControlPointAction());
             actions.addAction(new MoveControlPointAction(new FreeMoveControlPointProvider(), null)); // Working
-            actions.addAction(file.getModelerScene().createWidgetHoverAction());
-            actions.addAction(ActionFactory.createSelectAction(EDGE_WIDGET_SELECT_PROVIDER));
-//            actions.addAction(EDGE_DELETE_ACTION);
-            actions.addAction(ActionFactory.createReconnectAction(ActionFactory.createDefaultReconnectDecorator(), new SequenceFlowReconnectProvider(file.getModelerScene())));
-            actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
+        }
 
+        actions.addAction(file.getModelerScene().createWidgetHoverAction());
+        actions.addAction(ActionFactory.createSelectAction(EDGE_WIDGET_SELECT_PROVIDER));
+        actions.addAction(ActionFactory.createReconnectAction(ActionFactory.createDefaultReconnectDecorator(), new SequenceFlowReconnectProvider(file.getModelerScene())));
+        actions.addAction(ActionFactory.createPopupMenuAction(edgeWidget.getPopupMenuProvider()));
+    }
+
+    @Override
+    public void clearEdgeWidgetAction(IEdgeWidget edgeWidget) {
+        cleanActions(edgeWidget.getActions());
+    }
+
+    public static void cleanActions(WidgetAction.Chain actions) {
+        for (WidgetAction action : new CopyOnWriteArrayList<>(actions.getActions())) {
+            actions.removeAction(action);
         }
     }
+
     public JLabel positionLabel;
 
     /**
@@ -229,6 +252,15 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 //        positionLabel = new JLabel();
 //        bar.add(positionLabel);
 //        bar.add(new JToolBar.Separator());
+    }
+
+    @Override
+    public void cleanToolBar(JToolBar bar) {
+        selectToolButton.setAction(null);
+        handToolButton.setAction(null);
+        interactiveZoomButton.setAction(null);
+        bar.removeAll();
+        zoomManager.close();
     }
 
     protected void buildExportDocTool(JToolBar bar) {
@@ -257,8 +289,10 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         });
     }
 
+    private ZoomManager zoomManager;
+
     protected void buildZoomTool(JToolBar bar) {
-        ZoomManager zoomManager = new ZoomManager((Scene) file.getModelerScene()); //4 sec
+        zoomManager = new ZoomManager(file.getModelerScene()); //4 sec
         zoomManager.addZoomListener((ZoomEvent event) -> {
             ContextPaletteManager manager = file.getModelerScene().getContextPaletteManager();
             if (manager != null) {
@@ -269,11 +303,13 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         zoomManager.addToolbarActions(bar);
     }
 
+    private JToggleButton selectToolButton, handToolButton, interactiveZoomButton;
+
     protected void buildSelectTool(JToolBar bar) {
 
         ButtonGroup selectToolBtnGroup = new ButtonGroup();
 
-        JToggleButton selectToolButton = new JToggleButton(
+        selectToolButton = new JToggleButton(
                 new DiagramSelectToolAction(file.getModelerScene(), DesignerTools.SELECT,
                         ImageUtil.getInstance().getIcon("selection-arrow.png"), "SelectToolAction",
                         Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR),
@@ -282,7 +318,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         selectToolButton.setName(DesignerTools.SELECT);  // need a name to later identify the button
         DesignerTools.mapToolToButton.put(DesignerTools.SELECT, selectToolButton);
 
-        JToggleButton handToolButton = new JToggleButton(
+        handToolButton = new JToggleButton(
                 new DiagramSelectToolAction(file.getModelerScene(),
                         DesignerTools.PAN, ImageUtil.getInstance().getIcon("pan.png"), "HandToolAction",
                         Utilities.createCustomCursor(file.getModelerScene().getView(),
@@ -291,7 +327,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
                         KeyStroke.getKeyStroke("meta ctrl shift N")));
         handToolButton.setName(DesignerTools.PAN);
 
-        JToggleButton interactiveZoomButton = new JToggleButton(
+        interactiveZoomButton = new JToggleButton(
                 new DiagramSelectToolAction(file.getModelerScene(),
                         DesignerTools.INTERACTIVE_ZOOM, ImageUtil.getInstance().getIcon("interactive-zoom.png"), "InteractiveZoomAction",
                         Utilities.createCustomCursor(file.getModelerScene().getView(),

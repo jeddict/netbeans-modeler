@@ -351,6 +351,7 @@ public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidg
             scene.deleteBaseElement((IBaseElementWidget) this);
             scene.deleteEdgeWidget(this);
             this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
+            cleanReference();
         }
     }
 
@@ -370,6 +371,12 @@ public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidg
     @Override
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    @Override
+    public void cleanReference() {
+        this.getModelerScene().getModelerFile().getModelerDiagramEngine().clearEdgeWidgetAction(this);
+        this.getLabelManager().getLabelConnectionWidget().clearActions();
     }
 
 }

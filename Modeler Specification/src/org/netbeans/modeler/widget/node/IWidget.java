@@ -695,5 +695,5 @@ public interface IWidget extends Accessible, Lookup.Provider {
     IModelerScene getModelerScene();
 
     PopupMenuProvider getPopupMenuProvider();
-
+    
 }

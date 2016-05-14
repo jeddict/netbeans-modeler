@@ -22,6 +22,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.MoveStrategy;
@@ -39,6 +40,7 @@ import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.border.RoundResizeBorder;
+import static org.netbeans.modeler.core.engine.ModelerDiagramEngine.cleanActions;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextPaneInplaceEditorProvider;
 import org.netbeans.modeler.label.multiline.MultilineEditableCompartmentWidget;
@@ -276,6 +278,21 @@ public abstract class AbstractLabelManager implements LabelManager {
                     this, "getResourcePath()", name);
             labelWidget.setAlignment(LabelWidget.Alignment.CENTER);
             label = labelWidget;
+            
+
+            setLayout(LayoutFactory.createVerticalFlowLayout(LayoutFactory.SerialAlignment.CENTER, 1)); // use vertical layout
+
+            setBorder(NON_SELECTED_BORDER);
+//            labelWidget = (LabelWidget) label;
+            addChild(label);
+//            setLayout(LayoutFactory.createVerticalFlowLayout());
+
+            initActions();
+           
+
+        }
+        
+        private void initActions(){
             WidgetAction action = new InplaceEditorAction<>(new TextPaneInplaceEditorProvider(new LabelInplaceEditor(connector), null));
             WidgetAction.Chain actions = labelWidget.createActions(DesignerTools.SELECT);
             actions.addAction(action);
@@ -294,15 +311,8 @@ public abstract class AbstractLabelManager implements LabelManager {
                     return retVal;
                 }
             });
-
-            setLayout(LayoutFactory.createVerticalFlowLayout(LayoutFactory.SerialAlignment.CENTER, 1)); // use vertical layout
-
-            setBorder(NON_SELECTED_BORDER);
-//            labelWidget = (LabelWidget) label;
-            addChild(label);
-//            setLayout(LayoutFactory.createVerticalFlowLayout());
-
-            WidgetAction.Chain selectActionTool = this.createActions(DesignerTools.SELECT);
+            
+             WidgetAction.Chain selectActionTool = this.createActions(DesignerTools.SELECT);
             selectActionTool.addAction(this.getScene().createWidgetHoverAction());
             selectActionTool.addAction(ActionFactory.createSelectAction(new SelectProvider() {
                 @Override
@@ -320,7 +330,11 @@ public abstract class AbstractLabelManager implements LabelManager {
                     selectAction();
                 }
             }));
-
+        }
+        public void clearActions() {
+            cleanActions(getLabelConnectionWidget().createActions(DesignerTools.SELECT));
+            cleanActions(labelWidget.createActions(DesignerTools.SELECT));
+            cleanActions(this.createActions(DesignerTools.SELECT));
         }
 
         private void selectAction() {
@@ -387,7 +401,6 @@ public abstract class AbstractLabelManager implements LabelManager {
         }
 
         @Override
-
         public PopupMenuProvider getPopupMenuProvider() {
             return null;
         }

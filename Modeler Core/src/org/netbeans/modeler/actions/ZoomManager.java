@@ -1,5 +1,5 @@
 /**
- * Copyright [2014] Gaurav Gupta
+ * Copyright [2016] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -41,6 +41,7 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.scene.AbstractModelerScene;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.tool.DesignerTools;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
@@ -81,7 +82,7 @@ public class ZoomManager implements Scene.SceneListener {
     /**
      * The scene to zoom in/out.
      */
-    private Scene scene;
+    private IModelerScene scene;
     /**
      * The zoom factor in the form of a percentage (e.g. 75%).
      */
@@ -99,7 +100,7 @@ public class ZoomManager implements Scene.SceneListener {
      *
      * @param scene the scene to be managed.
      */
-    public ZoomManager(final Scene scene) {
+    public ZoomManager(final IModelerScene scene) {
         this.scene = scene;
         scene.addSceneListener(this);
         listeners = new EventListenerList();
@@ -195,7 +196,7 @@ public class ZoomManager implements Scene.SceneListener {
      *
      * @return Scene managed by this manager.
      */
-    public Scene getScene() {
+    public IModelerScene getScene() {
         return scene;
     }
 
@@ -218,6 +219,12 @@ public class ZoomManager implements Scene.SceneListener {
      */
     public void removeZoomListener(ZoomListener listener) {
         listeners.remove(ZoomListener.class, listener);
+    }
+    
+    private void removeAllZoomListener() {
+        for(ZoomListener listener : listeners.getListeners(ZoomListener.class)){
+           listeners.remove(ZoomListener.class, listener);
+        }
     }
 
     /**
@@ -657,7 +664,7 @@ public class ZoomManager implements Scene.SceneListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Scene scene = manager.getScene();
+            IModelerScene scene = manager.getScene();
             JScrollPane pane = (JScrollPane) SwingUtilities.getAncestorOfClass(
                     JScrollPane.class, scene.getView());
             if (pane == null) {
@@ -888,5 +895,10 @@ public class ZoomManager implements Scene.SceneListener {
                     ImageUtilities.icon2Image(ImageUtil.getInstance().getIcon("marquee-zoom-stop.gif")), "MarqueeZoomStop");
         }
         return zoomStopCursor;
+    }
+    
+    public void close() {
+        removeAllZoomListener();
+        scene.removeSceneListener(this);
     }
 }

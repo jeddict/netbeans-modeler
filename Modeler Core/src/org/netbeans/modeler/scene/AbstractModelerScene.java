@@ -290,7 +290,9 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
         }
 
         paletteManager = manager;
-        addToLookup(paletteManager);
+        if (paletteManager != null) {
+            addToLookup(paletteManager);
+        }
     }
 
     @Override
@@ -766,5 +768,17 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     @Override
     public IModelerScene getModelerScene() {
         return this;
+    }
+    
+    @Override
+    public void cleanReference(){
+           modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
+           setContextPaletteManager(null);//remove from lookup
+           getView().getActionMap().clear();
+           getView().getInputMap().clear();
+           
+        if (getPropertyManager() != null) {
+            getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+        }
     }
 }

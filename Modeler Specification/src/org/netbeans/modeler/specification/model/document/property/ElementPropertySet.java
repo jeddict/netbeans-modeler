@@ -17,6 +17,7 @@ package org.netbeans.modeler.specification.model.document.property;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -63,6 +64,20 @@ public class ElementPropertySet {
     
     public void deleteGroup(String id) {
         set.remove(id);
+    }
+    
+    public void clearGroup() {
+        for(Sheet.Set setTmp : set.values()){
+            Arrays.fill( setTmp.getProperties(), null );
+//            for(Node.Property property  : setTmp.getProperties()){
+//            if(property instanceof ElementCustomPropertySupport){
+//                ElementCustomPropertySupport propertySupport = (ElementCustomPropertySupport)property;
+//                propertySupport.set
+//            }
+//            }
+            System.out.println("");
+        }
+        set.clear();
     }
 
     public synchronized Node.Property<?> put(String id, Node.Property<?> p, boolean replace) {

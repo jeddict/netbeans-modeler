@@ -61,7 +61,6 @@ public class SwingPaletteManager implements ContextPaletteManager {
     }
 
     public SwingPaletteManager(IModelerScene scene, JComponent layer) {
-        // //System.out.println("INSIDE SwingPaletteManager(ObjectScene scene, JComponent layer)");
         setScene(scene);
         setDecoratorLayer(layer);
     }

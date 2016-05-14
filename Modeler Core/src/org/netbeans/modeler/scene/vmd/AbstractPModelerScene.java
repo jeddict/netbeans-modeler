@@ -379,7 +379,9 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         }
 
         paletteManager = manager;
-        addToLookup(paletteManager);
+        if (paletteManager != null) {
+            addToLookup(paletteManager);
+        }
     }
 
     @Override
@@ -1011,6 +1013,18 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     protected IEventListener getEventListener() {
         return new EventListener();
     }
+    
+    @Override
+     public void cleanReference(){
+           modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
+           setContextPaletteManager(null);//remove from lookup
+           getView().getActionMap().clear();
+           getView().getInputMap().clear();
+           
+        if (getPropertyManager() != null) {
+            getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+        }
+    }
 }
 
 /**
@@ -1029,5 +1043,5 @@ class MouseClickAction extends org.netbeans.api.visual.action.WidgetAction.Adapt
         System.out.println("setting focus to " + component);
         component.requestFocus();
         return State.REJECTED;
-    }
+    }   
 }

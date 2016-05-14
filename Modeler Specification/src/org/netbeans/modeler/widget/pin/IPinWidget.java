@@ -130,4 +130,6 @@ public interface IPinWidget extends IWidget, WidgetStateHandler {
     int getAnchorGap();
 
     void setAnchorGap(int gap);
+    
+    void cleanReference();
 }
