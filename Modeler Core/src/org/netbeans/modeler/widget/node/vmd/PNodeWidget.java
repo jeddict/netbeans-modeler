@@ -80,11 +80,11 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     public static final ResizeBorder RECTANGLE_RESIZE_BORDER = new RoundResizeBorder(WIDGET_BORDER_PADDING, new Color(242, 132, 0), RECTANGLE_RESIZE_BORDER_ENABLE_POINT, RECTANGLE_RESIZE_BORDER_DISABLE_POINT, false, 0, 0, true, new Color(242, 132, 0));
     private ResizeBorder widgetBorder;
     private NodeWidgetStatus status;
-    private NodeWidgetInfo nodeWidgetInfo;
+    private final NodeWidgetInfo nodeWidgetInfo;
     private boolean activeStatus = true;
     private boolean highlightStatus = false;
     private boolean anchorState = false;
-    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<>();
 
     @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
@@ -100,7 +100,7 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
         return propertyChangeHandlers;
     }
-    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<>();
 
     @Override
     public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {
@@ -619,6 +619,7 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         cleanActions(getNodeNameWidget().getActions());
         cleanActions(getHeader().getActions());
         cleanActions(getMinimizeButton().getActions());
+        cleanActions(getImageWidget().getActions());
 
     }
 }

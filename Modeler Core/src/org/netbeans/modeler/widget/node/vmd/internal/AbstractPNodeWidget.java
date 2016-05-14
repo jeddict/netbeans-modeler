@@ -64,13 +64,13 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
 
     private SeparatorWidget pinsSeparator;
 
-    private HashMap<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<String, IPinSeperatorWidget>();
+    private HashMap<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<>();
 
     private StateModel stateModel = new StateModel(2);
     private PNodeAnchor nodeAnchor;
     private IColorScheme colorScheme;
 
-    private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<Anchor, Anchor>();
+    private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<>();
 
 //    private boolean loaded;
     /**
@@ -496,19 +496,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         this.pinCategoryWidgets = pinCategoryWidgets;
     }
 
-//    /**
-//     * @return the loaded
-//     */
-//   public boolean isLoaded() {
-//        return loaded;
-//    }
-//
-//    /**
-//     * @param loaded the loaded to set
-//     */
-//   protected void setLoaded(boolean loaded) {
-//        this.loaded = loaded;
-//    }
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {
 
         @Override
