@@ -32,6 +32,8 @@ import org.netbeans.modeler.config.element.ElementConfig;
 import org.netbeans.modeler.config.element.ElementConfigFactory;
 import org.netbeans.modeler.config.element.Group;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.properties.enumtype.EnumComboBoxResolver;
+import org.netbeans.modeler.properties.type.Enumy;
 import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.document.ITextElement;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
@@ -42,6 +44,7 @@ import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.Node;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 
 public class ElementPropertySet {
 
@@ -165,7 +168,8 @@ public class ElementPropertySet {
       
       
     /*
-    * Filter using category  
+    * Filter using category
+      category used when object have more than one child of same type
     */
       public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object,
             final Map<String, PropertyChangeListener> propertyChangeHandlers) {
@@ -243,7 +247,10 @@ public class ElementPropertySet {
                                     }
                                 }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())), replaceProperty);
 
-                    } else {
+                    } else if (Enumy.class.isAssignableFrom(attribute.getClassType())) {
+                        EnumComboBoxResolver resolver = Lookup.getDefault().lookup(EnumComboBoxResolver.class);
+                        this.put(groupId,resolver.getPropertySupport(modelerFile, attribute, object));
+                    }else {
                         if (attribute.isReadOnly()) {
                             String value = BeanUtils.getProperty(object, attribute.getName());
                             if (value == null) {
@@ -300,7 +307,8 @@ public class ElementPropertySet {
         }
 
     }
-
+    
+     
     public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
         final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
         return (PropertyVisibilityHandler) () -> {

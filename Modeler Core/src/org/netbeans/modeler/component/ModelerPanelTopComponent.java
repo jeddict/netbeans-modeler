@@ -85,7 +85,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         this.setIcon(modelerFile.getIcon());
         this.setToolTipText(modelerFile.getTooltip());
         setFocusable(true);
-        addKeyListener(new ModelerKeyAdapter(modelerFile));
         initComponents();
         TopComponent propertiesComponent = WindowManager.getDefault().findTopComponent("properties");
         if (!propertiesComponent.isOpened()) {
