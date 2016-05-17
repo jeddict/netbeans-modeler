@@ -100,7 +100,7 @@ public final class InplaceEditorAction<C extends JComponent> extends WidgetActio
         return openEditor(widget, InplaceEditorProvider.EditorInvocationType.CODE);
     }
 
-    private boolean openEditor(Widget widget, InplaceEditorProvider.EditorInvocationType invocationType) {
+    public boolean openEditor(Widget widget, InplaceEditorProvider.EditorInvocationType invocationType) {
         if (editor != null) {
             return false;
         }
