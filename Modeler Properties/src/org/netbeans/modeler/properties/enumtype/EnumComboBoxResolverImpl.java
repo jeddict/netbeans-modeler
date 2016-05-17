@@ -19,6 +19,7 @@ package org.netbeans.modeler.properties.enumtype;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
@@ -36,7 +37,11 @@ import org.openide.util.lookup.ServiceProvider;
 //@ServiceProvider(service = EnumComboBoxResolver.class)
 public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
 
+     @Override
      public PropertySupport getPropertySupport(ModelerFile modelerFile, Attribute attribute, Object object) {
+         final Object[] ENUMS = attribute.getClassType().getEnumConstants();
+         Enumy DEFAULT = ((Enumy)ENUMS[0]).getDefault();
+         String BLANK = "";
         ComboBoxListener<Enumy> comboBoxListener = new ComboBoxListener<Enumy>() {
             @Override
             public void setItem(ComboBoxValue<Enumy> value) {
@@ -57,8 +62,7 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
                     modelerFile.handleException(ex);
                 }
                 if (enumy == null) {
-                    Object[] enumConstants = attribute.getClassType().getEnumConstants();
-                    enumy = ((Enumy) enumConstants[0]).getDefault();
+                    enumy = DEFAULT;
                 }
                 return new ComboBoxValue(enumy, enumy.getDisplay());
             }
@@ -66,8 +70,10 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
             @Override
             public List<ComboBoxValue<Enumy>> getItemList() {
                 List<ComboBoxValue<Enumy>> values = new ArrayList<>();
-                Object[] enumConstants = attribute.getClassType().getEnumConstants();
-                for(Object enumConstant : enumConstants){
+                 if (DEFAULT == null) {
+                     values.add(new ComboBoxValue(null, StringUtils.EMPTY));// null, ""
+                }
+                for(Object enumConstant : ENUMS){
                     Enumy enumy = (Enumy)enumConstant;
                     values.add(new ComboBoxValue(enumy,enumy.getDisplay()));
                 }
@@ -76,9 +82,11 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
 
             @Override
             public String getDefaultText() {
-                Object[] enumConstants = attribute.getClassType().getEnumConstants();
-                 Enumy enumy = (Enumy)enumConstants[0];
-                return enumy.getDefault().getDisplay();
+                 if (DEFAULT != null) {
+                    return DEFAULT.getDisplay();
+                } else {
+                    return StringUtils.EMPTY;
+                }
             }
 
             @Override
