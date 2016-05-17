@@ -33,9 +33,8 @@ import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.model.ObjectScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.actions.CustomAcceptAction;
+import org.netbeans.modeler.actions.CustomAcceptProvider;
 import org.netbeans.modeler.actions.CyclePinFocusAction;
 import org.netbeans.modeler.actions.CyclePinFocusProvider;
 import org.netbeans.modeler.actions.EdgeDeleteAction;
@@ -70,6 +69,7 @@ import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Utilities;
 import org.netbeans.modeler.actions.PinDeleteAction;
+import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
 
 public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
@@ -123,11 +123,14 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         WidgetAction moveAction = new MoveAction(nodeWidget, null, MOVE_PROVIDER_DEFAULT, ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
         WidgetAction popupMenuAction = ActionFactory.createPopupMenuAction(nodeWidget.getPopupMenuProvider());
         WidgetAction snapMoveAction = ActionFactory.createMoveAction(ActionFactory.createSnapToGridMoveStrategy(5, 5), null);
+        WidgetAction acceptAction = ActionFactory.createAcceptAction(new PinWidgetAcceptProvider(file.getModelerScene()));
+       
         WidgetAction.Chain selectActionTool = nodeWidget.createActions(DesignerTools.SELECT);
         selectActionTool.addAction(selectAction);
 //        selectActionTool.addAction(NODE_DELETE_ACTION);
         selectActionTool.addAction(moveAction);
         selectActionTool.addAction(nodeWidget.getModelerScene().createWidgetHoverAction());
+        selectActionTool.addAction(acceptAction);
         selectActionTool.addAction(popupMenuAction);
         selectActionTool.addAction(snapMoveAction);
     }
@@ -147,7 +150,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     public void setModelerSceneAction() {
         file.getModelerScene().getActions().addAction(ActionFactory.createWheelPanAction());
         file.getModelerScene().getActions().addAction(ActionFactory.createMouseCenteredZoomAction(1.5));
-        WidgetAction acceptAction = ActionFactory.createAcceptAction(new CustomAcceptAction(file.getModelerScene()));
+        WidgetAction acceptAction = ActionFactory.createAcceptAction(new CustomAcceptProvider(file.getModelerScene()));
         WidgetAction.Chain selectTool = file.getModelerScene().createActions(DesignerTools.SELECT);
         selectTool.addAction(new LockSelectionAction());//12  sec
         selectTool.addAction(ActionFactory.createSelectAction(new ModelerSceneSelectProvider(), true));

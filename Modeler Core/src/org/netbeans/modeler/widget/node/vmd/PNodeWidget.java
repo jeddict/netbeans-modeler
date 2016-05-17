@@ -40,6 +40,7 @@ import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.border.RoundResizeBorder;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
+import org.netbeans.modeler.config.palette.SubCategoryNodeConfig;
 import static org.netbeans.modeler.core.engine.ModelerDiagramEngine.cleanActions;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
@@ -621,5 +622,9 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         cleanActions(getMinimizeButton().getActions());
         cleanActions(getImageWidget().getActions());
 
+    }
+    
+      public boolean isValidPinWidget(SubCategoryNodeConfig subCategoryInfo){
+        return true;
     }
 }

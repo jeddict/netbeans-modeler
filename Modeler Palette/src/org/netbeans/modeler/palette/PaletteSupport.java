@@ -77,28 +77,11 @@ public class PaletteSupport {
         @Override
         public void customize(ExTransferable exTransferable, Lookup lookup) {
             final Node node = lookup.lookup(Node.class);
-//            final PaletteItemTransferable paletteItemTransferable = new PaletteItemTransferable(node);
-
             exTransferable.put(new ExTransferable.Single(DataFlavor.imageFlavor) {
                 @Override
                 protected Object getData() throws IOException, UnsupportedFlavorException {
                     return node;
                 }
-
-//                public DataFlavor[] getTransferDataFlavors() {
-//                    return new DataFlavor[]{PaletteItemTransferable.FLAVOR};
-//                }
-//
-//                public boolean isDataFlavorSupported(DataFlavor flavor) {
-//                    return PaletteItemTransferable.FLAVOR.equals(flavor);
-//                }
-//
-//                public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-//                    if (isDataFlavorSupported(flavor) == true) {
-//                        return paletteItemTransferable;
-//                    }
-//                    throw new UnsupportedFlavorException(flavor);
-//                }
             });
         }
 
