@@ -43,7 +43,6 @@
  */
 package org.netbeans.modeler.label.inplace;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
@@ -54,10 +53,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.EnumSet;
-import javax.swing.BorderFactory;
 import javax.swing.JTextField;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.netbeans.api.visual.action.InplaceEditorProvider;
@@ -127,6 +123,7 @@ public final class TextFieldInplaceEditorProvider implements InplaceEditorProvid
             @Override
             public void focusLost(FocusEvent e) {
                 controller.closeEditor(true);
+                widget.getScene().getView().requestFocusInWindow();
             }
         };
         documentListener = new DocumentListener() {
