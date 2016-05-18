@@ -20,6 +20,7 @@ import java.awt.event.InputEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import org.netbeans.modeler.core.IZoomManager;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 
@@ -43,6 +44,24 @@ public class EventListener implements IEventListener {
             public void actionPerformed(ActionEvent e) {
                 modelerFile.deleteSelectedElements();
                 NBModelerUtil.hideContextPalette(modelerFile.getModelerScene());
+            }
+        });
+
+        component.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_PLUS, InputEvent.CTRL_MASK), "ZOOM_PLUS");
+        component.getActionMap().put("ZOOM_PLUS", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IZoomManager manager = modelerFile.getModelerDiagramEngine().getZoomManager();
+                manager.setZoom(manager.getZoom() + 1);
+            }
+        });
+
+        component.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, InputEvent.CTRL_MASK), "ZOOM_MINUS");
+        component.getActionMap().put("ZOOM_MINUS", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IZoomManager manager = modelerFile.getModelerDiagramEngine().getZoomManager();
+                manager.setZoom(manager.getZoom() - 1);
             }
         });
     }

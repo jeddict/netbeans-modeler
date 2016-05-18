@@ -70,6 +70,7 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.Utilities;
 import org.netbeans.modeler.actions.PinDeleteAction;
 import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
+import org.netbeans.modeler.core.IZoomManager;
 
 public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
@@ -362,5 +363,12 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
      */
     public void setFile(ModelerFile file) {
         this.file = file;
+    }
+
+    /**
+     * @return the zoomManager
+     */
+    public IZoomManager getZoomManager() {
+        return zoomManager;
     }
 }

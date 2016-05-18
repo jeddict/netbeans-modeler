@@ -38,5 +38,7 @@ public interface IModelerDiagramEngine {
 
     void setModelerSceneAction();
     void clearModelerSceneAction();
+    
+    IZoomManager getZoomManager() ;
 
 }
