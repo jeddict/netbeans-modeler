@@ -64,7 +64,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
 
     private SeparatorWidget pinsSeparator;
 
-    private HashMap<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<>();
+    private Map<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<>();
 
     private StateModel stateModel = new StateModel(2);
     private PNodeAnchor nodeAnchor;
@@ -484,7 +484,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * @return the pinCategoryWidgets
      */
     @Override
-    public HashMap<String, IPinSeperatorWidget> getPinCategoryWidgets() {
+    public Map<String, IPinSeperatorWidget> getPinCategoryWidgets() {
         return pinCategoryWidgets;
     }
 

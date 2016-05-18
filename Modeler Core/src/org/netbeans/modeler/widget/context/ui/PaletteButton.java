@@ -145,8 +145,7 @@ public class PaletteButton extends ContextPaletteButton {
         // the label was always centering the image.  Instead I made the
         // PaletteButton derive from JPanel.  I then add a label to the
         // panel.  This handles the layout issues correctly.
-        JLabel display = new JLabel();
-        display.setIcon(new ImageIcon(model.getImage()));
+        JLabel display = new JLabel(new ImageIcon(model.getImage()),JLabel.CENTER);
         display.setOpaque(false);
 
         if (direction == PaletteDirection.RIGHT) {
@@ -157,13 +156,13 @@ public class PaletteButton extends ContextPaletteButton {
             display.setHorizontalAlignment(SwingConstants.RIGHT);
         }
 
-        if (filler == true) {
+        if (filler) {
             JPanel fillerPanel = new JPanel();
             fillerPanel.setOpaque(false);
             fillerPanel.setPreferredSize(new Dimension(0, 0));
 
             add(fillerPanel, BorderLayout.CENTER);
-        }
+        } 
 
         setToolTipText(model.getTooltip());
         setBorder(getNonFocusedBorder());
