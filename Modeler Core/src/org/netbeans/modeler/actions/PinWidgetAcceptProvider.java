@@ -69,12 +69,12 @@ public class PinWidgetAcceptProvider extends CustomAcceptProvider {
             JComponent view = scene.getView();
 
             Graphics2D g2 = (Graphics2D) view.getGraphics();
-            Rectangle visRect = scene.getBounds();//scene.getBounds();//view.getVisibleRect();//
-            view.paintImmediately(0, 0, visRect.width - visRect.x, visRect.height - visRect.y);//(visRect.x, visRect.y, visRect.width, visRect.height);
-            Rectangle visWidgetRect = widget.getBounds();
+            Rectangle visRect = scene.getBounds();
+            view.paintImmediately(0, 0, visRect.width - visRect.x, visRect.height - visRect.y);
+            point = scene.convertSceneToView(point);
             g2.drawImage(dragImage,
-                    AffineTransform.getTranslateInstance(widget.getLocation().x + point.getLocation().getX() - visWidgetRect.x,
-                            widget.getLocation().y +  point.getLocation().getY() - visWidgetRect.y),
+                    AffineTransform.getTranslateInstance(widget.getLocation().x +point.getLocation().getX() ,
+                           widget.getLocation().y +  point.getLocation().getY() ),
                     null);
 
             if (subCategoryInfo.getModelerDocument().getFlowDimension() == FlowDimensionType.BOUNDARY
