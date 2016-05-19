@@ -61,10 +61,14 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
                 } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
                     modelerFile.handleException(ex);
                 }
-                if (enumy == null) {
+                if (enumy == null && DEFAULT!=null) {
                     enumy = DEFAULT;
                 }
-                return new ComboBoxValue(enumy, enumy.getDisplay());
+                if (enumy == null){
+                return new ComboBoxValue(null, StringUtils.EMPTY);
+                } else {
+                return new ComboBoxValue(enumy, enumy.getDisplay());    
+                }
             }
 
             @Override
