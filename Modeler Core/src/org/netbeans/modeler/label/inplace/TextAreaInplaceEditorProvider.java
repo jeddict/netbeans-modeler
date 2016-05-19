@@ -102,6 +102,7 @@ public final class TextAreaInplaceEditorProvider implements InplaceEditorProvide
             @Override
             public void focusLost(FocusEvent e) {
                 controller.closeEditor(true);
+                widget.getScene().getView().requestFocusInWindow();
             }
         };
         documentListener = new DocumentListener() {

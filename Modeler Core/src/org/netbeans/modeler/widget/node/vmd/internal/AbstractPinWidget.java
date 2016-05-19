@@ -185,4 +185,5 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     public void setColorScheme(IColorScheme colorScheme) {
         this.colorScheme = colorScheme;
     }
+    
 }

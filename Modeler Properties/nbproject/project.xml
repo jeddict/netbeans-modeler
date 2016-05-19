@@ -7,6 +7,14 @@
             <suite-component/>
             <module-dependencies>
                 <dependency>
+                    <code-name-base>org.apache.commons.lang</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>2.4.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.jdesktop.layout</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -71,7 +79,6 @@
                         <specification-version>8.19.1</specification-version>
                     </run-dependency>
                 </dependency>
-              
                 <dependency>
                     <code-name-base>org.openide.windows</code-name-base>
                     <build-prerequisite/>
@@ -89,6 +96,7 @@
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.client.support</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.internal</package>
+                <package>org.netbeans.modeler.properties.enumtype</package>
                 <package>org.netbeans.modeler.properties.nentity</package>
                 <package>org.netbeans.modeler.properties.util</package>
                 <package>org.netbeans.modeler.properties.view.manager</package>

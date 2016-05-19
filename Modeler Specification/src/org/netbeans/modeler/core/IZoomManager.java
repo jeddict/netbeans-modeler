@@ -13,15 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.netbeans.modeler.label;
+package org.netbeans.modeler.core;
 
-import org.netbeans.api.visual.widget.LabelWidget;
-import org.netbeans.modeler.widget.node.IWidget;
-
-public interface ILabelConnectionWidget extends IWidget {
-
-    public LabelWidget getLabelWidget();
-    
-    void clearActions();
-
+public interface IZoomManager {
+    int getZoom();
+    void setZoom(int percent);
 }

@@ -292,6 +292,8 @@
                 <package>org.netbeans.modeler.file</package>
                 <package>org.netbeans.modeler.label</package>
                 <package>org.netbeans.modeler.locale</package>
+                <package>org.netbeans.modeler.properties.enumtype</package>
+                <package>org.netbeans.modeler.properties.type</package>
                 <package>org.netbeans.modeler.properties.view.manager</package>
                 <package>org.netbeans.modeler.resource.toolbar</package>
                 <package>org.netbeans.modeler.shape</package>

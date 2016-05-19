@@ -1,5 +1,5 @@
 /**
- * Copyright [2014] Gaurav Gupta
+ * Copyright [2016] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,15 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.netbeans.modeler.label;
 
-import org.netbeans.api.visual.widget.LabelWidget;
-import org.netbeans.modeler.widget.node.IWidget;
+package org.netbeans.modeler.properties.type;
 
-public interface ILabelConnectionWidget extends IWidget {
-
-    public LabelWidget getLabelWidget();
-    
-    void clearActions();
-
+/**
+ *
+ * @author jGauravGupta <gaurav.gupta.jc@gmail.com>
+ */
+public interface Enumy {
+     String getDisplay();
+    Enumy getDefault();
 }

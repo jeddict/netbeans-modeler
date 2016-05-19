@@ -37,7 +37,7 @@ public class Attribute {
     private String id;
     @XmlAttribute
     private String groupId;
-    @XmlAttribute(name = "class")
+    @XmlAttribute(name = "class") //e.g java.lang.String, enum etc
     private Class<?> classType;
     @XmlAttribute
     private String name;

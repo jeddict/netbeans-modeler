@@ -21,12 +21,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import org.netbeans.api.visual.action.InplaceEditorProvider;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
+import static org.netbeans.modeler.core.engine.ModelerDiagramEngine.cleanActions;
 import org.netbeans.modeler.label.LabelInplaceEditor;
 import org.netbeans.modeler.label.inplace.InplaceEditorAction;
 import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
@@ -49,15 +52,21 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     private PinWidgetInfo pinWidgetInfo;
     private boolean activeStatus = true;
     private boolean highlightStatus = false;
+    private InplaceEditorAction editAction;
 
     public PinWidget(S scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
         super((Scene) scene, scene.getColorScheme());
         this.setModelerScene(scene);
         this.pinWidgetInfo = pinWidgetInfo;
         this.nodeWidget = nodeWidget;
-        WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getPinNameWidget().getActions().addAction(editAction);
+        
         this.setProperties(pinWidgetInfo.getName(), null);
+    }
+    
+    public void edit(){
+        editAction.openEditor(getPinNameWidget());
     }
 
     @Override
@@ -167,12 +176,6 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
         return pinWidgetInfo;
     }
 
-    /**
-     * @param pinWidgetInfo the pinWidgetInfo to set
-     */
-    public void setPinWidgetInfo(PinWidgetInfo pinWidgetInfo) {
-        this.pinWidgetInfo = pinWidgetInfo;
-    }
     private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
 
     @Override
@@ -249,6 +252,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
 //        ((IPFlowNodeWidget) nodeWidget).deleteFlowPinWidget((IFlowPinWidget) this);
             nodeWidget.deletePinWidget(this);
             scene.getModelerPanelTopComponent().changePersistenceState(false);
+            cleanReference();
         }
     }
     private boolean locked = false;
@@ -295,5 +299,13 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     @Override
     public void setAnchorGap(int anchorGap) {
         this.anchorGap = anchorGap;
+    }
+    
+    public void cleanReference(){
+        if (this.getPropertyManager() != null) {
+                this.getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+            }
+        this.getModelerScene().getModelerFile().getModelerDiagramEngine().clearPinWidgetAction(this);
+        cleanActions(getPinNameWidget().getActions());
     }
 }

@@ -18,6 +18,7 @@ package org.netbeans.modeler.widget.edge.vmd;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.edge.EdgeWidget;
 import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;

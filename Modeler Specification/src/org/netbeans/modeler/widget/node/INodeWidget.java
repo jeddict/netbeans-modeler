@@ -109,4 +109,6 @@ public interface INodeWidget extends IWidget, WidgetStateHandler {
     void refreshProperties();
     
     IPropertyManager getPropertyManager();
+    
+    void cleanReference();
 }

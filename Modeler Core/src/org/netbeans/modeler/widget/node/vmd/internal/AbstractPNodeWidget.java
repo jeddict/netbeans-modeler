@@ -42,6 +42,7 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.SeparatorWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.anchors.PNodeAnchor;
+import static org.netbeans.modeler.core.engine.ModelerDiagramEngine.cleanActions;
 import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
@@ -63,13 +64,13 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
 
     private SeparatorWidget pinsSeparator;
 
-    private HashMap<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<String, IPinSeperatorWidget>();
+    private Map<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<>();
 
     private StateModel stateModel = new StateModel(2);
     private PNodeAnchor nodeAnchor;
     private IColorScheme colorScheme;
 
-    private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<Anchor, Anchor>();
+    private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<>();
 
 //    private boolean loaded;
     /**
@@ -483,7 +484,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * @return the pinCategoryWidgets
      */
     @Override
-    public HashMap<String, IPinSeperatorWidget> getPinCategoryWidgets() {
+    public Map<String, IPinSeperatorWidget> getPinCategoryWidgets() {
         return pinCategoryWidgets;
     }
 
@@ -495,19 +496,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         this.pinCategoryWidgets = pinCategoryWidgets;
     }
 
-//    /**
-//     * @return the loaded
-//     */
-//   public boolean isLoaded() {
-//        return loaded;
-//    }
-//
-//    /**
-//     * @param loaded the loaded to set
-//     */
-//   protected void setLoaded(boolean loaded) {
-//        this.loaded = loaded;
-//    }
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {
 
         @Override

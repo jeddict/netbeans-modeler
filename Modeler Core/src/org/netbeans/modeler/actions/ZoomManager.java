@@ -1,5 +1,5 @@
 /**
- * Copyright [2014] Gaurav Gupta
+ * Copyright [2016] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.util.EventListener;
 import java.util.EventObject;
 import javax.swing.AbstractAction;
@@ -39,8 +40,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.core.IZoomManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.scene.AbstractModelerScene;
+import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.tool.DesignerTools;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
@@ -51,7 +54,7 @@ import org.openide.util.Utilities;
  *
  *
  */
-public class ZoomManager implements Scene.SceneListener {
+public class ZoomManager implements Scene.SceneListener, IZoomManager {
 
     /**
      * The default zoom percent value.
@@ -81,7 +84,7 @@ public class ZoomManager implements Scene.SceneListener {
     /**
      * The scene to zoom in/out.
      */
-    private Scene scene;
+    private IModelerScene scene;
     /**
      * The zoom factor in the form of a percentage (e.g. 75%).
      */
@@ -99,7 +102,7 @@ public class ZoomManager implements Scene.SceneListener {
      *
      * @param scene the scene to be managed.
      */
-    public ZoomManager(final Scene scene) {
+    public ZoomManager(final IModelerScene scene) {
         this.scene = scene;
         scene.addSceneListener(this);
         listeners = new EventListenerList();
@@ -195,7 +198,7 @@ public class ZoomManager implements Scene.SceneListener {
      *
      * @return Scene managed by this manager.
      */
-    public Scene getScene() {
+    public IModelerScene getScene() {
         return scene;
     }
 
@@ -218,6 +221,12 @@ public class ZoomManager implements Scene.SceneListener {
      */
     public void removeZoomListener(ZoomListener listener) {
         listeners.remove(ZoomListener.class, listener);
+    }
+    
+    private void removeAllZoomListener() {
+        for(ZoomListener listener : listeners.getListeners(ZoomListener.class)){
+           listeners.remove(ZoomListener.class, listener);
+        }
     }
 
     /**
@@ -269,13 +278,13 @@ public class ZoomManager implements Scene.SceneListener {
         // locations, such that 0.5 is 50%, 1.0 is 100%, and 2.0 is 200%.
         double factor = ((double) percent) / 100.0d;
         scene.setZoomFactor(factor);
-        if (scene instanceof AbstractModelerScene) {
-            AbstractModelerScene ds = (AbstractModelerScene) scene;
+//        if (scene instanceof AbstractModelerScene) {
+//            AbstractModelerScene ds = (AbstractModelerScene) scene;
 //            if (ds.getModelerPanelTopComponent() instanceof ModelerPanelTopComponent) {
 ////                IModelerPanel tc =  ds.getModelerPanelTopComponent();
 //               // tc.getTrackBar().onPostScrollZoom(); gg2
 //            }
-        }
+//        }
         // Setting the zoom factor alone is not enough, must force
         // validation and repainting of the scene for it to work.
         scene.validate();
@@ -657,7 +666,7 @@ public class ZoomManager implements Scene.SceneListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            Scene scene = manager.getScene();
+            IModelerScene scene = manager.getScene();
             JScrollPane pane = (JScrollPane) SwingUtilities.getAncestorOfClass(
                     JScrollPane.class, scene.getView());
             if (pane == null) {
@@ -751,24 +760,24 @@ public class ZoomManager implements Scene.SceneListener {
             putValue(Action.NAME, desc); // for accessibility
             putValue(Action.SHORT_DESCRIPTION, desc);
 
-            KeyStroke keystroke = KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
-                    KeyEvent.CTRL_MASK);
-            KeyStroke macStroke = KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
-                    KeyEvent.META_MASK);
-
-            KeyStroke[] additionalKeystrokes = {
-                //KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_MASK|KeyEvent.SHIFT_MASK),
-                KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_MASK),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.CTRL_MASK)
-            };
-
-            KeyStroke[] additionalMacKeystrokes = {
-                //KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.META_MASK|KeyEvent.SHIFT_MASK),
-                KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.META_MASK),
-                KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.CTRL_MASK)
-            };
-
-            putValue(Action.ACCELERATOR_KEY, keystroke);
+//            KeyStroke keystroke = KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
+//                    KeyEvent.CTRL_MASK);
+//            KeyStroke macStroke = KeyStroke.getKeyStroke(KeyEvent.VK_PLUS,
+//                    KeyEvent.META_MASK);
+//
+//            KeyStroke[] additionalKeystrokes = {
+//                //KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_MASK|KeyEvent.SHIFT_MASK),
+//                KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_MASK),
+//                KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.CTRL_MASK)
+//            };
+//
+//            KeyStroke[] additionalMacKeystrokes = {
+//                //KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.META_MASK|KeyEvent.SHIFT_MASK),
+//                KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.META_MASK),
+//                KeyStroke.getKeyStroke(KeyEvent.VK_ADD, KeyEvent.CTRL_MASK)
+//            };
+//
+//            putValue(Action.ACCELERATOR_KEY, keystroke);
 //            putValue(DiagramInputkeyMapper.MAC_ACCELERATOR, macStroke);
 //            putValue(DiagramInputkeyMapper.ADDITIONAL_ACCELERATORS, additionalKeystrokes);
 //            putValue(DiagramInputkeyMapper.ADDITIONAL_MAC_ACCELERATORS, additionalMacKeystrokes);gg2
@@ -815,22 +824,22 @@ public class ZoomManager implements Scene.SceneListener {
             putValue(Action.NAME, desc); // for accessibility
             putValue(Action.SHORT_DESCRIPTION, desc);
 
-            KeyStroke keystroke = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
-                    KeyEvent.CTRL_MASK);
-            KeyStroke macStroke = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
-                    KeyEvent.META_MASK);
-
-            KeyStroke[] additionalKeystrokes = {
-                //KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_MASK|KeyEvent.SHIFT_MASK),
-                KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, KeyEvent.CTRL_MASK)
-            };
-
-            KeyStroke[] additionalMacKeystrokes = {
-                //KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.META_MASK|KeyEvent.SHIFT_MASK),
-                KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, KeyEvent.META_MASK)
-            };
-
-            putValue(Action.ACCELERATOR_KEY, keystroke);
+//            KeyStroke keystroke = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
+//                    KeyEvent.CTRL_MASK);
+//            KeyStroke macStroke = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
+//                    KeyEvent.META_MASK);
+//
+//            KeyStroke[] additionalKeystrokes = {
+//                //KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_MASK|KeyEvent.SHIFT_MASK),
+//                KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, KeyEvent.CTRL_MASK)
+//            };
+//
+//            KeyStroke[] additionalMacKeystrokes = {
+//                //KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.META_MASK|KeyEvent.SHIFT_MASK),
+//                KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, KeyEvent.META_MASK)
+//            };
+//
+//            putValue(Action.ACCELERATOR_KEY, keystroke);
 //            putValue(DiagramInputkeyMapper.MAC_ACCELERATOR, macStroke);
 //            putValue(DiagramInputkeyMapper.ADDITIONAL_ACCELERATORS, additionalKeystrokes);
 //            putValue(DiagramInputkeyMapper.ADDITIONAL_MAC_ACCELERATORS, additionalMacKeystrokes);gg2
@@ -860,7 +869,7 @@ public class ZoomManager implements Scene.SceneListener {
 
     @Override
     public void sceneValidated() {
-        fireZoomEvent((int) (scene.getZoomFactor() * 100));
+        fireZoomEvent((int) Math.round(scene.getZoomFactor()* 100));
         if (scene.getZoomFactor() * 100 >= MAX_ZOOM_PERCENT
                 || scene.getZoomFactor() * 100 <= MIN_ZOOM_PERCENT) {
             // disable marquee zoom
@@ -888,5 +897,10 @@ public class ZoomManager implements Scene.SceneListener {
                     ImageUtilities.icon2Image(ImageUtil.getInstance().getIcon("marquee-zoom-stop.gif")), "MarqueeZoomStop");
         }
         return zoomStopCursor;
+    }
+    
+    public void close() {
+        removeAllZoomListener();
+        scene.removeSceneListener(this);
     }
 }

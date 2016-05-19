@@ -19,6 +19,7 @@ import java.awt.Image;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.function.Supplier;
 import org.netbeans.api.visual.action.WidgetAction;
 
 /**
@@ -149,4 +150,8 @@ public interface ContextPaletteButtonModel {
      * @param id the id to set
      */
     void setId(String id);
+    
+    boolean isVisible();
+    
+    void checkVisibility(Supplier<Boolean> visibiltyCheck);
 }

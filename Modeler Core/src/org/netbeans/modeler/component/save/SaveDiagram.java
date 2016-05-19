@@ -21,13 +21,10 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.file.ModelerFileDataObject;
 import org.openide.cookies.SaveCookie;
 import org.openide.loaders.DataObject;
-import org.openide.util.RequestProcessor;
-import org.openide.windows.WindowManager;
 
 public class SaveDiagram implements SaveCookie {
 
     private final ModelerFile file;
-    private static final RequestProcessor RP = new RequestProcessor("Saving Diagram", 1); // NOI18N
 
     public SaveDiagram(ModelerFile file) {
         this.file = file;
@@ -35,16 +32,11 @@ public class SaveDiagram implements SaveCookie {
 
     @Override
     public synchronized void save() throws IOException {
-        WindowManager.getDefault().invokeWhenUIReady(() -> {
-            RP.post(() -> {
                 NBModelerUtil.saveModelerFile(file);
                 DataObject dobj = (DataObject) file.getModelerFileDataObject();
                 file.getModelerPanelTopComponent().changePersistenceState(true);
                 if (dobj instanceof ModelerFileDataObject) {
                     ((ModelerFileDataObject) dobj).setDirty(false, SaveDiagram.this);
                 }
-            });
-        });
-
     }
 }

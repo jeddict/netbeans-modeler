@@ -18,10 +18,10 @@ package org.netbeans.modeler.widget.properties.generic;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.lang.StringUtils;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.properties.type.Enumy;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -82,6 +82,9 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
             } else if (classType == Boolean.class) {
                 value = (T) Boolean.FALSE;
             } 
+//            else if (classType == Enumy.class) {
+//                value = "";
+//            } 
         }
         return value;
     }
