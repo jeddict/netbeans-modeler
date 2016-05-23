@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.netbeans.api.project.Project;
+import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.file.IModelerFileDataObject;
@@ -44,6 +45,7 @@ import org.netbeans.modeler.specification.version.SoftwareVersion;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modules.websvc.saas.codegen.java.support.SourceGroupSupport;
 import org.openide.DialogDisplayer;
 import org.openide.ErrorManager;
 import org.openide.NotifyDescriptor;
@@ -150,8 +152,20 @@ public class ModelerFile {
         this.setIcon(modelerFileDataObject.getIcon());
     }
 
+    private Project project;
     public Project getProject() {
-        return FileOwnerQuery.getOwner(modelerFileDataObject.getPrimaryFile());
+        if(project==null){
+        project = FileOwnerQuery.getOwner(modelerFileDataObject.getPrimaryFile());
+        }
+        return project;
+    }
+  
+    private SourceGroup sourceGroup;
+    public SourceGroup getSourceGroup() {
+        if (sourceGroup == null) {
+            sourceGroup = SourceGroupSupport.findSourceGroupForFile(getProject(), getModelerFileDataObject().getPrimaryFile());
+        }
+        return sourceGroup;
     }
 
     /**

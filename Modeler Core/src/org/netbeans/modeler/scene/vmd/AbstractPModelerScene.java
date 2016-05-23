@@ -115,8 +115,6 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     private INodeWidget invalidNodeWidget;
     private boolean alignSupport = true;
 
-    //  private UltraSimpleIdGenerator idGenerator;
-    //private List<NodeWidget> nodeWidgets = new ArrayList<NodeWidget>();
     public AbstractPModelerScene() {
         setKeyEventProcessingType(EventProcessingType.FOCUSED_WIDGET_AND_ITS_CHILDREN);
         backgroundLayer = new LayerWidget(this);
@@ -354,6 +352,9 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
     @Override
     public void paintChildren() {
+        if(closed){
+            return;
+        }
         Object anti = getGraphics().getRenderingHint(RenderingHints.KEY_ANTIALIASING);
         Object textAnti = getGraphics().getRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING);
 
@@ -1014,6 +1015,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         return new EventListener();
     }
     
+    private boolean closed = false;
     @Override
      public void cleanReference(){
            modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
@@ -1024,6 +1026,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         if (getPropertyManager() != null) {
             getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
         }
+        closed = true;
     }
 }
 

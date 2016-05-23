@@ -770,6 +770,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
         return this;
     }
     
+    private boolean closed = false;
     @Override
     public void cleanReference(){
            modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
@@ -780,5 +781,6 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
         if (getPropertyManager() != null) {
             getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
         }
+                closed = true;
     }
 }
