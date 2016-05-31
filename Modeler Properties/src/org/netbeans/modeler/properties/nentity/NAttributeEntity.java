@@ -28,13 +28,10 @@ public class NAttributeEntity {
     private String[] countDisplay = new String[3];
 
     private Table table = new Table(430, 350);
-    private List<Column> columns = new ArrayList<Column>();
+    private List<Column> columns = new ArrayList<>();
     private EntityComponent customDialog;
     private NEntityDataListener tableDataListener;
 
-//    private List<List<Object>> data = new ArrayList<List<Object>>();
-//     private List<Object[]> data = new ArrayList<Object[]>();
-//      private Object[][] data ;
     public NAttributeEntity(String name, String displayName, String shortDescription) {
         this.name = name;
         this.displayName = displayName;

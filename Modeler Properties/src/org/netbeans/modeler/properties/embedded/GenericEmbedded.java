@@ -15,10 +15,6 @@
  */
 package org.netbeans.modeler.properties.embedded;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
-
 public class GenericEmbedded {
 
     private Boolean readOnly = false;
@@ -112,6 +108,10 @@ public class GenericEmbedded {
      */
     public void setEntityEditor(GenericEmbeddedEditor entityEditor) {
         this.entityEditor = entityEditor;
+        if(entityEditor!=null && !entityEditor.isLoaded()){
+            entityEditor.init();
+            entityEditor.setLoaded();
+        }
     }
 
     /**

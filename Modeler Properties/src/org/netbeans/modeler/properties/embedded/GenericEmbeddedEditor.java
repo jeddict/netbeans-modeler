@@ -29,11 +29,7 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
     private PropertyEditor editor;
     private GenericEmbedded entity;
     private ModelerFile modelerFile;
-
-    public GenericEmbeddedEditor() {
-
-        init();
-    }
+    private boolean loaded = false;
 
     public abstract void init();
 
@@ -176,6 +172,20 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
         }
         layerPane.setEnabled(status);
 
+    }
+
+    /**
+     * @return the loaded
+     */
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    /**
+     * @param loaded the loaded to set
+     */
+    public void setLoaded() {
+        this.loaded = true;
     }
 
 }

@@ -43,9 +43,15 @@ public abstract class EntityComponent<T> extends GenericDialog {
 
     private Entity<T> entity;
 
+    /**
+     * invoked before createEntity / updateEntity
+     */
     public abstract void init();
     
     private boolean loaded = false;
+    /**
+     * invoked onetime after object construction but before init (on first init() invocation)
+     */
     public void postConstruct(){
         
     }

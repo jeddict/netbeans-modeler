@@ -201,7 +201,6 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
     
     @Override
     public boolean isVisible() {
-        System.out.println("too : " + tooltip  + visibiltyCheck);
         if(visibiltyCheck!=null){
             return visibiltyCheck.get();
         }
