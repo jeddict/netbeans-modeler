@@ -52,21 +52,12 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
         }
     }
 
-    //ELEMENT_UPGRADE
-    //http://blog.emilianbold.ro/2007/01/netbeans-platform-combobox-in-property.html // cmbo
-    //http://netbeans-org.1045718.n5.nabble.com/Widgets-and-properties-sheet-td2986719.html
-    //https://blogs.oracle.com/geertjan/entry/connecting_shapes_showing_properties
-    //https://platform.netbeans.org/tutorials/60/nbm-property-editors.html  ////custom calendar
-    //https://platform.netbeans.org/tutorials/nbm-property-editors.html   //custom calendar
-    //http://netbeans.dzone.com/nb-icon-checkbox-property-changer
-    //https://platform.netbeans.org/tutorials/60/nbm-nodesapi2.html    //multitab dnd
-    //http://forums.netbeans.org/ntopic52707.html
     private Sheet sheet;
     private ElementPropertySet elementPropertySet;
 
     @Override
     protected Sheet createSheet() {
-        return reloadSheet(new HashMap<String, PropertyVisibilityHandler>());
+        return sheet;//reloadSheet(new HashMap<>()); //bug : duplicate invocation of reloadSheet already called from PropertyUtil
     }
 
     public Sheet reloadSheet(Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
@@ -84,7 +75,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
     }
 
     private void createSheet(Sheet sheet, Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
-        for (Sheet.Set propertySet : elementPropertySet.getGroups()) {
+        for (Sheet.Set propertySet : elementPropertySet.getGroups()) {System.out.println("propertySet " + propertySet.getName());
             int hiddenPropertyCount = 0;
             for (Node.Property property : propertySet.getProperties()) {
                 property.setHidden(false);
@@ -137,6 +128,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
 
                 //propertyVisibilityHandlerList is Obselete remove this functionality in future
                 //.getPropertyVisibilityHandler() is the right way
+                System.out.println(property.isHidden() + " Pro : " + property.getDisplayName());
             }
             if (hiddenPropertyCount != propertySet.getProperties().length) {
 //                propertySet.setHidden(true);
