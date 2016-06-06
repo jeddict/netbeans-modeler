@@ -75,7 +75,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
     }
 
     private void createSheet(Sheet sheet, Map<String, PropertyVisibilityHandler> propertyVisibilityHandlerList) {
-        for (Sheet.Set propertySet : elementPropertySet.getGroups()) {System.out.println("propertySet " + propertySet.getName());
+        for (Sheet.Set propertySet : elementPropertySet.getGroups()) {
             int hiddenPropertyCount = 0;
             for (Node.Property property : propertySet.getProperties()) {
                 property.setHidden(false);
@@ -128,7 +128,6 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
 
                 //propertyVisibilityHandlerList is Obselete remove this functionality in future
                 //.getPropertyVisibilityHandler() is the right way
-                System.out.println(property.isHidden() + " Pro : " + property.getDisplayName());
             }
             if (hiddenPropertyCount != propertySet.getProperties().length) {
 //                propertySet.setHidden(true);

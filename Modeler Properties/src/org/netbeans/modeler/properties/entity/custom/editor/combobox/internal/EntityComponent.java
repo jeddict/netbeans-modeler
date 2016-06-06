@@ -50,7 +50,8 @@ public abstract class EntityComponent<T> extends GenericDialog {
     
     private boolean loaded = false;
     /**
-     * invoked onetime after object construction but before init (on first init() invocation)
+     * Instance attached with the GraphNode
+     * Invoked onetime after object construction but before init (on first init() invocation)
      */
     public void postConstruct(){
         
