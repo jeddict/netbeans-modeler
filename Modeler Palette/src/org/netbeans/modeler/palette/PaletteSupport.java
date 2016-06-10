@@ -41,7 +41,7 @@ public class PaletteSupport {
     private static final Map<IPaletteConfig, PaletteController> paletteConfigs = new HashMap<>();
     
     public static PaletteController createPalette(ModelerFile file) {
-        IPaletteConfig config = file.getVendorSpecification().getPaletteConfig();
+        IPaletteConfig config = file.getModelerDiagramModel().getPaletteConfig();
         if (paletteConfigs.get(config) == null) {
             AbstractNode paletteRoot = new AbstractNode(new CategoryChildren(file));
             paletteRoot.setName(file.getName());

@@ -15,6 +15,12 @@
  */
 package org.netbeans.modeler.specification.model;
 
+import org.netbeans.modeler.config.document.ModelerDocumentFactory;
+import org.netbeans.modeler.config.document.ModelerDocumentFactoryRepository;
+import org.netbeans.modeler.config.element.ElementConfigFactory;
+import org.netbeans.modeler.config.element.ElementConfigFactoryRepository;
+import org.netbeans.modeler.config.palette.IPaletteConfig;
+import org.netbeans.modeler.config.palette.PaletteConfigRepository;
 import org.netbeans.modeler.core.IExceptionHandler;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.specification.export.IExportManager;
@@ -37,6 +43,46 @@ public class ModelerDiagramSpecification {
     private IRelationValidator relationValidator;
 
     private IExceptionHandler exceptionHandler;
+    
+        private IPaletteConfig paletteConfig;
+    private ElementConfigFactory elementConfigFactory;
+    private ModelerDocumentFactory modelerDocumentFactory;
+
+    public void createElementConfig(String vendorId, String resourcePath) {
+        elementConfigFactory = ElementConfigFactoryRepository.createElementConfigFactory(vendorId, resourcePath);
+    }
+
+    public void createModelerDocumentConfig(String vendorId, String resourcePath) {
+        modelerDocumentFactory = ModelerDocumentFactoryRepository.createModelerDocumentFactory(vendorId, resourcePath);
+    }
+
+    public void createPaletteConfig(String vendorId, String diagramModelId, String resourcePath) {
+        paletteConfig = PaletteConfigRepository.createPaletteConfig(vendorId, diagramModelId, resourcePath);//.addPaletteConfig(modelerFileClass,resource);
+    }
+
+
+
+    /**
+     * @return the diagramModelPaletteConfig
+     */
+    public IPaletteConfig getPaletteConfig() {
+        return paletteConfig;
+    }
+
+    /**
+     * @return the elementConfigFactory
+     */
+    public ElementConfigFactory getElementConfigFactory() {
+        return elementConfigFactory;
+    }
+
+    /**
+     * @return the modelerDocumentFactory
+     */
+    public ModelerDocumentFactory getModelerDocumentFactory() {
+        return modelerDocumentFactory;
+    }
+
 
     /**
      * @return the modelerScene

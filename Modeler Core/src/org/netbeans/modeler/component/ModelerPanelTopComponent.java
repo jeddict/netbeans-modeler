@@ -32,7 +32,6 @@ import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.ModelerCore;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.palette.PaletteSupport;
-import org.netbeans.modeler.specification.Vendor;
 import org.netbeans.modeler.specification.model.DiagramModel;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.node.INodeWidget;
@@ -80,7 +79,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     public void init(ModelerFile modelerFile) {
         saveCookies = new SaveDiagram(modelerFile);
         this.modelerFile = modelerFile;
-        modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
+        modelerScene = modelerFile.getModelerDiagramModel().getModelerScene();
         this.setName(modelerFile.getName());
         this.setIcon(modelerFile.getIcon());
         this.setToolTipText(modelerFile.getTooltip());
@@ -110,7 +109,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     private void initLookup() {
         explorerManager = new ExplorerManager();
         lookupContent.add(exploreLookup = ExplorerUtils.createLookup(explorerManager, getActionMap())); //getActionMap() => setupActionMap(getActionMap()) to apply custom action key // it is commented because KeyAdapter functionality is added for key listener
-        if (!modelerFile.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs().isEmpty()) {
+        if (!modelerFile.getModelerDiagramModel().getPaletteConfig().getCategoryNodeConfigs().isEmpty()) {
             lookupContent.add(paletteController = PaletteSupport.createPalette(modelerFile));
         }
         lookupContent.add(modelerFile.getModelerScene());
@@ -283,7 +282,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         cleanLookup();
 
         modelerFile.getModelerFileDataObject().removeSaveCookie();
-        modelerFile.setModelerVendorSpecification(null);
+        modelerFile.setModelerDiagramModel(null);
         modelerScene.getBaseElements().clear();
         modelerScene.setBaseElementSpec(null);
         System.gc();
@@ -329,7 +328,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         if (isForceClose()) {
             return true;
         }
-        IModelerScene modelerScene = modelerFile.getVendorSpecification().getModelerDiagramModel().getModelerScene();
         if (modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) == null || modelerFile.getModelerFileDataObject().getCookie(SaveCookie.class) != this.saveCookies) {
             modelerScene.destroy();
             if (modelerFile.getParentFile() != null) {
@@ -369,15 +367,12 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     }
 
     private int saveDiagram() {
-        Vendor vendor = this.getModelerFile().getVendorSpecification().getVendor();
-        DiagramModel diagram = this.getModelerFile().getVendorSpecification().getModelerDiagramModel().getDiagramModel();
+        DiagramModel diagram = this.getModelerFile().getModelerDiagramModel().getDiagramModel();
         String title = "Save " + diagram.getName() + " Diagram"; // NOI18N
         int result;
 
         Object response = SaveNotifierYesNo.getDefault().displayNotifier(
-                title, // NOI18N
-                diagram.getName(), // NOI18N
-                this.getModelerFile().getName());
+                title, diagram.getName(), this.getModelerFile().getName());
 
         if (response == SaveNotifierYesNo.SAVE_ALWAYS_OPTION) {
             result = RESULT_YES;
@@ -402,17 +397,17 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         }
 
         String diagramName = modelerFile.getName();
-        String displName = "";
+        String displayName = "";
         persistenceState = state;
         if (persistenceState == Boolean.FALSE) {
-            displName = /*"<b>" + */ diagramName + SPACE_STAR/* +"</b>"*/;
+            displayName = /*"<b>" + */ diagramName + SPACE_STAR/* +"</b>"*/;
             modelerFile.getModelerFileDataObject().addSaveCookie(saveCookies);
         } else {
-            displName = diagramName;
+            displayName = diagramName;
             modelerFile.getModelerFileDataObject().removeSaveCookie();
         }
 
-        this.setDiagramDisplayName(displName);
+        this.setDiagramDisplayName(displayName);
     }
 
     @Override

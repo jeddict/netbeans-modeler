@@ -17,10 +17,8 @@ package org.netbeans.modeler.specification.model.file.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.SwingUtilities;
-import org.netbeans.modeler.actions.EventListener;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.component.ModelerPanelTopComponent;
 import org.netbeans.modeler.core.IExceptionHandler;
@@ -31,7 +29,6 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.core.engine.ModelerDiagramEngine;
 import org.netbeans.modeler.core.exception.ProcessInterruptedException;
 import org.netbeans.modeler.file.IModelerFileDataObject;
-import org.netbeans.modeler.specification.Vendor;
 import org.netbeans.modeler.specification.annotaton.ModelerConfig;
 import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.DiagramModel;
@@ -120,21 +117,20 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
                     Class _class = this.getClass();
                     final ModelerConfig modelerConfig = (ModelerConfig) _class.getAnnotation(ModelerConfig.class);
-                    final org.netbeans.modeler.specification.annotaton.Vendor vendorConfig = (org.netbeans.modeler.specification.annotaton.Vendor) _class.getAnnotation(org.netbeans.modeler.specification.annotaton.Vendor.class);
                     final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig = (org.netbeans.modeler.specification.annotaton.DiagramModel) _class.getAnnotation(org.netbeans.modeler.specification.annotaton.DiagramModel.class);
 
                     Class<? extends IModelerScene> modelerScene = diagramModelConfig.modelerScene();//ModelerScene
                     IModelerScene scene = modelerScene.newInstance();
                     scene.setModelerFile(modelerFile);
-                    modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerScene(scene);
+                    modelerFile.getModelerDiagramModel().setModelerScene(scene);
 
                     //System.out.println("InSpec I Total time : " + (new Date().getTime() - st) + " sec");
                     //st = new Date().getTime();
-                    new InitExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                    new ModelerUtilExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                    new PaletteConfigExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
-                    new InstanceExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();//Top Component
-                    new DiagramEngineExecuter(latch, modelerFile, modelerConfig, vendorConfig, diagramModelConfig).start();
+                    new InitExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
+                    new ModelerUtilExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
+                    new PaletteConfigExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
+                    new InstanceExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();//Top Component
+                    new DiagramEngineExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
                     //1    260,   428      304
                     //2    4180,  3314     3206
                     //3    290,   364      348
@@ -193,15 +189,13 @@ public abstract class ModelerFileActionListener implements ActionListener {
         private CountDownLatch latch;
         private ModelerFile modelerFile;
         private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.Vendor vendorConfig;
         private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public InstanceExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
-                org.netbeans.modeler.specification.annotaton.Vendor vendorConfig, org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
+                 org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
             this.latch = latch;
             this.modelerFile = modelerFile;
             this.modelerConfig = modelerConfig;
-            this.vendorConfig = vendorConfig;
             this.diagramModelConfig = diagramModelConfig;
         }
 
@@ -211,8 +205,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
             try {
 //                long st = new Date().getTime();
 
-                modelerFile.getVendorSpecification().setVendor(new Vendor(vendorConfig.id(), vendorConfig.version(), vendorConfig.name(), vendorConfig.displayName()));
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setDiagramModel(new DiagramModel(diagramModelConfig.id(), diagramModelConfig.name(), new SoftwareVersion(diagramModelConfig.version()), new SoftwareVersion(diagramModelConfig.architectureVersion())));
+                modelerFile.getModelerDiagramModel().setDiagramModel(new DiagramModel(diagramModelConfig.id(), diagramModelConfig.name(), new SoftwareVersion(diagramModelConfig.version()), new SoftwareVersion(diagramModelConfig.architectureVersion())));
 
                 Class<? extends IModelerPanel> modelerPanel = diagramModelConfig.modelerPanel();
                 if (modelerPanel != IModelerPanel.class) {
@@ -221,14 +214,14 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     modelerFile.getModelerScene().setModelerPanelTopComponent(new ModelerPanelTopComponent());
                 }
                 Class<? extends IRelationValidator> relationValidator = diagramModelConfig.relationValidator();
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setRelationValidator(relationValidator.newInstance());
+                modelerFile.getModelerDiagramModel().setRelationValidator(relationValidator.newInstance());
 
                 Class<? extends IExportManager> exportManager = diagramModelConfig.exportManager();
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setExportManager(exportManager.newInstance());
+                modelerFile.getModelerDiagramModel().setExportManager(exportManager.newInstance());
 
                 Class<? extends IExceptionHandler> exceptionHandler = diagramModelConfig.exceptionHandler();
                 if (exceptionHandler != IExceptionHandler.class) {
-                    modelerFile.getVendorSpecification().getModelerDiagramModel().setExceptionHandler(exceptionHandler.newInstance());
+                    modelerFile.getModelerDiagramModel().setExceptionHandler(exceptionHandler.newInstance());
                 } else if (modelerFile.getParentFile() != null) {
                     modelerFile.getModelerDiagramModel().setExceptionHandler(modelerFile.getParentFile().getModelerDiagramModel().getExceptionHandler());
                 } else {
@@ -254,33 +247,22 @@ public abstract class ModelerFileActionListener implements ActionListener {
         private CountDownLatch latch;
         private ModelerFile modelerFile;
         private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.Vendor vendorConfig;
         private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public InitExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
-                org.netbeans.modeler.specification.annotaton.Vendor vendorConfig, org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
+                org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
             this.latch = latch;
             this.modelerFile = modelerFile;
             this.modelerConfig = modelerConfig;
-            this.vendorConfig = vendorConfig;
             this.diagramModelConfig = diagramModelConfig;
         }
 
         @Override
         public void run() {
             try {
-                //long st = new Date().getTime();
-                // #A
-                modelerFile.getVendorSpecification().createElementConfig(vendorConfig.id(), modelerConfig.element());//130 sec
-//both lines A & B are parallel now
-                // #B
-//                modelerFile.getVendorSpecification().getModelerDiagramModel().init(modelerFile);//load empty configuration //override it in loadModelerFile() if already have //depends on ModelerScene,ElementConfigFactory
-                //System.out.println("E2 B3B Total time : " + (new Date().getTime() - st) + " sec");
-
+                modelerFile.getModelerDiagramModel().createElementConfig(diagramModelConfig.id(), modelerConfig.element());//130 sec
             } finally {
-                //long st = new Date().getTime();
                 latch.countDown();
-                //System.out.println("E2 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }
         }
     }
@@ -291,15 +273,13 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
         private ModelerFile modelerFile;
         private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.Vendor vendorConfig;
         private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public DiagramEngineExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
-                org.netbeans.modeler.specification.annotaton.Vendor vendorConfig, org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
+                org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
             this.latch = latch;
             this.modelerFile = modelerFile;
             this.modelerConfig = modelerConfig;
-            this.vendorConfig = vendorConfig;
             this.diagramModelConfig = diagramModelConfig;
         }
 
@@ -310,9 +290,9 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
                 Class<? extends IModelerDiagramEngine> modelerDiagramEngine = diagramModelConfig.modelerDiagramEngine();
                 if (modelerDiagramEngine != IModelerDiagramEngine.class) {
-                    modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerDiagramEngine(modelerDiagramEngine.newInstance());
+                    modelerFile.getModelerDiagramModel().setModelerDiagramEngine(modelerDiagramEngine.newInstance());
                 } else {
-                    modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerDiagramEngine(new ModelerDiagramEngine());
+                    modelerFile.getModelerDiagramModel().setModelerDiagramEngine(new ModelerDiagramEngine());
                 }
 
                 modelerFile.getModelerDiagramEngine().init(modelerFile);
@@ -337,32 +317,23 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
         private ModelerFile modelerFile;
         private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.Vendor vendorConfig;
         private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public PaletteConfigExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
-                org.netbeans.modeler.specification.annotaton.Vendor vendorConfig, org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
+                org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
             this.latch = latch;
             this.modelerFile = modelerFile;
             this.modelerConfig = modelerConfig;
-            this.vendorConfig = vendorConfig;
             this.diagramModelConfig = diagramModelConfig;
         }
 
         @Override
         public void run() {
             try {
-                //long st = new Date().getTime();
-
-                modelerFile.getVendorSpecification().createModelerDocumentConfig(vendorConfig.id(), modelerConfig.document());//141 sec
-                modelerFile.getVendorSpecification().createPaletteConfig(vendorConfig.id(), diagramModelConfig.id(), modelerConfig.palette());//67 sec //depends on docFac
-
-                //System.out.println("E4 B3B Total time : " + (new Date().getTime() - st) + " sec");
-
+                modelerFile.getModelerDiagramModel().createModelerDocumentConfig(diagramModelConfig.id(), modelerConfig.document());//141 sec
+                modelerFile.getModelerDiagramModel().createPaletteConfig(diagramModelConfig.id(), diagramModelConfig.id(), modelerConfig.palette());//67 sec //depends on docFac
             } finally {
-                //long st = new Date().getTime();
                 latch.countDown();
-                //System.out.println("E4 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }
 
         }
@@ -374,33 +345,26 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
         private ModelerFile modelerFile;
         private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.Vendor vendorConfig;
         private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public ModelerUtilExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
-                org.netbeans.modeler.specification.annotaton.Vendor vendorConfig, org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
+                org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
             this.latch = latch;
             this.modelerFile = modelerFile;
             this.modelerConfig = modelerConfig;
-            this.vendorConfig = vendorConfig;
             this.diagramModelConfig = diagramModelConfig;
         }
 
         @Override
         public void run() {
             try {
-                //long st = new Date().getTime();
                 Class<? extends IModelerUtil> modelerUtil = diagramModelConfig.modelerUtil();
-                modelerFile.getVendorSpecification().getModelerDiagramModel().setModelerUtil(modelerUtil.newInstance());
+                modelerFile.getModelerDiagramModel().setModelerUtil(modelerUtil.newInstance());
                 NBModelerUtil.init(modelerFile);
-
-                //System.out.println("E5 B3B Total time : " + (new Date().getTime() - st) + " sec");
             } catch (InstantiationException | IllegalAccessException ex) {
                 Exceptions.printStackTrace(ex);
             } finally {
-                //long st = new Date().getTime();
                 latch.countDown();
-                //System.out.println("E5 B3A Total time : " + (new Date().getTime() - st) + " sec");
             }
 
         }

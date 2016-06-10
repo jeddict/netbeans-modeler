@@ -26,7 +26,7 @@ public class CategoryChildren extends Children.Keys<CategoryNodeConfig> {
     List<CategoryNodeConfig> categoryNodeConfigs;
 
     public CategoryChildren(ModelerFile file) {
-        categoryNodeConfigs = file.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs();//PaletteConfigFactory.getCategoryNodeConfig(file.getModelerFileDataObject().getClass());
+        categoryNodeConfigs = file.getModelerDiagramModel().getPaletteConfig().getCategoryNodeConfigs();//PaletteConfigFactory.getCategoryNodeConfig(file.getModelerFileDataObject().getClass());
     }
 
     @Override

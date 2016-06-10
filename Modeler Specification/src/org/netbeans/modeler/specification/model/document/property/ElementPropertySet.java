@@ -56,7 +56,7 @@ public class ElementPropertySet {
     public ElementPropertySet(ModelerFile modelerFile, Sheet sheet) {
         this.modelerFile = modelerFile;
         this.sheet = sheet;
-        this.elementConfig = modelerFile.getVendorSpecification().getElementConfigFactory().getElementConfig();;
+        this.elementConfig = modelerFile.getModelerDiagramModel().getElementConfigFactory().getElementConfig();;
 
     }
 
@@ -201,7 +201,7 @@ public class ElementPropertySet {
     }
 
     private void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
-        ElementConfigFactory elementConfigFactory = modelerFile.getVendorSpecification().getElementConfigFactory();
+        ElementConfigFactory elementConfigFactory = modelerFile.getModelerDiagramModel().getElementConfigFactory();
         if (inherit) {
             for (Element element : elementConfigFactory.getElements(category,object.getClass())) {
                 createPropertySetInternal(groupId,baseElementWidget, object, element, propertyChangeHandlers, propertyVisiblityHandlers, replaceProperty);

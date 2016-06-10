@@ -34,7 +34,6 @@ import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.file.IModelerFileDataObject;
-import org.netbeans.modeler.specification.ModelerVendorSpecification;
 import org.netbeans.modeler.specification.model.ModelerDiagramSpecification;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -65,7 +64,8 @@ public class ModelerFile {
 
     private Image icon;
     private IModelerFileDataObject modelerFileDataObject;
-    private ModelerVendorSpecification modelerVendorSpecification;
+    private ModelerDiagramSpecification modelerSpecificationDiagramModel;
+
     private Map<String, Object> attributes = new HashMap<>();
     private ModelerFile parentFile;
     private Set<ModelerFile> childrenFile = new HashSet<>();
@@ -169,46 +169,46 @@ public class ModelerFile {
     }
 
     /**
-     * @return the modelerVendorSpecification
-     */
-    public ModelerVendorSpecification getVendorSpecification() {
-        if (modelerVendorSpecification == null) {
-            modelerVendorSpecification = new ModelerVendorSpecification();
-            modelerVendorSpecification.setModelerSpecificationDiagramModel(new ModelerDiagramSpecification());
-        }
-        return modelerVendorSpecification;
-    }
-
-    /**
-     * @param modelerVendorSpecification the modelerVendorSpecification to set
-     */
-    public void setModelerVendorSpecification(ModelerVendorSpecification modelerVendorSpecification) {
-        this.modelerVendorSpecification = modelerVendorSpecification;
-    }
-
-    /**
      * @return the modelerUtil
      */
     public IModelerUtil getModelerUtil() {
-        return this.getVendorSpecification().getModelerDiagramModel().getModelerUtil();
+        return this.getModelerDiagramModel().getModelerUtil();
+    }
+    
+        /**
+     * @return the modelerSpecificationDiagramModel
+     */
+    public ModelerDiagramSpecification getModelerDiagramModel() {
+        if(modelerSpecificationDiagramModel==null){
+            modelerSpecificationDiagramModel = new ModelerDiagramSpecification();
+        }
+        return modelerSpecificationDiagramModel;
+    }
+
+    /**
+     * @param modelerSpecificationDiagramModel the
+     * modelerSpecificationDiagramModel to set
+     */
+    public void setModelerDiagramModel(ModelerDiagramSpecification modelerSpecificationDiagramModel) {
+        this.modelerSpecificationDiagramModel = modelerSpecificationDiagramModel;
     }
 
     /**
      * These two method are for convenience *
      */
     public NModelerUtil getNModelerUtil() {
-        return (NModelerUtil) this.getVendorSpecification().getModelerDiagramModel().getModelerUtil();
+        return (NModelerUtil) this.getModelerDiagramModel().getModelerUtil();
     }
 
     public PModelerUtil getPModelerUtil() {
-        return (PModelerUtil) this.getVendorSpecification().getModelerDiagramModel().getModelerUtil();
+        return (PModelerUtil) this.getModelerDiagramModel().getModelerUtil();
     }
 
     /**
      * @return the modelerScene
      */
     public IModelerScene getModelerScene() {
-        return this.getVendorSpecification().getModelerDiagramModel().getModelerScene();
+        return this.getModelerDiagramModel().getModelerScene();
     }
 
     /**
@@ -222,18 +222,14 @@ public class ModelerFile {
      * @return the modelerDiagramEngine
      */
     public IModelerDiagramEngine getModelerDiagramEngine() {
-        return this.getVendorSpecification().getModelerDiagramModel().getModelerDiagramEngine();
+        return this.getModelerDiagramModel().getModelerDiagramEngine();
     }
 
     /**
      * @return the definitionElement
      */
     public IDefinitionElement getDefinitionElement() {
-        return this.getVendorSpecification().getModelerDiagramModel().getDefinitionElement();
-    }
-
-    public ModelerDiagramSpecification getModelerDiagramModel() {
-        return this.getVendorSpecification().getModelerDiagramModel();
+        return this.getModelerDiagramModel().getDefinitionElement();
     }
 
     public void handleException(Throwable throwable) {
@@ -465,12 +461,12 @@ public class ModelerFile {
     }
 
     public SoftwareVersion getCurrentVersion() {
-        return getVendorSpecification().getModelerDiagramModel().getDiagramModel().getVersion();
+        return this.getModelerDiagramModel().getDiagramModel().getVersion();
     }
 
     
     public SoftwareVersion getArchitectureVersion() {
-        return getVendorSpecification().getModelerDiagramModel().getDiagramModel().getArchitectureVersion();
+        return this.getModelerDiagramModel().getDiagramModel().getArchitectureVersion();
     }
 
 }
