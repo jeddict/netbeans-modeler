@@ -120,18 +120,18 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
     private void cleanLookup() {
         lookupContent.remove(exploreLookup);
-        if (!modelerFile.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs().isEmpty()) {
-            lookupContent.remove(paletteController);
-        }
+//        if (!modelerFile.getVendorSpecification().getPaletteConfig().getCategoryNodeConfigs().isEmpty()) {
+//            lookupContent.remove(paletteController);
+//        }
         lookupContent.remove(modelerFile.getModelerScene());
         lookupContent.remove(modelerFile.getModelerFileDataObject());
         lookupContent.remove(getNavigatorCookie());
 
         navigatorCookie = null;
         exploreLookup = null;
-        paletteController = null;
-        this.lookupContent = null;
-        this.lookup = Lookup.EMPTY;
+//        paletteController = null;
+//        this.lookupContent = null;
+//        this.lookup = Lookup.EMPTY;
     }
     private NavigatorHint navigatorCookie = null;
 

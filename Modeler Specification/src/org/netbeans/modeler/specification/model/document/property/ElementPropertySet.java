@@ -87,7 +87,7 @@ public class ElementPropertySet {
         if (set.get(id) == null) {
             Group group = elementConfig.getGroup(id);
             if (group == null) {
-                throw new RuntimeException("Group Id : " + id + " not found in element config for Element : " + p.getName());
+                throw new RuntimeException("Group Id : <" + id + "> not found in element config for Element : " + p.getName());
             }
             createGroup(id);
             setGroupDisplayName(id, group.getName());
@@ -218,45 +218,40 @@ public class ElementPropertySet {
         try {
             if (element != null) {
                 for (final Attribute attribute : element.getAttributes()) {
-                    if (groupId == null) {
-                        groupId = attribute.getGroupId();
+                    String attributeGroupId = groupId;
+                    if (attributeGroupId == null) {
+                        attributeGroupId = attribute.getGroupId();
                     }
                     if (attribute.getClassType() == ITextElement.class) {
                         final String name = attribute.getName();
                         final ITextElement expression = (ITextElement) PropertyUtils.getProperty(object, name);//return must not be null//(TExpression) PropertyUtils.getProperty(object, id) == null ? new TExpression() : (TExpression) PropertyUtils.getProperty(object, id);
-//                        PropertyUtils.setProperty(object, id, expression);
-                        
-                        this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, attribute.getId(),"content",
-                                attribute.getDisplayName(), attribute.getShortDescription(),
-                                new PropertyChangeListener<String>() {
-                                    @Override
-                                    public void changePerformed(String value) {
-                                        if (expression.getContent() == null || expression.getContent().isEmpty()) {
-                                            try {
-                                                PropertyUtils.setProperty(object, name, null);
-                                            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-                                                Exceptions.printStackTrace(ex);
-                                            }
-                                        }
-                                        if (propertyChangeHandlers != null && propertyChangeHandlers.get(name) != null) {
-                                            propertyChangeHandlers.get(name).changePerformed(value);
-                                        }
-                                        if (attribute.isRefreshOnChange()) {
-                                            baseElementWidget.refreshProperties();
+                        this.put(attributeGroupId, new ElementCustomPropertySupport(this.getModelerFile(), expression, String.class, attribute.getId(),"content",
+                                attribute.getDisplayName(), attribute.getShortDescription(), (PropertyChangeListener<String>) (String value) -> {
+                                    if (expression.getContent() == null || expression.getContent().isEmpty()) {
+                                        try {
+                                            PropertyUtils.setProperty(object, name, null);
+                                        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+                                            Exceptions.printStackTrace(ex);
                                         }
                                     }
-                                }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())), replaceProperty);
+                                    if (propertyChangeHandlers != null && propertyChangeHandlers.get(name) != null) {
+                                        propertyChangeHandlers.get(name).changePerformed(value);
+                                    }
+                                    if (attribute.isRefreshOnChange()) {
+                                        baseElementWidget.refreshProperties();
+                                    }
+                        }, propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId())), replaceProperty);
 
                     } else if (Enumy.class.isAssignableFrom(attribute.getClassType())) {
                         EnumComboBoxResolver resolver = Lookup.getDefault().lookup(EnumComboBoxResolver.class);
-                        this.put(groupId,resolver.getPropertySupport(modelerFile, attribute, object));
+                        this.put(attributeGroupId,resolver.getPropertySupport(modelerFile, attribute, object));
                     }else {
                         if (attribute.isReadOnly()) {
                             String value = BeanUtils.getProperty(object, attribute.getName());
                             if (value == null) {
                                 BeanUtils.setProperty(object, attribute.getName(), attribute.getValue());
                             }
-                            this.put(groupId, new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()), replaceProperty);
+                            this.put(attributeGroupId, new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()), replaceProperty);
                         } else {
                             PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
 
@@ -267,36 +262,32 @@ public class ElementPropertySet {
                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent() != null && !attribute.getOnChangeEvent().trim().isEmpty()) {
                                 propertyChangeHandlers.put(attribute.getId(), createPropertyChangeHandler(modelerFile, baseElementWidget, object, attribute.getChangeListenerExpression()));
                             }
-                            this.put(groupId, new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
-                                    attribute.getId(),attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(),
-                                    new PropertyChangeListener<Object>() {
-                                        @Override
-                                        public void changePerformed(Object value) {
-                                            try {
-                                                if (value != null) {
-                                                    if (value instanceof String) {
-                                                        if (!((String) value).isEmpty()) {
-                                                            BeanUtils.setProperty(object, attribute.getName(), value);
-                                                        } else {
-                                                            BeanUtils.setProperty(object, attribute.getName(), null);
-                                                        }
-                                                    } else {
+                            this.put(attributeGroupId, new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
+                                    attribute.getId(),attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(), (PropertyChangeListener<Object>) (Object value) -> {
+                                        try {
+                                            if (value != null) {
+                                                if (value instanceof String) {
+                                                    if (!((String) value).isEmpty()) {
                                                         BeanUtils.setProperty(object, attribute.getName(), value);
+                                                    } else {
+                                                        BeanUtils.setProperty(object, attribute.getName(), null);
                                                     }
                                                 } else {
-                                                    BeanUtils.setProperty(object, attribute.getName(), null);
+                                                    BeanUtils.setProperty(object, attribute.getName(), value);
                                                 }
-                                            } catch (IllegalAccessException | InvocationTargetException ex) {
-                                                Exceptions.printStackTrace(ex);
+                                            } else {
+                                                BeanUtils.setProperty(object, attribute.getName(), null);
                                             }
-                                            if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
-                                                propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
-                                            }
-                                            if (attribute.isRefreshOnChange()) {
-                                                baseElementWidget.refreshProperties();
-                                            }
+                                        } catch (IllegalAccessException | InvocationTargetException ex) {
+                                            Exceptions.printStackTrace(ex);
                                         }
-                                    }, propertyVisibilityHandler), replaceProperty);
+                                        if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
+                                            propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
+                                        }
+                                        if (attribute.isRefreshOnChange()) {
+                                            baseElementWidget.refreshProperties();
+                                        }
+                            }, propertyVisibilityHandler), replaceProperty);
 
                         }
                     }

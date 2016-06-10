@@ -18,7 +18,10 @@ package org.netbeans.modeler.palette;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Action;
+import org.netbeans.modeler.config.palette.IPaletteConfig;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.spi.palette.DragAndDropHandler;
 import org.netbeans.spi.palette.PaletteActions;
@@ -35,12 +38,17 @@ import org.openide.util.datatransfer.ExTransferable;
  */
 public class PaletteSupport {
 
+    private static final Map<IPaletteConfig, PaletteController> paletteConfigs = new HashMap<>();
+    
     public static PaletteController createPalette(ModelerFile file) {
-
-        AbstractNode paletteRoot = new AbstractNode(new CategoryChildren(file));
-        paletteRoot.setName(file.getName());
-        return PaletteFactory.createPalette(paletteRoot, new ModelerPaletteActions(), null, new ModelerPaletteItemDragAndDropHandler());
-
+        IPaletteConfig config = file.getVendorSpecification().getPaletteConfig();
+        if (paletteConfigs.get(config) == null) {
+            AbstractNode paletteRoot = new AbstractNode(new CategoryChildren(file));
+            paletteRoot.setName(file.getName());
+            PaletteController controller = PaletteFactory.createPalette(paletteRoot, new ModelerPaletteActions(), null, new ModelerPaletteItemDragAndDropHandler());
+            paletteConfigs.put(config, controller);
+        }
+        return paletteConfigs.get(config);
     }
 
     private static class ModelerPaletteActions extends PaletteActions {

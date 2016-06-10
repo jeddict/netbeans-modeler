@@ -15,11 +15,9 @@
  */
 package org.netbeans.modeler.specification.model.document.core;
 
-import java.util.List;
-
 public interface IFlowPin extends IFlowElement {
 
-    public List<String> getIncoming();
-
-    public List<String> getOutgoing();
+//    public List<String> getIncoming();
+//
+//    public List<String> getOutgoing();
 }

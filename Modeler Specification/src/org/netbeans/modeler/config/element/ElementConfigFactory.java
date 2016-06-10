@@ -51,9 +51,12 @@ public class ElementConfigFactory {
     public List<Element> getElements(String category, Class classType) {
         List<Element> elements = new LinkedList<>();
         for (Element element_TMP : elementConfig.getElements()) {
-             if (StringUtils.equals(category, element_TMP.getCategory()) &&  element_TMP.getClassType().isAssignableFrom(classType)) { //all super class
+            if (element_TMP.getClassType() == null) {
+                throw new IllegalArgumentException(element_TMP.getId() + " class not found");
+            }
+            if (StringUtils.equals(category, element_TMP.getCategory()) && element_TMP.getClassType().isAssignableFrom(classType)) { //all super class
                 elements.add(element_TMP);
-             }
+            }
         }
         return elements;
     }

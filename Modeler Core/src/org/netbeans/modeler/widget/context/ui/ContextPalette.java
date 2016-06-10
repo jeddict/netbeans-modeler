@@ -129,14 +129,11 @@ public class ContextPalette extends JPanel {
     }
 
     private JComponent[] buildChildrenList() {
-        //  //System.out.println(" ContextPalette buildChildrenList....");
-        ArrayList<JComponent> widgetList = new ArrayList< JComponent>();
-//        System.out.println("buildChildrenList __________________________________________________________________");
+        ArrayList<JComponent> widgetList = new ArrayList<>();
         ArrayList< ContextPaletteButtonModel> children = model.getChildren();
 
         ButtonListener buttonListener = new ButtonListener();
         for (ContextPaletteButtonModel componentModel : children) {
-            System.out.println("componentModel : " + componentModel.getTooltip());
             if(componentModel.isVisible()){
             if (componentModel.isGroup() == true) {
                 ComboButton btn = new ComboButton(model.getContext(), componentModel);
