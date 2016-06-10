@@ -16,7 +16,6 @@
 package org.netbeans.modeler.config.palette;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
@@ -25,7 +24,6 @@ import javax.xml.bind.Unmarshaller;
 import org.netbeans.modeler.config.document.ModelerDocumentFactory;
 import org.netbeans.modeler.config.document.ModelerDocumentFactoryRepository;
 import org.netbeans.modeler.core.exception.InvalidPalleteConfigException;
-import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.util.Util;
 import org.openide.util.Exceptions;
 

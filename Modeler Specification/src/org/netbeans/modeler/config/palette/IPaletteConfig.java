@@ -21,29 +21,9 @@ import org.netbeans.modeler.config.document.IModelerDocument;
 public interface IPaletteConfig {
 
     /**
-     * @return the id
-     */
-    String getId();
-
-    /**
-     * @return the name
-     */
-    String getName();
-
-    /**
      * @param categoryNodeConfigs the categoryNodeConfigs to set
      */
     void setCategoryNodeConfigs(List<CategoryNodeConfig> categoryNodeConfigs);
-
-    /**
-     * @param id the id to set
-     */
-    void setId(String id);
-
-    /**
-     * @param name the name to set
-     */
-    void setName(String name);
 
     /**
      * @return the categoryNodeConfigs
