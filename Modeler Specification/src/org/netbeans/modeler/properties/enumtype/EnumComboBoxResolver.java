@@ -18,6 +18,7 @@ package org.netbeans.modeler.properties.enumtype;
 
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.core.ModelerFile;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.openide.nodes.PropertySupport;
 
 /**
@@ -25,5 +26,5 @@ import org.openide.nodes.PropertySupport;
  * @author jGauravGupta <gaurav.gupta.jc@gmail.com>
  */
 public interface EnumComboBoxResolver {
-    PropertySupport getPropertySupport(ModelerFile modelerFile, Attribute attribute, Object object);
+    PropertySupport getPropertySupport(ModelerFile modelerFile, Attribute attribute, IBaseElementWidget baseElementWidget, Object object);
 }

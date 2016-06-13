@@ -27,6 +27,7 @@ import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.list
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.support.ComboBoxPropertySupport;
 import org.netbeans.modeler.properties.type.Enumy;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.openide.nodes.PropertySupport;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -38,7 +39,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
 
      @Override
-     public PropertySupport getPropertySupport(ModelerFile modelerFile, Attribute attribute, Object object) {
+     public PropertySupport getPropertySupport(ModelerFile modelerFile, Attribute attribute, IBaseElementWidget baseElementWidget, Object object) {
          final Object[] ENUMS = attribute.getClassType().getEnumConstants();
          Enumy DEFAULT = ((Enumy)ENUMS[0]).getDefault();
          String BLANK = "";
@@ -50,6 +51,9 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
                 org.apache.commons.beanutils.PropertyUtils.setProperty(object, attribute.getName(), enumy);
                 }catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException ex){
                     modelerFile.handleException(ex);
+                }
+                if (attribute.isRefreshOnChange()) {
+                    baseElementWidget.refreshProperties();
                 }
             }
 

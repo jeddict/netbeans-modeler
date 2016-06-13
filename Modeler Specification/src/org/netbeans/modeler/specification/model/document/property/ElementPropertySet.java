@@ -244,7 +244,7 @@ public class ElementPropertySet {
 
                     } else if (Enumy.class.isAssignableFrom(attribute.getClassType())) {
                         EnumComboBoxResolver resolver = Lookup.getDefault().lookup(EnumComboBoxResolver.class);
-                        this.put(attributeGroupId,resolver.getPropertySupport(modelerFile, attribute, object));
+                        this.put(attributeGroupId,resolver.getPropertySupport(modelerFile, attribute, baseElementWidget, object));
                     }else {
                         if (attribute.isReadOnly()) {
                             String value = BeanUtils.getProperty(object, attribute.getName());

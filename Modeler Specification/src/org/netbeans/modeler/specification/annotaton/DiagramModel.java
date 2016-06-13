@@ -45,7 +45,7 @@ public @interface DiagramModel {
 
     public Class<? extends IModelerScene> modelerScene();
 
-    public Class<? extends IExportManager> exportManager();
+    public Class<? extends IExportManager> exportManager() default IExportManager.class;
 
     public Class<? extends IModelerDiagramEngine> modelerDiagramEngine() default IModelerDiagramEngine.class; //for widget event handler
 
