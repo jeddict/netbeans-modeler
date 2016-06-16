@@ -25,10 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.mvel2.MVEL;
 
-/**
- *
- *
- */
 @XmlRootElement(name = "attribute")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Attribute {
@@ -60,7 +56,23 @@ public class Attribute {
     private String onChangeEvent;
     @XmlAttribute(name = "refresh-onchange")
     private Boolean refreshOnChange = false;
+    
+    @XmlAttribute
+    private String before;
+    
+    @XmlAttribute
+    private String after;
 
+    public Attribute() {
+    }
+
+    public Attribute(String name, String displayName, String shortDescription) {
+        this.name = name;
+        this.displayName = displayName;
+        this.shortDescription = shortDescription;
+    }
+
+    
     /**
      * @return the id
      */
@@ -292,6 +304,34 @@ public class Attribute {
      */
     private void setElement(Element element) {
         this.element = element;
+    }
+
+    /**
+     * @return the before
+     */
+    public String getBefore() {
+        return before;
+    }
+
+    /**
+     * @param before the before to set
+     */
+    public void setBefore(String before) {
+        this.before = before;
+    }
+
+    /**
+     * @return the after
+     */
+    public String getAfter() {
+        return after;
+    }
+
+    /**
+     * @param after the after to set
+     */
+    public void setAfter(String after) {
+        this.after = after;
     }
 
 }

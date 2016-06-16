@@ -18,6 +18,8 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.sup
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
+import org.netbeans.modeler.config.element.Attribute;
+import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.ComboBoxPropertyEditorSupport;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
@@ -25,12 +27,14 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
 
-public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxValue> {
+public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxValue> implements ModelerSheetProperty{
 
     private ModelerFile modelerFile;
     private ComboBoxListener comboBoxListener;
     private PropertyEditor propertyEditor;
     private PropertyVisibilityHandler propertyVisibilityHandler;
+    
+    private Attribute attribute; 
 
     public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener, PropertyVisibilityHandler propertyVisibilityHandler) {
         super(id, ComboBoxValue.class, name, description);
@@ -39,12 +43,17 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
         this.propertyVisibilityHandler = propertyVisibilityHandler;
     }
 
-    public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener) {
-        this(modelerFile, id, name, description, comboBoxListener, (PropertyVisibilityHandler) null);
+    public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String displayName, String description, ComboBoxListener comboBoxListener) {
+        this(modelerFile, id, displayName, description, comboBoxListener, (PropertyVisibilityHandler) null);
+    }
+    
+    public ComboBoxPropertySupport(ModelerFile modelerFile, Attribute attribute, ComboBoxListener comboBoxListener) {
+        this(modelerFile, attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(), comboBoxListener, (PropertyVisibilityHandler) null);
+        this.attribute=attribute;
     }
 
-    public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String name, String description, ComboBoxListener comboBoxListener, String visible, Object object) {
-        super(id, ComboBoxValue.class, name, description);
+    public ComboBoxPropertySupport(ModelerFile modelerFile, String id, String displayName, String description, ComboBoxListener comboBoxListener, String visible, Object object) {
+        super(id, ComboBoxValue.class, displayName, description);
         this.modelerFile = modelerFile;
         this.comboBoxListener = comboBoxListener;
         this.propertyVisibilityHandler = ElementPropertySet.createPropertyVisibilityHandler(modelerFile, object, visible);
@@ -75,6 +84,23 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
      */
     public PropertyVisibilityHandler getPropertyVisibilityHandler() {
         return propertyVisibilityHandler;
+    }
+
+
+    @Override
+    public String getBefore() {
+        if(attribute!=null){
+            return attribute.getBefore();
+        }
+        return null;
+    }
+
+    @Override
+    public String getAfter() {
+        if(attribute!=null){
+            return attribute.getAfter();
+        }
+        return null;
     }
 
 }

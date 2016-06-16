@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -31,6 +32,7 @@ import org.netbeans.modeler.config.element.Element;
 import org.netbeans.modeler.config.element.ElementConfig;
 import org.netbeans.modeler.config.element.ElementConfigFactory;
 import org.netbeans.modeler.config.element.Group;
+import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.enumtype.EnumComboBoxResolver;
 import org.netbeans.modeler.properties.type.Enumy;
@@ -83,7 +85,81 @@ public class ElementPropertySet {
         set.clear();
     }
 
-    public synchronized Node.Property<?> put(String id, Node.Property<?> p, boolean replace) {
+    private Map<String, LinkedList<SheetProperty>> preOrderedPropeties = new LinkedHashMap<>();
+    
+   
+    public synchronized void put(String id, Node.Property<?> p, boolean replace) {
+        LinkedList<SheetProperty> properties = preOrderedPropeties.get(id);
+        if(properties==null){
+            preOrderedPropeties.put(id, properties = new LinkedList<>());
+        }
+        properties.add(new SheetProperty(p,replace));
+    }
+    
+    
+    public void executeProperties(){
+        for(Entry<String, LinkedList<SheetProperty>> entry : preOrderedPropeties.entrySet()){
+            LinkedList<SheetProperty> propertyList = entry.getValue();
+            //Prepare hashmap container
+            Map<String, PropertyLinkedList<SheetProperty>> filterContainerMap= new LinkedHashMap<>();
+            propertyList.stream().forEach(p -> {
+                if (filterContainerMap.get(p.getProperty().getName()) == null) {
+                    PropertyLinkedList<SheetProperty> propertyLinkedList = new PropertyLinkedList<>();
+                    propertyLinkedList.addFirst(p);
+                    filterContainerMap.put(p.getProperty().getName(), propertyLinkedList);
+                } else {
+                    filterContainerMap.get(p.getProperty().getName()).addLast(p);
+                }
+            });
+            
+            propertyList.stream().forEach(p -> {
+                if(p.getProperty() instanceof ModelerSheetProperty){
+                    ModelerSheetProperty msp = (ModelerSheetProperty)p.getProperty();
+                    if(msp.getAfter()!=null){
+                        PropertyLinkedList<SheetProperty>  linklistA = filterContainerMap.get(msp.getAfter());
+                        PropertyLinkedList<SheetProperty>  linklistB = filterContainerMap.get(p.getProperty().getName());
+                        if(linklistA==null){
+                           System.out.println("Invalid after type : " + msp.getAfter());
+                       }
+                        if(linklistA!=null && linklistA!=linklistB){
+                            linklistA.addLast(linklistB.getHead());
+                        }
+                    }
+                    if(msp.getBefore()!=null){
+                       PropertyLinkedList<SheetProperty>  linklistB = filterContainerMap.get(p.getProperty().getName());
+                       PropertyLinkedList<SheetProperty>  linklistA = filterContainerMap.get(msp.getBefore());
+                       if(linklistA==null){
+                           System.out.println("Invalid before type : " + msp.getBefore());
+                       }
+                        if(linklistA!=null && linklistA!=linklistB){
+                            linklistB.addLast(linklistA.getHead());
+                        } 
+                    }
+                }
+            });
+            
+            for (Entry<String, PropertyLinkedList<SheetProperty>> filterEntry : filterContainerMap.entrySet()) {
+                PropertyLinkedList<SheetProperty> propertyLinkedList = filterEntry.getValue();
+                if (propertyLinkedList.getHead().prev == null) {
+//                    System.out.println("New : " + propertyLinkedList.getHead().element.getProperty().getName());
+                    PropertyLinkedList<SheetProperty>.Node node = propertyLinkedList.getHead();
+                    while (node != null) {
+//                        System.out.println("-> attach : " + node.element.getProperty().getName());
+                        putProperty(entry.getKey(), node.element.getProperty(), node.element.isReplace());
+                        node = node.next;
+                    }
+//
+//                } else {
+//                    System.out.print("Pre : " + propertyLinkedList.getHead().prev.element.getProperty().getName());
+//                    System.out.println("->  : " + propertyLinkedList.getHead().element.getProperty().getName());
+                }
+            }
+            
+        }
+        preOrderedPropeties.clear();
+    }
+    
+    public synchronized Node.Property<?> putProperty(String id, Node.Property<?> p, boolean replace) {
         if (set.get(id) == null) {
             Group group = elementConfig.getGroup(id);
             if (group == null) {
@@ -98,8 +174,8 @@ public class ElementPropertySet {
         return set.get(id).put(p);
     }
 
-    public synchronized Node.Property<?> put(String id, Node.Property<?> p) {
-        return put(id, p, false);
+    public synchronized void put(String id, Node.Property<?> p) {
+        put(id, p, false);
     }
 
     public void setGroupDisplayName(String id, String displayName) {
@@ -251,7 +327,7 @@ public class ElementPropertySet {
                             if (value == null) {
                                 BeanUtils.setProperty(object, attribute.getName(), attribute.getValue());
                             }
-                            this.put(attributeGroupId, new ElementPropertySupport(object, attribute.getClassType(), attribute.getFieldGetter(), null, attribute.getDisplayName(), attribute.getShortDescription()), replaceProperty);
+                            this.put(attributeGroupId, new ElementPropertySupport(object, attribute.getFieldGetter(), null, attribute), replaceProperty);
                         } else {
                             PropertyVisibilityHandler propertyVisibilityHandler = propertyVisiblityHandlers == null ? null : propertyVisiblityHandlers.get(attribute.getId());
 
@@ -262,8 +338,7 @@ public class ElementPropertySet {
                             if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) == null && attribute.getOnChangeEvent() != null && !attribute.getOnChangeEvent().trim().isEmpty()) {
                                 propertyChangeHandlers.put(attribute.getId(), createPropertyChangeHandler(modelerFile, baseElementWidget, object, attribute.getChangeListenerExpression()));
                             }
-                            this.put(attributeGroupId, new ElementCustomPropertySupport(this.getModelerFile(), object, attribute.getClassType(),
-                                    attribute.getId(),attribute.getName(), attribute.getDisplayName(), attribute.getShortDescription(), (PropertyChangeListener<Object>) (Object value) -> {
+                            this.put(attributeGroupId, new ElementCustomPropertySupport(this.getModelerFile(), object, attribute, (PropertyChangeListener<Object>) (Object value) -> {
                                         try {
                                             if (value != null) {
                                                 if (value instanceof String) {
@@ -347,3 +422,46 @@ public class ElementPropertySet {
     }
 
 }
+ class SheetProperty {
+  private Node.Property<?> property; private boolean replace;
+
+    public SheetProperty(Node.Property<?> property) {
+        this.property = property;
+    }
+
+    public SheetProperty(Node.Property<?> property, boolean replace) {
+        this.property = property;
+        this.replace = replace;
+    }
+
+
+
+    /**
+     * @return the property
+     */
+    public Node.Property<?> getProperty() {
+        return property;
+    }
+
+    /**
+     * @param property the property to set
+     */
+    public void setProperty(Node.Property<?> property) {
+        this.property = property;
+    }
+
+    /**
+     * @return the replace
+     */
+    public boolean isReplace() {
+        return replace;
+    }
+
+    /**
+     * @param replace the replace to set
+     */
+    public void setReplace(boolean replace) {
+        this.replace = replace;
+    }
+}
+    

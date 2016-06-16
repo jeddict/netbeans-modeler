@@ -65,16 +65,7 @@ public class NEntityPropertyEditorSupport extends PropertyEditorSupport implemen
     // bugfix# 9219 added attachEnv() method checking if the user canWrite in text box
     @Override
     public void attachEnv(PropertyEnv env) {
-
         FeatureDescriptor desc = env.getFeatureDescriptor();
-//        if (desc instanceof Node.Property){
-////            Node.Property prop = (Node.Property)desc;
-//            //enh 29294 - support one-line editor & suppression of custom
-//            //editor
-//            //instructions = (String) prop.getValue ("instructions"); //NOI18N
-//            //oneline = Boolean.TRUE.equals (prop.getValue ("oneline")); //NOI18N
-////            customEd = !Boolean.TRUE.equals (prop.getValue ("suppressCustomEditor")); //NOI18N
-//        }
         this.env = env;
     }
 }

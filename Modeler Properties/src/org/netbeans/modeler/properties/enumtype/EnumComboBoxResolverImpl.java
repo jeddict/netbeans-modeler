@@ -102,7 +102,7 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
                 return null;
             }
         };
-        return new ComboBoxPropertySupport(modelerFile, attribute.getId(), attribute.getDisplayName(), attribute.getShortDescription(), comboBoxListener);
+        return new ComboBoxPropertySupport(modelerFile, attribute, comboBoxListener);
     }
 
 }
