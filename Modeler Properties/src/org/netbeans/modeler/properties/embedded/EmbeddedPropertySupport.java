@@ -20,10 +20,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import org.mvel2.MVEL;
-import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
+import static org.netbeans.modeler.specification.model.document.property.PropertySetUtil.createPropertyVisibilityHandler;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
 
@@ -63,7 +62,7 @@ public class EmbeddedPropertySupport extends PropertySupport implements ModelerS
             entity.getDataListener().init();
         }
         Serializable visibilityExpression = MVEL.compileExpression(visible);
-        this.propertyVisibilityHandler = ElementPropertySet.createPropertyVisibilityHandler(modelerFile, object, visibilityExpression);
+        this.propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile, object, visibilityExpression);
     }
 
     @Override

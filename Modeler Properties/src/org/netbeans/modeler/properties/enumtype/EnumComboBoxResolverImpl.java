@@ -19,6 +19,7 @@ package org.netbeans.modeler.properties.enumtype;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.core.ModelerFile;
@@ -27,9 +28,10 @@ import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.list
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener.ComboBoxListener;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.support.ComboBoxPropertySupport;
 import org.netbeans.modeler.properties.type.Enumy;
+import static org.netbeans.modeler.specification.model.document.property.PropertySetUtil.elementValueChanged;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
+import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.openide.nodes.PropertySupport;
-import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
@@ -39,10 +41,9 @@ import org.openide.util.lookup.ServiceProvider;
 public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
 
      @Override
-     public PropertySupport getPropertySupport(ModelerFile modelerFile, Attribute attribute, IBaseElementWidget baseElementWidget, Object object) {
+     public PropertySupport getPropertySupport(ModelerFile modelerFile, Attribute attribute, IBaseElementWidget baseElementWidget, Object object, Map<String, PropertyChangeListener> propertyChangeHandlers) {
          final Object[] ENUMS = attribute.getClassType().getEnumConstants();
          Enumy DEFAULT = ((Enumy)ENUMS[0]).getDefault();
-         String BLANK = "";
         ComboBoxListener<Enumy> comboBoxListener = new ComboBoxListener<Enumy>() {
             @Override
             public void setItem(ComboBoxValue<Enumy> value) {
@@ -55,6 +56,7 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
                 if (attribute.isRefreshOnChange()) {
                     baseElementWidget.refreshProperties();
                 }
+                elementValueChanged(baseElementWidget, attribute, propertyChangeHandlers, value );  
             }
 
             @Override

@@ -192,7 +192,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
         return propertyChangeHandlers;
     }
-    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<>();
 
     @Override
     public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {

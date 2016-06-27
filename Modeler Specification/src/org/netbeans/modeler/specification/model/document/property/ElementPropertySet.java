@@ -18,7 +18,6 @@ package org.netbeans.modeler.specification.model.document.property;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -26,7 +25,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.mvel2.MVEL;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.config.element.Element;
 import org.netbeans.modeler.config.element.ElementConfig;
@@ -36,8 +34,10 @@ import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.enumtype.EnumComboBoxResolver;
 import org.netbeans.modeler.properties.type.Enumy;
-import org.netbeans.modeler.specification.model.document.IRootElement;
 import org.netbeans.modeler.specification.model.document.ITextElement;
+import static org.netbeans.modeler.specification.model.document.property.PropertySetUtil.createPropertyChangeHandler;
+import static org.netbeans.modeler.specification.model.document.property.PropertySetUtil.createPropertyVisibilityHandler;
+import static org.netbeans.modeler.specification.model.document.property.PropertySetUtil.elementValueChanged;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.properties.generic.ElementCustomPropertySupport;
 import org.netbeans.modeler.widget.properties.generic.ElementPropertySupport;
@@ -208,7 +208,7 @@ public class ElementPropertySet {
     }
 
     public LinkedList<Sheet.Set> getGroups() {
-        return new LinkedList<Sheet.Set>(set.values());
+        return new LinkedList<>(set.values());
     }
 
     /**
@@ -320,7 +320,7 @@ public class ElementPropertySet {
 
                     } else if (Enumy.class.isAssignableFrom(attribute.getClassType())) {
                         EnumComboBoxResolver resolver = Lookup.getDefault().lookup(EnumComboBoxResolver.class);
-                        this.put(attributeGroupId,resolver.getPropertySupport(modelerFile, attribute, baseElementWidget, object));
+                        this.put(attributeGroupId,resolver.getPropertySupport(modelerFile, attribute, baseElementWidget, object, propertyChangeHandlers));
                     }else {
                         if (attribute.isReadOnly()) {
                             String value = BeanUtils.getProperty(object, attribute.getName());
@@ -356,12 +356,7 @@ public class ElementPropertySet {
                                         } catch (IllegalAccessException | InvocationTargetException ex) {
                                             Exceptions.printStackTrace(ex);
                                         }
-                                        if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
-                                            propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
-                                        }
-                                        if (attribute.isRefreshOnChange()) {
-                                            baseElementWidget.refreshProperties();
-                                        }
+                                      elementValueChanged(baseElementWidget, attribute, propertyChangeHandlers, value );  
                             }, propertyVisibilityHandler), replaceProperty);
 
                         }
@@ -373,54 +368,7 @@ public class ElementPropertySet {
         }
 
     }
-    
      
-    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
-        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
-        return (PropertyVisibilityHandler) () -> {
-            Map vars = new HashMap();
-            vars.put("root", root);
-            vars.put("widget", baseElementWidget);
-            vars.put("_this", object);
-            vars.put("node", baseElementWidget.getBaseElementSpec());
-            return (Boolean) MVEL.executeExpression(exp, vars);
-        };
-    }
-
-    public static PropertyChangeListener createPropertyChangeHandler(final ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
-        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
-        return (PropertyChangeListener) (Object value) -> {
-            Map vars = new HashMap();
-            vars.put("root", root);
-            vars.put("widget", baseElementWidget);
-            vars.put("_this", object);
-            vars.put("node", baseElementWidget.getBaseElementSpec());
-            vars.put("value", value);
-            vars.put("scene", modelerFile.getModelerScene());
-            MVEL.executeExpression(exp, vars);
-        };
-    }
-
-    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final String exp) { //this method should be removed // created cuz of MVEL BUG
-        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
-        return (PropertyVisibilityHandler) () -> {
-            Map vars = new HashMap();
-            vars.put("root", root);
-            vars.put("widget", object);
-            return (Boolean) MVEL.executeExpression(MVEL.compileExpression(exp), vars);
-        };
-    }
-
-    public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final Object object, final Serializable exp) { //this method should be removed // created cuz of MVEL BUG
-        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
-        return (PropertyVisibilityHandler) () -> {
-            Map vars = new HashMap();
-            vars.put("root", root);
-            vars.put("widget", object);
-            return (Boolean) MVEL.executeExpression(exp, vars);
-        };
-    }
-
 }
  class SheetProperty {
   private Node.Property<?> property; private boolean replace;
@@ -433,8 +381,6 @@ public class ElementPropertySet {
         this.property = property;
         this.replace = replace;
     }
-
-
 
     /**
      * @return the property

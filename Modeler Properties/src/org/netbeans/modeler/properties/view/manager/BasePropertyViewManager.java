@@ -82,7 +82,13 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
                 property.setHidden(false);
                 if (property.getClass() == ElementCustomPropertySupport.class) {
                     ElementCustomPropertySupport elementCustomPropertySupport = (ElementCustomPropertySupport) property;
-                    if (elementCustomPropertySupport.getPropertyVisibilityHandler() != null) {
+                    PropertyVisibilityHandler propertyVisibilityHandler = propertyVisibilityHandlerList.get(elementCustomPropertySupport.getName());
+                    if (propertyVisibilityHandler != null) {
+                        if (!propertyVisibilityHandler.isVisible()) {
+                            property.setHidden(true);
+                            hiddenPropertyCount++;
+                        }
+                    } else if (elementCustomPropertySupport.getPropertyVisibilityHandler() != null) {
                         if (!elementCustomPropertySupport.getPropertyVisibilityHandler().isVisible()) {
                             property.setHidden(true);
                             hiddenPropertyCount++;
@@ -118,8 +124,14 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
                     }
                 } else if (property.getClass() == NEntityPropertySupport.class) {
                     NEntityPropertySupport nEntityPropertySupport = (NEntityPropertySupport) property;
+                    PropertyVisibilityHandler propertyVisibilityHandler = propertyVisibilityHandlerList.get(nEntityPropertySupport.getName());
                     nEntityPropertySupport.getAttributeEntity().getTableDataListener().initCount();
-                    if (nEntityPropertySupport.getPropertyVisibilityHandler() != null) {
+                    if (propertyVisibilityHandler != null) {
+                        if (!propertyVisibilityHandler.isVisible()) {
+                            property.setHidden(true);
+                            hiddenPropertyCount++;
+                        }
+                    } else if (nEntityPropertySupport.getPropertyVisibilityHandler() != null) {
                         if (!nEntityPropertySupport.getPropertyVisibilityHandler().isVisible()) {
                             property.setHidden(true);
                             hiddenPropertyCount++;

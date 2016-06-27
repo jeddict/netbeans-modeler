@@ -23,7 +23,7 @@ import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.ComboBoxPropertyEditorSupport;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
-import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
+import static org.netbeans.modeler.specification.model.document.property.PropertySetUtil.createPropertyVisibilityHandler;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
 
@@ -56,7 +56,7 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
         super(id, ComboBoxValue.class, displayName, description);
         this.modelerFile = modelerFile;
         this.comboBoxListener = comboBoxListener;
-        this.propertyVisibilityHandler = ElementPropertySet.createPropertyVisibilityHandler(modelerFile, object, visible);
+        this.propertyVisibilityHandler = createPropertyVisibilityHandler(modelerFile, object, visible);
     }
 
     @Override
