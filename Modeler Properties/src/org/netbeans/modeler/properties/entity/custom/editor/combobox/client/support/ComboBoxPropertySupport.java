@@ -33,6 +33,7 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
     private ComboBoxListener comboBoxListener;
     private PropertyEditor propertyEditor;
     private PropertyVisibilityHandler propertyVisibilityHandler;
+//    private PropertyChangeListener propertyChangeListener; support not added because it already have ComboBoxListener
     
     private Attribute attribute; 
 
@@ -76,7 +77,6 @@ public class ComboBoxPropertySupport extends PropertySupport.ReadWrite<ComboBoxV
     @Override
     public void setValue(ComboBoxValue newValue) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 //  value is set by listener , not here
-
     }
 
     /**
