@@ -37,19 +37,16 @@ public class DiagramNavigatorContent extends JPanel implements PropertyChangeLis
      */
     public DiagramNavigatorContent() {
         initComponents();
-//        System.err.println("@@@@ DiagNavContent");
     }
 
     public void navigate(final JComponent satelliteView) {
-//        System.err.println(" navigate().. ");
         SwingUtilities.invokeLater(() -> {
-            JComponent view = satelliteView;
-            if (view != null) {
+            if (satelliteView != null) {
                 if (currentView != null) {
                     remove(currentView);
                 }
-                add(view, BorderLayout.CENTER);
-                currentView = view;
+                add(satelliteView, BorderLayout.CENTER);
+                currentView = satelliteView;
                 invalidate();
                 validate();
             }
@@ -63,9 +60,9 @@ public class DiagramNavigatorContent extends JPanel implements PropertyChangeLis
             TopComponent view = (TopComponent) evt.getNewValue();
             if (view != null)//may be null on events like slide out of Project tree etc
             {
-                Object ctrl = view.getLookup().lookup(IModelerScene.class);
-                if (ctrl instanceof IModelerScene) {
-                    navigate(((IModelerScene) ctrl).getSatelliteView());
+                IModelerScene scene = view.getLookup().lookup(IModelerScene.class);
+                if (scene != null) {
+                    navigate(scene.getSatelliteView());
                 }
             }
         }
