@@ -50,7 +50,6 @@ import java.util.HashMap;
 import java.util.Set;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 

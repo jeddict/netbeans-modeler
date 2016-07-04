@@ -55,7 +55,6 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
-import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;

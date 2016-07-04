@@ -19,7 +19,6 @@ import java.awt.Point;
 import java.util.Collections;
 import org.netbeans.api.visual.action.SelectProvider;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.scene.AbstractModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.edge.EdgeWidget;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;

@@ -43,11 +43,10 @@
  */
 package org.netbeans.modeler.actions;
 
-import org.netbeans.api.visual.action.WidgetAction;
-import org.netbeans.api.visual.action.CycleFocusProvider;
-import org.netbeans.api.visual.widget.Widget;
-
 import java.awt.event.KeyEvent;
+import org.netbeans.api.visual.action.CycleFocusProvider;
+import org.netbeans.api.visual.action.WidgetAction;
+import org.netbeans.api.visual.widget.Widget;
 
 /**
  * @author David Kaspar

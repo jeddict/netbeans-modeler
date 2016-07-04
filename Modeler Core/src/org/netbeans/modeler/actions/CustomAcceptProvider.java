@@ -43,7 +43,6 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.pin.IPinWidget;
-import org.netbeans.modeler.widget.pin.PinWidget;
 import org.netbeans.modeler.widget.transferable.MoveWidgetTransferable;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;

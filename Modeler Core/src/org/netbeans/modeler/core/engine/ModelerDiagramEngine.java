@@ -43,10 +43,13 @@ import org.netbeans.modeler.actions.InteractiveZoomAction;
 import org.netbeans.modeler.actions.LockSelectionAction;
 import org.netbeans.modeler.actions.NodeDeleteAction;
 import org.netbeans.modeler.actions.PanAction;
+import org.netbeans.modeler.actions.PinDeleteAction;
+import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
 import org.netbeans.modeler.actions.ZoomManager;
 import org.netbeans.modeler.actions.ZoomManager.ZoomEvent;
 import org.netbeans.modeler.actions.export.ExportAction;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
+import org.netbeans.modeler.core.IZoomManager;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.provider.EdgeWidgetSelectProvider;
@@ -69,10 +72,6 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Utilities;
-import org.netbeans.modeler.actions.PinDeleteAction;
-import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
-import org.netbeans.modeler.core.IZoomManager;
-import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.openide.windows.WindowManager;
 
 public class ModelerDiagramEngine implements IModelerDiagramEngine {

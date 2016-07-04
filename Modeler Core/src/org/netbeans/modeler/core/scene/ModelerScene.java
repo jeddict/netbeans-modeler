@@ -17,7 +17,6 @@ package org.netbeans.modeler.core.scene;
 
 import org.netbeans.modeler.scene.AbstractModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 
 public abstract class ModelerScene<E extends IRootElement> extends AbstractModelerScene<E> {
 

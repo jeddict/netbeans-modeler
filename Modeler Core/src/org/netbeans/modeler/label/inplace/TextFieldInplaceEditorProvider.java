@@ -58,7 +58,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.netbeans.api.visual.action.InplaceEditorProvider;
 import org.netbeans.api.visual.action.TextFieldInplaceEditor;
-//import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
