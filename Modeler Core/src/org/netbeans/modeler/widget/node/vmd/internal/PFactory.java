@@ -71,6 +71,10 @@ public final class PFactory {
     public static Class<? extends IColorScheme> getMacScheme() {
         return PMacColorScheme.class;
     }
+    
+    public static Class<? extends IColorScheme> getDarkScheme() {
+        return PDarkColorScheme.class;
+    }
 
     public static Class<? extends IColorScheme> getWoodScheme() {
         return PWoodColorScheme.class;
