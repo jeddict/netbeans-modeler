@@ -270,9 +270,9 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         if (this.getModelerFile() != null) {
             ModelerCore.removeModelerFile(this.getModelerFile().getPath());
         }
-        modelerScene.getBaseElements().stream().filter(element -> element instanceof INodeWidget).forEach(element -> {
-            ((INodeWidget) element).remove(false);
-        });
+//        modelerScene.getBaseElements().stream().filter(element -> element instanceof INodeWidget).forEach(element -> {
+//            ((INodeWidget) element).remove(false);
+//        });
         modelerScene.cleanReference();
 
         for (KeyListener keyListener : this.getKeyListeners()) {

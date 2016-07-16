@@ -38,6 +38,7 @@ import org.netbeans.modeler.specification.version.SoftwareVersion;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
+import org.openide.util.RequestProcessor;
 
 public abstract class ModelerFileActionListener implements ActionListener {
 
@@ -53,9 +54,8 @@ public abstract class ModelerFileActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ev) {
         SwingUtilities.invokeLater(() -> {
-            //long st = new Date().getTime();
+//            RequestProcessor.getDefault().post(this::openModelerFile);
             openModelerFile();
-            //System.out.println("Total time : " + (new Date().getTime() - st) + " sec");
         });
     }
 
@@ -74,7 +74,6 @@ public abstract class ModelerFileActionListener implements ActionListener {
     public void openModelerFile(String id, String name, String tooltip, ModelerFile parentFile) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
         ModelerFile modelerFile = null;
         try {
-            //long st = new Date().getTime();
             if (context == null) {
                 if (parentFile == null) {
                     throw new IllegalStateException("ModelerFileDataObject(context) and Parent Modeler file does not exist");

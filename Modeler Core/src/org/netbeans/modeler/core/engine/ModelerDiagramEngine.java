@@ -293,6 +293,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
             int option = JOptionPane.showConfirmDialog(WindowManager.getDefault().getMainWindow(), "Are you want to re-route the diagram ?", "Re-Route Diagram", JOptionPane.YES_NO_OPTION);
             if (option == javax.swing.JOptionPane.OK_OPTION) {
                 file.getModelerScene().autoLayout();
+                file.getModelerPanelTopComponent().changePersistenceState(false);
             }
         });
     }

@@ -362,9 +362,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
                 RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         getGraphics().setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
         super.paintChildren();
-
         getGraphics().setRenderingHint(RenderingHints.KEY_ANTIALIASING, anti);
         getGraphics().setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, textAnti);
     }
@@ -1018,6 +1016,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     private boolean closed = false;
     @Override
      public void cleanReference(){
+         satelliteView.removeNotify();
            modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
            setContextPaletteManager(null);//remove from lookup
            getView().getActionMap().clear();
@@ -1026,6 +1025,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         if (getPropertyManager() != null) {
             getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
         }
+        
         closed = true;
     }
 }

@@ -271,9 +271,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
                 RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         getGraphics().setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
         super.paintChildren();
-
         getGraphics().setRenderingHint(RenderingHints.KEY_ANTIALIASING, anti);
         getGraphics().setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, textAnti);
     }
