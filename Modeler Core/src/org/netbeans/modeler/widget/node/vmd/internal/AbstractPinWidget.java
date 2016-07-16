@@ -21,7 +21,6 @@ import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.layout.LayoutFactory;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.vmd.VMDGlyphSetWidget;
-import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;

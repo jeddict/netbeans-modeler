@@ -16,9 +16,9 @@
 package org.netbeans.modeler.actions;
 
 import org.netbeans.api.visual.action.CycleFocusProvider;
-import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.model.ObjectScene;
+import org.netbeans.api.visual.widget.Scene;
+import org.netbeans.api.visual.widget.Widget;
 import static org.netbeans.modeler.core.engine.ModelerDiagramEngine.PIN_WIDGET_SELECT_PROVIDER;
 import org.netbeans.modeler.widget.pin.PinWidget;
 

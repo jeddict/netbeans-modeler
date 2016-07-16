@@ -17,8 +17,9 @@ package org.netbeans.modeler.widget.properties.generic;
 
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.lang.StringUtils;
+import org.netbeans.modeler.config.element.Attribute;
+import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.properties.type.Enumy;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
@@ -28,15 +29,15 @@ import org.openide.nodes.PropertySupport;
  *
  * @param <T>
  */
-public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<T> {// PropertySupport.ReadOnly {
+public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<T> implements ModelerSheetProperty {
 
-//    private Object object = null;
-//    private String propertyName = null;
     private Class<T> classType = null;
     private PropertyChangeListener propertyChangeListener;
     private PropertyVisibilityHandler propertyVisibilityHandler;
     private ModelerFile modelerFile;
     private String propertyId;
+    
+    private  Attribute attribute;//@Null
 
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String propertyId,String propertyName, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException, NoSuchFieldException {
         this(modelerFile, object, classType, propertyId, propertyName, propertyName, propertyName, propertyChangeListener);
@@ -46,17 +47,26 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
         this(modelerFile, object, classType, propertyId, propertyName, displayName, description, propertyChangeListener, null);
     }
 
-    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType,String propertyId, String propertyName, String displayName, String description, PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
+    public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType,
+            String propertyId, String propertyName, String displayName, String description, 
+            PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
         super(object, classType, propertyName);
         this.modelerFile = modelerFile;
         this.propertyId = propertyId;
-//        this.propertyName = propertyName;
         this.classType = classType;
         this.propertyChangeListener = propertyChangeListener;
         this.propertyVisibilityHandler = propertyVisibilityHandler;
         this.setDisplayName(displayName);
         this.setShortDescription(description);
 
+    }
+    
+        public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Attribute attribute,
+            PropertyChangeListener propertyChangeListener, PropertyVisibilityHandler propertyVisibilityHandler) throws NoSuchMethodException, NoSuchFieldException {
+        this(modelerFile, object, (Class<T>)attribute.getClassType(), 
+             attribute.getId(),attribute.getName(),attribute.getDisplayName(),attribute.getShortDescription(),
+        propertyChangeListener, propertyVisibilityHandler);
+        this.attribute=attribute;
     }
 
     public ElementCustomPropertySupport(ModelerFile modelerFile, Object object, Class<T> classType, String getter, String setter,String propertyId, String displayName, String description, PropertyChangeListener propertyChangeListener) throws NoSuchMethodException {
@@ -119,13 +129,21 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
         }
         return propertyId;
     }
+    
+        @Override
+    public String getBefore() {
+        if(attribute!=null){
+            return attribute.getBefore();
+        }
+        return null;
+    }
+
+    @Override
+    public String getAfter() {
+        if(attribute!=null){
+            return attribute.getAfter();
+        }
+        return null;
+    }
+
 }
-// class BooleanWrapper {
-//    private Boolean booleanValue;
-//    public Boolean getBooleanValue() {
-//        return booleanValue;
-//    }
-//    public void setBooleanValue(Boolean booleanValue) {
-//        this.booleanValue=booleanValue;
-//    }
-//}

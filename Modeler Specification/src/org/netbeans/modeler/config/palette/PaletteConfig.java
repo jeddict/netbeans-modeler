@@ -17,14 +17,11 @@ package org.netbeans.modeler.config.palette;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.netbeans.modeler.config.document.IModelerDocument;
-import org.netbeans.modeler.file.IModelerFileDataObject;
 
 /**
  *
@@ -33,9 +30,6 @@ import org.netbeans.modeler.file.IModelerFileDataObject;
 @XmlRootElement(name = "palette-config")
 @XmlAccessorType(XmlAccessType.NONE)
 public class PaletteConfig implements IPaletteConfig {
-
-    private String id;
-    private String name;
 
     @XmlElement(name = "category-node")
     private List<CategoryNodeConfig> categoryNodeConfigs = new ArrayList<CategoryNodeConfig>();
@@ -56,38 +50,6 @@ public class PaletteConfig implements IPaletteConfig {
         this.categoryNodeConfigs = categoryNodeConfigs;
     }
 
-    /**
-     * @return the id
-     */
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the name
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public SubCategoryNodeConfig findSubCategoryNodeConfig(IModelerDocument modelerDocument) {
         for (CategoryNodeConfig categoryNodeConfig : categoryNodeConfigs) {
@@ -100,29 +62,5 @@ public class PaletteConfig implements IPaletteConfig {
         return null;
 
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final PaletteConfig other = (PaletteConfig) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-    
-    
 
 }

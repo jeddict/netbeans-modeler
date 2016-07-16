@@ -24,7 +24,6 @@ import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.modeler.widget.context.ContextActionType;
 import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
 import org.netbeans.modeler.widget.context.ContextPaletteModel;
-import org.netbeans.modeler.widget.context.NodeInitializer;
 import org.netbeans.modeler.widget.context.RelationshipFactory;
 
 /**

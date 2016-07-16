@@ -15,6 +15,8 @@
  */
 package org.netbeans.modeler.properties.embedded;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 public class GenericEmbedded {
 
     private Boolean readOnly = false;
@@ -30,6 +32,9 @@ public class GenericEmbedded {
     private String shortDescription;
     private GenericEmbeddedEditor entityEditor;
     private EmbeddedDataListener dataListener;
+    
+    private String before;
+    private String after;
 
     public GenericEmbedded(String name, String displayName, String shortDescription) {
         this.name = name;
@@ -127,4 +132,33 @@ public class GenericEmbedded {
     public void setDataListener(EmbeddedDataListener dataListener) {
         this.dataListener = dataListener;
     }
+
+    /**
+     * @return the before
+     */
+    public String getBefore() {
+        return before;
+    }
+
+    /**
+     * @param before the before to set
+     */
+    public void setBefore(String before) {
+        this.before = before;
+    }
+
+    /**
+     * @return the after
+     */
+    public String getAfter() {
+        return after;
+    }
+
+    /**
+     * @param after the after to set
+     */
+    public void setAfter(String after) {
+        this.after = after;
+    }
+
 }

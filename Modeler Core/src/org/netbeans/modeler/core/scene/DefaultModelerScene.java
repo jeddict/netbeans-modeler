@@ -20,7 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.netbeans.modeler.specification.model.document.IRootElement;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;

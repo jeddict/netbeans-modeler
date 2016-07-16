@@ -16,13 +16,17 @@
 package org.netbeans.modeler.widget.properties.generic;
 
 import java.lang.reflect.InvocationTargetException;
+import org.netbeans.modeler.config.element.Attribute;
+import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.openide.nodes.PropertySupport;
 
-public class ElementPropertySupport extends PropertySupport.Reflection {// PropertySupport.ReadOnly {
+public class ElementPropertySupport extends PropertySupport.Reflection implements ModelerSheetProperty {
 
-    Object object = null;
-    String propertyName = null;
-    Class classType = null;
+    private final Object object;
+    private String propertyName;
+    private final Class classType;
+    
+    private Attribute attribute;
 
     public ElementPropertySupport(Object object, Class classType, String propertyName) throws NoSuchMethodException, NoSuchFieldException {
         super(object, classType, propertyName);
@@ -52,12 +56,16 @@ public class ElementPropertySupport extends PropertySupport.Reflection {// Prope
         super(object, classType, getter, setter);
 
         this.object = object;
-        //this.propertyName = propertyName;
         this.classType = classType;
 
         this.setDisplayName(displayName);
         this.setShortDescription(description);
 
+    }
+    
+     public ElementPropertySupport(Object object, String getter, String setter, Attribute attribute) throws NoSuchMethodException {
+        this(object, attribute.getClassType(),getter, setter, attribute.getDisplayName(), attribute.getShortDescription());
+        this.attribute=attribute;
     }
 
     @Override
@@ -76,19 +84,21 @@ public class ElementPropertySupport extends PropertySupport.Reflection {// Prope
         return value;
     }
 
-//    @Override
-//    public Object getValue() throws IllegalAccessException, InvocationTargetException {
-//        String value = null;
-//        try {
-//             value =  BeanUtils.getProperty(object,propertyName);   
-//        } catch (NoSuchMethodException ex) {
-//            Exceptions.printStackTrace(ex);
-//        }
-//        return value;
-//    }
-//
-//    @Override
-//    public void setValue(Object t) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-//         BeanUtils.setProperty(object,propertyName , t);   
-//      }
+
+
+    @Override
+    public String getBefore() {
+        if(attribute!=null){
+            return attribute.getBefore();
+        }
+        return null;
+    }
+
+    @Override
+    public String getAfter() {
+        if(attribute!=null){
+            return attribute.getAfter();
+        }
+        return null;
+    }
 }

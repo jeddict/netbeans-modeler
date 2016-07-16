@@ -21,12 +21,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import org.netbeans.api.visual.action.InplaceEditorProvider;
 import org.netbeans.api.visual.action.PopupMenuProvider;
-import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import static org.netbeans.modeler.core.engine.ModelerDiagramEngine.cleanActions;
@@ -192,7 +189,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     public Map<String, PropertyChangeListener> getPropertyChangeListeners() {
         return propertyChangeHandlers;
     }
-    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<String, PropertyVisibilityHandler>();
+    private final Map<String, PropertyVisibilityHandler> propertyVisibilityHandlers = new HashMap<>();
 
     @Override
     public void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler) {

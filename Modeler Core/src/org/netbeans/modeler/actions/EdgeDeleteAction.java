@@ -15,13 +15,12 @@
  */
 package org.netbeans.modeler.actions;
 
-import org.netbeans.api.visual.widget.Widget;
-
 import java.awt.event.KeyEvent;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.action.WidgetAction.State;
 import org.netbeans.api.visual.action.WidgetAction.WidgetKeyEvent;
 import org.netbeans.api.visual.graph.GraphPinScene;
+import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 
 /**

@@ -23,16 +23,10 @@ import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
-/**
- *
- *
- */
 public abstract class ModelerNavigatorPanel implements NavigatorPanel {
 
     private DiagramNavigatorContent navigator = null;
-    private Lookup.Template< IModelerScene> template
-            = new Lookup.Template< IModelerScene>(IModelerScene.class);
-//    private Lookup.Result<IModelerScene> result;
+    private Lookup.Template< IModelerScene> template = new Lookup.Template<>(IModelerScene.class);
 
     @Override
     public String getDisplayName() {

@@ -73,7 +73,7 @@ public class SceneConnectProvider implements ExConnectProvider {
         if (!(targetWidget instanceof IModelerScene)) {
             if (sourceWidget.getScene() instanceof IModelerScene) {
                 IModelerScene modelerScene = (IModelerScene) sourceWidget.getScene();
-                IRelationValidator relationValidator = modelerScene.getModelerFile().getVendorSpecification().getModelerDiagramModel().getRelationValidator();
+                IRelationValidator relationValidator = modelerScene.getModelerFile().getModelerDiagramModel().getRelationValidator();
 
                 INodeWidget source = null, target = null;
 

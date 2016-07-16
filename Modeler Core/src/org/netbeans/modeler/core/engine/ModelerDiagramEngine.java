@@ -24,6 +24,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
@@ -42,10 +43,13 @@ import org.netbeans.modeler.actions.InteractiveZoomAction;
 import org.netbeans.modeler.actions.LockSelectionAction;
 import org.netbeans.modeler.actions.NodeDeleteAction;
 import org.netbeans.modeler.actions.PanAction;
+import org.netbeans.modeler.actions.PinDeleteAction;
+import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
 import org.netbeans.modeler.actions.ZoomManager;
 import org.netbeans.modeler.actions.ZoomManager.ZoomEvent;
 import org.netbeans.modeler.actions.export.ExportAction;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
+import org.netbeans.modeler.core.IZoomManager;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.provider.EdgeWidgetSelectProvider;
@@ -68,9 +72,7 @@ import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Utilities;
-import org.netbeans.modeler.actions.PinDeleteAction;
-import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
-import org.netbeans.modeler.core.IZoomManager;
+import org.openide.windows.WindowManager;
 
 public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
@@ -246,7 +248,9 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     public void buildToolBar(JToolBar bar) {
         buildSaveDocTool(bar);
         buildExportDocTool(bar);
+        bar.add(new JToolBar.Separator());
         buildSatelliteTool(bar);
+        buildReRouteTool(bar);
         bar.add(new JToolBar.Separator());
         buildSelectTool(bar);
         bar.add(new JToolBar.Separator());
@@ -278,6 +282,19 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         bar.add(saveButton);
         saveButton.addActionListener((ActionEvent e) -> {
             file.save();
+        });
+    }
+    
+    protected void buildReRouteTool(JToolBar bar) {
+        JButton reRouteButton = new JButton(ImageUtil.getInstance().getIcon("reroute.png"));
+        reRouteButton.setToolTipText("Re-Route");
+        bar.add(reRouteButton);
+        reRouteButton.addActionListener((ActionEvent e) -> {
+            int option = JOptionPane.showConfirmDialog(WindowManager.getDefault().getMainWindow(), "Are you want to re-route the diagram ?", "Re-Route Diagram", JOptionPane.YES_NO_OPTION);
+            if (option == javax.swing.JOptionPane.OK_OPTION) {
+                file.getModelerScene().autoLayout();
+                file.getModelerPanelTopComponent().changePersistenceState(false);
+            }
         });
     }
 

@@ -25,7 +25,7 @@ public class DocumentWriter {
     public static void write(IModelerScene scene,
             FileType format,
             File file) {
-        IExportManager exportManager = scene.getModelerFile().getVendorSpecification().getModelerDiagramModel().getExportManager();
+        IExportManager exportManager = scene.getModelerFile().getModelerDiagramModel().getExportManager();
         exportManager.export(scene, format, file);
 
     }

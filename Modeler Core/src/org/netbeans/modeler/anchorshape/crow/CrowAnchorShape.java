@@ -15,10 +15,9 @@
  */
 package org.netbeans.modeler.anchorshape.crow;
 
-import org.netbeans.api.visual.anchor.AnchorShape;
-
 import java.awt.*;
 import java.awt.geom.GeneralPath;
+import org.netbeans.api.visual.anchor.AnchorShape;
 
 /**
  * @author Shiwani Gupta

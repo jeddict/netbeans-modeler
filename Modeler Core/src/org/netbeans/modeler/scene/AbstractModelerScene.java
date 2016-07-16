@@ -55,7 +55,6 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
-import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
@@ -272,9 +271,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
                 RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         getGraphics().setRenderingHint(
                 RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
         super.paintChildren();
-
         getGraphics().setRenderingHint(RenderingHints.KEY_ANTIALIASING, anti);
         getGraphics().setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, textAnti);
     }
