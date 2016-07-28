@@ -508,6 +508,8 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
             scene.deleteNodeWidget(this);
             scene.getModelerPanelTopComponent().changePersistenceState(false);
             cleanReference(children);
+        }else {
+            System.out.println("");
         }
     }
 

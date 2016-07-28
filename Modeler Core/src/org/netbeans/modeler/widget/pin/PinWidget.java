@@ -245,8 +245,6 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     private void removePin() {
         if (!locked) {
             this.setLabel("");
-//            ((IBaseElementWidget) this).destroy();
-//        ((IPFlowNodeWidget) nodeWidget).deleteFlowPinWidget((IFlowPinWidget) this);
             nodeWidget.deletePinWidget(this);
             scene.getModelerPanelTopComponent().changePersistenceState(false);
             cleanReference();
