@@ -77,16 +77,7 @@ public class PaletteButton extends ContextPaletteButton {
         actionTarget = context;
         model = desc;
 
-//        IModelerScene scene = context.getModelerScene();
         WidgetAction[] descriptionActions = desc.getWidgetActions();
-//        System.out.println("desc : " + desc.getId() + " " + desc.getTooltip());
-//        System.out.println("desc event : " + desc.getMouseListener());
-//        if (desc.getWidgetActions() != null) {
-//            System.out.println("desc wevent : " + desc.getWidgetActions().length);
-//        } else {
-//            System.out.println("desc wevent : NOOOO");
-//
-//        }
         if (descriptionActions != null) {
             actions = new WidgetAction[descriptionActions.length];
 
@@ -259,13 +250,7 @@ public class PaletteButton extends ContextPaletteButton {
 
             Point localTargetPt = actionTarget.getLocation();
             Point sceneTargetPnt = actionTarget.getParentWidget().convertLocalToScene(localTargetPt);
-//              //System.out.println("sceneActual " + sceneActual);
-//            //System.out.println("localTargetPt " + localTargetPt);
-//            //System.out.println("sceneTargetPnt " + sceneTargetPnt);
             localTargetPt = sceneTargetPnt;
-
-            Point eventPoint = event.getPoint();
-
             ContextPaletteModel.FOLLOWMODE mode = model.getPaletteModel().getFollowMouseMode();
             if (mode == ContextPaletteModel.FOLLOWMODE.VERTICAL_AND_HORIZONTAL) {
                 int x = getParent().getParent().getLocation().x + getParent().getLocation().x + event.getPoint().x;
@@ -316,15 +301,9 @@ public class PaletteButton extends ContextPaletteButton {
 
         @Override
         public void mouseDragged(MouseEvent event) {
-            // //System.out.println("PaletteButton ButtonListener  mouseDragged...");
-//            System.out.println("actionTarget : " + actionTarget.getClass());
-
             super.mouseDragged(event);
-
             Scene scene = actionTarget.getScene();
             scene.getView().dispatchEvent(convertMouseEvent(event));
-//            System.out.println("actionTarget2 : " + actionTarget.getClass());
-
         }
 
         @Override

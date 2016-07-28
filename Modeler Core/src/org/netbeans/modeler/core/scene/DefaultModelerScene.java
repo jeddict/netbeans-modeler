@@ -40,6 +40,10 @@ public abstract class DefaultModelerScene<E extends IRootElement> extends Modele
     protected Map<String, IFlowElementWidget> flowElements = new LinkedHashMap<>();
 
     @Override
+    public void onConnection() {
+    }
+    
+    @Override
     public IBaseElementWidget getBaseElement(String id) {
 //        for (IBaseElementWidget baseElementWidget : flowElements) {
 //            if (baseElementWidget.getId().equals(id)) {

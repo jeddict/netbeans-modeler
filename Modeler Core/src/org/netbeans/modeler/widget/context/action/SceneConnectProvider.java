@@ -26,6 +26,7 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.util.PModelerUtil;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 import org.netbeans.modeler.widget.context.RelationshipFactory;
@@ -160,6 +161,9 @@ public class SceneConnectProvider implements ExConnectProvider {
                     PModelerUtil modelerUtil = ((PModelerUtil) scene.getModelerFile().getModelerUtil());
                     ((IPModelerScene) scene).setEdgeWidgetSource(edgeInfo, modelerUtil.getEdgeSourcePinWidget(pSourceNodeWidget, pTargetNodeWidget, edgeWidget));
                     ((IPModelerScene) scene).setEdgeWidgetTarget(edgeInfo, modelerUtil.getEdgeTargetPinWidget(pSourceNodeWidget, pTargetNodeWidget, edgeWidget));
+                    ((IBaseElementWidget)edgeWidget.getSourceAnchor().getRelatedWidget()).onConnection();
+                    ((IBaseElementWidget)edgeWidget.getTargetAnchor().getRelatedWidget()).onConnection();
+                    ((IBaseElementWidget)edgeWidget).onConnection();
                 }
             }
         }

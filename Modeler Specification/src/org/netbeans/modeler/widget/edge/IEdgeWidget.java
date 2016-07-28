@@ -16,7 +16,6 @@
 package org.netbeans.modeler.widget.edge;
 
 import java.util.Map;
-import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;

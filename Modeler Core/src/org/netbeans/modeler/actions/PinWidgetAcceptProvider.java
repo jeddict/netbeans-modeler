@@ -44,7 +44,6 @@ import org.netbeans.modeler.widget.node.NodeWidget;
  */
 public class PinWidgetAcceptProvider extends CustomAcceptProvider {
 
-
     public PinWidgetAcceptProvider(IModelerScene scene) {
         super(scene);
     }
@@ -73,14 +72,13 @@ public class PinWidgetAcceptProvider extends CustomAcceptProvider {
             view.paintImmediately(0, 0, visRect.width - visRect.x, visRect.height - visRect.y);
             point = scene.convertSceneToView(point);
             g2.drawImage(dragImage,
-                    AffineTransform.getTranslateInstance(widget.getLocation().x +point.getLocation().getX() ,
-                           widget.getLocation().y +  point.getLocation().getY() ),
+                    AffineTransform.getTranslateInstance(widget.getLocation().x + point.getLocation().getX(),
+                            widget.getLocation().y + point.getLocation().getY()),
                     null);
 
             if (subCategoryInfo.getModelerDocument().getFlowDimension() == FlowDimensionType.BOUNDARY
                     || INodeWidget.class.isAssignableFrom(subCategoryInfo.getModelerDocument().getWidget())//INodeWidget item skipped
-                    || !((IPNodeWidget)widget).isValidPinWidget(subCategoryInfo)
-                    ) {
+                    || !((IPNodeWidget) widget).isValidPinWidget(subCategoryInfo)) {
                 return ConnectorState.REJECT;
             }
         }
@@ -92,78 +90,77 @@ public class PinWidgetAcceptProvider extends CustomAcceptProvider {
     @Override
     public void accept(Widget nodeWidget, Point point, Transferable transferable) {
         try {
-        if (isWidgetMove(transferable)) {
-            boolean convertLocation = false;
-            Widget[] target;
-            try {
-                target = new Widget[]{getWidget(transferable)};
-                convertLocation = true;
-            } catch (Exception e) {
-                target = new Widget[0];
-            }
-
-            for (Widget curWidget : target) {
-
-                if (curWidget instanceof IBounadryFlowNodeWidget
-                        || curWidget instanceof ILabelConnectionWidget) {
-                    continue;
-                }
-                if (curWidget.getParentWidget() != null) {
-                    curWidget.getParentWidget().removeChild(curWidget);
+            if (isWidgetMove(transferable)) {
+                boolean convertLocation = false;
+                Widget[] target;
+                try {
+                    target = new Widget[]{getWidget(transferable)};
+                    convertLocation = true;
+                } catch (Exception e) {
+                    target = new Widget[0];
                 }
 
-                Point curPt = curWidget.getPreferredLocation();
-                if (curPt == null) {
-                    curPt = curWidget.getLocation();
-                }
-                scene.addChild(curWidget);
-                if (convertLocation == true) {
-                    curWidget.setPreferredLocation(scene.convertSceneToLocal(curPt));
-                }
+                for (Widget curWidget : target) {
+
+                    if (curWidget instanceof IBounadryFlowNodeWidget
+                            || curWidget instanceof ILabelConnectionWidget) {
+                        continue;
+                    }
+                    if (curWidget.getParentWidget() != null) {
+                        curWidget.getParentWidget().removeChild(curWidget);
+                    }
+
+                    Point curPt = curWidget.getPreferredLocation();
+                    if (curPt == null) {
+                        curPt = curWidget.getLocation();
+                    }
+                    scene.addChild(curWidget);
+                    if (convertLocation == true) {
+                        curWidget.setPreferredLocation(scene.convertSceneToLocal(curPt));
+                    }
 
 //                if(!(curWidget instanceof BaseElementWidget)){
 //                     break;
 //                }
-                IFlowElementWidget newNodeWidget = (IFlowElementWidget) curWidget;
-                /*Manage Widget and Widget Specification Start */
+                    IFlowElementWidget newNodeWidget = (IFlowElementWidget) curWidget;
+                    /*Manage Widget and Widget Specification Start */
 
-                if (newNodeWidget.getFlowElementsContainer() instanceof IModelerSubScene) {
-                    IModelerSubScene subProcessWidget = (IModelerSubScene) newNodeWidget.getFlowElementsContainer();
+                    if (newNodeWidget.getFlowElementsContainer() instanceof IModelerSubScene) {
+                        IModelerSubScene subProcessWidget = (IModelerSubScene) newNodeWidget.getFlowElementsContainer();
 
-                    subProcessWidget.removeBaseElementElement(newNodeWidget);
-                    scene.addBaseElement(newNodeWidget);
+                        subProcessWidget.removeBaseElementElement(newNodeWidget);
+                        scene.addBaseElement(newNodeWidget);
 
-                    IRootElement rootElementSpec = (IRootElement)scene.getBaseElementSpec();
-                    IContainerElement subProcessSpec = (IContainerElement) subProcessWidget.getBaseElementSpec();
-                    IBaseElement baseElementSpec = newNodeWidget.getBaseElementSpec();
+                        IRootElement rootElementSpec = (IRootElement) scene.getBaseElementSpec();
+                        IContainerElement subProcessSpec = (IContainerElement) subProcessWidget.getBaseElementSpec();
+                        IBaseElement baseElementSpec = newNodeWidget.getBaseElementSpec();
 
-                    subProcessSpec.removeBaseElement(baseElementSpec);
-                    rootElementSpec.addBaseElement(baseElementSpec);
+                        subProcessSpec.removeBaseElement(baseElementSpec);
+                        rootElementSpec.addBaseElement(baseElementSpec);
+                    }
+
+                    /*Manage Widget and Widget Specification End */
+                    newNodeWidget.setFlowElementsContainer(nodeWidget);
+
                 }
-
-                /*Manage Widget and Widget Specification End */
-                newNodeWidget.setFlowElementsContainer(nodeWidget);
-
-            }
 //            scene.getModelerPanelTopComponent().changePersistenceState(false);
 //            scene.revalidate();
-        } else if (isPaletteItem(transferable)) {
-            SubCategoryNodeConfig subCategoryInfo = getSubCategory(transferable);
-            boolean status = true;
-            if (subCategoryInfo.getModelerDocument().getFlowDimension() == FlowDimensionType.BOUNDARY) {
-                status = false;
-            }
-            if (status) {
+            } else if (isPaletteItem(transferable)) {
+                SubCategoryNodeConfig subCategoryInfo = getSubCategory(transferable);
+                boolean status = true;
+                if (subCategoryInfo.getModelerDocument().getFlowDimension() == FlowDimensionType.BOUNDARY) {
+                    status = false;
+                }
+                if (status) {
 //                INodeWidget widget = scene.createNodeWidget(new NodeWidgetInfo("_" + NBModelerUtil.getAutoGeneratedId().toString(), subCategoryInfo, point));
-                ((IPNodeWidget)nodeWidget).createPinWidget(subCategoryInfo);
-                scene.getModelerPanelTopComponent().changePersistenceState(false);
+                    ((IPNodeWidget) nodeWidget).createPinWidget(subCategoryInfo);
+                    scene.getModelerPanelTopComponent().changePersistenceState(false);
+                }
             }
-        }
 
-        } catch(Throwable t){
-            ((IPNodeWidget)nodeWidget).getModelerScene().getModelerFile().handleException(t);
+        } catch (Throwable t) {
+            ((IPNodeWidget) nodeWidget).getModelerScene().getModelerFile().handleException(t);
         }
     }
-
 
 }
