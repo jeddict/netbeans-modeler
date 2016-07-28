@@ -40,6 +40,10 @@ public abstract class DefaultPModelerScene<E extends IRootElement> extends PMode
     private Map<String, IFlowElementWidget> flowElements = new LinkedHashMap<>();
 
     @Override
+    public void onConnection() {
+    }
+    
+    @Override
     public IBaseElementWidget getBaseElement(String id) {
 //        for (IBaseElementWidget baseElementWidget : flowElements) {
 //            if (baseElementWidget.getId().equals(id)) {

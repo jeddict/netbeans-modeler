@@ -34,7 +34,13 @@ public interface IBaseElementWidget<E extends IBaseElement> extends IWidget {
 
     public E getBaseElementSpec();
 
-    public void init();
+    public void init();//Base Element spec available
+    
+    /**
+     * After relation is completed/connected with other widget
+     */
+    public void onConnection();
+    
 
     public void destroy();
 
