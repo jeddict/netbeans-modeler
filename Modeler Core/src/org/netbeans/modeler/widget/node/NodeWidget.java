@@ -85,11 +85,11 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
     private ResizeBorder widgetBorder;
 
     private NodeWidgetStatus status;
-    private NodeWidgetInfo nodeWidgetInfo;
+    private final NodeWidgetInfo nodeWidgetInfo;
     private boolean activeStatus = true;
     private boolean anchorState = false;
     private static final Float HOVER_BORDER_WIDTH = 0.2F;
-    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<String, PropertyChangeListener>();
+    private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<>();
 
     @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {

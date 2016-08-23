@@ -45,7 +45,9 @@ import org.netbeans.modeler.anchors.PNodeAnchor;
 import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.node.IWidgetStateHandler;
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
+import org.netbeans.modeler.widget.state.WidgetStateHandler;
 
 /**
  *
@@ -53,23 +55,23 @@ import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
  */
 public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget, StateModel.Listener, VMDMinimizeAbility {
 
-    /*__________________________________________VMDNodeWidget Impl Start___________________________*/
-    private Widget header;
-    private ImageWidget minimizeWidget;
-    private AdvanceImageWidget imageWidget;
-    private LabelWidget nameWidget;
-    private LabelWidget typeWidget;
-    private VMDGlyphSetWidget glyphSetWidget;
+    private final Widget header;
+    private final ImageWidget minimizeWidget;
+    private final AdvanceImageWidget imageWidget;
+    private final LabelWidget nameWidget;
+    private final LabelWidget typeWidget;
+    private final VMDGlyphSetWidget glyphSetWidget;
 
-    private SeparatorWidget pinsSeparator;
+    private final SeparatorWidget pinsSeparator;
 
     private Map<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<>();
 
     private StateModel stateModel = new StateModel(2);
-    private PNodeAnchor nodeAnchor;
+    private final PNodeAnchor nodeAnchor;
     private IColorScheme colorScheme;
+    private final IWidgetStateHandler stateHandler;
 
-    private WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<>();
+    private final WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<>();
 
 //    private boolean loaded;
     /**
@@ -101,6 +103,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         }
 
         imageWidget = new AdvanceImageWidget(scene);
+        stateHandler = new WidgetStateHandler(imageWidget);
         header.addChild(imageWidget);
 
         nameWidget = new LabelWidget(scene);
@@ -218,26 +221,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     public void setImage(Image image) {
         getImageWidget().setImage(image);
     }
-    
-
-    /**
-     * @return the errorState
-     */
-    @Override
-    public boolean isErrorState() {
-        return getImageWidget().isErrorState();
-    }
-
-    /**
-     * @param state the errorState to set
-     */
-    @Override
-    public void setErrorState(boolean state) {
-       getImageWidget().setErrorState(state);
-    }
-    
-    
-    
     
     /**
      * Returns a node name.
@@ -493,6 +476,13 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     @Override
     public void setPinCategoryWidgets(HashMap<String, IPinSeperatorWidget> pinCategoryWidgets) {
         this.pinCategoryWidgets = pinCategoryWidgets;
+    }
+
+    /**
+     * @return the stateHandler
+     */
+    public IWidgetStateHandler getWidgetStateHandler() {
+        return stateHandler;
     }
 
     private final class ToggleMinimizedAction extends WidgetAction.Adapter {

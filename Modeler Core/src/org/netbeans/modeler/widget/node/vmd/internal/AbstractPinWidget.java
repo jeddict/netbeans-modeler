@@ -26,15 +26,18 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.anchors.PNodeAnchor;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.widget.node.IWidgetStateHandler;
 import org.netbeans.modeler.widget.pin.IPinWidget;
+import org.netbeans.modeler.widget.state.WidgetStateHandler;
 
 public abstract class AbstractPinWidget extends Widget implements IPinWidget {
 
     private IColorScheme colorScheme;
-    private AdvanceImageWidget imageWidget;
-    private LabelWidget nameWidget;
-    private VMDGlyphSetWidget glyphsWidget;
+    private final AdvanceImageWidget imageWidget;
+    private final LabelWidget nameWidget;
+    private final VMDGlyphSetWidget glyphsWidget;
     private PNodeAnchor anchor;
+    private final IWidgetStateHandler stateHandler;
 
     /**
      * Creates a pin widget with a specific color scheme.
@@ -52,7 +55,9 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
         addChild(imageWidget = new AdvanceImageWidget(scene));
         addChild(nameWidget = new LabelWidget(scene));
         addChild(glyphsWidget = new VMDGlyphSetWidget(scene));
-
+        
+        stateHandler = new WidgetStateHandler(imageWidget);
+        
         scheme.installUI(this);
         notifyStateChanged(ObjectState.createNormal(), ObjectState.createNormal());
     }
@@ -66,21 +71,6 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
         getImageWidget().setImage(image);
     }
 
-    /**
-     * @return the errorState
-     */
-    @Override
-    public boolean isErrorState() {
-        return getImageWidget().isErrorState();
-    }
-
-    /**
-     * @param state the errorState to set
-     */
-    @Override
-    public void setErrorState(boolean state) {
-        getImageWidget().setErrorState(state);
-    }
 
     /**
      * Called to notify about the change of the widget state.
@@ -183,6 +173,13 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     @Override
     public void setColorScheme(IColorScheme colorScheme) {
         this.colorScheme = colorScheme;
+    }
+    
+    /**
+     * @return the stateHandler
+     */
+    public IWidgetStateHandler getWidgetStateHandler() {
+        return stateHandler;
     }
     
 }

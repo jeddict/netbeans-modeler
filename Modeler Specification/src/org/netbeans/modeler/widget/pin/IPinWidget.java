@@ -19,17 +19,18 @@ import java.awt.Image;
 import java.util.List;
 import java.util.Map;
 import org.netbeans.api.visual.anchor.Anchor;
+import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.IWidget;
-import org.netbeans.modeler.widget.node.WidgetStateHandler;
+import org.netbeans.modeler.widget.node.IWidgetStateHandler;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 
-public interface IPinWidget extends IWidget, WidgetStateHandler {
+public interface IPinWidget extends IWidget {
 
     public PinWidgetInfo getPinWidgetInfo();
 
@@ -81,6 +82,8 @@ public interface IPinWidget extends IWidget, WidgetStateHandler {
     void refreshProperties();
     
     IPropertyManager getPropertyManager();
+    
+    IWidgetStateHandler getWidgetStateHandler();
 
     /* Abstract PinWidget */
     /**
@@ -132,4 +135,6 @@ public interface IPinWidget extends IWidget, WidgetStateHandler {
     void setAnchorGap(int gap);
     
     void cleanReference();
+    
+    ImageWidget getImageWidget();
 }

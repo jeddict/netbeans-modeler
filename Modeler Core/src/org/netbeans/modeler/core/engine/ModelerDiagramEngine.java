@@ -69,6 +69,7 @@ import org.netbeans.modeler.widget.context.ContextPaletteManager;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.vmd.PEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Utilities;
@@ -90,15 +91,15 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
         @Override
         public void movementStarted(Widget widget) {
-            INodeWidget nodeWidget = (INodeWidget) widget;
-            NBModelerUtil.hideContextPalette(nodeWidget.getModelerScene());
+            IWidget actionWidget = (IWidget) widget;
+            NBModelerUtil.hideContextPalette(actionWidget.getModelerScene());
             locationChanged = false;
         }
 
         @Override
         public void movementFinished(Widget widget) {
-            INodeWidget nodeWidget = (INodeWidget) widget;
-            NBModelerUtil.showContextPalette(nodeWidget.getModelerScene(), nodeWidget);
+            IWidget actionWidget = (IWidget) widget;
+            NBModelerUtil.showContextPalette(actionWidget.getModelerScene(), actionWidget);
             if (locationChanged) {
                 ((IModelerScene) widget.getScene()).getModelerPanelTopComponent().changePersistenceState(false);
             }
@@ -113,6 +114,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
         @Override
         public void setNewLocation(Widget widget, Point location) {
+            System.out.println("Location : " + location);
             widget.setPreferredLocation(location);
             if (original != null) {
                 locationChanged = true;
@@ -199,7 +201,10 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     @Override
     public void setPinWidgetAction(final IPinWidget pinWidget) {
         WidgetAction.Chain selectActionTool = pinWidget.createActions(DesignerTools.SELECT);
-        selectActionTool.addAction(ActionFactory.createSelectAction(PIN_WIDGET_SELECT_PROVIDER, true));//(getScene().createSelectAction());
+//        WidgetAction moveAction = new MoveAction(pinWidget, null, MOVE_PROVIDER_DEFAULT, ALIGNSTRATEGY_PROVIDER, ALIGNSTRATEGY_PROVIDER);
+          selectActionTool.addAction(ActionFactory.createSelectAction(PIN_WIDGET_SELECT_PROVIDER, true));//(getScene().createSelectAction());
+//        selectActionTool.addAction(moveAction);
+
         selectActionTool.addAction(file.getModelerScene().createObjectHoverAction());
         selectActionTool.addAction(ActionFactory.createPopupMenuAction(pinWidget.getPopupMenuProvider()));
         selectActionTool.addAction(new CyclePinFocusAction(new CyclePinFocusProvider()));

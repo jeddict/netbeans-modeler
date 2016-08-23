@@ -20,7 +20,7 @@ import java.awt.Image;
 import java.awt.image.ImageObserver;
 import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.Scene;
-import org.netbeans.modeler.util.Util;
+import org.netbeans.modeler.widget.node.IWidgetStateHandler.StateType;
 
 /**
  *
@@ -28,8 +28,7 @@ import org.netbeans.modeler.util.Util;
  */
 public class AdvanceImageWidget extends ImageWidget {
 
-    private boolean errorState;
-    public final static Image ERROR_ICON = Util.loadImage("org/netbeans/modeler/widget/resource/error_small_icon.gif");
+    private StateType stateType;
 
     public AdvanceImageWidget(Scene scene, Image image) {
         super(scene, image);
@@ -55,9 +54,13 @@ public class AdvanceImageWidget extends ImageWidget {
         }
         Graphics2D gr = getGraphics();
         if (getImage() != null) {
-            if (isErrorState()) {
+            if (getStateType() != null) {
                 gr.drawImage(getImage(), 0, 0, null);
-                gr.drawImage(ERROR_ICON, 0, getImage().getHeight(null) - ERROR_ICON.getHeight(null), observer);
+                if (stateType == StateType.ERROR) {
+                    gr.drawImage(stateType.getIcon(), 0, getImage().getHeight(null) - stateType.getIcon().getHeight(null), observer);
+                } else {
+                    gr.drawImage(stateType.getIcon(), 0, 0, observer);
+                }
             } else {
                 gr.drawImage(getImage(), 0, 0, observer);
 
@@ -68,15 +71,15 @@ public class AdvanceImageWidget extends ImageWidget {
     /**
      * @return the errorState
      */
-    public boolean isErrorState() {
-        return errorState;
+    public StateType getStateType() {
+        return stateType;
     }
 
     /**
-     * @param errorState the errorState to set
+     * @param state the errorState to set
      */
-    public void setErrorState(boolean errorState) {
-        this.errorState = errorState;
+    public void setStateType(StateType state) {
+        this.stateType = state;
         revalidate();
     }
 

@@ -7,5 +7,17 @@
             <file>file:/home/jGauravGupta/nb/NB5/JPAM/nbmodeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/property/ElementPropertySet.java</file>
         </group>
         <group/>
+        <group name="Demo">
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/element/ElementConfigFactory.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/property/ElementPropertySet.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/core/NBModelerUtil.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/shape/ShapeDesign.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/node/image/svg/SvgImage.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/shape/adapter/ShapeAdapter.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/util/Util.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/document/ModelerDocument.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/core/ModelerFile.java</file>
+            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/document/IModelerDocument.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -21,11 +21,11 @@ import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.MoveStrategy;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 
 public final class MoveAction extends WidgetAction.LockedAdapter {
 
-    private INodeWidget nodeWidget;
+    private IWidget actionWidget;
     private MoveStrategy moveStrategy;
     private MoveProvider moveProvider;
     private MoveStrategy alignStrategy;
@@ -36,8 +36,8 @@ public final class MoveAction extends WidgetAction.LockedAdapter {
     private Point originalSceneLocation = null;
     private Point initialMouseLocation = null;
 
-    public MoveAction(INodeWidget nodeWidget, MoveStrategy strategy, MoveProvider provider, MoveStrategy alignStrategy, MoveProvider alignProvider) {
-        this.nodeWidget = nodeWidget;
+    public MoveAction(IWidget actionWidget, MoveStrategy strategy, MoveProvider provider, MoveStrategy alignStrategy, MoveProvider alignProvider) {
+        this.actionWidget = actionWidget;
         this.moveStrategy = strategy;
         this.moveProvider = provider;
         this.alignStrategy = alignStrategy;
@@ -62,7 +62,7 @@ public final class MoveAction extends WidgetAction.LockedAdapter {
                 originalSceneLocation = new Point();
             }
             dragSceneLocation = widget.convertLocalToScene(event.getPoint());
-            if (nodeWidget.getModelerScene().isAlignSupport()) {
+            if (actionWidget.getModelerScene().isAlignSupport()) {
                 alignProvider.movementStarted(widget);
             }
             moveProvider.movementStarted(widget);
@@ -84,7 +84,7 @@ public final class MoveAction extends WidgetAction.LockedAdapter {
             dragSceneLocation = null;
             originalSceneLocation = null;
             initialMouseLocation = null;
-            if (nodeWidget.getModelerScene().isAlignSupport()) {
+            if (actionWidget.getModelerScene().isAlignSupport()) {
                 alignProvider.movementFinished(widget);
             }
             moveProvider.movementFinished(widget);
@@ -104,7 +104,7 @@ public final class MoveAction extends WidgetAction.LockedAdapter {
         initialMouseLocation = null;
         newLocation = widget.convertLocalToScene(newLocation);
         Point location = new Point(originalSceneLocation.x + newLocation.x - dragSceneLocation.x, originalSceneLocation.y + newLocation.y - dragSceneLocation.y);
-        if (nodeWidget.getModelerScene().isAlignSupport()) {
+        if (actionWidget.getModelerScene().isAlignSupport()) {
             moveProvider.setNewLocation(widget, alignStrategy.locationSuggested(widget, originalSceneLocation, location));
         } else {
             moveProvider.setNewLocation(widget, location);

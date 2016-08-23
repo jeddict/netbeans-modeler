@@ -17,6 +17,7 @@ package org.netbeans.modeler.widget.node;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.modeler.config.palette.SubCategoryNodeConfig;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
@@ -52,5 +53,7 @@ public interface IPNodeWidget extends INodeWidget, IParentPNodeWidget {
     void createPinWidget(SubCategoryNodeConfig subCategoryInfo);
       
     boolean isValidPinWidget(SubCategoryNodeConfig subCategoryInfo);
+    
+    ImageWidget getImageWidget();
 
 }

@@ -19,19 +19,17 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Map;
-import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 //import org.netbeans.modules.visual.border.ResizeBorder;
 
-public interface INodeWidget extends IWidget, WidgetStateHandler {
+public interface INodeWidget extends IWidget {
 
     public static final Border DEFAULT_BORDER = BorderFactory.createEmptyBorder(0);
 
@@ -111,4 +109,6 @@ public interface INodeWidget extends IWidget, WidgetStateHandler {
     IPropertyManager getPropertyManager();
     
     void cleanReference();
+    
+    IWidgetStateHandler getWidgetStateHandler();
 }
