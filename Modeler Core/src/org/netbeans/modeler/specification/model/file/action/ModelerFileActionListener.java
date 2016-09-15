@@ -30,6 +30,7 @@ import org.netbeans.modeler.core.engine.ModelerDiagramEngine;
 import org.netbeans.modeler.core.exception.ProcessInterruptedException;
 import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.specification.annotaton.ModelerConfig;
+import org.netbeans.modeler.specification.export.DefaultExportManager;
 import org.netbeans.modeler.specification.export.IExportManager;
 import org.netbeans.modeler.specification.model.DiagramModel;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -216,7 +217,11 @@ public abstract class ModelerFileActionListener implements ActionListener {
                 modelerFile.getModelerDiagramModel().setRelationValidator(relationValidator.newInstance());
 
                 Class<? extends IExportManager> exportManager = diagramModelConfig.exportManager();
-                modelerFile.getModelerDiagramModel().setExportManager(exportManager.newInstance());
+                if (exportManager != IExportManager.class) {
+                    modelerFile.getModelerDiagramModel().setExportManager(exportManager.newInstance());
+                } else {
+                    modelerFile.getModelerDiagramModel().setExportManager(new DefaultExportManager());
+                }
 
                 Class<? extends IExceptionHandler> exceptionHandler = diagramModelConfig.exceptionHandler();
                 if (exceptionHandler != IExceptionHandler.class) {

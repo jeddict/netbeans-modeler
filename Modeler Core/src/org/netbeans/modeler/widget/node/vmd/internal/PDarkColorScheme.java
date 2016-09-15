@@ -138,8 +138,8 @@ public class PDarkColorScheme implements IColorScheme {
         PIN_WIDGET_HOVER_LBACKGROUND = new Color(175, 175, 175);
         PIN_WIDGET_SELECT_LBACKGROUND = new Color(180, 180, 180);
 
-        PIN_WIDGET_TEXT_COLOR = new Color(111 ,111, 111);
-        PIN_WIDGET_HOVER_TEXT_COLOR = new Color(233, 233, 233);
+        PIN_WIDGET_TEXT_COLOR = new Color(40 ,40, 40);
+        PIN_WIDGET_HOVER_TEXT_COLOR = new Color(70, 70, 70);
         PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
 
         PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(133, 133, 133);
