@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -94,6 +95,8 @@ import org.openide.windows.WindowManager;
  *
  */
 public abstract class AbstractPModelerScene<E extends IRootElement> extends GraphPinScene<NodeWidgetInfo, EdgeWidgetInfo, PinWidgetInfo> implements IPModelerScene<E> {
+
+    private static final Logger LOG = Logger.getLogger(AbstractPModelerScene.class.getName());
 
     private LayerWidget backgroundLayer; //  rectangular selection
     private LayerWidget mainLayer;
@@ -875,29 +878,39 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
     @Override
     public void deleteNodeWidget(INodeWidget nodeWidget) {
-
-        this.removeNode(nodeWidget.getNodeWidgetInfo());
-        if (nodeWidget instanceof IBaseElementWidget) {
-            ((IBaseElementWidget) nodeWidget).destroy();
+        if (this.isNode(nodeWidget.getNodeWidgetInfo())) {
+            this.removeNode(nodeWidget.getNodeWidgetInfo());
+            if (nodeWidget instanceof IBaseElementWidget) {
+                ((IBaseElementWidget) nodeWidget).destroy();
+            }
+        } else {
+            LOG.warning("node not found");
         }
     }
 
     @Override
     public void deleteEdgeWidget(IEdgeWidget edgeWidget) {
-
-        this.removeEdge(edgeWidget.getEdgeWidgetInfo());
-        if (edgeWidget instanceof IBaseElementWidget) {
-            ((IBaseElementWidget) edgeWidget).destroy();
+        if (this.isEdge(edgeWidget.getEdgeWidgetInfo())) {
+            this.removeEdge(edgeWidget.getEdgeWidgetInfo());
+            if (edgeWidget instanceof IBaseElementWidget) {
+                ((IBaseElementWidget) edgeWidget).destroy();
+            }
+        } else {
+            LOG.warning("edge not found");
         }
     }
 
     @Override
     public void deletePinWidget(IPinWidget pinWidget) {
-
-        this.removePin(pinWidget.getPinWidgetInfo());
-        if (pinWidget instanceof IBaseElementWidget) {
-            ((IBaseElementWidget) pinWidget).destroy();
+        if (this.isPin(pinWidget.getPinWidgetInfo())) {
+            this.removePin(pinWidget.getPinWidgetInfo());
+            if (pinWidget instanceof IBaseElementWidget) {
+                ((IBaseElementWidget) pinWidget).destroy();
+            }
+        } else {
+            LOG.warning("pin not found");
         }
+       
     }
 
     @Override

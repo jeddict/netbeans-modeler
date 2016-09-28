@@ -111,8 +111,6 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     }
                     ModelerCore.addModelerFile(absolutePath, modelerFile);
 
-                    //System.out.println("TLTIP Total time : " + (new Date().getTime() - st) + " sec");
-                    //st = new Date().getTime();
                     //VendorSpecification,ModelerDiagramSpecification
 
                     Class _class = this.getClass();
@@ -124,8 +122,6 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     scene.setModelerFile(modelerFile);
                     modelerFile.getModelerDiagramModel().setModelerScene(scene);
 
-                    //System.out.println("InSpec I Total time : " + (new Date().getTime() - st) + " sec");
-                    //st = new Date().getTime();
                     new InitExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
                     new ModelerUtilExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
                     new PaletteConfigExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
@@ -140,18 +136,13 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     //final 4192,  3326     3214
 
                     latch.await();
-                    //System.out.println("CountDownLatch Total time : " + (new Date().getTime() - st) + " sec");
-                    //st = new Date().getTime();
                     initSpecification(modelerFile);
                     scene.getModelerPanelTopComponent().init(modelerFile);
                     scene.getModelerPanelTopComponent().open();
                     scene.getModelerPanelTopComponent().requestActive();
-                    //System.out.println("TC RA Total time : " + (new Date().getTime() - st) + " sec");
-                    //st = new Date().getTime();
                     NBModelerUtil.loadModelerFile(modelerFile);
 
                     modelerFile.getModelerScene().init(); //color scehme depends on entitymapping
-                    //System.out.println("lmf Total time : " + (new Date().getTime() - st) + " sec");
 
                     modelerFile.loaded();
                 } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {

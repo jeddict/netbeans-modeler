@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -55,6 +56,7 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
+import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
@@ -79,6 +81,8 @@ import org.openide.windows.WindowManager;
  *
  */
 public abstract class AbstractModelerScene<E extends IRootElement> extends GraphScene<NodeWidgetInfo, EdgeWidgetInfo> implements INModelerScene<E> {
+
+    private static final Logger LOG = Logger.getLogger(AbstractModelerScene.class.getName());
 
     private LayerWidget backgroundLayer; //  rectangular selection
     private LayerWidget mainLayer;
@@ -383,9 +387,8 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
                 if (rect.contains(widgetRect) && (object instanceof IFlowElementWidget)) {
                     set.add((IFlowElementWidget) object);
                 }
-            } else {
-                // The node or edge can intersect the rectangle.
-                if (widget instanceof ConnectionWidget) {
+            } else // The node or edge can intersect the rectangle.
+            if (widget instanceof ConnectionWidget) {
                 ConnectionWidget conn = (ConnectionWidget) widget;
                 java.util.List<Point> points = conn.getControlPoints();
                 for (int i = points.size() - 2; i >= 0; i--) {
@@ -401,7 +404,6 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
                     set.add((IFlowElementWidget) object);
                 }
             }
-        }
         }
 
         return set;
@@ -563,8 +565,8 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getName(), propertyVisibilityHandlers);
     }
-    
-    public IPropertyManager getPropertyManager(){
+
+    public IPropertyManager getPropertyManager() {
         return node;
     }
 
@@ -693,20 +695,28 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
 
     @Override
     public void deleteNodeWidget(INodeWidget nodeWidget) {
-
-        this.removeNode(nodeWidget.getNodeWidgetInfo());
-        if (nodeWidget instanceof IBaseElementWidget) {
-            ((IBaseElementWidget) nodeWidget).destroy();
+        if (this.isNode(nodeWidget.getNodeWidgetInfo())) {
+            this.removeNode(nodeWidget.getNodeWidgetInfo());
+            if (nodeWidget instanceof IBaseElementWidget) {
+                ((IBaseElementWidget) nodeWidget).destroy();
+            }
+        } else {
+            LOG.warning("node not found");
         }
+
     }
 
     @Override
     public void deleteEdgeWidget(IEdgeWidget edgeWidget) {
-
-        this.removeEdge(edgeWidget.getEdgeWidgetInfo());
-        if (edgeWidget instanceof IBaseElementWidget) {
-            ((IBaseElementWidget) edgeWidget).destroy();
+        if (this.isEdge(edgeWidget.getEdgeWidgetInfo())) {
+            this.removeEdge(edgeWidget.getEdgeWidgetInfo());
+            if (edgeWidget instanceof IBaseElementWidget) {
+                ((IBaseElementWidget) edgeWidget).destroy();
+            }
+        } else {
+            LOG.warning("edge not found");
         }
+
     }
 
     @Override
@@ -766,18 +776,19 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     public IModelerScene getModelerScene() {
         return this;
     }
-    
+
     private boolean closed = false;
+
     @Override
-    public void cleanReference(){
-           modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
-           setContextPaletteManager(null);//remove from lookup
-           getView().getActionMap().clear();
-           getView().getInputMap().clear();
-           
+    public void cleanReference() {
+        modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
+        setContextPaletteManager(null);//remove from lookup
+        getView().getActionMap().clear();
+        getView().getInputMap().clear();
+
         if (getPropertyManager() != null) {
             getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
         }
-                closed = true;
+        closed = true;
     }
 }
