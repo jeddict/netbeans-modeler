@@ -78,14 +78,16 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         }
         this.editor = editor;
         this.setSize(1900, 900);
-        this.attributeEntity = attributeEntity;
-        initComponents();
-        this.setInternalAttributeEntity(attributeEntity);
+        setAttributeEntity(attributeEntity);
     }
 
     public void setAttributeEntity(NAttributeEntity attributeEntity) {
         this.attributeEntity = attributeEntity;
         initComponents();
+        if(attributeEntity.getCustomDialog()==null){
+            jButtonNewProperty.hide();
+            jButtonModifyProperty.hide();
+        }
         this.setInternalAttributeEntity(attributeEntity);
     }
 
@@ -95,7 +97,9 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
     private void setInternalAttributeEntity(NAttributeEntity attributeEntity) {
 
         attributeEntity.getTableDataListener().initData();
-        attributeEntity.getCustomDialog().setRootComponent(jTableAttribute);
+        if(attributeEntity.getCustomDialog()!=null){
+            attributeEntity.getCustomDialog().setRootComponent(jTableAttribute);
+        }
         tableModel = new javax.swing.table.DefaultTableModel(
                 attributeEntity.getTableDataListener().getData().toArray(new Object[][]{}),
                 attributeEntity.getColumnsName().toArray(new String[0])) {
@@ -366,28 +370,30 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
         DefaultTableModel dtm = (DefaultTableModel) jTableAttribute.getModel();
 
         EntityComponent attrDialog = attributeEntity.getCustomDialog();
+        
+        if(attrDialog!=null){
+            RowValue rowValue = new RowValue(getRow(index));
+    //       rowValue.setTableModel(dtm);
 
-        RowValue rowValue = new RowValue(getRow(index));
-//       rowValue.setTableModel(dtm);
-
-        if(!attrDialog.isLoaded()){
-            attrDialog.postConstruct();
-            attrDialog.setLoaded();
-        }
-        attrDialog.init();
-        attrDialog.updateEntity(rowValue);
-
-        attrDialog.setVisible(true);
-
-        if (attrDialog.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {
-            Object[] row = ((RowValue) attrDialog.getEntity()).getRow();
-            int i = 0;
-            for (Object value : row) {
-                dtm.setValueAt(value, index, i++);
+            if(!attrDialog.isLoaded()){
+                attrDialog.postConstruct();
+                attrDialog.setLoaded();
             }
+            attrDialog.init();
+            attrDialog.updateEntity(rowValue);
 
-            updateTableUI();
-//            data.add(row);
+            attrDialog.setVisible(true);
+
+            if (attrDialog.getDialogResult() == javax.swing.JOptionPane.OK_OPTION) {
+                Object[] row = ((RowValue) attrDialog.getEntity()).getRow();
+                int i = 0;
+                for (Object value : row) {
+                    dtm.setValueAt(value, index, i++);
+                }
+
+                updateTableUI();
+    //            data.add(row);
+            }
         }
     }//GEN-LAST:event_jButtonModifyPropertyActionPerformed
 
