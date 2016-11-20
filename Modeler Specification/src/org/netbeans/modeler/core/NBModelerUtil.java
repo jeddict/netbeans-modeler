@@ -282,7 +282,11 @@ public class NBModelerUtil {
     }
 
     public static String browseClass(ModelerFile modelerFile) {
-        ElementHandle<TypeElement> handle = TypeElementFinder.find(ClasspathInfo.create(modelerFile.getFileObject()), new TypeElementFinder.Customizer() {
+        return browseClass(modelerFile, null);
+    }
+    
+    public static String browseClass(ModelerFile modelerFile, String defaultClass) {
+    ElementHandle<TypeElement> handle = TypeElementFinder.find(ClasspathInfo.create(modelerFile.getFileObject()), defaultClass, new TypeElementFinder.Customizer() {
             @Override
             public Set<ElementHandle<TypeElement>> query(ClasspathInfo classpathInfo, String textForQuery, ClassIndex.NameKind nameKind, Set<ClassIndex.SearchScope> searchScopes) {
                 return classpathInfo.getClassIndex().getDeclaredTypes(textForQuery, nameKind, searchScopes);
