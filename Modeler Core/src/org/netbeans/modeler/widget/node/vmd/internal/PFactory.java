@@ -38,15 +38,7 @@ public final class PFactory {
             try {
                 scheme = (IColorScheme) colorSchemeClass.getMethod("getInstance").invoke(null);
                 SCHEME.put(colorSchemeClass, scheme);
-            } catch (NoSuchMethodException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (SecurityException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (IllegalAccessException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (IllegalArgumentException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (InvocationTargetException ex) {
+            } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Exceptions.printStackTrace(ex);
             }
         }
