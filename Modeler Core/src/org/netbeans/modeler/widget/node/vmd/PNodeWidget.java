@@ -610,7 +610,7 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     
     private void cleanReference(List<Widget> children) { //PinWidget children lost after NodeWidget remove method called
         if (this.getPropertyManager() != null) {
-            this.getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+            this.getPropertyManager().getElementPropertySet().clearGroups();//clear ElementSupportGroup
         }
         for (Widget childWidget : children) {
             if (childWidget instanceof IPinWidget) {

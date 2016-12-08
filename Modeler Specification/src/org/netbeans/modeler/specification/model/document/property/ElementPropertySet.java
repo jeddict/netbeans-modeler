@@ -71,16 +71,18 @@ public class ElementPropertySet {
         set.remove(id);
     }
     
-    public void clearGroup() {
+    public void clearGroup(String id) {
+        if(set.get(id)!=null){
+            for(Node.Property<?> property : set.get(id).getProperties()){
+                set.get(id).remove(property.getName());
+            }
+//            set.remove(id);
+        }
+    }
+    
+    public void clearGroups() {
         for(Sheet.Set setTmp : set.values()){
             Arrays.fill( setTmp.getProperties(), null );
-//            for(Node.Property property  : setTmp.getProperties()){
-//            if(property instanceof ElementCustomPropertySupport){
-//                ElementCustomPropertySupport propertySupport = (ElementCustomPropertySupport)property;
-//                propertySupport.set
-//            }
-//            }
-            System.out.println("");
         }
         set.clear();
     }
@@ -141,17 +143,11 @@ public class ElementPropertySet {
             for (Entry<String, PropertyLinkedList<SheetProperty>> filterEntry : filterContainerMap.entrySet()) {
                 PropertyLinkedList<SheetProperty> propertyLinkedList = filterEntry.getValue();
                 if (propertyLinkedList.getHead().prev == null) {
-//                    System.out.println("New : " + propertyLinkedList.getHead().element.getProperty().getName());
                     PropertyLinkedList<SheetProperty>.Node node = propertyLinkedList.getHead();
                     while (node != null) {
-//                        System.out.println("-> attach : " + node.element.getProperty().getName());
                         putProperty(entry.getKey(), node.element.getProperty(), node.element.isReplace());
                         node = node.next;
                     }
-//
-//                } else {
-//                    System.out.print("Pre : " + propertyLinkedList.getHead().prev.element.getProperty().getName());
-//                    System.out.println("->  : " + propertyLinkedList.getHead().element.getProperty().getName());
                 }
             }
             

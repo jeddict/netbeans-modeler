@@ -990,7 +990,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
     @Override
     public void cleanReference() {
         if (this.getPropertyManager() != null) {
-            this.getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+            this.getPropertyManager().getElementPropertySet().clearGroups();//clear ElementSupportGroup
         }
         for (Widget childWidget : this.getChildren()) {
             if (childWidget instanceof IPinWidget) {

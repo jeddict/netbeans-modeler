@@ -68,7 +68,9 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
             elementPropertySet.executeProperties();
         } else {
             for (String key : elementPropertySet.getGroupKey()) {
-                sheet.remove(key);
+//                if(sheet.get(key) !=null ){
+                    sheet.remove(key);
+//                }
             }
         }
         createSheet(sheet, propertyVisibilityHandlerList);
@@ -165,6 +167,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
         return baseElementWidget;
     }
     
+    @Override
     public ElementPropertySet getElementPropertySet() {
         return elementPropertySet;
     }

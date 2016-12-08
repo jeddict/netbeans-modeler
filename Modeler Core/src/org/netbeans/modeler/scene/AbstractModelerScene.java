@@ -787,7 +787,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
         getView().getInputMap().clear();
 
         if (getPropertyManager() != null) {
-            getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+            getPropertyManager().getElementPropertySet().clearGroups();//clear ElementSupportGroup
         }
         closed = true;
     }

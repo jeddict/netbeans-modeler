@@ -298,7 +298,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     
     public void cleanReference(){
         if (this.getPropertyManager() != null) {
-                this.getPropertyManager().getElementPropertySet().clearGroup();//clear ElementSupportGroup
+                this.getPropertyManager().getElementPropertySet().clearGroups();//clear ElementSupportGroup
             }
         this.getModelerScene().getModelerFile().getModelerDiagramEngine().clearPinWidgetAction(this);
         cleanActions(getPinNameWidget().getActions());
