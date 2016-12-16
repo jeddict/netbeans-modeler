@@ -17,7 +17,11 @@ package org.netbeans.modeler.properties.window;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.prefs.Preferences;
 import org.netbeans.modeler.locale.I18n;
+import org.openide.util.NbPreferences;
 import org.openide.windows.WindowManager;
 
 /**
@@ -25,6 +29,8 @@ import org.openide.windows.WindowManager;
  * @author Gaurav Gupta
  */
 public class GenericDialog extends javax.swing.JDialog {
+    
+    private static final Preferences pref = NbPreferences.forModule(GenericDialog.class);
 
     public GenericDialog(java.awt.Frame parent, String title, boolean modal) {
         super(parent, title, modal);
@@ -44,9 +50,11 @@ public class GenericDialog extends javax.swing.JDialog {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
+                captureSize();
                 closeDialog(evt);
             }
         });
+       
 
     }
     
@@ -62,10 +70,20 @@ public class GenericDialog extends javax.swing.JDialog {
             int x = (screenSize.width - this.getWidth()) / 2;
             int y = (screenSize.height - this.getHeight()) / 2;
             this.setLocation(x, y);
+            
+            int width = pref.getInt(this.getTitle() + ".width", -1);
+            int height = pref.getInt(this.getTitle() + ".height", -1);
+            if(width>0 && height>0){
+                this.setSize(width, height);
+            }
         }
         super.setVisible(visible);
     }
 
+    private void captureSize(){
+      pref.putInt(this.getTitle() + ".width", this.getWidth());
+      pref.putInt(this.getTitle() + ".height", this.getHeight());
+    }
     protected void closeDialog(java.awt.event.WindowEvent evt) {
         setVisible(false);
         this.setDialogResult(javax.swing.JOptionPane.CLOSED_OPTION);
