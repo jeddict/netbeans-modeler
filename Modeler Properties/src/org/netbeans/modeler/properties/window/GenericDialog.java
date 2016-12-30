@@ -27,12 +27,13 @@ import org.openide.windows.WindowManager;
  * @author Gaurav Gupta
  */
 public class GenericDialog extends javax.swing.JDialog {
-    
+
     private static final Preferences pref = NbPreferences.forModule(GenericDialog.class);
+    private boolean captureWindowSize = true;
 
     public GenericDialog(java.awt.Frame parent, String title, boolean modal) {
         super(parent, title, modal);
-        
+
         javax.swing.KeyStroke escape = javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
         javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
             @Override
@@ -52,44 +53,45 @@ public class GenericDialog extends javax.swing.JDialog {
                 closeDialog(evt);
             }
         });
-       
 
     }
-    
+
     public GenericDialog() {
         this("");
     }
-    
-    
+
     public GenericDialog(String title) {
-        this(WindowManager.getDefault().getMainWindow(),title, true);
+        this(WindowManager.getDefault().getMainWindow(), title, true);
     }
 
     @Override
     public void setVisible(boolean visible) {
         if (visible) {
-            int width = pref.getInt(this.getTitle() + ".width", -1);
-            int height = pref.getInt(this.getTitle() + ".height", -1);
-            if(width>0 && height>0){
-                this.setSize(width, height);
-            }
-            
-            pack();
 
+            if (captureWindowSize) {
+                int width = pref.getInt(this.getTitle() + ".width", -1);
+                int height = pref.getInt(this.getTitle() + ".height", -1);
+                if (width > 0 && height > 0) {
+                    this.setSize(width, height);
+                }
+            }
             Toolkit toolkit = Toolkit.getDefaultToolkit();
             Dimension screenSize = toolkit.getScreenSize();
             int x = (screenSize.width - this.getWidth()) / 2;
             int y = (screenSize.height - this.getHeight()) / 2;
             this.setLocation(x, y);
-            
+
         }
         super.setVisible(visible);
     }
 
-    private void captureSize(){
-      pref.putInt(this.getTitle() + ".width", this.getWidth());
-      pref.putInt(this.getTitle() + ".height", this.getHeight());
+    private void captureSize() {
+        if (captureWindowSize) {
+            pref.putInt(this.getTitle() + ".width", this.getWidth());
+            pref.putInt(this.getTitle() + ".height", this.getHeight());
+        }
     }
+
     protected void closeDialog(java.awt.event.WindowEvent evt) {
         captureSize();
         setVisible(false);
@@ -126,4 +128,17 @@ public class GenericDialog extends javax.swing.JDialog {
         this.dialogResult = dialogResult;
     }
 
+    /**
+     * @return the captureWindowSize
+     */
+    public boolean isCaptureWindowSize() {
+        return captureWindowSize;
+    }
+
+    /**
+     * @param captureWindowSize the captureWindowSize to set
+     */
+    public void setCaptureWindowSize(boolean captureWindowSize) {
+        this.captureWindowSize = captureWindowSize;
+    }
 }
