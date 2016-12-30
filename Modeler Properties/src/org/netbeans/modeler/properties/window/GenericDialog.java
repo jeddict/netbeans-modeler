@@ -74,6 +74,8 @@ public class GenericDialog extends javax.swing.JDialog {
                 this.setSize(width, height);
             }
             
+            pack();
+
             Toolkit toolkit = Toolkit.getDefaultToolkit();
             Dimension screenSize = toolkit.getScreenSize();
             int x = (screenSize.width - this.getWidth()) / 2;
@@ -89,18 +91,21 @@ public class GenericDialog extends javax.swing.JDialog {
       pref.putInt(this.getTitle() + ".height", this.getHeight());
     }
     protected void closeDialog(java.awt.event.WindowEvent evt) {
+        captureSize();
         setVisible(false);
         this.setDialogResult(javax.swing.JOptionPane.CLOSED_OPTION);
         dispose();
     }
 
     protected void cancelActionPerformed(java.awt.event.ActionEvent evt) {
+        captureSize();
         setVisible(false);
         this.setDialogResult(javax.swing.JOptionPane.CANCEL_OPTION);
         dispose();
     }
 
     protected void saveActionPerformed(java.awt.event.ActionEvent evt) {
+        captureSize();
         setVisible(false);
         this.setDialogResult(javax.swing.JOptionPane.OK_OPTION);
         dispose();
