@@ -347,8 +347,6 @@ public class NEntityEditor extends JPanel implements PropertyChangeListener {
             Object[] row = ((RowValue) attrDialog.getEntity()).getRow();
             dtm.addRow(row);
             updateTableUI();
-
-//            data.add(row);
         }
     }//GEN-LAST:event_jButtonNewPropertyActionPerformed
 

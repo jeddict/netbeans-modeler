@@ -17,8 +17,6 @@ package org.netbeans.modeler.properties.window;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.prefs.Preferences;
 import org.netbeans.modeler.locale.I18n;
 import org.openide.util.NbPreferences;
@@ -59,23 +57,29 @@ public class GenericDialog extends javax.swing.JDialog {
     }
     
     public GenericDialog() {
-        this(WindowManager.getDefault().getMainWindow(),"", true);
+        this("");
+    }
+    
+    
+    public GenericDialog(String title) {
+        this(WindowManager.getDefault().getMainWindow(),title, true);
     }
 
     @Override
     public void setVisible(boolean visible) {
         if (visible) {
+            int width = pref.getInt(this.getTitle() + ".width", -1);
+            int height = pref.getInt(this.getTitle() + ".height", -1);
+            if(width>0 && height>0){
+                this.setSize(width, height);
+            }
+            
             Toolkit toolkit = Toolkit.getDefaultToolkit();
             Dimension screenSize = toolkit.getScreenSize();
             int x = (screenSize.width - this.getWidth()) / 2;
             int y = (screenSize.height - this.getHeight()) / 2;
             this.setLocation(x, y);
             
-            int width = pref.getInt(this.getTitle() + ".width", -1);
-            int height = pref.getInt(this.getTitle() + ".height", -1);
-            if(width>0 && height>0){
-                this.setSize(width, height);
-            }
         }
         super.setVisible(visible);
     }

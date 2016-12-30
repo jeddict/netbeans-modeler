@@ -15,18 +15,9 @@
  */
 package org.netbeans.modeler.properties.embedded;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
 public class GenericEmbedded {
 
     private Boolean readOnly = false;
-
-    public GenericEmbedded(String name, String displayName, String shortDescription, GenericEmbeddedEditor customDialog) {
-        this.name = name;
-        this.displayName = displayName;
-        this.shortDescription = shortDescription;
-        this.entityEditor = customDialog;
-    }
     private String name;
     private String displayName;
     private String shortDescription;
@@ -35,6 +26,13 @@ public class GenericEmbedded {
     
     private String before;
     private String after;
+
+    public GenericEmbedded(String name, String displayName, String shortDescription, GenericEmbeddedEditor customDialog) {
+        this.name = name;
+        this.displayName = displayName;
+        this.shortDescription = shortDescription;
+        this.entityEditor = customDialog;
+    }
 
     public GenericEmbedded(String name, String displayName, String shortDescription) {
         this.name = name;

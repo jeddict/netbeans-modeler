@@ -26,10 +26,6 @@ import static org.netbeans.modeler.specification.model.document.property.Propert
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.nodes.PropertySupport;
 
-/**
- *
- *
- */
 public class EmbeddedPropertySupport extends PropertySupport implements ModelerSheetProperty{
 
     PropertyEditor editor = null;

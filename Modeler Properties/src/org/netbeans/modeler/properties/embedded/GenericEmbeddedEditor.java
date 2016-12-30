@@ -36,25 +36,9 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
     public abstract T getValue();
 
     public abstract void setValue(T val);
-
-//    public GenericEntityEditor(GenericEntity entity, PropertyEditor editor, PropertyEnv env) {
-//        this.env = env;
-//        this.editor = editor;
-//        this.entity = entity;
-//        this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
-//        this.env.addPropertyChangeListener(this);
-//    }
     @Override //Save Button Clicked
     public void propertyChange(PropertyChangeEvent evt) {
         if (PropertyEnv.PROP_STATE.equals(evt.getPropertyName()) && evt.getNewValue() == PropertyEnv.STATE_VALID) {
-//            T obj = this.getValue();
-//            if (obj == null) {
-//                this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
-//            } else {
-//                entity.getDataListener().setData(obj);
-//                getModelerFile().getModelerPanelTopComponent().changePersistenceState(false);
-//            }
-
             try {
                 entity.getDataListener().setData(this.getValue());
                 getModelerFile().getModelerPanelTopComponent().changePersistenceState(false);
@@ -122,38 +106,6 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
     public void setModelerFile(ModelerFile modelerFile) {
         this.modelerFile = modelerFile;
     }
-
-//    @Override
-//    public int getWidth() {
-//        if (this.getParent() != null) {
-//            Container dialog = (Container) this.getParent().getParent().getParent().getParent();
-//            return dialog.getWidth();
-//        }
-//        return 0;
-//    }
-//
-//    @Override
-//    public int getHeight() {
-//        if (this.getParent() != null) {
-//            Container dialog = (Container) this.getParent().getParent().getParent().getParent();
-//            return dialog.getHeight();
-//        }
-//        return 0;
-//    }
-//    @Override
-//    public void setSize(int width, int height) {
-//        if (this.getParent() != null) {
-//            Container dialog = (Container) this.getParent().getParent().getParent().getParent();//NBDialog
-//            dialog.setSize(width, height);
-//
-//            Toolkit toolkit = Toolkit.getDefaultToolkit();
-//            Dimension screenSize = toolkit.getScreenSize();
-//            int x = (screenSize.width - this.getWidth()) / 2;
-//            int y = (screenSize.height - this.getHeight()) / 2;
-//            dialog.setLocation(x, y);
-//
-//        }
-//    }
     protected void setEnablePanel(JComponent layerPane, boolean status) {
         for (Component com : layerPane.getComponents()) {
             if (com instanceof javax.swing.JLayeredPane) {
