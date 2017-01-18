@@ -30,9 +30,10 @@ import org.openide.util.Exceptions;
  */
 public final class PFactory {
 
-    private static final Map<Class<? extends IColorScheme>, IColorScheme> SCHEME = new HashMap<Class<? extends IColorScheme>, IColorScheme>();
+    private static final Map<Class<? extends IColorScheme>, IColorScheme> SCHEME = new HashMap<>();
 
     public static IColorScheme getColorScheme(Class<? extends IColorScheme> colorSchemeClass) {
+        SCHEME.clear();
         IColorScheme scheme = SCHEME.get(colorSchemeClass);
         if (scheme == null) {
             try {
@@ -40,6 +41,7 @@ public final class PFactory {
                 SCHEME.put(colorSchemeClass, scheme);
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Exceptions.printStackTrace(ex);
+//                scheme = POriginalColorScheme.getInstance();
             }
         }
         return scheme;
