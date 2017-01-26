@@ -36,6 +36,7 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
     public abstract T getValue();
 
     public abstract void setValue(T val);
+    
     @Override //Save Button Clicked
     public void propertyChange(PropertyChangeEvent evt) {
         if (PropertyEnv.PROP_STATE.equals(evt.getPropertyName()) && evt.getNewValue() == PropertyEnv.STATE_VALID) {
@@ -45,7 +46,6 @@ public abstract class GenericEmbeddedEditor<T> extends javax.swing.JPanel implem
             } catch (IllegalStateException ise) {
                 this.env.setState(PropertyEnv.STATE_NEEDS_VALIDATION);
             }
-
         }
     }
 

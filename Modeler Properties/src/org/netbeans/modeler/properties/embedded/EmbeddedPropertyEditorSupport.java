@@ -23,13 +23,12 @@ import org.openide.explorer.propertysheet.PropertyEnv;
 
 public class EmbeddedPropertyEditorSupport extends PropertyEditorSupport implements ExPropertyEditor {
 
-    private GenericEmbedded entity;
-    private ModelerFile modelerFile;
+    private final GenericEmbedded entity;
+    private final ModelerFile modelerFile;
 
     public EmbeddedPropertyEditorSupport(ModelerFile modelerFile, GenericEmbedded entity) {
         this.modelerFile = modelerFile;
         this.entity = entity;
-//        entity.getEntityEditor().init();
     }
 
     @Override
@@ -44,7 +43,6 @@ public class EmbeddedPropertyEditorSupport extends PropertyEditorSupport impleme
 
     @Override
     public java.awt.Component getCustomEditor() {
-//        Object val = getValue();this.
         if (entity.getEntityEditor() != null) {
             entity.getEntityEditor().setEntity(entity);
             entity.getEntityEditor().setEnv(env);

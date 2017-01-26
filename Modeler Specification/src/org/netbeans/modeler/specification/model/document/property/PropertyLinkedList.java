@@ -78,7 +78,6 @@ public class PropertyLinkedList<E> {
         head = tmp;
         if(getTail() == null) { tail = tmp;}
         size++;
-        System.out.println("adding: "+element);
     }
      
     /**
@@ -86,19 +85,13 @@ public class PropertyLinkedList<E> {
      * @param element
      */
     public void addLast(E element) {
-         
         Node tmp = new Node(element, null, getTail());
         if(getTail() != null) {tail.next = tmp;}
         tail = tmp;
         if(getHead() == null) { head = tmp;}
-//        size++;
-        System.out.println("adding: "+element);
     }
     
       public void addLast(Node tmp) {
-         
-//        Node tmp = new Node(element, null, getTail());
-          
         if(getTail() != null) {
             tmp.prev = tail;
             tail.next = tmp;
@@ -108,8 +101,6 @@ public class PropertyLinkedList<E> {
             tmp.prev=null;
             head = tmp;
         }
-//        size++;
-        System.out.println("adding: "+tmp);
     }
      
     /**

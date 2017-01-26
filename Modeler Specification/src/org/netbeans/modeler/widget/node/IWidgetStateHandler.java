@@ -33,8 +33,8 @@ public interface IWidgetStateHandler {
 
     public enum StateType {
         ERROR(1,Util.loadImage("org/netbeans/modeler/resource/error_8.png")),
-        WARNING(2,Util.loadImage("org/netbeans/modeler/resource/warning_8.png")),
-        TODO(3,Util.loadImage("org/netbeans/modeler/resource/warning_8.png"));
+        WARNING(2,Util.loadImage("org/netbeans/modeler/resource/warning_8.png"));
+//        TODO(3,Util.loadImage("org/netbeans/modeler/resource/warning_8.png"));//todo
         
         private final int priority;
         public final Image icon;
