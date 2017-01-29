@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Set;
 import javax.lang.model.element.TypeElement;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
 import org.netbeans.api.java.source.ClassIndex;
 import org.netbeans.api.java.source.ClasspathInfo;
 import org.netbeans.api.java.source.ElementHandle;
@@ -50,6 +52,8 @@ import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.Exceptions;
+import org.openide.util.Pair;
+import org.netbeans.editor.Utilities;
 
 public class NBModelerUtil {
 
@@ -281,6 +285,21 @@ public class NBModelerUtil {
         return new Point(x, y);
     }
 
+    public static Pair<JScrollPane, JEditorPane> getJavaSingleLineEditor(JComponent comp, String className, String tooltipText) {
+        JComponent [] editorComponents = Utilities.createSingleLineEditor("text/x-java-nbdebug-class");
+        JScrollPane sle = (JScrollPane) editorComponents[0];
+        JEditorPane epClassName = (JEditorPane) editorComponents[1];
+        epClassName.setText(className);
+        if(comp!=null){
+            comp.removeAll();
+            comp.setLayout(new java.awt.GridLayout());
+            comp.add(sle);
+        }
+        sle.setToolTipText(tooltipText);
+        epClassName.setToolTipText(tooltipText);
+        return Pair.<JScrollPane, JEditorPane>of(sle, epClassName);
+    }
+    
     public static String browseClass(ModelerFile modelerFile) {
         return browseClass(modelerFile, null);
     }
