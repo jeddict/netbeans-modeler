@@ -1,5 +1,5 @@
 /**
- * Copyright [2014] Gaurav Gupta
+ * Copyright [2017] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,24 +15,30 @@
  */
 package org.netbeans.modeler.config.element;
 
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- *
- */
 @XmlRootElement(name = "group")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Group {
+public class Group implements Comparable<Group>{
 
     @XmlAttribute
     private String id;
     @XmlAttribute(name = "name")
     private String name;
+    @XmlAttribute(name = "position")
+    private int position = 100;
 
+    public Group() {
+    }
+
+    public Group(String id) {
+        this.id = id;
+    }
+    
     /**
      * @return the id
      */
@@ -61,4 +67,47 @@ public class Group {
         this.name = name;
     }
 
+    /**
+     * @return the position
+     */
+    public int getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position the position to set
+     */
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    @Override
+    public int compareTo(Group g2) {
+        return Integer.compare(position, g2.position);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Group other = (Group) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
 }

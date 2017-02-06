@@ -114,7 +114,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
         @Override
         public void setNewLocation(Widget widget, Point location) {
-            System.out.println("Location : " + location);
+//            System.out.println("Location : " + location);
             widget.setPreferredLocation(location);
             if (original != null) {
                 locationChanged = true;

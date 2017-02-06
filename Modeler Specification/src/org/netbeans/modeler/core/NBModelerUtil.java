@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import javax.lang.model.element.TypeElement;
 import javax.swing.JComponent;
@@ -304,7 +305,7 @@ public class NBModelerUtil {
         return browseClass(modelerFile, null);
     }
     
-    public static String browseClass(ModelerFile modelerFile, String defaultClass) {
+    public static Optional<ElementHandle<TypeElement>> browseElement(ModelerFile modelerFile, String defaultClass) {
     ElementHandle<TypeElement> handle = TypeElementFinder.find(ClasspathInfo.create(modelerFile.getFileObject()), defaultClass, new TypeElementFinder.Customizer() {
             @Override
             public Set<ElementHandle<TypeElement>> query(ClasspathInfo classpathInfo, String textForQuery, ClassIndex.NameKind nameKind, Set<ClassIndex.SearchScope> searchScopes) {
@@ -316,7 +317,12 @@ public class NBModelerUtil {
                 return true;
             }
         });
-        return handle != null ? handle.getQualifiedName() : "";
+        return Optional.ofNullable(handle);
+    }
+    
+    public static String browseClass(ModelerFile modelerFile, String defaultClass) {
+        Optional<ElementHandle<TypeElement>> handle = browseElement(modelerFile, defaultClass);
+        return handle.isPresent() ? handle.get().getQualifiedName() : "";
     }
 
     public static boolean isEmptyObject(Object obj) {

@@ -18,11 +18,15 @@ package org.netbeans.modeler.specification.model.document.property;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.netbeans.modeler.config.element.Attribute;
@@ -53,30 +57,30 @@ public class ElementPropertySet {
     private ModelerFile modelerFile;
     private final ElementConfig elementConfig;
     private Sheet sheet;
-    private Map<String, Sheet.Set> set = new LinkedHashMap<>();
+    private Map<Group, Sheet.Set> set = new HashMap<>();
 
     public ElementPropertySet(ModelerFile modelerFile, Sheet sheet) {
         this.modelerFile = modelerFile;
         this.sheet = sheet;
         this.elementConfig = modelerFile.getModelerDiagramModel().getElementConfigFactory().getElementConfig();;
-
     }
 
-    public void createGroup(String id) {
-        set.put(id, sheet.createPropertiesSet());
-        set.get(id).setName(id);// Sheet.Set : name is required work as key [otherwise set is replaced]
+    public void createGroup(Group group) {
+        set.put(group, sheet.createPropertiesSet());
+        set.get(group).setName(group.getId());// Sheet.Set : name is required work as key [otherwise set is replaced]
     }
     
     public void deleteGroup(String id) {
-        set.remove(id);
+        Group group = getElementConfigGroup(id);
+        set.remove(group);
     }
     
     public void clearGroup(String id) {
-        if(set.get(id)!=null){
-            for(Node.Property<?> property : set.get(id).getProperties()){
-                set.get(id).remove(property.getName());
+        Group group = getElementConfigGroup(id);
+        if(set.get(group)!=null){
+            for(Node.Property<?> property : set.get(group).getProperties()){
+                set.get(group).remove(property.getName());
             }
-//            set.remove(id);
         }
     }
     
@@ -156,18 +160,23 @@ public class ElementPropertySet {
     }
     
     public synchronized Node.Property<?> putProperty(String id, Node.Property<?> p, boolean replace) {
-        if (set.get(id) == null) {
-            Group group = elementConfig.getGroup(id);
-            if (group == null) {
-                throw new RuntimeException("Group Id : <" + id + "> not found in element config for Element : " + p.getName());
-            }
-            createGroup(id);
+        Group group = getElementConfigGroup(id);
+        if (set.get(group) == null) {
+            createGroup(group);
             setGroupDisplayName(id, group.getName());
         }
-        if (replace && set.get(id).get(p.getName()) != null) {
-            set.get(id).remove(p.getName());
+        if (replace && set.get(group).get(p.getName()) != null) {
+            set.get(group).remove(p.getName());
         }
-        return set.get(id).put(p);
+        return set.get(group).put(p);
+    }
+    
+    private Group getElementConfigGroup(String id){
+        Group group = elementConfig.getGroup(id);
+            if (group == null) {
+                throw new RuntimeException("Group Id : <" + id + "> not found in element config");
+            }
+            return group;
     }
 
     public synchronized void put(String id, Node.Property<?> p) {
@@ -175,7 +184,8 @@ public class ElementPropertySet {
     }
 
     public void setGroupDisplayName(String id, String displayName) {
-        set.get(id).setDisplayName(displayName);
+        Group group = getElementConfigGroup(id);
+        set.get(group).setDisplayName(displayName);
     }
 
     /**
@@ -196,15 +206,16 @@ public class ElementPropertySet {
      * @return the set
      */
     public Sheet.Set getGroup(String id) {
-        return set.get(id);
+        Group group = getElementConfigGroup(id);
+        return set.get(group);
     }
 
     public Set<String> getGroupKey() {
-        return set.keySet();
+        return set.keySet().stream().map(Group::getName).collect(toSet());
     }
 
-    public LinkedList<Sheet.Set> getGroups() {
-        return new LinkedList<>(set.values());
+    public List<Sheet.Set> getGroups() {
+        return set.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(entry -> entry.getValue()).collect(toList());
     }
 
     /**
@@ -273,6 +284,7 @@ public class ElementPropertySet {
     }
 
     private void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
+        assert(object==null);
         ElementConfigFactory elementConfigFactory = modelerFile.getModelerDiagramModel().getElementConfigFactory();
         if (inherit) {
             for (Element element : elementConfigFactory.getElements(category,object.getClass())) {

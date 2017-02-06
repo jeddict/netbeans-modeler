@@ -17,11 +17,15 @@ package org.netbeans.modeler.config.element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,11 +39,11 @@ public class ElementConfig implements IElementConfig {
 
     @XmlElementWrapper(name = "elements")
     @XmlElement(name = "element")
-    private List<Element> elements = new ArrayList<Element>();
+    private List<Element> elements = new ArrayList<>();
     @XmlElementWrapper(name = "groups")
     @XmlElement(name = "group")
-    private List<Group> groups = new ArrayList<Group>();
-
+    private List<Group> groups = new ArrayList<>();
+    
     /**
      * @return the elements
      */
@@ -69,13 +73,14 @@ public class ElementConfig implements IElementConfig {
         return groups;
     }
 
+    @XmlTransient
+    private Map<String, Group> groupsCache;
     public Group getGroup(String id) {
-        for (Group group : groups) {
-            if (group.getId().equals(id)) {
-                return group;
-            }
+        if(groupsCache == null){
+            groupsCache = groups.stream().collect(toMap(Group::getId, identity()));
         }
-        return null;
+        
+        return groupsCache.get(id);
     }
 
     /**

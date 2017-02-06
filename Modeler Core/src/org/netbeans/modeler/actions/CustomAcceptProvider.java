@@ -46,6 +46,7 @@ import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.transferable.MoveWidgetTransferable;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
+import org.openide.util.datatransfer.ExTransferable;
 
 /**
  *
@@ -98,7 +99,7 @@ public class CustomAcceptProvider implements AcceptProvider {
 
     @Override
     public void accept(Widget modelerScene, Point point, Transferable transferable) {
-        try {
+        try {     
         if (isWidgetMove(transferable)) {
             boolean convertLocation = false;
             Widget[] target;
@@ -234,6 +235,35 @@ public class CustomAcceptProvider implements AcceptProvider {
     protected boolean isPaletteItem(Transferable transferable) {
         return transferable.isDataFlavorSupported(DataFlavor.imageFlavor);
     }
+    
+//    transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
+//            List files = null;
+//            try {
+//                files = (List) t.getTransferData(DataFlavor.javaFileListFlavor);
+//            } catch (Exception ex) {
+//                ErrorManager.getDefault().notify(ErrorManager.INFORMATIONAL, ex);
+//                return false;
+//            }
+//
+//            if (files.size() > 0) {
+//                File file = (File) files.get(0);
+//                if (file != null && IconEditor.isImageFileName(file.getName())) {
+//                    if (setExternalAsCPFile(file)) { // the file is on classpath
+//                        classPathRadio.setSelected(true);
+//                    } else {
+//                        selectedExternalFile = file;
+//                        selectedURL = null;
+//                        externalRadio.setSelected(true);
+//                        try {
+//                            urlField.setText(file.toURL().toExternalForm());
+//                        } catch (MalformedURLException ex) {
+//                            ErrorManager.getDefault().notify(ErrorManager.INFORMATIONAL, ex);
+//                        }
+//                    }
+//                    updateValue();
+//                    return true;
+//                }
+//            }
 //
 
 }
