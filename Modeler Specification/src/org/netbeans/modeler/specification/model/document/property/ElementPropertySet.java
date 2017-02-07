@@ -284,7 +284,7 @@ public class ElementPropertySet {
     }
 
     private void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
-        assert(object==null);
+
         ElementConfigFactory elementConfigFactory = modelerFile.getModelerDiagramModel().getElementConfigFactory();
         if (inherit) {
             for (Element element : elementConfigFactory.getElements(category,object.getClass())) {
