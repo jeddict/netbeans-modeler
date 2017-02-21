@@ -206,12 +206,8 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
     private void initializeToolBar() {
         SwingUtilities.invokeLater(() -> {
-            IModelerDiagramEngine engine = modelerFile.getModelerDiagramEngine();
-            if (engine != null) {
-                engine.buildToolBar(editorToolbar);
-            }
+            modelerFile.getModelerDiagramEngine().buildToolBar(editorToolbar);
         });
-
     }
 
     /**
@@ -259,20 +255,17 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     @Override
     public void componentClosed() {
         super.componentClosed();
-        WindowManager.getDefault().invokeWhenUIReady(() -> {
-            RP.post(() -> {
+//        WindowManager.getDefault().invokeWhenUIReady(() -> {
+//            RP.post(() -> {
                 cleanReference();
-            });
-        });
+//            });
+//        });
     }
 
     private void cleanReference() {
         if (this.getModelerFile() != null) {
             ModelerCore.removeModelerFile(this.getModelerFile().getPath());
         }
-//        modelerScene.getBaseElements().stream().filter(element -> element instanceof INodeWidget).forEach(element -> {
-//            ((INodeWidget) element).remove(false);
-//        });
         modelerScene.cleanReference();
 
         for (KeyListener keyListener : this.getKeyListeners()) {
@@ -368,7 +361,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
     private int saveDiagram() {
         DiagramModel diagram = this.getModelerFile().getModelerDiagramModel().getDiagramModel();
-        String title = "Save " + diagram.getName() + " Diagram"; // NOI18N
+        String title = "Save Diagram"; // NOI18N
         int result;
 
         Object response = SaveNotifierYesNo.getDefault().displayNotifier(

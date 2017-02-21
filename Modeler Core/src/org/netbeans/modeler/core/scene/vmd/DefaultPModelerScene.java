@@ -45,17 +45,11 @@ public abstract class DefaultPModelerScene<E extends IRootElement> extends PMode
     
     @Override
     public IBaseElementWidget getBaseElement(String id) {
-//        for (IBaseElementWidget baseElementWidget : flowElements) {
-//            if (baseElementWidget.getId().equals(id)) {
-//                return baseElementWidget;
-//            }
-//        }
         return flowElements.get(id);
     }
 
     @Override
     public List<IBaseElementWidget> getBaseElements() {
-//        List<IBaseElementWidget> baseElementWidgets = new ArrayList<>(flowElements);
         return new ArrayList<>(flowElements.values());
     }
 

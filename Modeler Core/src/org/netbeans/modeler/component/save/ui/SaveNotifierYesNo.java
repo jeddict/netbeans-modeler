@@ -108,12 +108,10 @@ public class SaveNotifierYesNo {
                     DialogDescriptor.YES_OPTION
                 };
 
-        public DialogManager(
-                String dialogTitle, String saveType, String saveName) {
+        public DialogManager(String dialogTitle, String saveType, String saveName) {
 
             this(dialogTitle,
-                    NbBundle.getMessage(SaveNotifierYesNo.class,
-                            "LBL_SaveNotifierYesNoDialog_Question", saveType, saveName),
+                    NbBundle.getMessage(SaveNotifierYesNo.class, "LBL_SaveNotifierYesNoDialog_Question", saveName),
                     SaveNotifierYesNo.SAVE_DISCARD_CANCEL);
         }
 

@@ -74,7 +74,7 @@ public class ElementConfigFactory {
         return null;
     }
 
-    public void initializeObjectValue(final Object object/*TBaseElement baseElement*/) { // this method used to initialize object default value of JAXB from XML instead of hardcoding in object
+    public void initializeObjectValue(final Object object) { // this method used to initialize object default value of JAXB from XML instead of hardcoding in object
         try {
             for (Element element : getElements(object.getClass())) {
                 for (final Attribute attribute : element.getAttributes()) {

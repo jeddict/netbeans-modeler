@@ -17,6 +17,7 @@ package org.netbeans.modeler.specification.model.file.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import javax.swing.SwingUtilities;
 import org.netbeans.modeler.component.IModelerPanel;
@@ -65,14 +66,22 @@ public abstract class ModelerFileActionListener implements ActionListener {
     }
 
     public void openModelerFile(ModelerFile parentFile) {
-        openModelerFile(null, null, null, parentFile);
+        openModelerFile(null, null, null, parentFile, null);
     }
-
+    
+    public void openModelerFile(Map<String, Object> attributes) {
+        openModelerFile(null, null, null, null, attributes);
+    }
+    
     public void openModelerFile(String id, String name, String tooltip) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
-        openModelerFile(id, name, tooltip, null);
+        openModelerFile(id, name, tooltip, null, null);
     }
 
-    public void openModelerFile(String id, String name, String tooltip, ModelerFile parentFile) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
+    public void openModelerFile(String id, String name, String tooltip, Map<String, Object> attributes) {
+        openModelerFile(id, name, tooltip, null, attributes);
+    }
+    
+    public void openModelerFile(String id, String name, String tooltip, ModelerFile parentFile, Map<String, Object> attributes) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
         ModelerFile modelerFile = null;
         try {
             if (context == null) {
@@ -91,6 +100,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
             }
             modelerFile = ModelerCore.getModelerFile(absolutePath) == null ? new ModelerFile() : ModelerCore.getModelerFile(absolutePath);
 
+            if(attributes != null) {
+                modelerFile.getAttributes().putAll(attributes);
+            }
+            
             if (modelerFile.getPath() == null) { // if new modeler file
                 try {
                     CountDownLatch latch = new CountDownLatch(5);
@@ -110,8 +123,6 @@ public abstract class ModelerFileActionListener implements ActionListener {
                         modelerFile.setTooltip(tooltip);
                     }
                     ModelerCore.addModelerFile(absolutePath, modelerFile);
-
-                    //VendorSpecification,ModelerDiagramSpecification
 
                     Class _class = this.getClass();
                     final ModelerConfig modelerConfig = (ModelerConfig) _class.getAnnotation(ModelerConfig.class);
@@ -157,14 +168,6 @@ public abstract class ModelerFileActionListener implements ActionListener {
 //            if (modelerFile != null) {
 //                modelerFile.handleException(ex);
 //            }
-        } catch (RuntimeException ex) {
-            if (modelerFile != null) {
-                modelerFile.handleException(ex);
-            }
-        } catch (Exception ex) {
-            if (modelerFile != null) {
-                modelerFile.handleException(ex);
-            }
         } catch (Throwable t) {
             if (modelerFile != null) {
                 modelerFile.handleException(t);

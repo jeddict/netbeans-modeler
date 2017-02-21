@@ -46,9 +46,17 @@ public interface IModelerPanel {
 
     boolean isPersistenceState();
 
-    String getToolTipText();
-
     void forceClose();
     
     void addKeyListener(KeyListener listener);
+    
+    String getName();
+    
+    void setName(String name);
+    
+    String getToolTipText();
+    
+    void setToolTipText(String tooltip);
+    
+    
 }

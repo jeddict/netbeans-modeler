@@ -597,7 +597,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {
-        List<JMenuItem> menuItemList = new LinkedList<JMenuItem>();
+        List<JMenuItem> menuItemList = new LinkedList<>();
 
         JMenu themeMenu = new JMenu("Theme");
         ButtonGroup thmemeGroup = new javax.swing.ButtonGroup();
@@ -690,7 +690,6 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         propsMenu.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
         propsMenu.addActionListener((ActionEvent e) -> {
             AbstractPModelerScene.this.showProperties();
-            AbstractPModelerScene.this.getModelerPanelTopComponent().changePersistenceState(false);
         });
 
         menuItemList.add(propsMenu);
@@ -700,22 +699,16 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
     @Override
     public PopupMenuProvider getPopupMenuProvider() {
-        final PopupMenuProvider popupMenuProvider;
-        final JPopupMenu popupMenu; //PopupMenu used to give some funcionality to the widget
-
-        popupMenu = new JPopupMenu();
-
+        JPopupMenu popupMenu = new JPopupMenu();
         List<JMenuItem> menuItemList = getPopupMenuItemList();
-        for (JMenuItem menuItem : menuItemList) {
+        menuItemList.forEach(menuItem -> {
             if (menuItem == null) {
                 popupMenu.addSeparator();
             } else {
                 popupMenu.add(menuItem);
             }
-        }
-        popupMenuProvider = (final Widget widget, final Point location1) -> popupMenu;
-
-        return popupMenuProvider;
+        });
+       return (widget, location) -> popupMenu;
     }
 
     private BasePropertyViewManager node;
