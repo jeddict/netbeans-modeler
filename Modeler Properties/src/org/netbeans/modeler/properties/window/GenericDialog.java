@@ -17,7 +17,13 @@ package org.netbeans.modeler.properties.window;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
 import java.util.prefs.Preferences;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+import javax.swing.KeyStroke;
 import org.netbeans.modeler.locale.I18n;
 import org.openide.util.NbPreferences;
 import org.openide.windows.WindowManager;
@@ -34,18 +40,18 @@ public class GenericDialog extends javax.swing.JDialog {
     public GenericDialog(java.awt.Frame parent, String title, boolean modal) {
         super(parent, title, modal);
 
-        javax.swing.KeyStroke escape = javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0, false);
-        javax.swing.Action escapeAction = new javax.swing.AbstractAction() {
+        KeyStroke escape = KeyStroke.getKeyStroke(VK_ESCAPE, 0, false);
+        Action escapeAction = new AbstractAction() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 cancelActionPerformed(e);
             }
         };
 
-        getRootPane().getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
+        getRootPane().getInputMap(WHEN_IN_FOCUSED_WINDOW).put(escape, I18n.getString("Global.Pane.Escape"));
         getRootPane().getActionMap().put(I18n.getString("Global.Pane.Escape"), escapeAction);
-
-        setModal(true);
+//        getRootPane().registerKeyboardAction(e -> cancelActionPerformed(e), KeyStroke.getKeyStroke(VK_ESCAPE, 0), WHEN_IN_FOCUSED_WINDOW);
+        setModal(modal);
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -91,6 +97,9 @@ public class GenericDialog extends javax.swing.JDialog {
         }
     }
 
+    protected void setDefaultButton(JButton defaultButton) {
+        getRootPane().setDefaultButton(defaultButton);
+    }
     protected void closeDialog(java.awt.event.WindowEvent evt) {
         captureSize();
         setVisible(false);
