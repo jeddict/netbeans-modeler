@@ -47,6 +47,7 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
         ComboBoxListener<Enumy> comboBoxListener = new ComboBoxListener<Enumy>() {
             @Override
             public void setItem(ComboBoxValue<Enumy> value) {
+                ComboBoxValue<Enumy> oldValue = getItem();
                 Enumy enumy = value.getValue();
                 try {
                 org.apache.commons.beanutils.PropertyUtils.setProperty(object, attribute.getName(), enumy);
@@ -56,7 +57,7 @@ public class EnumComboBoxResolverImpl implements EnumComboBoxResolver {
                 if (attribute.isRefreshOnChange()) {
                     baseElementWidget.refreshProperties();
                 }
-                elementValueChanged(baseElementWidget, attribute, propertyChangeHandlers, value );  
+                elementValueChanged(baseElementWidget, attribute, propertyChangeHandlers, oldValue, value);  
             }
 
             @Override

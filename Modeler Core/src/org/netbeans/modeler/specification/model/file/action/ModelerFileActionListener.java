@@ -153,7 +153,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     scene.getModelerPanelTopComponent().requestActive();
                     NBModelerUtil.loadModelerFile(modelerFile);
 
-                    modelerFile.getModelerScene().init(); //color scehme depends on entitymapping
+                    modelerFile.getModelerScene().init(); //color scheme depends on entitymapping
 
                     modelerFile.loaded();
                 } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
@@ -165,9 +165,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
             }
 
         } catch (ProcessInterruptedException ex) {
-//            if (modelerFile != null) {
-//                modelerFile.handleException(ex);
-//            }
+            //skip
         } catch (Throwable t) {
             if (modelerFile != null) {
                 modelerFile.handleException(t);
@@ -197,8 +195,6 @@ public abstract class ModelerFileActionListener implements ActionListener {
         public void run() {
 
             try {
-//                long st = new Date().getTime();
-
                 modelerFile.getModelerDiagramModel().setDiagramModel(new DiagramModel(diagramModelConfig.id(), diagramModelConfig.name(), new SoftwareVersion(diagramModelConfig.version()), new SoftwareVersion(diagramModelConfig.architectureVersion())));
 
                 Class<? extends IModelerPanel> modelerPanel = diagramModelConfig.modelerPanel();

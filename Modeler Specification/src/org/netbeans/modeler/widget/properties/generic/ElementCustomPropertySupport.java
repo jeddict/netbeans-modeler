@@ -101,9 +101,10 @@ public class ElementCustomPropertySupport<T> extends PropertySupport.Reflection<
 
     @Override
     public void setValue(T t) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        T oldValue = getValue();
         super.setValue(t);
         if (propertyChangeListener != null) {
-            propertyChangeListener.changePerformed(t);
+            propertyChangeListener.changePerformed(oldValue, t);
         }
         modelerFile.getModelerPanelTopComponent().changePersistenceState(false);
 

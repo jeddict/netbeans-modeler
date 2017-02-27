@@ -244,6 +244,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     }
 
     public JLabel positionLabel;
+    private Boolean toolBarInitStatus;//incase cleanToolBar called before the buildToolBar e.g DB Modeler error handler close top-component at start and buildToolBar called later lazzly due to seperte thread
 
     /**
      *
@@ -251,6 +252,9 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
      */
     @Override
     public void buildToolBar(JToolBar bar) {
+        if(Boolean.FALSE.equals(toolBarInitStatus)){
+            return;
+        }
         buildSaveDocTool(bar);
         buildExportDocTool(bar);
         bar.add(new JToolBar.Separator());
@@ -262,6 +266,8 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         buildZoomTool(bar);
         bar.add(new JToolBar.Separator());
 
+        toolBarInitStatus = true;
+
 //        positionLabel = new JLabel();
 //        bar.add(positionLabel);
 //        bar.add(new JToolBar.Separator());
@@ -269,11 +275,17 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     @Override
     public void cleanToolBar(JToolBar bar) {
+        if(!Boolean.TRUE.equals(toolBarInitStatus)){
+            toolBarInitStatus = false;
+            return;
+        }
         selectToolButton.setAction(null);
         handToolButton.setAction(null);
         interactiveZoomButton.setAction(null);
         bar.removeAll();
         zoomManager.close();
+        
+        toolBarInitStatus = false;
     }
 
     protected void buildExportDocTool(JToolBar bar) {

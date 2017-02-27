@@ -233,7 +233,11 @@ public class ModelerFile {
     }
 
     public void handleException(Throwable throwable) {
-        getModelerDiagramModel().getExceptionHandler().handle(throwable, this);
+        if (getModelerDiagramModel().getExceptionHandler() != null) {
+            getModelerDiagramModel().getExceptionHandler().handle(throwable, this);
+        } else {
+            throwable.printStackTrace();
+        }
     }
 
     public void save() {

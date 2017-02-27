@@ -18,5 +18,5 @@ package org.netbeans.modeler.widget.properties.handler;
 @FunctionalInterface
 public interface PropertyChangeListener<T> {
 
-    void changePerformed(T value);
+    void changePerformed(T oldeValue, T value);
 }

@@ -346,6 +346,7 @@
                 <package>org.netbeans.modeler.util</package>
                 <package>org.netbeans.modeler.widget.connection.relation</package>
                 <package>org.netbeans.modeler.widget.context</package>
+                <package>org.netbeans.modeler.widget.design</package>
                 <package>org.netbeans.modeler.widget.edge</package>
                 <package>org.netbeans.modeler.widget.edge.info</package>
                 <package>org.netbeans.modeler.widget.node</package>

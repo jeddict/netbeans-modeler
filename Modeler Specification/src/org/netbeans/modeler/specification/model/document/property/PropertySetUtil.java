@@ -42,7 +42,7 @@ public class PropertySetUtil {
 
     public static PropertyChangeListener createPropertyChangeHandler(final ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
         final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
-        return (PropertyChangeListener) (Object value) -> {
+        return (oldValue, value) -> {
             Map vars = new HashMap();
             vars.put("root", root);
             vars.put("widget", baseElementWidget);
@@ -74,9 +74,9 @@ public class PropertySetUtil {
         };
     }
     
-        public static void elementValueChanged(IBaseElementWidget baseElementWidget, Attribute attribute, Map<String, PropertyChangeListener> propertyChangeHandlers, Object value) {
+    public static void elementValueChanged(IBaseElementWidget baseElementWidget, Attribute attribute, Map<String, PropertyChangeListener> propertyChangeHandlers, Object oldValue, Object value) {
         if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
-            propertyChangeHandlers.get(attribute.getId()).changePerformed(value);
+            propertyChangeHandlers.get(attribute.getId()).changePerformed(oldValue, value);
         }
         if (attribute.isRefreshOnChange()) {
             baseElementWidget.refreshProperties();
