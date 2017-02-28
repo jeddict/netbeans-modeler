@@ -438,13 +438,13 @@ public class ModelerFile {
     }
 
     /**
-     * @return the loaded
+     * @return the load
      */
     public boolean isLoaded() {
         return loaded;
     }
 
-    public void loaded() {
+    public void load() {
         if (loaded) {
             throw new IllegalStateException("Modeler File already loaded");
         }

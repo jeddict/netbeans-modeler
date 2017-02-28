@@ -204,7 +204,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         return map;
     }
 
-    private void initializeToolBar() {
+    public void initializeToolBar() {
         SwingUtilities.invokeLater(() -> {
             modelerFile.getModelerDiagramEngine().buildToolBar(editorToolbar);
         });
@@ -241,9 +241,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         } else {
             scrollPane.setViewportView(modelerScene.getView());
         }
-
-        initializeToolBar();
-    }// </editor-fold>
+    }
 
     @Override
     public void componentOpened() {
@@ -255,11 +253,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     @Override
     public void componentClosed() {
         super.componentClosed();
-//        WindowManager.getDefault().invokeWhenUIReady(() -> {
-//            RP.post(() -> {
-                cleanReference();
-//            });
-//        });
+        cleanReference();
     }
 
     private void cleanReference() {

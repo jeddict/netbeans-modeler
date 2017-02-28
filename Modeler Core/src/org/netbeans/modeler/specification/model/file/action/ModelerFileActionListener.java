@@ -128,7 +128,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     final ModelerConfig modelerConfig = (ModelerConfig) _class.getAnnotation(ModelerConfig.class);
                     final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig = (org.netbeans.modeler.specification.annotaton.DiagramModel) _class.getAnnotation(org.netbeans.modeler.specification.annotaton.DiagramModel.class);
 
-                    Class<? extends IModelerScene> modelerScene = diagramModelConfig.modelerScene();//ModelerScene
+                    Class<? extends IModelerScene> modelerScene = diagramModelConfig.modelerScene();
                     IModelerScene scene = modelerScene.newInstance();
                     scene.setModelerFile(modelerFile);
                     modelerFile.getModelerDiagramModel().setModelerScene(scene);
@@ -138,24 +138,17 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     new PaletteConfigExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
                     new InstanceExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();//Top Component
                     new DiagramEngineExecuter(latch, modelerFile, modelerConfig, diagramModelConfig).start();
-                    //1    260,   428      304
-                    //2    4180,  3314     3206
-                    //3    290,   364      348
-                    //4    1186,  2043     1076
-                    //5    3921,  2966     3022
-                    //===========================
-                    //final 4192,  3326     3214
-
                     latch.await();
+
                     initSpecification(modelerFile);
                     scene.getModelerPanelTopComponent().init(modelerFile);
                     scene.getModelerPanelTopComponent().open();
                     scene.getModelerPanelTopComponent().requestActive();
                     NBModelerUtil.loadModelerFile(modelerFile);
 
+                    scene.getModelerPanelTopComponent().initializeToolBar();
                     modelerFile.getModelerScene().init(); //color scheme depends on entitymapping
-
-                    modelerFile.loaded();
+                    modelerFile.load();
                 } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
                     modelerFile.handleException(ex);
                 }
@@ -165,7 +158,8 @@ public abstract class ModelerFileActionListener implements ActionListener {
             }
 
         } catch (ProcessInterruptedException ex) {
-            //skip
+            modelerFile.unload();
+            modelerFile.getModelerPanelTopComponent().close();
         } catch (Throwable t) {
             if (modelerFile != null) {
                 modelerFile.handleException(t);
@@ -178,10 +172,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
     class InstanceExecuter extends Thread {
 
-        private CountDownLatch latch;
-        private ModelerFile modelerFile;
-        private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
+        private final CountDownLatch latch;
+        private final ModelerFile modelerFile;
+        private final ModelerConfig modelerConfig;
+        private final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public InstanceExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
                  org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
@@ -238,10 +232,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
     class InitExecuter extends Thread {
 
-        private CountDownLatch latch;
-        private ModelerFile modelerFile;
-        private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
+        private final CountDownLatch latch;
+        private final ModelerFile modelerFile;
+        private final ModelerConfig modelerConfig;
+        private final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public InitExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
                 org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
@@ -263,11 +257,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
     class DiagramEngineExecuter extends Thread {
 
-        private CountDownLatch latch;
-
-        private ModelerFile modelerFile;
-        private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
+        private final CountDownLatch latch;
+        private final ModelerFile modelerFile;
+        private final ModelerConfig modelerConfig;
+        private final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public DiagramEngineExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
                 org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
@@ -307,11 +300,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
     class PaletteConfigExecuter extends Thread {
 
-        private CountDownLatch latch;
-
-        private ModelerFile modelerFile;
-        private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
+        private final CountDownLatch latch;
+        private final ModelerFile modelerFile;
+        private final ModelerConfig modelerConfig;
+        private final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public PaletteConfigExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
                 org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {
@@ -335,11 +327,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
 
     class ModelerUtilExecuter extends Thread {
 
-        private CountDownLatch latch;
-
-        private ModelerFile modelerFile;
-        private ModelerConfig modelerConfig;
-        private org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
+        private final CountDownLatch latch;
+        private final ModelerFile modelerFile;
+        private final ModelerConfig modelerConfig;
+        private final org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig;
 
         public ModelerUtilExecuter(CountDownLatch latch, ModelerFile modelerFile, ModelerConfig modelerConfig,
                 org.netbeans.modeler.specification.annotaton.DiagramModel diagramModelConfig) {

@@ -58,5 +58,5 @@ public interface IModelerPanel {
     
     void setToolTipText(String tooltip);
     
-    
+    void initializeToolBar();
 }
