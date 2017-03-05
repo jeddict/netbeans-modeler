@@ -35,6 +35,8 @@ public interface IModelerUtil<S extends IModelerScene> {
     void loadModelerFile(ModelerFile file) throws ProcessInterruptedException;
 
     void saveModelerFile(ModelerFile file);
+    
+    public String getContent(ModelerFile file);
 
     INodeWidget updateNodeWidgetDesign(ShapeDesign shapeDesign, INodeWidget nodeWidget);
 

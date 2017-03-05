@@ -456,12 +456,7 @@ public class ModelerFile {
     }
 
     public String getContent() {
-        try {
-            return new String(this.getFileObject().asBytes(), Charset.defaultCharset());
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-        return null;
+        return getModelerUtil().getContent(this);
     }
 
     public SoftwareVersion getCurrentVersion() {

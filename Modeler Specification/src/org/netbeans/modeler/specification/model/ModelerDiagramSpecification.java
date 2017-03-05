@@ -44,7 +44,7 @@ public class ModelerDiagramSpecification {
 
     private IExceptionHandler exceptionHandler;
     
-        private IPaletteConfig paletteConfig;
+    private IPaletteConfig paletteConfig;
     private ElementConfigFactory elementConfigFactory;
     private ModelerDocumentFactory modelerDocumentFactory;
 
