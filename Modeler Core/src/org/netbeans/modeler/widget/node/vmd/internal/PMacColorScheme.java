@@ -22,7 +22,6 @@ import java.awt.GradientPaint;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
-import java.awt.image.BufferedImage;
 import javax.swing.border.Border;
 import org.netbeans.api.visual.anchor.PointShape;
 import org.netbeans.api.visual.border.BorderFactory;
@@ -31,6 +30,7 @@ import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.border.ShadowBorder;
+import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
@@ -100,7 +100,7 @@ public class PMacColorScheme implements IColorScheme {
     }
 
     private PMacColorScheme() {
-        SCENE_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BACKGROUND.jpg"), new Rectangle(0, 0, 3812, 2362));
+        SCENE_BACKGROUND = new TexturePaint(ImageUtil.toBufferedImage(ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BACKGROUND.jpg")), new Rectangle(0, 0, 3812, 2362));
         OPAQUE_BORDER = BorderFactory.createOpaqueBorder(2, 8, 2, 8);
         BUTTON_G = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_G.png");
         BUTTON_Y = ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/BUTTON_Y.png");
@@ -115,9 +115,9 @@ public class PMacColorScheme implements IColorScheme {
         WIDGET_SELECT_BORDER_COLOR = new Color(230, 230, 230);
         WIDGET_HOVER_BORDER_COLOR = new Color(200, 200, 200);
 
-        WIDGET_HOVER_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_LIGHT.png"), new Rectangle(0, 0, 658, 61));
-        WIDGET_SELECT_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_DARK.png"), new Rectangle(0, 0, 658, 37));
-        WIDGET_BACKGROUND = new TexturePaint((BufferedImage) ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_AVG.png"), new Rectangle(0, 0, 660, 48));
+        WIDGET_HOVER_BACKGROUND = new TexturePaint(ImageUtil.toBufferedImage(ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_LIGHT.png")), new Rectangle(0, 0, 658, 61));
+        WIDGET_SELECT_BACKGROUND = new TexturePaint(ImageUtil.toBufferedImage(ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_DARK.png")), new Rectangle(0, 0, 658, 37));
+        WIDGET_BACKGROUND = new TexturePaint(ImageUtil.toBufferedImage(ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_AVG.png")), new Rectangle(0, 0, 660, 48));
 
         WIDGET_BORDER = new ShadowBorder(WIDGET_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
         WIDGET_SELECT_BORDER = new ShadowBorder(WIDGET_SELECT_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);

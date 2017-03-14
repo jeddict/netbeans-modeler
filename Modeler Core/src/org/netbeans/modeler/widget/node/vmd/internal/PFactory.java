@@ -33,7 +33,6 @@ public final class PFactory {
     private static final Map<Class<? extends IColorScheme>, IColorScheme> SCHEME = new HashMap<>();
 
     public static IColorScheme getColorScheme(Class<? extends IColorScheme> colorSchemeClass) {
-        SCHEME.clear();
         IColorScheme scheme = SCHEME.get(colorSchemeClass);
         if (scheme == null) {
             try {
