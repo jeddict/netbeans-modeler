@@ -459,6 +459,15 @@ public class ModelerFile {
         return getModelerUtil().getContent(this);
     }
 
+    public String getFileContent() {
+        try {
+            return new String(this.getFileObject().asBytes(), Charset.defaultCharset());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return null;
+    }
+    
     public SoftwareVersion getCurrentVersion() {
         return this.getModelerDiagramModel().getDiagramModel().getVersion();
     }
