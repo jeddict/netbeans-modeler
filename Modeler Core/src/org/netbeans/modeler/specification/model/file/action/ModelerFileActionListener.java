@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.SwingUtilities;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.component.ModelerPanelTopComponent;
@@ -40,7 +42,6 @@ import org.netbeans.modeler.specification.version.SoftwareVersion;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
-import org.openide.util.RequestProcessor;
 
 public abstract class ModelerFileActionListener implements ActionListener {
 
@@ -160,6 +161,13 @@ public abstract class ModelerFileActionListener implements ActionListener {
         } catch (ProcessInterruptedException ex) {
             modelerFile.unload();
             modelerFile.getModelerPanelTopComponent().close();
+            if (ex.getAfterInterruptionAction() != null) {
+//                ExecutorService executor = Executors.newSingleThreadExecutor();
+//                executor.execute(ex.getAfterInterruptionAction());
+//                executor.shutdown();
+            SwingUtilities.invokeLater(ex.getAfterInterruptionAction());
+                        }
+
         } catch (Throwable t) {
             if (modelerFile != null) {
                 modelerFile.handleException(t);

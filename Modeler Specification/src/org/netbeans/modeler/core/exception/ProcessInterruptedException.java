@@ -16,6 +16,8 @@
 package org.netbeans.modeler.core.exception;
 
 public class ProcessInterruptedException extends ModelerException {
+    
+    private Runnable afterInterruptionAction;
 
     /**
      * Creates a new instance of <code>ModelerException</code> without detail
@@ -33,4 +35,17 @@ public class ProcessInterruptedException extends ModelerException {
     public ProcessInterruptedException(String msg) {
         super(msg);
     }
+    
+    public ProcessInterruptedException(String msg, Runnable afterInterruptionAction) {
+        super(msg);
+        this.afterInterruptionAction = afterInterruptionAction;
+    }
+
+    /**
+     * @return the afterInterruptionAction
+     */
+    public Runnable getAfterInterruptionAction() {
+        return afterInterruptionAction;
+    }
+
 }
