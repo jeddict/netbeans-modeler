@@ -162,11 +162,8 @@ public abstract class ModelerFileActionListener implements ActionListener {
             modelerFile.unload();
             modelerFile.getModelerPanelTopComponent().close();
             if (ex.getAfterInterruptionAction() != null) {
-//                ExecutorService executor = Executors.newSingleThreadExecutor();
-//                executor.execute(ex.getAfterInterruptionAction());
-//                executor.shutdown();
-            SwingUtilities.invokeLater(ex.getAfterInterruptionAction());
-                        }
+                SwingUtilities.invokeLater(ex.getAfterInterruptionAction());
+            }
 
         } catch (Throwable t) {
             if (modelerFile != null) {
