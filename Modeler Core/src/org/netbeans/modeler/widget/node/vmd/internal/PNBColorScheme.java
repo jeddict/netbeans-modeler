@@ -127,9 +127,9 @@ public class PNBColorScheme implements IColorScheme {
         Widget header = widget.getHeader();
         header.setBackground(COLOR60_HOVER_BACKGROUND);
         header.setBorder(BORDER_PIN);
-        widget.getNodeNameWidget().setForeground(Color.BLACK);
-        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(Font.BOLD, 12));
-
+        widget.getNodeNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():Color.BLACK);
+        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+        
         Widget pinsSeparator = widget.getPinsSeparator();
         pinsSeparator.setForeground(BORDER_CATEGORY_BACKGROUND);
 
@@ -195,7 +195,9 @@ public class PNBColorScheme implements IColorScheme {
     public void installUI(IPinWidget widget) {
         widget.setBorder(BORDER_PIN);
         widget.setBackground(COLOR60_HOVER_BACKGROUND);
-        widget.getPinNameWidget().setForeground(Color.BLACK);
+        widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():Color.BLACK);
+        widget.getPinNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+    
     }
 
     @Override

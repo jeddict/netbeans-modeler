@@ -23,6 +23,7 @@ import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.widget.design.ITextDesign;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.IWidgetStateHandler;
@@ -137,4 +138,8 @@ public interface IPinWidget extends IWidget {
     void cleanReference();
     
     ImageWidget getImageWidget();
+        
+    ITextDesign getTextDesign();
+
+    void setTextDesign(ITextDesign textDesign);
 }

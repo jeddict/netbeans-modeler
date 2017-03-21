@@ -48,6 +48,8 @@ import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.IWidgetStateHandler;
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
 import org.netbeans.modeler.widget.state.WidgetStateHandler;
+import org.netbeans.modeler.widget.design.ITextDesign;
+import org.netbeans.modeler.widget.design.NodeTextDesign;
 
 /**
  *
@@ -61,29 +63,27 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     private final LabelWidget nameWidget;
     private final LabelWidget typeWidget;
     private final VMDGlyphSetWidget glyphSetWidget;
-
     private final SeparatorWidget pinsSeparator;
-
     private Map<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<>();
 
     private StateModel stateModel = new StateModel(2);
     private final PNodeAnchor nodeAnchor;
     private IColorScheme colorScheme;
+    private ITextDesign textDesign;
     private final IWidgetStateHandler stateHandler;
-
     private final WeakHashMap<Anchor, Anchor> proxyAnchorCache = new WeakHashMap<>();
 
-//    private boolean loaded;
     /**
      * Creates a node widget with a specific color scheme.
      *
      * @param scene the scene
-     * @param scheme the color scheme
+     * @param colorScheme the color scheme
      */
-    public AbstractPNodeWidget(Scene scene, IColorScheme scheme) {
+    public AbstractPNodeWidget(Scene scene, IColorScheme colorScheme, ITextDesign textDesign) {
         super(scene);
 
-        this.colorScheme = scheme;
+        this.colorScheme = colorScheme;
+        this.textDesign = textDesign;
         nodeAnchor = new PNodeAnchor(this, true);
 
         setLayout(LayoutFactory.createVerticalFlowLayout());
@@ -93,9 +93,9 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         header.setLayout(LayoutFactory.createHorizontalFlowLayout(LayoutFactory.SerialAlignment.CENTER, 8));
         addChild(header);
 
-        boolean right = scheme.isNodeMinimizeButtonOnRight(this);
+        boolean right = colorScheme.isNodeMinimizeButtonOnRight(this);
 
-        minimizeWidget = new ImageWidget(scene, scheme.getMinimizeWidgetImage(this));
+        minimizeWidget = new ImageWidget(scene, colorScheme.getMinimizeWidgetImage(this));
         minimizeWidget.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         minimizeWidget.getActions().addAction(new ToggleMinimizedAction());
         if (!right) {
@@ -107,7 +107,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         header.addChild(imageWidget);
 
         nameWidget = new LabelWidget(scene);
-//        nameWidget.setFont(scene.getDefaultFont().deriveFont(Font.BOLD));
         header.addChild(nameWidget);
 
         typeWidget = new LabelWidget(scene);
@@ -133,7 +132,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         stateModel = new StateModel();
         stateModel.addListener(this);
 
-        scheme.installUI(this);
+        colorScheme.installUI(this);
         notifyStateChanged(ObjectState.createNormal(), ObjectState.createNormal());
     }
 
@@ -497,7 +496,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         }
     }
 
-    /*__________________________________________VMDNodeWidget Impl End___________________________*/ /**
+    /**
      * @return the colorScheme
      */
     @Override
@@ -511,5 +510,24 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     @Override
     public void setColorScheme(IColorScheme colorScheme) {
         this.colorScheme = colorScheme;
+    }
+
+    /**
+     * @return the textDesign
+     */
+    @Override
+    public ITextDesign getTextDesign() {
+        if(textDesign == null){
+            textDesign = new NodeTextDesign();
+        }
+        return textDesign;
+    }
+
+    /**
+     * @param textDesign the textDesign to set
+     */
+    @Override
+    public void setTextDesign(ITextDesign textDesign) {
+        this.textDesign = textDesign;
     }
 }

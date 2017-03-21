@@ -139,8 +139,8 @@ public class PWoodColorScheme implements IColorScheme {
         header.setBackground(WIDGET_HOVER_BACKGROUND);
         header.setBorder(BORDER_PIN);
         widget.getHeader().setOpaque(true);
-        widget.getNodeNameWidget().setForeground(Color.WHITE);
-        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(Font.BOLD, 12));
+        widget.getNodeNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():Color.WHITE);
+        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
         Widget pinsSeparator = widget.getPinsSeparator();
         pinsSeparator.setForeground(PIN_SEPERATOR_WIDGET_BACKGROUND);
 
@@ -219,7 +219,9 @@ public class PWoodColorScheme implements IColorScheme {
     public void installUI(IPinWidget widget) {
         widget.setBorder(BORDER_PIN);
         widget.setBackground(PIN_WIDGET_HOVER_BACKGROUND);
-        widget.getPinNameWidget().setForeground(WIDGET_HOVER_BACKGROUND);
+        widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():WIDGET_HOVER_BACKGROUND);
+        widget.getPinNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+    
     }
 
     @Override
@@ -237,14 +239,18 @@ public class PWoodColorScheme implements IColorScheme {
             }
         }
 
-        if (state.isHovered() || state.isSelected()) {
-            widget.getPinNameWidget().setForeground(Color.WHITE);
+        if (widget.getTextDesign().getColor() == null) {
+            if (state.isHovered() || state.isSelected()) {
+                widget.getPinNameWidget().setForeground(Color.WHITE);
 //            widget.getPinNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(Font.BOLD));
-        } else {
-            widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT);
+            } else {
+                widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT);
 //            widget.getPinNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(Font.PLAIN));
+            }
+        } else {
+            widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor());
         }
-
+        
         if (state.isSelected()) {
             widget.setBorder(PIN_WIDGET_SELECT_BORDER);
         } else {

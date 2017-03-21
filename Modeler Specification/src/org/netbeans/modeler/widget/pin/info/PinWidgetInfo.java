@@ -17,28 +17,27 @@ package org.netbeans.modeler.widget.pin.info;
 
 import java.awt.Image;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
+import org.netbeans.modeler.widget.design.ITextDesign;
 
 public class PinWidgetInfo {
 
     private String id;
     private String name;
     private Image image;
-    // private String imagePath;
     private String documentId; // inplaceof ImodelerDocument to identify
     private IBaseElement baseElementSpec;
     private Boolean exist = false;
+    private ITextDesign textDesign;
 
     public PinWidgetInfo(String id,IBaseElement baseElementSpec, String documentId) {
         this.id = id;
         this.baseElementSpec=baseElementSpec;
         this.documentId = documentId;
-
     }
 
     public PinWidgetInfo(String id, String documentId) {
         this.id = id;
         this.documentId = documentId;
-
     }
 
     public PinWidgetInfo(String id,IBaseElement baseElementSpec) {
@@ -119,5 +118,19 @@ public class PinWidgetInfo {
      */
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
+    }
+
+    /**
+     * @return the textDesign
+     */
+    public ITextDesign getTextDesign() {
+        return textDesign;
+    }
+
+    /**
+     * @param textDesign the textDesign to set
+     */
+    public void setTextDesign(ITextDesign textDesign) {
+        this.textDesign = textDesign;
     }
 }

@@ -139,8 +139,8 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     }
 
     public PNodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
-        super((Scene) scene, ((IPModelerScene) scene).getColorScheme());
-        this.setModelerScene(scene);
+        super((Scene) scene, ((IPModelerScene) scene).getColorScheme(), nodeWidgetInfo.getNodeDesign());
+        this.scene = scene;
         this.nodeWidgetInfo = nodeWidgetInfo;
         setAnchorGap(0);
 
@@ -149,7 +149,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         getHeader().getActions().addAction(scene.createObjectHoverAction());
 
         setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
-
     }
 
     // Alternative to AbstractPModelerScene createPinWidget

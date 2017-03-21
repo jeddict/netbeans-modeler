@@ -26,6 +26,8 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.anchors.PNodeAnchor;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
+import org.netbeans.modeler.widget.design.ITextDesign;
+import org.netbeans.modeler.widget.design.PinTextDesign;
 import org.netbeans.modeler.widget.node.IWidgetStateHandler;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.state.WidgetStateHandler;
@@ -38,18 +40,19 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     private final VMDGlyphSetWidget glyphsWidget;
     private PNodeAnchor anchor;
     private final IWidgetStateHandler stateHandler;
+    private ITextDesign textDesign;
 
     /**
      * Creates a pin widget with a specific color scheme.
      *
      * @param scene the scene
-     * @param scheme the color scheme
+     * @param colorScheme the color scheme
      */
-    public AbstractPinWidget(Scene scene, IColorScheme scheme) {
+    public AbstractPinWidget(Scene scene, IColorScheme colorScheme, ITextDesign textDesign) {
         super(scene);
-        assert scheme != null;
-        this.colorScheme = scheme;
-
+        assert colorScheme != null;
+        this.colorScheme = colorScheme;
+        this.textDesign = textDesign;
         setLayout(LayoutFactory.createHorizontalFlowLayout(LayoutFactory.SerialAlignment.CENTER, 8));
 
         addChild(imageWidget = new AdvanceImageWidget(scene));
@@ -58,7 +61,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
         
         stateHandler = new WidgetStateHandler(imageWidget);
         
-        scheme.installUI(this);
+        colorScheme.installUI(this);
         notifyStateChanged(ObjectState.createNormal(), ObjectState.createNormal());
     }
 
@@ -182,4 +185,23 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
         return stateHandler;
     }
     
+    
+    /**
+     * @return the textDesign
+     */
+    @Override
+    public ITextDesign getTextDesign() {
+        if(textDesign == null){
+            textDesign = new PinTextDesign();
+        }
+        return textDesign;
+    }
+
+    /**
+     * @param textDesign the textDesign to set
+     */
+    @Override
+    public void setTextDesign(ITextDesign textDesign) {
+        this.textDesign = textDesign;
+    }
 }

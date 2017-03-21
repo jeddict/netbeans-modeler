@@ -90,6 +90,35 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
     private boolean anchorState = false;
     private static final Float HOVER_BORDER_WIDTH = 0.2F;
     private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<>();
+    private LabelManager labelManager;
+
+    public NodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
+        super(scene, nodeWidgetInfo.getNodeDesign());
+        this.setModelerScene(scene);
+
+        this.nodeWidgetInfo = nodeWidgetInfo;
+
+        IModelerDocument modelerDocument = nodeWidgetInfo.getModelerDocument();
+        Dimension dimension = new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue());
+        nodeWidgetInfo.setDimension(dimension);
+
+        this.setNodeImageWidget(new SvgNodeWidget(scene, this,
+                modelerDocument.generateDocument(),
+                new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue())));
+
+        NBModelerUtil.updateNodeWidgetDesign(new ShapeDesign(modelerDocument.getDocumentShapeDesign()), this);
+
+        setRangeConstraint();
+
+        setOpaque(false);
+        setLayout(LayoutFactory.createVerticalFlowLayout(LayoutFactory.SerialAlignment.LEFT_TOP, 1)); // use vertical layout
+
+        setChildConstraint(getNodeImageWidget(), 1);
+        setCheckClipping(true);
+
+        this.setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
+
+    }
 
     @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
@@ -142,35 +171,6 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         y = y < (int) bound.getHeight().getMax() ? y : (int) bound.getHeight().getMax();
         return new Dimension(x, y);
     }
-
-    public NodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
-        super(scene);
-        this.setModelerScene(scene);
-
-        this.nodeWidgetInfo = nodeWidgetInfo;
-
-        IModelerDocument modelerDocument = nodeWidgetInfo.getModelerDocument();
-        Dimension dimension = new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue());
-        nodeWidgetInfo.setDimension(dimension);
-
-        this.setNodeImageWidget(new SvgNodeWidget(scene, this,
-                modelerDocument.generateDocument(),
-                new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue())));
-
-        NBModelerUtil.updateNodeWidgetDesign(new ShapeDesign(modelerDocument.getDocumentShapeDesign()), this);
-
-        setRangeConstraint();
-
-        setOpaque(false);
-        setLayout(LayoutFactory.createVerticalFlowLayout(LayoutFactory.SerialAlignment.LEFT_TOP, 1)); // use vertical layout
-
-        setChildConstraint(getNodeImageWidget(), 1);
-        setCheckClipping(true);
-
-        this.setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
-
-    }
-    private LabelManager labelManager;
 
     @Override
     public void setLabel(String label) {

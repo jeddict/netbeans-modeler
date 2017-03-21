@@ -21,6 +21,7 @@ import java.awt.Point;
 import org.netbeans.modeler.config.document.IModelerDocument;
 import org.netbeans.modeler.config.palette.SubCategoryNodeConfig;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
+import org.netbeans.modeler.widget.design.ITextDesign;
 
 public class NodeWidgetInfo implements Cloneable {
 
@@ -33,6 +34,7 @@ public class NodeWidgetInfo implements Cloneable {
     private IModelerDocument modelerDocument;
     private IBaseElement baseElementSpec;
     private Boolean exist = false;//to Load Element
+    private ITextDesign  nodeDesign;
 
     public NodeWidgetInfo(String id, SubCategoryNodeConfig subCategoryNodeConfig, Point location) {
         this.id = id;
@@ -77,19 +79,6 @@ public class NodeWidgetInfo implements Cloneable {
         this.location = location;
     }
 
-//    /**
-//     * @return the imagePath
-//     */
-//    public String getImagePath() {
-//        return imagePath;
-//    }
-//
-//    /**
-//     * @param imagePath the imagePath to set
-//     */
-//    public void setImagePath(String imagePath) {
-//        this.imagePath = imagePath;
-//    }
     /**
      * @return the modelerDocument
      */
@@ -182,5 +171,19 @@ public class NodeWidgetInfo implements Cloneable {
      */
     public void setSubCategoryNodeConfig(SubCategoryNodeConfig subCategoryNodeConfig) {
         this.subCategoryNodeConfig = subCategoryNodeConfig;
+    }
+
+    /**
+     * @return the nodeDesign
+     */
+    public ITextDesign getNodeDesign() {
+        return nodeDesign;
+    }
+
+    /**
+     * @param nodeDesign the nodeDesign to set
+     */
+    public void setNodeDesign(ITextDesign nodeDesign) {
+        this.nodeDesign = nodeDesign;
     }
 }

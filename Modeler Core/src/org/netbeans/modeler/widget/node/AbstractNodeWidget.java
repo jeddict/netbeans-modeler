@@ -21,6 +21,8 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.widget.design.ITextDesign;
+import org.netbeans.modeler.widget.design.NodeTextDesign;
 import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 
 /**
@@ -29,20 +31,6 @@ import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
  */
 public abstract class AbstractNodeWidget extends Widget {
 
-    /**
-     * @param labelWidget the labelWidget to set
-     */
-//    public void setLabelWidget(LabelWidget labelWidget) {
-//        this.labelWidget = labelWidget;
-//    }
-    /**
-     * Returns the label widget part of the icon node widget.
-     *
-     * @return the label widget
-     */
-//    public LabelWidget getLabelWidget () {
-//        return labelWidget;
-//    }
     public static enum TextOrientation {
 
         BOTTOM_CENTER, RIGHT_CENTER
@@ -50,14 +38,16 @@ public abstract class AbstractNodeWidget extends Widget {
     }
 
     private SvgNodeWidget nodeImageWidget;
+    private ITextDesign textDesign;
 
     /**
      * Creates an icon node widget with bottom-center orientation.
      *
      * @param scene the scene
+     * @param textDesign
      */
-    public AbstractNodeWidget(IModelerScene scene) {
-        this(scene, TextOrientation.BOTTOM_CENTER);
+    public AbstractNodeWidget(IModelerScene scene, ITextDesign textDesign) {
+        this(scene, TextOrientation.BOTTOM_CENTER, textDesign);
     }
 
     /**
@@ -65,9 +55,12 @@ public abstract class AbstractNodeWidget extends Widget {
      *
      * @param scene the scene
      * @param orientation the text orientation
+     * @param textDesign
      */
-    public AbstractNodeWidget(IModelerScene scene, TextOrientation orientation) {
+    public AbstractNodeWidget(IModelerScene scene, TextOrientation orientation, ITextDesign textDesign) {
         super((Scene) scene);
+        this.textDesign = textDesign;
+        
         LookFeel lookFeel = getScene().getLookFeel();
 
         switch (orientation) {
@@ -133,6 +126,24 @@ public abstract class AbstractNodeWidget extends Widget {
      */
     public final SvgNodeWidget getNodeImageWidget() {
         return nodeImageWidget;
+    }
+    
+    
+    /**
+     * @return the textDesign
+     */
+    public ITextDesign getTextDesign() {
+        if(textDesign == null){
+            textDesign = new NodeTextDesign();
+        }
+        return textDesign;
+    }
+
+    /**
+     * @param textDesign the textDesign to set
+     */
+    public void setTextDesign(ITextDesign textDesign) {
+        this.textDesign = textDesign;
     }
 
 }

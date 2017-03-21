@@ -27,13 +27,13 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.netbeans.modeler.widget.design.ITextDesign;
 //import org.netbeans.modules.visual.border.ResizeBorder;
 
 public interface INodeWidget extends IWidget {
 
     public static final Border DEFAULT_BORDER = BorderFactory.createEmptyBorder(0);
 
-//    void setModelerScene(IModelerScene scene);
     public void setStatus(NodeWidgetStatus status);
 
     ElementPropertySet createVisualInnerPropertiesSet(ElementPropertySet elementPropertySet) throws NoSuchMethodException, NoSuchFieldException;
@@ -111,4 +111,9 @@ public interface INodeWidget extends IWidget {
     void cleanReference();
     
     IWidgetStateHandler getWidgetStateHandler();
+        
+    ITextDesign getTextDesign();
+
+    void setTextDesign(ITextDesign textDesign);
+    
 }

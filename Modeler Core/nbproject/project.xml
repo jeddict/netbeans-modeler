@@ -217,6 +217,7 @@
                 <package>org.netbeans.modeler.widget.context.action</package>
                 <package>org.netbeans.modeler.widget.context.base</package>
                 <package>org.netbeans.modeler.widget.context.ui</package>
+                <package>org.netbeans.modeler.widget.design</package>
                 <package>org.netbeans.modeler.widget.edge</package>
                 <package>org.netbeans.modeler.widget.edge.vmd</package>
                 <package>org.netbeans.modeler.widget.node</package>

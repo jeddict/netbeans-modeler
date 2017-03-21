@@ -30,6 +30,7 @@ import org.netbeans.modeler.widget.context.ContextPaletteManager;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;

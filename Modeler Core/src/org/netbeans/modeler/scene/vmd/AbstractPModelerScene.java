@@ -79,6 +79,7 @@ import org.netbeans.modeler.widget.edge.IPEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.node.vmd.PNodeWidget;
 import org.netbeans.modeler.widget.pin.IPinSeperatorWidget;
@@ -112,7 +113,6 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     private ContextPaletteManager paletteManager = null;
     // Lookup Data
     private InstanceContent lookupContent = new InstanceContent();
-//    private AbstractLookup lookup = new AbstractLookup(lookupContent);
     private ArrayList< IFlowElementWidget> lockedSelected = new ArrayList< IFlowElementWidget>();
     private INodeWidget validNodeWidget;
     private INodeWidget invalidNodeWidget;
@@ -554,6 +554,10 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         }
     }
 
+    public void reinstallColorScheme(IWidget widget){
+        reinstallColorScheme((Widget)widget, this.getColorScheme());
+    }
+    
     private void reinstallColorScheme(Widget widget, IColorScheme scheme) {
         if (widget instanceof IPNodeWidget) {//PNodeAnchor implements skipped
             IPNodeWidget nodeWidget = (IPNodeWidget) widget;

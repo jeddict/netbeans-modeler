@@ -46,13 +46,13 @@ import org.openide.NotifyDescriptor;
 public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWidget {
 
     private IPNodeWidget nodeWidget;
-    private PinWidgetInfo pinWidgetInfo;
+    private final PinWidgetInfo pinWidgetInfo;
     private boolean activeStatus = true;
     private boolean highlightStatus = false;
-    private InplaceEditorAction editAction;
+    private final InplaceEditorAction editAction;
 
     public PinWidget(S scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
-        super((Scene) scene, scene.getColorScheme());
+        super((Scene) scene, scene.getColorScheme(), pinWidgetInfo.getTextDesign());
         this.setModelerScene(scene);
         this.pinWidgetInfo = pinWidgetInfo;
         this.nodeWidget = nodeWidget;
