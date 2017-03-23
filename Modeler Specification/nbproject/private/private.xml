@@ -18,8 +18,6 @@
             <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/core/ModelerFile.java</file>
             <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/document/IModelerDocument.java</file>
         </group>
-        <group>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/core/exception/ProcessInterruptedException.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
