@@ -257,6 +257,11 @@ public class ElementPropertySet {
       public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object) {
         createPropertySet(groupId,category,baseElementWidget, object, null, null, true, false);
     }
+      
+    public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object,
+            final Map<String, PropertyChangeListener> propertyChangeHandlers) {
+        createPropertySet(groupId,category,baseElementWidget, object, propertyChangeHandlers, null, true, false);
+    }
     
 
     public void createPropertySet(IBaseElementWidget baseElementWidget, final Object object,
