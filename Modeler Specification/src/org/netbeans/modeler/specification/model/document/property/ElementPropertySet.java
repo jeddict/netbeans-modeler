@@ -254,9 +254,8 @@ public class ElementPropertySet {
     * Filter using category
       category used when object have more than one child of same type
     */
-      public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object,
-            final Map<String, PropertyChangeListener> propertyChangeHandlers) {
-        createPropertySet(groupId,category,baseElementWidget, object, propertyChangeHandlers, null, true, false);
+      public void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object) {
+        createPropertySet(groupId,category,baseElementWidget, object, null, null, true, false);
     }
     
 
@@ -284,7 +283,6 @@ public class ElementPropertySet {
     }
 
     private void createPropertySet(String groupId,String category, IBaseElementWidget baseElementWidget, final Object object, final Map<String, PropertyChangeListener> propertyChangeHandlers, final Map<String, PropertyVisibilityHandler> propertyVisiblityHandlers, boolean inherit, boolean replaceProperty) {
-
         ElementConfigFactory elementConfigFactory = modelerFile.getModelerDiagramModel().getElementConfigFactory();
         if (inherit) {
             for (Element element : elementConfigFactory.getElements(category,object.getClass())) {
