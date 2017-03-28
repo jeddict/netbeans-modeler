@@ -1,5 +1,5 @@
 /**
- * Copyright [2014] Gaurav Gupta
+ * Copyright [2017] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,25 +15,91 @@
  */
 package org.netbeans.modeler.properties.nentity;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-public interface NEntityDataListener {
+public class NEntityDataListener<T> implements INEntityDataListener {
 
-    void initData();
+    private List<Object[]> data;  //object[] represent row
+    private int count;
+    private final Collection<T> inputData; //T represent row
+    private final Function<T,List> displayDataFunction;
+    private BiConsumer<T, Object[]> onSaveRowCallBack;
+    private Runnable onSaveTableCallBack;
 
-    void initCount();
+    public NEntityDataListener(Collection<T> inputData, Function<T,List> displayDataFunction) {
+        this.inputData = inputData;
+        this.displayDataFunction = displayDataFunction;
+    }
 
-    int getCount();
+    public NEntityDataListener(Collection<T> inputData, Function<T, List> displayDataFunction, BiConsumer<T, Object[]> onSaveRowCallBack) {
+        this.inputData = inputData;
+        this.displayDataFunction = displayDataFunction;
+        this.onSaveRowCallBack = onSaveRowCallBack;
+    }
 
-    List<Object[]> getData();
+    public NEntityDataListener(Collection<T> inputData, Function<T, List> displayDataFunction, BiConsumer<T, Object[]> onSaveRowCallBack, Runnable onSaveTableCallBack) {
+        this.inputData = inputData;
+        this.displayDataFunction = displayDataFunction;
+        this.onSaveRowCallBack = onSaveRowCallBack;
+        this.onSaveTableCallBack = onSaveTableCallBack;
+    }
+    
+    
+    
+    @Override
+    public void initCount() {
+        count = inputData.size();
+    }
 
-    void setData(List<Object[]> data);
+    @Override
+    public int getCount() {
+        return count;
+    }
 
-//    List<T> getEntities();
-//
-//    void setEntities(List<T> entities);
-//
-//    Object[] getRow(T entity);
-//
-//    T getEntity(Object[] row);
+    @Override
+    public void initData() {
+        List<Object[]> data_local = new LinkedList<>();
+        Iterator<? extends T> itr = inputData.iterator();
+        while (itr.hasNext()) {
+            T t = itr.next();
+            List displayData = displayDataFunction.apply(t);
+            Object[] row = new Object[displayData.size() + 1];
+            row[0] = t;//reserved hidden column for object row-0
+            for (int i = 1; i < displayData.size()+1; i++) { //row-1 to row-n
+                row[i] = displayData.get(i - 1);
+            }
+            data_local.add(row);
+        }
+        this.data = data_local;
+    }
+
+    @Override
+    public List<Object[]> getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(List<Object[]> data) {
+        inputData.clear();
+        data.stream().forEach((row) -> {
+            T t = (T) row[0];
+            if(onSaveRowCallBack!=null){
+                onSaveRowCallBack.accept(t, row);
+            }
+            inputData.add(t);
+        });
+        if(onSaveTableCallBack!=null){
+            onSaveTableCallBack.run();
+        }
+        this.data = data;
+    }
+    
+       
+    
+
 }

@@ -98,6 +98,7 @@
             </module-dependencies>
             <public-packages>
                 <package>org.netbeans.modeler.node</package>
+                <package>org.netbeans.modeler.properties</package>
                 <package>org.netbeans.modeler.properties.editor.documentation</package>
                 <package>org.netbeans.modeler.properties.embedded</package>
                 <package>org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity</package>

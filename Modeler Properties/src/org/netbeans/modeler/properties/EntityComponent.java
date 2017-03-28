@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.netbeans.modeler.properties.entity.custom.editor.combobox.internal;
+package org.netbeans.modeler.properties;
 
 import java.awt.Component;
 import java.awt.Frame;

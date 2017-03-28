@@ -17,7 +17,7 @@ package org.netbeans.modeler.properties.nentity;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
+import org.netbeans.modeler.properties.EntityComponent;
 
 public class NAttributeEntity {
 
@@ -30,7 +30,7 @@ public class NAttributeEntity {
     private Table table = new Table(430, 350);
     private List<Column> columns = new ArrayList<>();
     private EntityComponent customDialog;
-    private NEntityDataListener tableDataListener;
+    private INEntityDataListener tableDataListener;
 
     public NAttributeEntity(String name, String displayName, String shortDescription) {
         this.name = name;
@@ -123,7 +123,7 @@ public class NAttributeEntity {
     }
 
     public List<Class> getColumnsType() {
-        List<Class> types = new ArrayList<Class>();
+        List<Class> types = new ArrayList<>();
         for (Column column : columns) {
             types.add(column.getClassType());
         }
@@ -134,7 +134,9 @@ public class NAttributeEntity {
      * @param columns the columns to set
      */
     public void setColumns(List<Column> columns) {
-        this.columns = columns;
+        this.columns = new ArrayList<>();
+        this.columns.add(new Column("OBJECT", false, true, Object.class));
+        this.columns.addAll(columns);
     }
 
     /**
@@ -154,14 +156,14 @@ public class NAttributeEntity {
     /**
      * @return the tableDataListener
      */
-    public NEntityDataListener getTableDataListener() {
+    public INEntityDataListener getTableDataListener() {
         return tableDataListener;
     }
 
     /**
      * @param tableDataListener the tableDataListener to set
      */
-    public void setTableDataListener(NEntityDataListener tableDataListener) {
+    public void setTableDataListener(INEntityDataListener tableDataListener) {
         this.tableDataListener = tableDataListener;
     }
 
@@ -179,6 +181,14 @@ public class NAttributeEntity {
         this.countDisplay = countDisplay;
     }
 
+//    /**
+//     * @param countDisplay the countDisplay to set
+//     */
+//    public void setCountDisplay(String countDisplay) {
+//        this.countDisplay = new String[]{String.format("No %s exist", English.plural(countDisplay)),
+//            String.format("One %s exist", countDisplay), String.format("%s exist", English.plural(countDisplay))};
+//    }
+    
     /**
      * @return the table
      */

@@ -18,7 +18,7 @@ package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.lis
 import javax.swing.JOptionPane;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
-import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
+import org.netbeans.modeler.properties.EntityComponent;
 import org.openide.windows.WindowManager;
 
 public class JComboBoxPanel extends javax.swing.JPanel {

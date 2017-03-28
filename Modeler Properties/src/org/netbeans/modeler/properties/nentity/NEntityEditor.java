@@ -31,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.RowValue;
-import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
+import org.netbeans.modeler.properties.EntityComponent;
 import org.openide.explorer.propertysheet.PropertyEnv;
 
 public class NEntityEditor extends JPanel implements PropertyChangeListener {

@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
-import org.netbeans.modeler.properties.entity.custom.editor.combobox.internal.EntityComponent;
+import org.netbeans.modeler.properties.EntityComponent;
 
     /**
      * ActionHandler handler provides 2 options :
