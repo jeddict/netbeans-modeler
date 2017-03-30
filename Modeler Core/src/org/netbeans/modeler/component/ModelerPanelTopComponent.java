@@ -256,21 +256,23 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
     private void cleanReference() {
         if (this.getModelerFile() != null) {
-            ModelerCore.removeModelerFile(this.getModelerFile().getPath());
+            ModelerCore.removeModelerFile(this.getModelerFile());
         }
-        modelerScene.cleanReference();
+        SwingUtilities.invokeLater(() -> {
+            modelerScene.cleanReference();
 
-        for (KeyListener keyListener : this.getKeyListeners()) {
-            this.removeKeyListener(keyListener);
-        }
-        modelerFile.getModelerDiagramEngine().cleanToolBar(editorToolbar);
-        cleanLookup();
+            for (KeyListener keyListener : this.getKeyListeners()) {
+                this.removeKeyListener(keyListener);
+            }
+            modelerFile.getModelerDiagramEngine().cleanToolBar(editorToolbar);
+            cleanLookup();
 
-        modelerFile.getModelerFileDataObject().removeSaveCookie();
-        modelerFile.setModelerDiagramModel(null);
-        modelerScene.getBaseElements().clear();
-        modelerScene.setBaseElementSpec(null);
-        System.gc();
+            modelerFile.getModelerFileDataObject().removeSaveCookie();
+            modelerFile.setModelerDiagramModel(null);
+            modelerScene.getBaseElements().clear();
+            modelerScene.setBaseElementSpec(null);
+            System.gc();
+        });
     }
 
     @Override

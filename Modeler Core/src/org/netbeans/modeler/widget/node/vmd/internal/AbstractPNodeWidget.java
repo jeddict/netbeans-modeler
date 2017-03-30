@@ -350,7 +350,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * widgets as value
      */
     @Override
-    public void sortPins(Map<String, List<Widget>> pinsCategories) {//gg sync
+    public void sortPins(Map<String, List<Widget>> pinsCategories) {
 
         List<Widget> previousPins = getPinWidgets();
         List<Widget> unresolvedPins = new ArrayList<>(previousPins);
@@ -363,9 +363,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         }
 
         ArrayList<String> unusedCategories = new ArrayList<String>(pinCategoryWidgets.keySet());
-
         ArrayList<String> categoryNames = new ArrayList<String>(pinsCategories.keySet());
-//        Collections.sort(categoryNames);
 
         ArrayList<Widget> newWidgets = new ArrayList<Widget>();
         for (String categoryName : categoryNames) {
@@ -392,7 +390,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
 
         removeChildren(previousPins);
         addChildren(newWidgets);
-        ((AbstractPModelerScene) this.getScene()).validateComponent();//.validateComponent();
+        ((AbstractPModelerScene) this.getScene()).validateComponent();
     }
 
     private IPinSeperatorWidget createPinCategoryWidget(String categoryDisplayName) {

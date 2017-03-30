@@ -17,10 +17,9 @@ package org.netbeans.modeler.specification.model.file.action;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.swing.SwingUtilities;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.component.ModelerPanelTopComponent;
@@ -83,6 +82,8 @@ public abstract class ModelerFileActionListener implements ActionListener {
     }
     
     public void openModelerFile(String id, String name, String tooltip, ModelerFile parentFile, Map<String, Object> attributes) { //id :=> if file contains multiple modeler file then each modeler file dom has own that represent it as an single modeler file
+        long st = new Date().getTime();
+        
         ModelerFile modelerFile = null;
         try {
             if (context == null) {
@@ -146,10 +147,11 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     scene.getModelerPanelTopComponent().open();
                     scene.getModelerPanelTopComponent().requestActive();
                     NBModelerUtil.loadModelerFile(modelerFile);
-
+                    
                     scene.getModelerPanelTopComponent().initializeToolBar();
                     modelerFile.getModelerScene().init(); //color scheme depends on entitymapping
                     modelerFile.load();
+                    System.out.println("MFA Total time : " + (new Date().getTime() - st) + " ms");
                 } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
                     modelerFile.handleException(ex);
                 }

@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -88,6 +89,7 @@ import org.netbeans.modeler.widget.pin.PinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.openide.util.RequestProcessor;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.WindowManager;
 
@@ -196,7 +198,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         Widget widget = (Widget) this.getModelerFile().getModelerUtil().attachNodeWidget(this, widgetInfo);
         this.getMainLayer().addChild(widget);
         this.setFocusedWidget(widget);
-        this.validateComponent();
+        this.validateComponent();//#60
         if (widget instanceof IBaseElementWidget) {
             ((IBaseElementWidget) widget).setId(widgetInfo.getId());
             this.createBaseElement((IBaseElementWidget) widget);
@@ -222,7 +224,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         edgeWidget.setControlPointShape(PointShape.SQUARE_FILLED_SMALL);
         edgeWidget.setRouter(getRouter());
         this.setFocusedWidget((Widget) edgeWidget);
-        this.validateComponent();
+        this.validateComponent();//#60
         if (edgeWidget instanceof IBaseElementWidget) {
             ((IBaseElementWidget) edgeWidget).setId(widgetInfo.getId());
             this.createBaseElement((IBaseElementWidget) edgeWidget);
@@ -977,21 +979,23 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     }
 
     public void validateComponent() {
-//        if(!isSceneGenerating()){
-//          synchronized(AbstractPModelerScene.class){
-        this.validate();
-//          }
-//        }
+        if(!isSceneGenerating()){
+            long st = new Date().getTime();
+            this.validate();
+            System.out.println("validateComponent Total time : " + (new Date().getTime() - st) + " ms");
+        }
     }
-    private boolean sceneGeneration = false; //to improve the effciency and thread-safety in parrallel processing of ui generation (scene.validate() called at the end instead of after each element creation)
+    private boolean sceneGeneration; //to improve the effciency and thread-safety in parrallel processing of ui generation (scene.validate() called at the end instead of after each element creation)
 
     public void startSceneGeneration() {
         sceneGeneration = true;
     }
 
     public void commitSceneGeneration() {
-        sceneGeneration = true;
-        validateComponent();
+        sceneGeneration = false;
+        RequestProcessor.getDefault().post(() -> {
+            validateComponent();
+        });
     }
 
     public boolean isSceneGenerating() {

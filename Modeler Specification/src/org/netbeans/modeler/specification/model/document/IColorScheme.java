@@ -16,6 +16,7 @@
 package org.netbeans.modeler.specification.model.document;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.IPEdgeWidget;
@@ -25,6 +26,7 @@ import org.netbeans.modeler.widget.pin.IPinWidget;
 
 public interface IColorScheme {
 
+    Rectangle HEADER_BOUND = new Rectangle(0,0,200,20);
     /**
      * Called to install UI to a node widget.
      *

@@ -52,5 +52,9 @@ public class ModelerCore {
     public static void removeModelerFile(String key) {
         ModelerCore.modelerFiles.remove(key);
     }
+    
+    public static void removeModelerFile(ModelerFile modelerFile) {
+        ModelerCore.modelerFiles.remove(modelerFile.getPath());
+    }
 
 }

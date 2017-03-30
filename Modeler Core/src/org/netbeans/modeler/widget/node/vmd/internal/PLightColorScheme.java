@@ -151,10 +151,11 @@ public class PLightColorScheme implements IColorScheme {
         widget.setBorder(WIDGET_BORDER);
         Widget header = widget.getHeader();
         Rectangle bound = widget.getHeader().getBounds();
-        if (bound != null) {
-            GradientPaint gp = new GradientPaint(bound.x + bound.width / 2, bound.y, WIDGET_LBACKGROUND, bound.x + bound.width / 2, bound.y + bound.height, WIDGET_BACKGROUND);
-            header.setBackground(gp);
+        if (bound == null) {
+            bound = HEADER_BOUND;
         }
+        GradientPaint gp = new GradientPaint(bound.x + bound.width / 2, bound.y, WIDGET_LBACKGROUND, bound.x + bound.width / 2, bound.y + bound.height, WIDGET_BACKGROUND);
+        header.setBackground(gp);  
         header.setBorder(OPAQUE_BORDER);
         widget.getHeader().setOpaque(true);
         widget.getNodeNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():WIDGET_TEXT_COLOR);
