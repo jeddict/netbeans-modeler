@@ -27,16 +27,16 @@ import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 
 public class PropertySetUtil {
-    
+
     public static PropertyVisibilityHandler createPropertyVisibilityHandler(ModelerFile modelerFile, final IBaseElementWidget baseElementWidget, final Object object, final Serializable exp) {
-        final IRootElement root = (IRootElement)modelerFile.getModelerScene().getBaseElementSpec();
+        final IRootElement root = (IRootElement) modelerFile.getModelerScene().getBaseElementSpec();
         return (PropertyVisibilityHandler) () -> {
             Map vars = new HashMap();
             vars.put("root", root);
             vars.put("widget", baseElementWidget);
             vars.put("_this", object);
             vars.put("node", baseElementWidget.getBaseElementSpec());
-            return (Boolean) MVEL.executeExpression(exp, vars);
+                return (Boolean) MVEL.executeExpression(exp, vars);
         };
     }
 
@@ -50,7 +50,7 @@ public class PropertySetUtil {
             vars.put("node", baseElementWidget.getBaseElementSpec());
             vars.put("value", value);
             vars.put("scene", modelerFile.getModelerScene());
-            MVEL.executeExpression(exp, vars);
+                MVEL.executeExpression(exp, vars);
         };
     }
 
@@ -60,7 +60,7 @@ public class PropertySetUtil {
             Map vars = new HashMap();
             vars.put("root", root);
             vars.put("widget", object);
-            return (Boolean) MVEL.executeExpression(MVEL.compileExpression(exp), vars);
+                return (Boolean) MVEL.executeExpression(MVEL.compileExpression(exp), vars);
         };
     }
 
@@ -70,10 +70,10 @@ public class PropertySetUtil {
             Map vars = new HashMap();
             vars.put("root", root);
             vars.put("widget", object);
-            return (Boolean) MVEL.executeExpression(exp, vars);
+                return (Boolean) MVEL.executeExpression(exp, vars);
         };
     }
-    
+
     public static void elementValueChanged(IBaseElementWidget baseElementWidget, Attribute attribute, Map<String, PropertyChangeListener> propertyChangeHandlers, Object oldValue, Object value) {
         if (propertyChangeHandlers != null && propertyChangeHandlers.get(attribute.getId()) != null) {
             propertyChangeHandlers.get(attribute.getId()).changePerformed(oldValue, value);

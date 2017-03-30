@@ -993,9 +993,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
     public void commitSceneGeneration() {
         sceneGeneration = false;
-        RequestProcessor.getDefault().post(() -> {
-            validateComponent();
-        });
+        validateComponent();
     }
 
     public boolean isSceneGenerating() {
