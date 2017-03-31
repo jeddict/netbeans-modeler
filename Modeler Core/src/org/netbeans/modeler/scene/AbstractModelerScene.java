@@ -131,7 +131,6 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
 //          router = RouterFactory.createOrthogonalSearchRouter(mainLayer);
 
         satelliteView = this.createSatelliteView();
-
         //  idGenerator = new UltraSimpleIdGenerator();
         setActiveTool(DesignerTools.SELECT);
 // Zoom Action
@@ -284,7 +283,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     public JComponent getSatelliteView() {
         return satelliteView;
     }
-
+    
     public void setContextPaletteManager(ContextPaletteManager manager) {
         if (paletteManager != null) {
             removeFromLookup(paletteManager);

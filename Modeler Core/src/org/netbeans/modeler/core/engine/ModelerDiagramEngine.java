@@ -78,10 +78,6 @@ import org.openide.windows.WindowManager;
 public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     protected ModelerFile file;
-    private static final WidgetAction NODE_DELETE_ACTION = new NodeDeleteAction();
-    private static final WidgetAction EDGE_DELETE_ACTION = new EdgeDeleteAction();
-    private static final WidgetAction PIN_DELETE_ACTION = new PinDeleteAction();
-
     protected AlignStrategyProvider ALIGNSTRATEGY_PROVIDER;
 
     protected static final MoveProvider MOVE_PROVIDER_DEFAULT = new MoveProvider() {

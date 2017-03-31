@@ -125,10 +125,6 @@ public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidg
 
     JComponent getSatelliteView();
     
-    JComponent getTreeView();
-    
-    JComponent createTreeView();
-    
     /* GraphScene & GraphPinScene */
     boolean isNode(Object object);
 

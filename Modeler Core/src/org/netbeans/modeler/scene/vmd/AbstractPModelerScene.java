@@ -376,7 +376,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     public JComponent getSatelliteView() {
         return satelliteView;
     }
-
+    
     public void setContextPaletteManager(ContextPaletteManager manager) {
         if (paletteManager != null) {
             removeFromLookup(paletteManager);
@@ -996,7 +996,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         validateComponent();
     }
 
-    public boolean isSceneGenerating() {
+    public boolean isSceneGenerating() {//bound is not available if true
         return sceneGeneration;
     }
 

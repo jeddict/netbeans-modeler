@@ -52,7 +52,7 @@ public class DiagramNavigatorContent extends JPanel implements PropertyChangeLis
             }
         });
     }
-
+    
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String property = evt.getPropertyName();
