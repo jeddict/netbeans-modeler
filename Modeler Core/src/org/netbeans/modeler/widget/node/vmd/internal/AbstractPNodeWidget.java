@@ -189,6 +189,9 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     @Override
     public void stateChanged() {
         boolean minimized = stateModel.getBooleanState();
+        if(this.getModelerScene().isSceneGenerating()){
+            return;
+        }
         Rectangle rectangle = minimized ? new Rectangle(0, 0, (int) getBounds().getWidth(), 0) : null;  //getBounds().getWidth() dont need to change width
         for (Widget widget : getChildren()) {
             if (widget != header && widget != pinsSeparator) {

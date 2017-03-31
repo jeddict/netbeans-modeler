@@ -124,7 +124,11 @@ public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidg
     void setLabelLayer(LayerWidget labelLayer);
 
     JComponent getSatelliteView();
-
+    
+    JComponent getTreeView();
+    
+    JComponent createTreeView();
+    
     /* GraphScene & GraphPinScene */
     boolean isNode(Object object);
 
@@ -155,4 +159,6 @@ public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidg
     IPropertyManager getPropertyManager();
     
     void cleanReference();
+    
+    boolean isSceneGenerating();
 }
