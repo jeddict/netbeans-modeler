@@ -397,7 +397,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         Rectangle visibleRect = scene.getView().getVisibleRect();
         visibleRect.x = (int) widget.getLocation().getX() - visibleRect.width / 2 + widget.getBounds().width / 2;
         visibleRect.y = (int) widget.getLocation().getY() - visibleRect.height / 2 + widget.getBounds().height / 4;
-        scene.getView().scrollRectToVisible(visibleRect);
+        scene.getView().scrollRectToVisible(scene.convertSceneToView(scene.convertLocalToScene(visibleRect)));
         NODE_WIDGET_SELECT_PROVIDER.select((Widget) widget, null, false);
         scene.setFocusedWidget((Widget) widget);
     }
