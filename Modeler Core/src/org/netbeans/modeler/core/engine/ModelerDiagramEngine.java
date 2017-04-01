@@ -18,6 +18,7 @@ package org.netbeans.modeler.core.engine;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.ButtonGroup;
@@ -38,12 +39,9 @@ import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.actions.CustomAcceptProvider;
 import org.netbeans.modeler.actions.CyclePinFocusAction;
 import org.netbeans.modeler.actions.CyclePinFocusProvider;
-import org.netbeans.modeler.actions.EdgeDeleteAction;
 import org.netbeans.modeler.actions.InteractiveZoomAction;
 import org.netbeans.modeler.actions.LockSelectionAction;
-import org.netbeans.modeler.actions.NodeDeleteAction;
 import org.netbeans.modeler.actions.PanAction;
-import org.netbeans.modeler.actions.PinDeleteAction;
 import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
 import org.netbeans.modeler.actions.ZoomManager;
 import org.netbeans.modeler.actions.ZoomManager.ZoomEvent;
@@ -62,6 +60,7 @@ import org.netbeans.modeler.provider.connection.controlpoint.MoveControlPointAct
 import org.netbeans.modeler.provider.node.move.AlignStrategyProvider;
 import org.netbeans.modeler.provider.node.move.MoveAction;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
+import org.netbeans.modeler.search.SearchDialog;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.tool.DesignerTools;
 import org.netbeans.modeler.tool.DiagramSelectToolAction;
@@ -251,6 +250,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         buildExportDocTool(bar);
         bar.add(new JToolBar.Separator());
         buildSatelliteTool(bar);
+        buildSearchTool(bar);
         buildReRouteTool(bar);
         bar.add(new JToolBar.Separator());
         buildSelectTool(bar);
@@ -298,6 +298,15 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
                 file.getModelerScene().autoLayout();
                 file.getModelerPanelTopComponent().changePersistenceState(false);
             }
+        });
+    }
+    
+    protected void buildSearchTool(JToolBar bar) {
+        JButton reRouteButton = new JButton(ImageUtil.getInstance().getIcon("search.png"));
+        reRouteButton.setToolTipText("Search");
+        bar.add(reRouteButton);
+        reRouteButton.addActionListener((ActionEvent e) -> {
+            searchWidget();
         });
     }
 
@@ -369,6 +378,28 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         bar.add(selectToolButton);
         bar.add(handToolButton);
         bar.add(interactiveZoomButton);
+    }
+    
+    @Override
+    public void searchWidget(){
+        IModelerScene scene =file.getModelerScene();
+        final SearchDialog searchDialog = new SearchDialog(scene);
+        searchDialog.setVisible(true);
+        INodeWidget widget = searchDialog.getValue();
+        if (widget != null) {
+            moveToWidget(widget);
+        }
+    }
+    
+    @Override
+    public void moveToWidget(INodeWidget widget) {
+        IModelerScene scene = file.getModelerScene();
+        Rectangle visibleRect = scene.getView().getVisibleRect();
+        visibleRect.x = (int) widget.getLocation().getX() - visibleRect.width / 2 + widget.getBounds().width / 2;
+        visibleRect.y = (int) widget.getLocation().getY() - visibleRect.height / 2 + widget.getBounds().height / 4;
+        scene.getView().scrollRectToVisible(visibleRect);
+        NODE_WIDGET_SELECT_PROVIDER.select((Widget) widget, null, false);
+        scene.setFocusedWidget((Widget) widget);
     }
 
     /**
