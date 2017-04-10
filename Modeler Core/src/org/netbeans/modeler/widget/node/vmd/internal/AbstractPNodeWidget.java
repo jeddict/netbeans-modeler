@@ -78,6 +78,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      *
      * @param scene the scene
      * @param colorScheme the color scheme
+     * @param textDesign
      */
     public AbstractPNodeWidget(Scene scene, IColorScheme colorScheme, ITextDesign textDesign) {
         super(scene);

@@ -49,6 +49,5 @@ public class ModelerSceneSelectProvider implements SelectProvider {
         IModelerScene modelerScene = (IModelerScene) widget;
         NBModelerUtil.hideContextPalette(modelerScene);
         modelerScene.exploreProperties();
-
     }
 }

@@ -16,12 +16,9 @@
 package org.netbeans.modeler.widget.edge.info;
 
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
+import org.netbeans.modeler.widget.info.WidgetInfo;
 
-/**
- *
- *
- */
-public class EdgeWidgetInfo {
+public class EdgeWidgetInfo implements WidgetInfo {
 
     private String id;
     private String name;
@@ -56,10 +53,12 @@ public class EdgeWidgetInfo {
         this.target = target;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String title) {
         this.name = title;
     }
@@ -67,6 +66,7 @@ public class EdgeWidgetInfo {
     /**
      * @return the id
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -74,6 +74,7 @@ public class EdgeWidgetInfo {
     /**
      * @param id the id to set
      */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -81,6 +82,7 @@ public class EdgeWidgetInfo {
     /**
      * @return the exist
      */
+    @Override
     public Boolean isExist() {
         return exist;
     }
@@ -88,6 +90,7 @@ public class EdgeWidgetInfo {
     /**
      * @param exist the exist to set
      */
+    @Override
     public void setExist(Boolean exist) {
         this.exist = exist;
     }
@@ -95,6 +98,7 @@ public class EdgeWidgetInfo {
     /**
      * @return the baseElementSpec
      */
+    @Override
     public IBaseElement getBaseElementSpec() {
         return baseElementSpec;
     }
@@ -102,6 +106,7 @@ public class EdgeWidgetInfo {
     /**
      * @param baseElementSpec the baseElementSpec to set
      */
+    @Override
     public void setBaseElementSpec(IBaseElement baseElementSpec) {
         this.baseElementSpec = baseElementSpec;
     }

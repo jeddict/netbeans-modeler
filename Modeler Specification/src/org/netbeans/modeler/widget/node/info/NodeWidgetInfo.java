@@ -22,8 +22,9 @@ import org.netbeans.modeler.config.document.IModelerDocument;
 import org.netbeans.modeler.config.palette.SubCategoryNodeConfig;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.widget.design.ITextDesign;
+import org.netbeans.modeler.widget.info.WidgetInfo;
 
-public class NodeWidgetInfo implements Cloneable {
+public class NodeWidgetInfo implements WidgetInfo, Cloneable {
 
     private String id;
     private String name;

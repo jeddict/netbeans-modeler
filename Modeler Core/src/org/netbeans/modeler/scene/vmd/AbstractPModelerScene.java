@@ -89,7 +89,7 @@ import org.netbeans.modeler.widget.pin.PinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
-import org.openide.util.RequestProcessor;
+import org.netbeans.modeler.widget.transferable.cp.WidgetTransferable;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.WindowManager;
 
@@ -605,6 +605,8 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     protected List<JMenuItem> getPopupMenuItemList() {
         List<JMenuItem> menuItemList = new LinkedList<>();
 
+        menuItemList.add(getPasteMenu());
+        
         JMenu themeMenu = new JMenu("Theme");
         ButtonGroup thmemeGroup = new javax.swing.ButtonGroup();
 
@@ -703,6 +705,14 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         return menuItemList;
     }
 
+    protected JMenuItem getPasteMenu() {
+        JMenuItem pasteProperty = new JMenuItem("Paste");
+        pasteProperty.addActionListener(e -> {
+            WidgetTransferable.paste((IBaseElementWidget)this);
+        });
+        return pasteProperty;
+    }
+    
     @Override
     public PopupMenuProvider getPopupMenuProvider() {
         JPopupMenu popupMenu = new JPopupMenu();

@@ -44,7 +44,6 @@ import org.netbeans.modeler.actions.LockSelectionAction;
 import org.netbeans.modeler.actions.PanAction;
 import org.netbeans.modeler.actions.PinWidgetAcceptProvider;
 import org.netbeans.modeler.actions.ZoomManager;
-import org.netbeans.modeler.actions.ZoomManager.ZoomEvent;
 import org.netbeans.modeler.actions.export.ExportAction;
 import org.netbeans.modeler.core.IModelerDiagramEngine;
 import org.netbeans.modeler.core.IZoomManager;
@@ -292,7 +291,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         JButton reRouteButton = new JButton(ImageUtil.getInstance().getIcon("reroute.png"));
         reRouteButton.setToolTipText("Re-Route");
         bar.add(reRouteButton);
-        reRouteButton.addActionListener((ActionEvent e) -> {
+        reRouteButton.addActionListener(e -> {
             int option = JOptionPane.showConfirmDialog(WindowManager.getDefault().getMainWindow(), "Are you want to re-route the diagram ?", "Re-Route Diagram", JOptionPane.YES_NO_OPTION);
             if (option == javax.swing.JOptionPane.OK_OPTION) {
                 file.getModelerScene().autoLayout();
@@ -305,7 +304,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
         JButton reRouteButton = new JButton(ImageUtil.getInstance().getIcon("search.png"));
         reRouteButton.setToolTipText("Search");
         bar.add(reRouteButton);
-        reRouteButton.addActionListener((ActionEvent e) -> {
+        reRouteButton.addActionListener(e -> {
             searchWidget();
         });
     }
@@ -313,7 +312,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
     protected void buildSatelliteTool(JToolBar bar) {
         JButton satelliteViewButton = new JButton(ImageUtil.getInstance().getIcon("satelliteView.png"));
         bar.add(satelliteViewButton);
-        satelliteViewButton.addActionListener((ActionEvent e) -> {
+        satelliteViewButton.addActionListener(e -> {
             JPopupMenu popup = new JPopupMenu();
             popup.setLayout(new BorderLayout());
             JComponent satelliteView = file.getModelerScene().createSatelliteView();
@@ -326,7 +325,7 @@ public class ModelerDiagramEngine implements IModelerDiagramEngine {
 
     protected void buildZoomTool(JToolBar bar) {
         zoomManager = new ZoomManager(file.getModelerScene()); //4 sec
-        zoomManager.addZoomListener((ZoomEvent event) -> {
+        zoomManager.addZoomListener(e -> {
             ContextPaletteManager manager = file.getModelerScene().getContextPaletteManager();
             if (manager != null) {
                 manager.cancelPalette();

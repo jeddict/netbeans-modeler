@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.specification.model.util;
 
+import java.util.List;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.config.document.IModelerDocument;
@@ -22,6 +23,8 @@ import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.exception.ProcessInterruptedException;
 import org.netbeans.modeler.shape.ShapeDesign;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.specification.model.document.core.IBaseElement;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
@@ -35,7 +38,11 @@ public interface IModelerUtil<S extends IModelerScene> {
     void loadModelerFile(ModelerFile file) throws ProcessInterruptedException;
 
     void saveModelerFile(ModelerFile file);
+      
+    public IBaseElement clone(IBaseElement element);
     
+    void loadBaseElement(IBaseElementWidget parentConatiner, List<IBaseElement> elements);
+
     public String getContent(ModelerFile file);
 
     INodeWidget updateNodeWidgetDesign(ShapeDesign shapeDesign, INodeWidget nodeWidget);

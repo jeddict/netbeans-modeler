@@ -60,8 +60,10 @@ import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.netbeans.modeler.widget.transferable.cp.WidgetTransferable;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 
 /**
  *
@@ -246,8 +248,26 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         
         menuItemList.add(delete);
         menuItemList.add(null);
+        menuItemList.add(getCopyMenu());
+        menuItemList.add(getPasteMenu());
         menuItemList.add(getPropertyMenu());
         return menuItemList;
+    }
+    
+    protected JMenuItem getCopyMenu() {
+        JMenuItem copyProperty = new JMenuItem("Copy");
+        copyProperty.addActionListener(e -> {
+            WidgetTransferable.copy(PNodeWidget.this);
+        });
+        return copyProperty;
+    }
+
+    protected JMenuItem getPasteMenu() {
+        JMenuItem pasteProperty = new JMenuItem("Paste");
+        pasteProperty.addActionListener(e -> {
+            WidgetTransferable.paste((IBaseElementWidget)PNodeWidget.this);
+        });
+        return pasteProperty;
     }
     
     protected JMenuItem getPropertyMenu(){

@@ -349,6 +349,7 @@
                 <package>org.netbeans.modeler.widget.design</package>
                 <package>org.netbeans.modeler.widget.edge</package>
                 <package>org.netbeans.modeler.widget.edge.info</package>
+                <package>org.netbeans.modeler.widget.info</package>
                 <package>org.netbeans.modeler.widget.node</package>
                 <package>org.netbeans.modeler.widget.node.image.svg</package>
                 <package>org.netbeans.modeler.widget.node.info</package>

@@ -18,8 +18,9 @@ package org.netbeans.modeler.widget.pin.info;
 import java.awt.Image;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.widget.design.ITextDesign;
+import org.netbeans.modeler.widget.info.WidgetInfo;
 
-public class PinWidgetInfo {
+public class PinWidgetInfo implements WidgetInfo {
 
     private String id;
     private String name;

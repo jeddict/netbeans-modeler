@@ -15,7 +15,6 @@
  */
 package org.netbeans.modeler.widget.pin;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,6 +39,7 @@ import org.netbeans.modeler.widget.node.vmd.internal.AbstractPinWidget;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.netbeans.modeler.widget.transferable.cp.WidgetTransferable;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 
@@ -94,10 +94,19 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
 
     protected List<JMenuItem> getPopupMenuItemList() {
         List<JMenuItem> menuItemList = new LinkedList<>();
+        menuItemList.add(getCopyMenu());
         menuItemList.add(getPropertyMenu());
         return menuItemList;
     }
 
+    protected JMenuItem getCopyMenu() {
+        JMenuItem copyProperty = new JMenuItem("Copy");
+        copyProperty.addActionListener(e -> {
+            WidgetTransferable.copy(PinWidget.this.getModelerScene());
+        });
+        return copyProperty;
+    }
+    
     protected JMenuItem getPropertyMenu() {
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
@@ -123,7 +132,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
                 popupMenu.add(menuItem);
             }
         }
-        popupMenuProvider = (final Widget widget, final Point location1) -> popupMenu;
+        popupMenuProvider = (widget, location1) -> popupMenu;
 
         return popupMenuProvider;
     }
