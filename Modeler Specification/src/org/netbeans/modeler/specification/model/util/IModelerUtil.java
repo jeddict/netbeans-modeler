@@ -15,7 +15,9 @@
  */
 package org.netbeans.modeler.specification.model.util;
 
+import java.awt.Rectangle;
 import java.util.List;
+import java.util.Map;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.config.document.IModelerDocument;
@@ -39,9 +41,9 @@ public interface IModelerUtil<S extends IModelerScene> {
 
     void saveModelerFile(ModelerFile file);
       
-    public IBaseElement clone(IBaseElement element);
+    List<IBaseElement> clone(List<IBaseElement> elements);
     
-    void loadBaseElement(IBaseElementWidget parentConatiner, List<IBaseElement> elements);
+    void loadBaseElement(IBaseElementWidget parentConatiner, Map<IBaseElement,Rectangle> elements);
 
     public String getContent(ModelerFile file);
 

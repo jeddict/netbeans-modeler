@@ -15,7 +15,9 @@
  */
 package org.netbeans.modeler.widget.transferable.cp;
 
+import java.awt.Rectangle;
 import java.util.List;
+import java.util.Map;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 
 /**
@@ -24,23 +26,23 @@ import org.netbeans.modeler.specification.model.document.core.IBaseElement;
  */
 public class WidgetData {
     
-    private List<IBaseElement> data;
+    private Map<IBaseElement, Rectangle> data;
 
-    public WidgetData(List<IBaseElement> data) {
+    public WidgetData(Map<IBaseElement, Rectangle> data) {
         this.data = data;
     }
 
     /**
      * @return the data
      */
-    public List<IBaseElement> getData() {
+    public Map<IBaseElement, Rectangle> getData() {
         return data;
     }
 
     /**
      * @param data the data to set
      */
-    public void setData(List<IBaseElement> data) {
+    public void setData(Map<IBaseElement, Rectangle> data) {
         this.data = data;
     }
     

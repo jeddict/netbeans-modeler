@@ -15,6 +15,7 @@
  */
 package org.netbeans.modeler.widget.transferable.cp;
 
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -22,14 +23,21 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
-import static java.util.stream.Collectors.toList;
+import java.util.Map;
+import static java.util.stream.Collectors.toMap;
+import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
+import org.netbeans.modeler.specification.model.document.core.IFlowNode;
+import org.netbeans.modeler.specification.model.document.core.IFlowPin;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
 import org.netbeans.modeler.widget.info.WidgetInfo;
+import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.vmd.PNodeWidget;
 import org.openide.util.Exceptions;
 
@@ -47,20 +55,30 @@ public class WidgetTransferable implements Transferable, ClipboardOwner {
     }
 
     public static void copy(IModelerScene modelerScene) {
-        List<IBaseElement> data = modelerScene.getSelectedObjects()
-                .stream()
-                .filter(wi -> wi instanceof WidgetInfo)
-                .map(wi -> ((WidgetInfo) wi).getBaseElementSpec())
-                .collect(toList());
+        Map<IBaseElement,Rectangle> data = new LinkedHashMap<>();
+        for (Object object : modelerScene.getSelectedObjects()) {
+            if (object instanceof WidgetInfo) {
+                Widget widget = modelerScene.findWidget(object);
+                if (widget instanceof IBaseElementWidget&& ((IBaseElementWidget) widget).getBaseElementSpec()!=null){
+                    if (widget instanceof INodeWidget) {
+                        data.put(((IBaseElementWidget) widget).getBaseElementSpec(), ((INodeWidget) widget).getSceneViewBound());
+                    } else {
+                        data.put(((IBaseElementWidget) widget).getBaseElementSpec(), null);
+                    }
+                }
+            }
+        }
+        
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         WidgetTransferable dataSelection = new WidgetTransferable(new WidgetData(data));
         clipboard.setContents(dataSelection, dataSelection);
     }
     
     public static void copy(PNodeWidget nodeWidget) {
-        List<IBaseElement> data = Collections.singletonList(nodeWidget.getNodeWidgetInfo().getBaseElementSpec());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        WidgetTransferable dataSelection = new WidgetTransferable(new WidgetData(data));
+        WidgetTransferable dataSelection = new WidgetTransferable(
+                new WidgetData(Collections.singletonMap(((IBaseElementWidget)nodeWidget).getBaseElementSpec(), nodeWidget.getSceneViewBound()))
+        );
         clipboard.setContents(dataSelection, dataSelection);
     }
 
@@ -74,12 +92,38 @@ public class WidgetTransferable implements Transferable, ClipboardOwner {
                 try {
                     WidgetData widgetData = (WidgetData) clipboardContent.getTransferData(flavor);
                     IModelerUtil util = parentConatiner.getModelerScene().getModelerFile().getModelerUtil();
-                    util.loadBaseElement(parentConatiner,
-                            widgetData.getData()
-                                    .stream()
-                                    .filter(data -> data!=null)
-                                    .map(data -> util.clone(data))
-                                    .collect(toList()));
+                    
+                    Map<IBaseElement, Rectangle> data = widgetData.getData()
+                            .entrySet().stream()
+                            .filter(map -> (parentConatiner instanceof IModelerScene && map.getKey() instanceof IFlowNode)
+                            || (parentConatiner instanceof INodeWidget && map.getKey() instanceof IFlowPin))
+                            .collect(toMap(p -> p.getKey(), p -> p.getValue()));
+                    List<IBaseElement> elments = new ArrayList<>(data.keySet());
+                    List<IBaseElement> clonedElements = util.clone(elments);
+                    Map<IBaseElement,Rectangle> clonedElementData = new LinkedHashMap<>();
+        
+                    //find min location point
+                    int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+                    for (int i = 0; i < elments.size(); i++) {
+                        IBaseElement elment = elments.get(i);
+                        Rectangle location = data.get(elment);
+                        minX = location.x < minX ? location.x : minX;
+                        minY = location.y < minY ? location.y : minY;
+                    }
+                    //normalize location
+                    for (int i = 0; i < elments.size(); i++) {
+                        IBaseElement elment = elments.get(i);
+                        Rectangle location = data.get(elment);
+                        location.setLocation((int)location.getX()-minX, (int)location.getY()-minY);
+                    }
+                    
+                    for (int i = 0; i < elments.size(); i++) {
+                        IBaseElement elment = elments.get(i);
+                        Rectangle location = data.get(elment);
+                        clonedElementData.put(clonedElements.get(i),location);
+                    }
+                    
+                    util.loadBaseElement(parentConatiner,clonedElementData);
                 } catch (UnsupportedFlavorException | IOException ex) {
                     Exceptions.printStackTrace(ex);
                 }

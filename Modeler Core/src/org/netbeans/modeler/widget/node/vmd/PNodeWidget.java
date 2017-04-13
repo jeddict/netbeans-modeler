@@ -257,7 +257,12 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     protected JMenuItem getCopyMenu() {
         JMenuItem copyProperty = new JMenuItem("Copy");
         copyProperty.addActionListener(e -> {
-            WidgetTransferable.copy(PNodeWidget.this);
+            if (PNodeWidget.this.getModelerScene().getSelectedObjects().isEmpty() ||
+                    !PNodeWidget.this.getModelerScene().getSelectedObjects().contains(PNodeWidget.this.getNodeWidgetInfo())) {
+                WidgetTransferable.copy(PNodeWidget.this);
+            } else {
+                WidgetTransferable.copy(PNodeWidget.this.getModelerScene());
+            }
         });
         return copyProperty;
     }
