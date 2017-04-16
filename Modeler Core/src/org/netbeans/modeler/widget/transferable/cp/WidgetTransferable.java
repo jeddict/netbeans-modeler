@@ -97,7 +97,7 @@ public class WidgetTransferable implements Transferable, ClipboardOwner {
                             .entrySet().stream()
                             .filter(map -> (parentConatiner instanceof IModelerScene && map.getKey() instanceof IFlowNode)
                             || (parentConatiner instanceof INodeWidget && map.getKey() instanceof IFlowPin))
-                            .collect(toMap(p -> p.getKey(), p -> p.getValue()));
+                            .collect(toMap(p -> p.getKey(), p -> p.getValue(), (p1, p2) -> p1));
                     List<IBaseElement> elments = new ArrayList<>(data.keySet());
                     List<IBaseElement> clonedElements = util.clone(elments);
                     Map<IBaseElement,Rectangle> clonedElementData = new LinkedHashMap<>();

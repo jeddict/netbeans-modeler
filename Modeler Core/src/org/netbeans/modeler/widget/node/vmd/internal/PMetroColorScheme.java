@@ -52,9 +52,6 @@ public class PMetroColorScheme implements IColorScheme {
     private final Color COLOR4;
     private final Color COLOR5;
 
-    protected final Color WIDGET_BORDER_COLOR;
-    private final Color WIDGET_SELECT_BORDER_COLOR;
-    private final Color WIDGET_HOVER_BORDER_COLOR;
 
     private final Color WIDGET_HOVER_BACKGROUND;
     private final Color WIDGET_SELECT_BACKGROUND;
@@ -73,11 +70,15 @@ public class PMetroColorScheme implements IColorScheme {
     private final Color EDGE_WIDGET_HOVER_COLOR;
 
     private final Color PIN_WIDGET_BACKGROUND;
-    private final Color PIN_WIDGET_LBACKGROUND;
     private final Color PIN_WIDGET_HOVER_BACKGROUND;
     private final Color PIN_WIDGET_SELECT_BACKGROUND;
     private final Color PIN_WIDGET_HOVER_LBACKGROUND;
     private final Color PIN_WIDGET_SELECT_LBACKGROUND;
+    
+    
+    private final Color PIN_WIDGET_BORDER_COLOR;
+    private final Color PIN_WIDGET_SELECT_BORDER_COLOR;
+    private final Color PIN_WIDGET_HOVER_BORDER_COLOR;
 
     private final Color PIN_WIDGET_TEXT_COLOR;
     private final Color PIN_WIDGET_HOVER_TEXT_COLOR;
@@ -110,9 +111,9 @@ public class PMetroColorScheme implements IColorScheme {
         COLOR4 = new Color(255, 255, 255);
         COLOR5 = new Color(241, 249, 253);
 
-        WIDGET_BORDER_COLOR = new Color(98, 168, 217);
-        WIDGET_SELECT_BORDER_COLOR = new Color(40, 94, 142);
-        WIDGET_HOVER_BORDER_COLOR = new Color(46, 139, 204);
+        PIN_WIDGET_BORDER_COLOR = new Color(98, 168, 217);
+        PIN_WIDGET_SELECT_BORDER_COLOR = new Color(40, 94, 142);
+        PIN_WIDGET_HOVER_BORDER_COLOR = new Color(46, 139, 204);
 
         WIDGET_HOVER_BACKGROUND = new Color(46, 139, 204);
         WIDGET_SELECT_BACKGROUND = new Color(36, 119, 174);
@@ -123,7 +124,7 @@ public class PMetroColorScheme implements IColorScheme {
         WIDGET_LBACKGROUND = new Color(108, 178, 227);
 
         WIDGET_BORDER = new ShadowBorder(new Color(255, 255, 255), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-        WIDGET_SELECT_BORDER = new ShadowBorder(new Color(230, 230, 230), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_SELECT_BORDER = new ShadowBorder(new Color(180, 180, 180), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
         WIDGET_HOVER_BORDER = new ShadowBorder(new Color(200, 200, 200), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
 
         EDGE_WIDGET_COLOR = new Color(98, 168, 217);
@@ -131,7 +132,6 @@ public class PMetroColorScheme implements IColorScheme {
         EDGE_WIDGET_HOVER_COLOR = new Color(46, 139, 204);
 
         PIN_WIDGET_BACKGROUND = new Color(98, 168, 217);
-        PIN_WIDGET_LBACKGROUND = new Color(98, 168, 217);
         PIN_WIDGET_HOVER_BACKGROUND = new Color(98, 168, 217);
         PIN_WIDGET_SELECT_BACKGROUND = new Color(118, 188, 237);
         PIN_WIDGET_HOVER_LBACKGROUND = new Color(118, 188, 237);
@@ -139,7 +139,7 @@ public class PMetroColorScheme implements IColorScheme {
 
         PIN_WIDGET_TEXT_COLOR = new Color(36, 111, 159);
         PIN_WIDGET_HOVER_TEXT_COLOR = Color.white;
-        PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+        PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, PIN_WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, PIN_WIDGET_HOVER_BORDER_COLOR));
 
         PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(170, 208, 234);
         PIN_SEPERATOR_WIDGET_FOREGROUND = Color.WHITE;
@@ -171,14 +171,14 @@ public class PMetroColorScheme implements IColorScheme {
         }
         Rectangle bound = widget.getHeader().getBounds();
         if (bound != null) {
-            if (state.isHovered()) {
-                GradientPaint gp = new GradientPaint(bound.x + bound.width / 2, bound.y, WIDGET_HOVER_LBACKGROUND, bound.x + bound.width / 2, bound.y + bound.height, WIDGET_HOVER_BACKGROUND);
-                widget.getHeader().setBackground(gp);
-                widget.setBorder(WIDGET_HOVER_BORDER);
-            } else if (state.isSelected() || state.isFocused()) {
+            if (state.isSelected() || state.isFocused()) {
                 GradientPaint gp = new GradientPaint(bound.x, bound.y, WIDGET_SELECT_LBACKGROUND, bound.width, bound.height, WIDGET_SELECT_BACKGROUND);
                 widget.getHeader().setBackground(gp);
                 widget.setBorder(WIDGET_SELECT_BORDER);
+            } else if (state.isHovered()) {
+                GradientPaint gp = new GradientPaint(bound.x + bound.width / 2, bound.y, WIDGET_HOVER_LBACKGROUND, bound.x + bound.width / 2, bound.y + bound.height, WIDGET_HOVER_BACKGROUND);
+                widget.getHeader().setBackground(gp);
+                widget.setBorder(WIDGET_HOVER_BORDER);
             } else {
                 GradientPaint gp = new GradientPaint(bound.x + bound.width / 2, bound.y, WIDGET_LBACKGROUND, bound.x + bound.width / 2, bound.y + bound.height, WIDGET_BACKGROUND);
                 widget.getHeader().setBackground(gp);
@@ -243,15 +243,12 @@ public class PMetroColorScheme implements IColorScheme {
             }
         }
 
-        if (widget.getTextDesign().getColor() == null) {
-            if (state.isHovered() || state.isSelected()) {
+        if (state.isHovered() || state.isFocused()) {
                 widget.getPinNameWidget().setForeground(PIN_WIDGET_HOVER_TEXT_COLOR);
             } else {
                 widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT_COLOR);
             }
-        } else {
-            widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor());
-        }
+        
          
         if (state.isSelected()) {
             widget.setBorder(PIN_WIDGET_SELECT_BORDER);

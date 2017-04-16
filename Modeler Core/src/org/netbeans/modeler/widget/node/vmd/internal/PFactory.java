@@ -40,7 +40,6 @@ public final class PFactory {
                 SCHEME.put(colorSchemeClass, scheme);
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Exceptions.printStackTrace(ex);
-//                scheme = POriginalColorScheme.getInstance();
             }
         }
         return scheme;

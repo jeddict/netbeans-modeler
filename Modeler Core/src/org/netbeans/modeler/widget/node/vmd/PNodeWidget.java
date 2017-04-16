@@ -226,17 +226,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
 
     protected List<JMenuItem> getPopupMenuItemList() {
         List<JMenuItem> menuItemList = new LinkedList<>();
-//        JMenuItem visualProperty = new JMenuItem(I18n.getString("Customize"));
-//        visualProperty.setIcon(ImageUtil.getInstance().getIcon("customize.png"));
-//        visualProperty.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                AbstractNode node = new VisualPropertyViewManager((IBaseElementWidget) PNodeWidget.this);
-//                NodeOperation.getDefault().showProperties(node);
-//                PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
-//
-//            }
-//        });
 
         JMenuItem delete = new JMenuItem("Delete");
         delete.setIcon(ImageUtil.getInstance().getIcon("delete.png"));
@@ -244,7 +233,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
             PNodeWidget.this.remove(true);
             PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
-
         
         menuItemList.add(delete);
         menuItemList.add(null);
@@ -280,7 +268,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
         baseProperty.addActionListener((ActionEvent e) -> {
             PNodeWidget.this.showProperties();
-            PNodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
         return baseProperty;
     }

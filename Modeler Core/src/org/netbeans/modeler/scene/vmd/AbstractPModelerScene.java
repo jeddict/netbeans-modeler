@@ -357,7 +357,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
     @Override
     public void paintChildren() {
-        if(closed){
+        if (closed) {
             return;
         }
         Object anti = getGraphics().getRenderingHint(RenderingHints.KEY_ANTIALIASING);
@@ -376,7 +376,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     public JComponent getSatelliteView() {
         return satelliteView;
     }
-    
+
     public void setContextPaletteManager(ContextPaletteManager manager) {
         if (paletteManager != null) {
             removeFromLookup(paletteManager);
@@ -496,7 +496,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
                         set.add((IFlowElementWidget) object);
                     }
                 }
-        }
+            }
         }
 
         return set;
@@ -556,10 +556,10 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         }
     }
 
-    public void reinstallColorScheme(IWidget widget){
-        reinstallColorScheme((Widget)widget, this.getColorScheme());
+    public void reinstallColorScheme(IWidget widget) {
+        reinstallColorScheme((Widget) widget, this.getColorScheme());
     }
-    
+
     private void reinstallColorScheme(Widget widget, IColorScheme scheme) {
         if (widget instanceof IPNodeWidget) {//PNodeAnchor implements skipped
             IPNodeWidget nodeWidget = (IPNodeWidget) widget;
@@ -606,7 +606,14 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         List<JMenuItem> menuItemList = new LinkedList<>();
 
         menuItemList.add(getPasteMenu());
-        
+        menuItemList.add(getThemeMenu());
+        menuItemList.add(getContainerMenu());
+        menuItemList.add(getPropertyMenu());
+
+        return menuItemList;
+    }
+
+    protected JMenu getThemeMenu() {
         JMenu themeMenu = new JMenu("Theme");
         ButtonGroup thmemeGroup = new javax.swing.ButtonGroup();
 
@@ -623,11 +630,12 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 //                schemeMenu.setSelected(true);
 //            }
         }
-        menuItemList.add(themeMenu);
+        return themeMenu;
+    }
 
+    protected JMenu getContainerMenu() {
         JMenu container = new JMenu("Container");
-        menuItemList.add(container);
-        
+
         JMenuItem rerouteMenu = new JMenuItem("Re-Route");
         rerouteMenu.addActionListener((ActionEvent e) -> {
             int option = JOptionPane.showConfirmDialog(WindowManager.getDefault().getMainWindow(), "Are you want to re-route the diagram ?", "Re-Route Diagram", JOptionPane.YES_NO_OPTION);
@@ -694,25 +702,26 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
         container.add(alignMenu);
 
-        JMenuItem propsMenu = new JMenuItem("Properties");
-        propsMenu.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
-        propsMenu.addActionListener((ActionEvent e) -> {
+        return container;
+    }
+
+    protected JMenuItem getPropertyMenu() {
+        JMenuItem baseProperty = new JMenuItem("Properties");
+        baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
+        baseProperty.addActionListener((ActionEvent e) -> {
             AbstractPModelerScene.this.showProperties();
         });
-
-        menuItemList.add(propsMenu);
-
-        return menuItemList;
+        return baseProperty;
     }
 
     protected JMenuItem getPasteMenu() {
         JMenuItem pasteProperty = new JMenuItem("Paste");
         pasteProperty.addActionListener(e -> {
-            WidgetTransferable.paste((IBaseElementWidget)this);
+            WidgetTransferable.paste((IBaseElementWidget) this);
         });
         return pasteProperty;
     }
-    
+
     @Override
     public PopupMenuProvider getPopupMenuProvider() {
         JPopupMenu popupMenu = new JPopupMenu();
@@ -724,7 +733,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
                 popupMenu.add(menuItem);
             }
         });
-       return (widget, location) -> popupMenu;
+        return (widget, location) -> popupMenu;
     }
 
     private BasePropertyViewManager node;
@@ -736,8 +745,8 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         }
         org.netbeans.modeler.properties.util.PropertyUtil.exploreProperties(node, this.getName(), propertyVisibilityHandlers);
     }
-    
-    public IPropertyManager getPropertyManager(){
+
+    public IPropertyManager getPropertyManager() {
         return node;
     }
 
@@ -919,7 +928,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         } else {
             LOG.warning("pin not found");
         }
-       
+
     }
 
     @Override
@@ -989,7 +998,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     }
 
     public void validateComponent() {
-        if(!isSceneGenerating()){
+        if (!isSceneGenerating()) {
             long st = new Date().getTime();
             this.validate();
             System.out.println("validateComponent Total time : " + (new Date().getTime() - st) + " ms");
@@ -1034,20 +1043,21 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     protected IEventListener getEventListener() {
         return new EventListener();
     }
-    
+
     private boolean closed = false;
+
     @Override
-     public void cleanReference(){
-         satelliteView.removeNotify();
-           modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
-           setContextPaletteManager(null);//remove from lookup
-           getView().getActionMap().clear();
-           getView().getInputMap().clear();
-           
+    public void cleanReference() {
+        satelliteView.removeNotify();
+        modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
+        setContextPaletteManager(null);//remove from lookup
+        getView().getActionMap().clear();
+        getView().getInputMap().clear();
+
         if (getPropertyManager() != null) {
             getPropertyManager().getElementPropertySet().clearGroups();//clear ElementSupportGroup
         }
-        
+
         closed = true;
     }
 }
@@ -1065,8 +1075,7 @@ class MouseClickAction extends org.netbeans.api.visual.action.WidgetAction.Adapt
 
     @Override
     public State mouseClicked(Widget widget, WidgetMouseEvent event) {
-        System.out.println("setting focus to " + component);
         component.requestFocus();
         return State.REJECTED;
-    }   
+    }
 }

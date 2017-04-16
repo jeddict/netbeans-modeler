@@ -147,9 +147,7 @@ public class PNBColorScheme implements IColorScheme {
 
         if (state.isSelected()) {
             widget.setBorder(BORDER60_SELECT);
-        } else if (state.isHovered()) {
-            widget.setBorder(BORDER60_HOVER);
-        } else if (state.isFocused()) {
+        } else if (state.isHovered() || state.isFocused()) {
             widget.setBorder(BORDER60_HOVER);
         } else {
             widget.setBorder(BORDER60);

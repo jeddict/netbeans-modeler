@@ -112,7 +112,7 @@ public class PMacColorScheme implements IColorScheme {
         COLOR5 = new Color(237, 237, 237);
 
         WIDGET_BORDER_COLOR = new Color(245, 245, 245);
-        WIDGET_SELECT_BORDER_COLOR = new Color(230, 230, 230);
+        WIDGET_SELECT_BORDER_COLOR = new Color(180, 180, 180);
         WIDGET_HOVER_BORDER_COLOR = new Color(200, 200, 200);
 
         WIDGET_HOVER_BACKGROUND = new TexturePaint(ImageUtil.toBufferedImage(ImageUtilities.loadImage("org/netbeans/modeler/widget/theme/mac/MAC_TOOLBAR_LIGHT.png")), new Rectangle(0, 0, 658, 61));
@@ -122,7 +122,6 @@ public class PMacColorScheme implements IColorScheme {
         WIDGET_BORDER = new ShadowBorder(WIDGET_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
         WIDGET_SELECT_BORDER = new ShadowBorder(WIDGET_SELECT_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
         WIDGET_HOVER_BORDER = new ShadowBorder(WIDGET_HOVER_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-        // WIDGET_HIGHT_BORDER = new ShadowBorder(WIDGET_HOVER_BORDER_COLOR, 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
 
         EDGE_WIDGET_SELECT_COLOR = new Color(235, 235, 235);
         EDGE_WIDGET_HOVER_COLOR = new Color(255, 255, 255);
@@ -162,19 +161,20 @@ public class PMacColorScheme implements IColorScheme {
         if (!previousState.isSelected() && state.isSelected()) {
             widget.bringToFront();
         }
-        if (state.isHovered()) {
-            widget.getHeader().setBackground(WIDGET_HOVER_BACKGROUND);
-            widget.setBorder(WIDGET_HOVER_BORDER);
-            widget.getMinimizeButton().setImage(this.getMinimizeWidgetImage(widget));
-        } else if (state.isSelected() || state.isFocused()) {
+       
+        if (state.isSelected() || state.isFocused()) {
             widget.getHeader().setBackground(WIDGET_SELECT_BACKGROUND);
             widget.setBorder(WIDGET_SELECT_BORDER);
+            widget.getMinimizeButton().setImage(this.getMinimizeWidgetImage(widget));
+        } else if (state.isHovered()) {
+            widget.getHeader().setBackground(WIDGET_HOVER_BACKGROUND);
+            widget.setBorder(WIDGET_HOVER_BORDER);
             widget.getMinimizeButton().setImage(this.getMinimizeWidgetImage(widget));
         } else {
             widget.getHeader().setBackground(WIDGET_BACKGROUND);
             widget.setBorder(WIDGET_BORDER);
             widget.getMinimizeButton().setImage(BUTTON_W);
-        }
+        } 
     }
 
     @Override
@@ -237,16 +237,12 @@ public class PMacColorScheme implements IColorScheme {
             }
         }
 
-        if (widget.getTextDesign().getColor() == null) {
-            if (state.isHovered() || state.isSelected()) {
-                widget.getPinNameWidget().setForeground(PIN_WIDGET_HOVER_TEXT_COLOR);
-            } else {
-                widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT_COLOR);
-            }
+        if (state.isHovered() || state.isFocused()) {
+            widget.getPinNameWidget().setForeground(PIN_WIDGET_HOVER_TEXT_COLOR);
         } else {
-            widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor());
+            widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT_COLOR);
         }
-
+       
         if (state.isSelected()) {
             widget.setBorder(PIN_WIDGET_SELECT_BORDER);
         } else {

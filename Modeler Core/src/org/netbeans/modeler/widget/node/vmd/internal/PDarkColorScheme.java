@@ -52,9 +52,9 @@ public class PDarkColorScheme implements IColorScheme {
     private final Color COLOR4;
     private final Color COLOR5;
 
-    protected final Color WIDGET_BORDER_COLOR;
-    private final Color WIDGET_SELECT_BORDER_COLOR;
-    private final Color WIDGET_HOVER_BORDER_COLOR;
+    private final Color PIN_WIDGET_BORDER_COLOR;
+    private final Color PIN_WIDGET_SELECT_BORDER_COLOR;
+    private final Color PIN_WIDGET_HOVER_BORDER_COLOR;
 
     private final Color WIDGET_HOVER_BACKGROUND;
     private final Color WIDGET_SELECT_BACKGROUND;
@@ -111,10 +111,6 @@ public class PDarkColorScheme implements IColorScheme {
         COLOR4 = new Color(255, 255, 255);
         COLOR5 = new Color(241, 249, 253);
 
-        WIDGET_BORDER_COLOR = new Color(168, 168, 168);
-        WIDGET_SELECT_BORDER_COLOR = new Color(94, 94, 94);
-        WIDGET_HOVER_BORDER_COLOR = new Color(139, 139, 139);
-
         WIDGET_HOVER_BACKGROUND = new Color(66, 66, 66);
         WIDGET_SELECT_BACKGROUND = new Color(77, 77, 77);
         WIDGET_BACKGROUND = new Color(99, 99, 99);
@@ -124,7 +120,7 @@ public class PDarkColorScheme implements IColorScheme {
         WIDGET_LBACKGROUND = new Color(66, 66, 66);
 
         WIDGET_BORDER = new ShadowBorder(new Color(155, 155, 155), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
-        WIDGET_SELECT_BORDER = new ShadowBorder(new Color(130, 130, 130), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
+        WIDGET_SELECT_BORDER = new ShadowBorder(new Color(180, 180, 180), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
         WIDGET_HOVER_BORDER = new ShadowBorder(new Color(100, 100, 100), 2, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5);
 
         WIDGET_TEXT_COLOR = new Color(230, 230, 230);
@@ -138,9 +134,14 @@ public class PDarkColorScheme implements IColorScheme {
         PIN_WIDGET_HOVER_LBACKGROUND = new Color(175, 175, 175);
         PIN_WIDGET_SELECT_LBACKGROUND = new Color(180, 180, 180);
 
+        PIN_WIDGET_BORDER_COLOR = new Color(168, 168, 168);
+        PIN_WIDGET_SELECT_BORDER_COLOR = new Color(94, 94, 94);
+        PIN_WIDGET_HOVER_BORDER_COLOR = new Color(139, 139, 139);
+
+        
         PIN_WIDGET_TEXT_COLOR = new Color(40 ,40, 40);
         PIN_WIDGET_HOVER_TEXT_COLOR = new Color(70, 70, 70);
-        PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, WIDGET_HOVER_BORDER_COLOR));
+        PIN_WIDGET_SELECT_BORDER = BorderFactory.createCompositeBorder(BorderFactory.createLineBorder(0, 1, 0, 1, PIN_WIDGET_BORDER_COLOR), BorderFactory.createLineBorder(2, 3, 2, 3, PIN_WIDGET_HOVER_BORDER_COLOR));
 
         PIN_SEPERATOR_WIDGET_BACKGROUND = new Color(133, 133, 133);
         PIN_SEPERATOR_WIDGET_FOREGROUND = Color.WHITE;
