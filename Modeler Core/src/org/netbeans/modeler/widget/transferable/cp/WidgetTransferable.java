@@ -63,7 +63,7 @@ public class WidgetTransferable implements Transferable, ClipboardOwner {
                     if (widget instanceof INodeWidget) {
                         data.put(((IBaseElementWidget) widget).getBaseElementSpec(), ((INodeWidget) widget).getSceneViewBound());
                     } else {
-                        data.put(((IBaseElementWidget) widget).getBaseElementSpec(), null);
+                        data.put(((IBaseElementWidget) widget).getBaseElementSpec(), widget.getBounds());
                     }
                 }
             }

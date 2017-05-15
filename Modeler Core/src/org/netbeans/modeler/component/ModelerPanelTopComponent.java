@@ -18,6 +18,7 @@ package org.netbeans.modeler.component;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
+import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -26,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultEditorKit;
+import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.save.SaveDiagram;
 import org.netbeans.modeler.component.save.ui.SaveNotifierYesNo;
 import org.netbeans.modeler.core.ModelerCore;
@@ -33,6 +35,8 @@ import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.palette.PaletteSupport;
 import org.netbeans.modeler.specification.model.DiagramModel;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
+import org.netbeans.modeler.widget.transferable.cp.WidgetTransferable;
 import org.netbeans.spi.navigator.NavigatorLookupHint;
 import org.netbeans.spi.palette.PaletteController;
 import org.openide.NotifyDescriptor;
@@ -44,6 +48,8 @@ import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.RequestProcessor;
+import org.openide.util.actions.CallbackSystemAction;
+import org.openide.util.actions.SystemAction;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
@@ -87,7 +93,8 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         if (!propertiesComponent.isOpened()) {
             propertiesComponent.open();
         }
-        initLookup();// 60 ms
+        setupActionMap(getActionMap());
+        initLookup();
     }
 
     private InstanceContent lookupContent = new InstanceContent();
@@ -126,7 +133,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
         navigatorCookie = null;
         exploreLookup = null;
-//        paletteController = null;
+        paletteController = null;
 //        this.lookupContent = null;
 //        this.lookup = Lookup.EMPTY;
     }
@@ -158,50 +165,39 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     public ExplorerManager getExplorerManager() {
         return explorerManager;
     }
-
+ 
     private ActionMap setupActionMap(javax.swing.ActionMap map) {
-//        this.getInputMap(WHEN_IN_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('a'),
-//                "doNothing");
-//        this.getActionMap().put("doNothing",
-//                doNothing);
-        map.put(DefaultEditorKit.copyAction, new javax.swing.AbstractAction() {
-
+        CallbackSystemAction a = SystemAction.get(org.openide.actions.FindAction.class);
+        map.put(a.getActionMapKey(), new AbstractAction() {
             @Override
-            public void actionPerformed(ActionEvent ev
-            ) {
-                System.out.println("copyAction");
-
+            public void actionPerformed(ActionEvent e) {
+                modelerFile.getModelerDiagramEngine().searchWidget();
             }
-
         });
-        map.put(DefaultEditorKit.cutAction, new javax.swing.AbstractAction() {
-
+        map.put(DefaultEditorKit.copyAction, new javax.swing.AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                System.out.println("cutAction");
+                WidgetTransferable.copy(modelerScene);
             }
-
         });
         map.put(DefaultEditorKit.pasteAction, new javax.swing.AbstractAction() {
-
-            @Override
-            public void actionPerformed(ActionEvent ev
-            ) {
-                System.out.println("pasteAction");
-
-            }
-
-        });
-        map.put("delete", new javax.swing.AbstractAction() {
-
             @Override
             public void actionPerformed(ActionEvent ev) {
-                System.out.println("Deleted Acion");
+                Object[] selectedObjects = modelerScene.getSelectedObjects().toArray();
+                if (selectedObjects.length == 1) {
+                    Widget selectedWidget = modelerScene.findWidget(selectedObjects[0]);
+                    if (selectedWidget instanceof IBaseElementWidget) {
+                        WidgetTransferable.paste((IBaseElementWidget) selectedWidget);
+                    }
+                } else {
+                    WidgetTransferable.paste((IBaseElementWidget) modelerScene);
+                }
             }
         });
         return map;
     }
 
+    @Override
     public void initializeToolBar() {
         SwingUtilities.invokeLater(() -> {
             modelerFile.getModelerDiagramEngine().buildToolBar(editorToolbar);

@@ -781,28 +781,6 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         return widgetBorder.getWidgetArea().getSize();
     }
 
-//    protected JMenuItem getMenuItem(final IFlowNodeWidget flowNodeWidget, final Class<? extends IFlowNodeWidget> widget) {
-//        JMenuItem menuItem = new JMenuItem();
-//        ModelerDocumentFactory modelerDocumentFactory = flowNodeWidget.getModelerScene().getModelerFile().getVendorSpecification().getModelerDocumentFactory();
-//        try {
-//            IModelerDocument document = modelerDocumentFactory.getModelerDocument(widget);
-//            menuItem.setText(null);
-//            menuItem.setToolTipText(document.getName());
-//            menuItem.setIcon(new ImageIcon(document.getPaletteDocument().getPaletteSmallIcon()));
-//
-//            menuItem.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    NodeWidget.this.getModelerScene().getModelerFile().getModelerUtil().transformNode(flowNodeWidget, widget);
-//                }
-//            });
-//
-//        } catch (ModelerException ex) {
-////            System.out.println("Widget : " + widget);
-//            Exceptions.printStackTrace(ex);
-//        }
-//        return menuItem;
-//    }
     @Override
     public boolean isAnchorEnable() {
         return anchorState;
