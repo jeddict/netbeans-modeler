@@ -15,12 +15,12 @@
  */
 package org.netbeans.modeler.specification.model.document.widget;
 
-import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.node.IWidget;
+import org.netbeans.modeler.widget.property.IPropertyWidget;
 
-public interface IBaseElementWidget<E extends IBaseElement> extends IWidget {
+public interface IBaseElementWidget<E extends IBaseElement> extends IWidget, IPropertyWidget {
 
     public String getId();
 
@@ -41,16 +41,6 @@ public interface IBaseElementWidget<E extends IBaseElement> extends IWidget {
      */
     public void onConnection();
     
-
     public void destroy();
-
-    //custom added
-    void showProperties();
-
-    void exploreProperties();
-
-    void refreshProperties();
-    
-    IPropertyManager getPropertyManager();
 
 }

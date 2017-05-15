@@ -17,7 +17,6 @@ package org.netbeans.modeler.widget.pin;
 
 import java.awt.Image;
 import java.util.List;
-import java.util.Map;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.Widget;
@@ -28,10 +27,9 @@ import org.netbeans.modeler.widget.node.IPNodeWidget;
 import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.IWidgetStateHandler;
 import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
-import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
-import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.netbeans.modeler.widget.property.IPropertyWidget;
 
-public interface IPinWidget extends IWidget {
+public interface IPinWidget extends IWidget, IPropertyWidget {
 
     public PinWidgetInfo getPinWidgetInfo();
 
@@ -42,18 +40,6 @@ public interface IPinWidget extends IWidget {
     public boolean isActiveStatus();
 
     public void setActiveStatus(boolean activeStatus);
-
-    void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
-
-    void removePropertyChangeListener(String id);
-
-    Map<String, PropertyChangeListener> getPropertyChangeListeners();
-
-    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
-
-    void removePropertyVisibilityHandler(String id);
-
-    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
 
     void setLabel(String label);
 
@@ -74,15 +60,6 @@ public interface IPinWidget extends IWidget {
     boolean isHighlightStatus();
 
     void setHighlightStatus(boolean highlightStatus);
-
-    //custom added
-    void showProperties();
-
-    void exploreProperties();
-
-    void refreshProperties();
-    
-    IPropertyManager getPropertyManager();
     
     IWidgetStateHandler getWidgetStateHandler();
 

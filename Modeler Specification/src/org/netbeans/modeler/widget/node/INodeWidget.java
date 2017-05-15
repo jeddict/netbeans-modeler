@@ -18,19 +18,17 @@ package org.netbeans.modeler.widget.node;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Map;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
-import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
-import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.netbeans.modeler.widget.design.ITextDesign;
+import org.netbeans.modeler.widget.property.IPropertyWidget;
 //import org.netbeans.modules.visual.border.ResizeBorder;
 
-public interface INodeWidget extends IWidget {
+public interface INodeWidget extends IWidget, IPropertyWidget {
 
     public static final Border DEFAULT_BORDER = BorderFactory.createEmptyBorder(0);
 
@@ -81,32 +79,11 @@ public interface INodeWidget extends IWidget {
 
     public void setActiveStatus(boolean activeStatus);
 
-    void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
-
-    void removePropertyChangeListener(String id);
-
-    Map<String, PropertyChangeListener> getPropertyChangeListeners();
-
-    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
-
-    void removePropertyVisibilityHandler(String id);
-
-    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
-
     boolean isLocked();
 
     void setLocked(boolean locked);
 
     Point getSceneViewLocation();
-
-    //custom added
-    void showProperties();
-
-    void exploreProperties();
-
-    void refreshProperties();
-    
-    IPropertyManager getPropertyManager();
     
     void cleanReference();
     

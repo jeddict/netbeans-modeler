@@ -15,14 +15,12 @@
  */
 package org.netbeans.modeler.widget.edge;
 
-import java.util.Map;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
-import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
-import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.netbeans.modeler.widget.property.IPropertyWidget;
 
-public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget {
+public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget, IPropertyWidget {
 
     void createVisualPropertySet(ElementPropertySet elementPropertySet);
 
@@ -36,7 +34,6 @@ public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget 
 
     void setModelerScene(S scene);
 
-//    void setNode(AbstractNode node);
     void showLabel();
 
     boolean remove();
@@ -46,18 +43,6 @@ public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget 
     boolean isLocked();
 
     void setLocked(boolean locked);
-
-    void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
-
-    void removePropertyChangeListener(String id);
-
-    Map<String, PropertyChangeListener> getPropertyChangeListeners();
-
-    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
-
-    void removePropertyVisibilityHandler(String id);
-
-    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
     
     void cleanReference();
 }

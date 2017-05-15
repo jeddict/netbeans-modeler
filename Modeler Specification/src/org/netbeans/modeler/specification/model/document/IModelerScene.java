@@ -16,84 +16,77 @@
 package org.netbeans.modeler.specification.model.document;
 
 import java.util.List;
-import java.util.Map;
 import javax.swing.JComponent;
-import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.widget.context.ContextPaletteManager;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
-import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
-import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
-import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
+import org.netbeans.modeler.widget.property.IPropertyWidget;
 
-public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidget<E>, IObjectScene {
+public interface IModelerScene<E extends IRootElement> extends IBaseElementWidget<E>, IPropertyWidget, IObjectScene {
 
-     String getName();
+    String getName();
 
-     void setName(String name);
+    void setName(String name);
 
     /**
      * To move INodeWidget from IModelerSubScene to IModelerScene
      *
      * @param baseElementWidget
      */
-     void addBaseElement(IBaseElementWidget baseElementWidget);
+    void addBaseElement(IBaseElementWidget baseElementWidget);
 
     /**
      * To move INodeWidget from IModelerScene to IModelerSubScene
      *
      * @param baseElementWidget
      */
-     void removeBaseElement(IBaseElementWidget baseElementWidget);
+    void removeBaseElement(IBaseElementWidget baseElementWidget);
 
     /**
      * To create new INodeWidget in IModelerScene
      *
      * @param baseElementWidget
      */
-     void createBaseElement(IBaseElementWidget baseElementWidget);
+    void createBaseElement(IBaseElementWidget baseElementWidget);
 
     /**
      * To delete INodeWidget in IModelerScene
      *
      * @param baseElementWidget
      */
-     void deleteBaseElement(IBaseElementWidget baseElementWidget);
+    void deleteBaseElement(IBaseElementWidget baseElementWidget);
 
-     List<IBaseElementWidget> getBaseElements();
+    List<IBaseElementWidget> getBaseElements();
 
-     IBaseElementWidget getBaseElement(String id);
+    IBaseElementWidget getBaseElement(String id);
 
-     ModelerFile getModelerFile();
+    ModelerFile getModelerFile();
 
-     void setModelerFile(ModelerFile modelerFile);
+    void setModelerFile(ModelerFile modelerFile);
 
-     ContextPaletteManager getContextPaletteManager();
+    ContextPaletteManager getContextPaletteManager();
 
-     IModelerPanel getModelerPanelTopComponent();
+    IModelerPanel getModelerPanelTopComponent();
 
-     void setModelerPanelTopComponent(IModelerPanel topComponent);
+    void setModelerPanelTopComponent(IModelerPanel topComponent);
 
-     LayerWidget getConnectionLayer();
+    LayerWidget getConnectionLayer();
 
-     LayerWidget getInterractionLayer();
+    LayerWidget getInterractionLayer();
 
-     LayerWidget getMainLayer();
+    LayerWidget getMainLayer();
 
-     LayerWidget getBackgroundLayer();
+    LayerWidget getBackgroundLayer();
 
-     LayerWidget getBoundaryWidgetLayer();
-
-    PopupMenuProvider getPopupMenuProvider();
+    LayerWidget getBoundaryWidgetLayer();
 
     void manageLayerWidget();
 
@@ -109,7 +102,7 @@ public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidg
 
     INodeWidget createNodeWidget(NodeWidgetInfo node);
 
-     IEdgeWidget createEdgeWidget(EdgeWidgetInfo edge);
+    IEdgeWidget createEdgeWidget(EdgeWidgetInfo edge);
 
     void deleteNodeWidget(INodeWidget nodeWidget);
 
@@ -124,37 +117,15 @@ public interface IModelerScene<E extends IRootElement>  extends IBaseElementWidg
     void setLabelLayer(LayerWidget labelLayer);
 
     JComponent getSatelliteView();
-    
+
     /* GraphScene & GraphPinScene */
     boolean isNode(Object object);
 
     boolean isEdge(Object object);
 
-    void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener);
-
-    void removePropertyChangeListener(String id);
-
-    Map<String, PropertyChangeListener> getPropertyChangeListeners();
-
-    void addPropertyVisibilityHandler(String id, PropertyVisibilityHandler propertyVisibilityHandler);
-
-    void removePropertyVisibilityHandler(String id);
-
-    Map<String, PropertyVisibilityHandler> getPropertyVisibilityHandlers();
-
     void autoLayout();
 
-    //custom added
-    
-    void showProperties();
-
-    void exploreProperties();
-
-    void refreshProperties();
-    
-    IPropertyManager getPropertyManager();
-    
     void cleanReference();
-    
+
     boolean isSceneGenerating();
 }

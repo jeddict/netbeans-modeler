@@ -18,6 +18,13 @@
             <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/core/ModelerFile.java</file>
             <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/document/IModelerDocument.java</file>
         </group>
-        <group/>
+        <group>
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/element/Element.java</file>
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/IModelerScene.java</file>
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/property/ElementPropertySet.java</file>
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/widget/IBaseElementWidget.java</file>
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/element/Attribute.java</file>
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/property/IPropertyWidget.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -37,6 +37,7 @@ import org.netbeans.modeler.config.element.Group;
 import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.enumtype.EnumComboBoxResolver;
+import org.netbeans.modeler.properties.type.Embedded;
 import org.netbeans.modeler.properties.type.Enumy;
 import org.netbeans.modeler.specification.model.document.ITextElement;
 import static org.netbeans.modeler.specification.model.document.property.PropertySetUtil.createPropertyChangeHandler;
@@ -332,7 +333,9 @@ public class ElementPropertySet {
                     } else if (Enumy.class.isAssignableFrom(attribute.getClassType())) {
                         EnumComboBoxResolver resolver = Lookup.getDefault().lookup(EnumComboBoxResolver.class);
                         this.put(attributeGroupId,resolver.getPropertySupport(modelerFile, attribute, baseElementWidget, object, propertyChangeHandlers));
-                    }else {
+                    } else if (Embedded.class.isAssignableFrom(attribute.getClassType())) {
+                        this.createPropertySet(groupId, null, baseElementWidget, PropertyUtils.getSimpleProperty(object, attribute.getName()), propertyChangeHandlers, propertyVisiblityHandlers, true, replaceProperty);
+                    } else {
                         if (attribute.isReadOnly()) {
                             String value = BeanUtils.getProperty(object, attribute.getName());
                             if (value == null) {

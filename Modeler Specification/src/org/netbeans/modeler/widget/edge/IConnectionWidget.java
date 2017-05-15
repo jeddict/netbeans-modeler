@@ -388,12 +388,4 @@ public interface IConnectionWidget extends IWidget {
      */
     void setTargetAnchorShape(AnchorShape targetAnchorShape);
 
-    //custom added
-    void showProperties();
-
-    void exploreProperties();
-
-    void refreshProperties();
-    
-    IPropertyManager getPropertyManager();
 }

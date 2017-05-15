@@ -1,5 +1,5 @@
 /**
- * Copyright [2016] Gaurav Gupta
+ * Copyright [2017] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,16 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package org.netbeans.modeler.properties.type;
 
 /**
+ * This marker interface allow to parse nested attribute in ElementConfig.xml
  *
  * @author jGauravGupta <gaurav.gupta.jc@gmail.com>
  */
-public interface Enumy {
-
-    String getDisplay();
-
-    Enumy getDefault();
-
+public interface Embedded {
 }

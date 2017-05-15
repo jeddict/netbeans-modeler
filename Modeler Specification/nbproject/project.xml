@@ -357,6 +357,7 @@
                 <package>org.netbeans.modeler.widget.pin.info</package>
                 <package>org.netbeans.modeler.widget.properties.generic</package>
                 <package>org.netbeans.modeler.widget.properties.handler</package>
+                <package>org.netbeans.modeler.widget.property</package>
                 <package>org.w3c.css.sac</package>
                 <package>org.w3c.css.sac.helpers</package>
                 <package>org.w3c.dom</package>
