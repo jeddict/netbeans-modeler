@@ -37,9 +37,6 @@ public class InteractiveZoomAction extends WidgetAction.Adapter {
 
         int amount = lastLocation.y - newLocation.y;
 
-//        //System.out.println("lastLocation.y : " + lastLocation.y);
-//        //System.out.println("newLocation.y : " + newLocation.y);
-//        //System.out.println("amount : " + amount);
         double zoom = scene.getZoomFactor();
         zoomMultiplier = 1 + Math.abs(amount) / (zoom * 100) / 5;
         if (amount > 0 && zoom < (double) ZoomManager.MAX_ZOOM_PERCENT / 100) {
