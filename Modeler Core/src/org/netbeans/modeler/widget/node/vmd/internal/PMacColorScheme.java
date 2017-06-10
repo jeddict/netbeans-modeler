@@ -236,13 +236,17 @@ public class PMacColorScheme implements IColorScheme {
                 widget.setBackground(gp);
             }
         }
-
-        if (state.isHovered() || state.isFocused()) {
-            widget.getPinNameWidget().setForeground(PIN_WIDGET_HOVER_TEXT_COLOR);
+        
+        if (widget.getTextDesign().getColor() == null) {
+            if (state.isHovered() || state.isSelected()) {
+                widget.getPinNameWidget().setForeground(PIN_WIDGET_HOVER_TEXT_COLOR);
+            } else {
+                widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT_COLOR);
+            }
         } else {
-            widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT_COLOR);
+            widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor());
         }
-       
+        
         if (state.isSelected()) {
             widget.setBorder(PIN_WIDGET_SELECT_BORDER);
         } else {

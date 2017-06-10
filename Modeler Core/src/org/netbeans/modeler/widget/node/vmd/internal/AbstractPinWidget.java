@@ -181,6 +181,7 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     /**
      * @return the stateHandler
      */
+    @Override
     public IWidgetStateHandler getWidgetStateHandler() {
         return stateHandler;
     }

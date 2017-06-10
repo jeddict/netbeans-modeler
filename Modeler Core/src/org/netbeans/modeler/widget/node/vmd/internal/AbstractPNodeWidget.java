@@ -366,16 +366,18 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
             }
         }
 
-        ArrayList<String> unusedCategories = new ArrayList<String>(pinCategoryWidgets.keySet());
-        ArrayList<String> categoryNames = new ArrayList<String>(pinsCategories.keySet());
+        ArrayList<String> unusedCategories = new ArrayList<>(pinCategoryWidgets.keySet());
+        ArrayList<String> categoryNames = new ArrayList<>(pinsCategories.keySet());
 
-        ArrayList<Widget> newWidgets = new ArrayList<Widget>();
+        ArrayList<Widget> newWidgets = new ArrayList<>();
         for (String categoryName : categoryNames) {
             if (categoryName == null) {
                 continue;
             }
             unusedCategories.remove(categoryName);
-            newWidgets.add((Widget) createPinCategoryWidget(categoryName));
+            if(!categoryName.isEmpty()){
+                newWidgets.add((Widget) createPinCategoryWidget(categoryName));
+            }
             List<Widget> widgets = pinsCategories.get(categoryName);
             for (Widget widget : widgets) {
                 if (unresolvedPins.remove(widget)) {

@@ -243,12 +243,15 @@ public class PMetroColorScheme implements IColorScheme {
             }
         }
 
-        if (state.isHovered() || state.isFocused()) {
+        if (widget.getTextDesign().getColor() == null) {
+            if (state.isHovered() || state.isSelected()) {
                 widget.getPinNameWidget().setForeground(PIN_WIDGET_HOVER_TEXT_COLOR);
             } else {
                 widget.getPinNameWidget().setForeground(PIN_WIDGET_TEXT_COLOR);
             }
-        
+        } else {
+            widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor());
+        }
          
         if (state.isSelected()) {
             widget.setBorder(PIN_WIDGET_SELECT_BORDER);

@@ -19,6 +19,7 @@ import org.netbeans.api.visual.action.TextFieldInplaceEditor;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
+import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowPinWidget;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
@@ -40,7 +41,11 @@ public class LabelInplaceEditor implements TextFieldInplaceEditor {
 
     @Override
     public String getText(Widget widget) {
-        return ((LabelWidget) widget).getLabel();
+        if(widget.getParentWidget() != null && widget.getParentWidget() instanceof IFlowElementWidget){
+            return ((IFlowElementWidget)widget.getParentWidget()).getName();
+        } else {
+            return ((LabelWidget) widget).getLabel();
+        }
     }
 
     @Override
