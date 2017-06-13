@@ -17,11 +17,13 @@ package org.netbeans.modeler.widget.design;
 
 import java.awt.Color;
 import java.awt.Font;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
  * @author jGauravGupta
  */
+@XmlJavaTypeAdapter(value = NodeTextDesignValidator.class)
 public class NodeTextDesign extends TextDesign {
 
     private static final int NODE_DEFAULT_STYLE = Font.BOLD;

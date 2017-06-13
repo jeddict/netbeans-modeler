@@ -26,5 +26,9 @@
             <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/element/Attribute.java</file>
             <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/property/IPropertyWidget.java</file>
         </group>
+        <group name="work">
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/design/PinTextDesign.java</file>
+            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/design/PinTextDesignValidator.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author jGauravGupta
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlJavaTypeAdapter(value = TextDesignValidator.class)
 public abstract class TextDesign implements ITextDesign {
 
     protected static final int DEFAULT_SIZE = 12;

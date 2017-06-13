@@ -17,10 +17,10 @@ package org.netbeans.modeler.widget.design;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-public class TextDesignValidator extends XmlAdapter<TextDesign, TextDesign> {
+public class PinTextDesignValidator extends XmlAdapter<PinTextDesign, PinTextDesign> {
 
     @Override
-    public TextDesign marshal(TextDesign textDesign) throws Exception {
+    public PinTextDesign marshal(PinTextDesign textDesign) throws Exception {
         if (textDesign != null && !textDesign.isChanged()) {
             return null;
         }
@@ -28,7 +28,7 @@ public class TextDesignValidator extends XmlAdapter<TextDesign, TextDesign> {
     }
 
     @Override
-    public TextDesign unmarshal(TextDesign textDesign) throws Exception {
+    public PinTextDesign unmarshal(PinTextDesign textDesign) throws Exception {
         return textDesign;
     }
 

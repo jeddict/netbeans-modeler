@@ -1,5 +1,5 @@
 /**
- * Copyright [2017] Gaurav Gupta
+ * Copyright [2016] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,26 +15,21 @@
  */
 package org.netbeans.modeler.widget.design;
 
-import java.awt.Color;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-/**
- *
- * @author jGauravGupta
- */
-@XmlJavaTypeAdapter(value = PinTextDesignValidator.class)
-public class PinTextDesign extends TextDesign {
+public class NodeTextDesignValidator extends XmlAdapter<NodeTextDesign, NodeTextDesign> {
 
-    public PinTextDesign() {
+    @Override
+    public NodeTextDesign marshal(NodeTextDesign textDesign) throws Exception {
+        if (textDesign != null && !textDesign.isChanged()) {
+            return null;
+        }
+        return textDesign;
     }
-    
-    public PinTextDesign(int style, float size) {
-        super(style, size);
+
+    @Override
+    public NodeTextDesign unmarshal(NodeTextDesign textDesign) throws Exception {
+        return textDesign;
     }
-    
-    public PinTextDesign(int style, float size, Color color) {
-        super(style, size, color);
-    }
-   
 
 }
