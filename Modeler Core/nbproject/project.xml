@@ -190,6 +190,7 @@
             <public-packages>
                 <package>org.netbeans.modeler.actions</package>
                 <package>org.netbeans.modeler.actions.export</package>
+                <package>org.netbeans.modeler.analytics</package>
                 <package>org.netbeans.modeler.anchors</package>
                 <package>org.netbeans.modeler.anchorshape</package>
                 <package>org.netbeans.modeler.anchorshape.crow</package>
