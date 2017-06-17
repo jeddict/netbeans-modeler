@@ -33,8 +33,10 @@ public interface IPModelerScene<E extends IRootElement> extends IModelerScene<E>
     void deletePinWidget(IPinWidget pinWidget);
 
     Anchor getPinAnchor(IPinWidget pin);
-
+    
     IColorScheme getColorScheme();
+
+    IColorScheme getColorScheme(String defaultTheme);
 
     void setColorScheme(Class<? extends IColorScheme> scheme);
 

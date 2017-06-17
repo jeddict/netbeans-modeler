@@ -90,6 +90,7 @@ import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.netbeans.modeler.widget.transferable.cp.WidgetTransferable;
+import org.openide.util.NbPreferences;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.WindowManager;
 
@@ -549,15 +550,19 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     }
 
     private void reinstallColorScheme() {
-        IColorScheme scheme = this.getColorScheme();
+        IColorScheme scheme = getColorScheme();
         scheme.installUI(this);
         for (Widget widget : this.getChildren()) {
             reinstallColorScheme(widget, scheme);
         }
     }
+    
+    public final IColorScheme getColorScheme() {
+        return this.getColorScheme(NbPreferences.forModule(this.getClass()).get("theme", null));
+    }
 
     public void reinstallColorScheme(IWidget widget) {
-        reinstallColorScheme((Widget) widget, this.getColorScheme());
+        reinstallColorScheme((Widget) widget, getColorScheme());
     }
 
     private void reinstallColorScheme(Widget widget, IColorScheme scheme) {
@@ -620,6 +625,8 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         for (final Entry<String, Class<? extends IColorScheme>> scheme : this.getColorSchemes().entrySet()) {
             JRadioButtonMenuItem schemeMenu = new JRadioButtonMenuItem(scheme.getKey());
             schemeMenu.addActionListener((ActionEvent e) -> {
+                NbPreferences.forModule(AbstractPModelerScene.this.getClass())
+                        .put("theme", scheme.getValue().getSimpleName());
                 AbstractPModelerScene.this.setColorScheme(scheme.getValue());
                 reinstallColorScheme();
                 AbstractPModelerScene.this.getModelerPanelTopComponent().changePersistenceState(false);
