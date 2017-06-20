@@ -34,7 +34,6 @@ import org.netbeans.api.visual.anchor.AnchorFactory;
 import org.netbeans.api.visual.layout.LayoutFactory;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.model.StateModel;
-import org.netbeans.api.visual.vmd.VMDGlyphSetWidget;
 import org.netbeans.api.visual.vmd.VMDMinimizeAbility;
 import org.netbeans.api.visual.widget.ImageWidget;
 import org.netbeans.api.visual.widget.LabelWidget;
@@ -51,10 +50,6 @@ import org.netbeans.modeler.widget.state.WidgetStateHandler;
 import org.netbeans.modeler.widget.design.ITextDesign;
 import org.netbeans.modeler.widget.design.NodeTextDesign;
 
-/**
- *
- *
- */
 public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget, StateModel.Listener, VMDMinimizeAbility {
 
     private final Widget header;
@@ -62,7 +57,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     private final AdvanceImageWidget imageWidget;
     private final LabelWidget nameWidget;
     private final LabelWidget typeWidget;
-    private final VMDGlyphSetWidget glyphSetWidget;
     private final SeparatorWidget pinsSeparator;
     private Map<String, IPinSeperatorWidget> pinCategoryWidgets = new HashMap<>();
 
@@ -114,12 +108,9 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         typeWidget.setForeground(Color.BLACK);
         header.addChild(typeWidget);
 
-        glyphSetWidget = new VMDGlyphSetWidget(scene);
-        header.addChild(glyphSetWidget);
-
         if (right) {
             Widget widget = new Widget(scene);
-            widget.setOpaque(false);
+//            widget.setOpaque(false);
             header.addChild(widget, 1000);
             header.addChild(minimizeWidget);
         }
@@ -133,7 +124,9 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         stateModel = new StateModel();
         stateModel.addListener(this);
 
-        colorScheme.installUI(this);
+        if(!((AbstractPModelerScene)this.getScene()).isSceneGenerating()){
+          colorScheme.installUI(this);  
+        }
         notifyStateChanged(ObjectState.createNormal(), ObjectState.createNormal());
     }
 
@@ -271,32 +264,6 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
     }
 
     /**
-     * Sets node glyphs.
-     *
-     * @param glyphs the list of images
-     */
-    @Override
-    public void setGlyphs(List<Image> glyphs) {
-        glyphSetWidget.setGlyphs(glyphs);
-    }
-
-    /**
-     * Sets all node properties at once.
-     *
-     * @param image the node image
-     * @param nodeName the node name
-     * @param nodeType the node type (secondary name)
-     * @param glyphs the node glyphs
-     */
-    @Override
-    public void setNodeProperties(Image image, String nodeName, String nodeType, List<Image> glyphs) {
-        setImage(image);
-        setNodeName(nodeName);
-        setNodeType(nodeType);
-        setGlyphs(glyphs);
-    }
-
-    /**
      * Returns a node name widget.
      *
      * @return the node name widget
@@ -404,7 +371,11 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
         if (w != null) {
             return w;
         }
-        IPinSeperatorWidget label = colorScheme.createPinCategoryWidget(this, categoryDisplayName);
+        IPinSeperatorWidget label = new PinSeperatorWidget(this.getScene(), categoryDisplayName);
+        if(!((AbstractPModelerScene)this.getScene()).isSceneGenerating()){
+          colorScheme.installUI(label);  
+        }
+        
         if (stateModel.getBooleanState()) {
             label.setPreferredBounds(new Rectangle());
         }

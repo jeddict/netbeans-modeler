@@ -140,7 +140,8 @@ public class PWoodColorScheme implements IColorScheme {
         header.setBorder(BORDER_PIN);
         widget.getHeader().setOpaque(true);
         widget.getNodeNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():Color.WHITE);
-        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+        Font font = widget.getNodeNameWidget().getFont()!=null?widget.getNodeNameWidget().getFont():widget.getScene().getDefaultFont();
+        widget.getNodeNameWidget().setFont(font.deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
         Widget pinsSeparator = widget.getPinsSeparator();
         pinsSeparator.setForeground(PIN_SEPERATOR_WIDGET_BACKGROUND);
 
@@ -220,7 +221,8 @@ public class PWoodColorScheme implements IColorScheme {
         widget.setBorder(BORDER_PIN);
         widget.setBackground(PIN_WIDGET_HOVER_BACKGROUND);
         widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():WIDGET_HOVER_BACKGROUND);
-        widget.getPinNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+        Font font = widget.getPinNameWidget().getFont()!=null?widget.getPinNameWidget().getFont():widget.getScene().getDefaultFont();
+        widget.getPinNameWidget().setFont(font.deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
     
     }
 
@@ -274,14 +276,6 @@ public class PWoodColorScheme implements IColorScheme {
         return widget.isMinimized()
                 ? ImageUtilities.loadImage("org/netbeans/modeler/widget/node/vmd/internal/resource/ex1/expand.png") // NOI18N
                 : ImageUtilities.loadImage("org/netbeans/modeler/widget/node/vmd/internal/resource/ex1/collapse.png"); // NOI18N
-    }
-
-    @Override
-    public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
-        Scene scene = widget.getScene();
-        IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
-        installUI(label);
-        return label;
     }
 
     @Override

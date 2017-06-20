@@ -160,7 +160,8 @@ public class PDarkColorScheme implements IColorScheme {
         header.setBorder(OPAQUE_BORDER);
         widget.getHeader().setOpaque(true);
         widget.getNodeNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():WIDGET_TEXT_COLOR);
-        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+        Font font = widget.getNodeNameWidget().getFont()!=null?widget.getNodeNameWidget().getFont():widget.getScene().getDefaultFont();
+        widget.getNodeNameWidget().setFont(font.deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
         Widget pinsSeparator = widget.getPinsSeparator();
         pinsSeparator.setForeground(PIN_SEPERATOR_WIDGET_BACKGROUND);
         widget.getMinimizeButton().setImage(this.getMinimizeWidgetImage(widget));
@@ -226,7 +227,8 @@ public class PDarkColorScheme implements IColorScheme {
         widget.setBorder(OPAQUE_BORDER);
         widget.setBackground(PIN_WIDGET_BACKGROUND);
         widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():PIN_WIDGET_TEXT_COLOR);
-        widget.getPinNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+        Font font = widget.getPinNameWidget().getFont()!=null?widget.getPinNameWidget().getFont():widget.getScene().getDefaultFont();
+        widget.getPinNameWidget().setFont(font.deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
     
     }
 
@@ -270,14 +272,6 @@ public class PDarkColorScheme implements IColorScheme {
     @Override
     public Image getMinimizeWidgetImage(IPNodeWidget widget) {
         return widget.isMinimized() ? BUTTON_E : BUTTON_C;
-    }
-
-    @Override
-    public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
-        Scene scene = widget.getScene();
-        IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
-        installUI(label);
-        return label;
     }
 
     @Override

@@ -15,13 +15,16 @@
  */
 package org.netbeans.modeler.specification.model.document;
 
+import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 
 public interface INModelerScene<E extends IRootElement> extends IModelerScene<E> {
 
-    public void setEdgeWidgetSource(EdgeWidgetInfo edge, NodeWidgetInfo node);
+    void setEdgeWidgetSource(EdgeWidgetInfo edge, NodeWidgetInfo node);
 
-    public void setEdgeWidgetTarget(EdgeWidgetInfo edge, NodeWidgetInfo node);
+    void setEdgeWidgetTarget(EdgeWidgetInfo edge, NodeWidgetInfo node);
+    
+    LayerWidget getBoundaryWidgetLayer();
 
 }

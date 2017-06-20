@@ -67,16 +67,6 @@ public interface IColorScheme {
     Image getMinimizeWidgetImage(IPNodeWidget widget);
 
     /**
-     * Called to create a pin-category widget.
-     *
-     * @param widget the node widget
-     * @param categoryDisplayName the category display name
-     * @return the pin-category widget
-     *
-     */
-    IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName);
-
-    /**
      * Called to install UI to a connection widget.
      *
      * @param widget the connection widget

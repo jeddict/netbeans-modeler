@@ -128,7 +128,8 @@ public class PNBColorScheme implements IColorScheme {
         header.setBackground(COLOR60_HOVER_BACKGROUND);
         header.setBorder(BORDER_PIN);
         widget.getNodeNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():Color.BLACK);
-        widget.getNodeNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+        Font font = widget.getNodeNameWidget().getFont()!=null?widget.getNodeNameWidget().getFont():widget.getScene().getDefaultFont();
+        widget.getNodeNameWidget().setFont(font.deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
         
         Widget pinsSeparator = widget.getPinsSeparator();
         pinsSeparator.setForeground(BORDER_CATEGORY_BACKGROUND);
@@ -194,7 +195,8 @@ public class PNBColorScheme implements IColorScheme {
         widget.setBorder(BORDER_PIN);
         widget.setBackground(COLOR60_HOVER_BACKGROUND);
         widget.getPinNameWidget().setForeground(widget.getTextDesign().getColor()!=null?widget.getTextDesign().getColor():Color.BLACK);
-        widget.getPinNameWidget().setFont(widget.getScene().getDefaultFont().deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
+        Font font = widget.getPinNameWidget().getFont()!=null?widget.getPinNameWidget().getFont():widget.getScene().getDefaultFont();
+        widget.getPinNameWidget().setFont(font.deriveFont(widget.getTextDesign().getStyle(), widget.getTextDesign().getSize()));
     
     }
 
@@ -224,14 +226,6 @@ public class PNBColorScheme implements IColorScheme {
         return widget.isMinimized()
                 ? ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-expand-60.png") // NOI18N
                 : ImageUtilities.loadImage("org/netbeans/modules/visual/resources/vmd-collapse-60.png"); // NOI18N
-    }
-
-    @Override
-    public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
-        Scene scene = widget.getScene();
-        IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
-        installUI(label);
-        return label;
     }
 
     @Override

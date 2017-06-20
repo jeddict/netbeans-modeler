@@ -2,33 +2,5 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="GAURAV 21 MAR"/>
-        <group name="JPAM">
-            <file>file:/home/jGauravGupta/nb/NB5/JPAM/nbmodeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/property/ElementPropertySet.java</file>
-        </group>
-        <group name="Demo">
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/element/ElementConfigFactory.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/property/ElementPropertySet.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/core/NBModelerUtil.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/shape/ShapeDesign.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/node/image/svg/SvgImage.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/shape/adapter/ShapeAdapter.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/util/Util.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/document/ModelerDocument.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/core/ModelerFile.java</file>
-            <file>file:/E:/JPAM/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/document/IModelerDocument.java</file>
-        </group>
-        <group>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/element/Element.java</file>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/IModelerScene.java</file>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/property/ElementPropertySet.java</file>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/specification/model/document/widget/IBaseElementWidget.java</file>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/config/element/Attribute.java</file>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/property/IPropertyWidget.java</file>
-        </group>
-        <group name="work">
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/design/PinTextDesign.java</file>
-            <file>file:/F:/JPAM/Module/NBModeler/Modeler%20Specification/src/org/netbeans/modeler/widget/design/PinTextDesignValidator.java</file>
-        </group>
     </open-files>
 </project-private>

@@ -64,6 +64,7 @@ import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
+import org.netbeans.modeler.router.OrthogonalSearchRouter;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
@@ -90,6 +91,7 @@ import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.netbeans.modeler.widget.transferable.cp.WidgetTransferable;
+import org.netbeans.modeler.router.WidgetsCollisionCollector;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.WindowManager;
@@ -106,7 +108,6 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     private LayerWidget mainLayer;
     private LayerWidget connectionLayer;
     private LayerWidget interractionLayer;//interactive actions like ConnectAction or AlignWithMoveAction
-    private LayerWidget boundaryWidgetLayer;
     private LayerWidget labelLayer;
     private Router router = null;
     private JComponent satelliteView;
@@ -127,20 +128,17 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         mainLayer = new LayerWidget(this);
         connectionLayer = new LayerWidget(this);
         interractionLayer = new LayerWidget(this);
-        boundaryWidgetLayer = new LayerWidget(this);
         labelLayer = new LayerWidget(this);
         addChild(backgroundLayer);
         addChild(mainLayer);
         addChild(interractionLayer);
         addChild(connectionLayer);
-        addChild(boundaryWidgetLayer);
         addChild(labelLayer);
 
-        boundaryWidgetLayer.bringToFront();
         connectionLayer.bringToFront();
         labelLayer.bringToFront();
 
-        router = RouterFactory.createOrthogonalSearchRouter(mainLayer, connectionLayer);//RouterFactory.createFreeRouter();
+        router = new OrthogonalSearchRouter(new WidgetsCollisionCollector (mainLayer, connectionLayer));//RouterFactory.createFreeRouter();
         satelliteView = this.createSatelliteView();
         setActiveTool(DesignerTools.SELECT);
     }
@@ -799,32 +797,14 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         this.invalidNodeWidget = invalidNodeWidget;
     }
 
-    /**
-     * @return the boundaryWidgetLayer
-     */
-    @Override
-    public LayerWidget getBoundaryWidgetLayer() {
-        return boundaryWidgetLayer;
-    }
-
-    /**
-     * @param boundaryWidgetLayer the boundaryWidgetLayer to set
-     */
-    public void setBoundaryWidgetLayer(LayerWidget boundaryWidgetLayer) {
-        this.boundaryWidgetLayer = boundaryWidgetLayer;
-    }
-
     public void manageWidgetBorder() {
     }
 
     @Override
     public void manageLayerWidget() {
-
         getInterractionLayer().bringToBack();
-        getBoundaryWidgetLayer().bringToFront();
         getMainLayer().bringToFront();
         getConnectionLayer().bringToFront();
-        getBoundaryWidgetLayer().bringToFront();
         getLabelLayer().bringToFront();
     }
 
@@ -1007,6 +987,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     public void validateComponent() {
         if (!isSceneGenerating()) {
             long st = new Date().getTime();
+            updateRouterMaxDepth();
             this.validate();
             System.out.println("validateComponent Total time : " + (new Date().getTime() - st) + " ms");
         }
@@ -1024,6 +1005,33 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
 
     public boolean isSceneGenerating() {//bound is not available if true
         return sceneGeneration;
+    }
+    
+    private void updateRouterMaxDepth() {
+        if (router instanceof OrthogonalSearchRouter) {
+            OrthogonalSearchRouter searchRouter = (OrthogonalSearchRouter) router;
+            if (searchRouter.getMaxDepth() == 0) {
+                int size = this.getConnectionLayer().getChildren().size();
+                System.out.println("size : " + size);
+                if (size > 100) {
+                    searchRouter.setMaxDepth(2);
+                } else if (size > 60) {
+                    searchRouter.setMaxDepth(3);
+                } else if (size > 30) {
+                    searchRouter.setMaxDepth(4);
+                } else {
+                    searchRouter.setMaxDepth(5);
+                }
+            }
+        }
+    }
+    
+    public int getRouterMaxDepth() {
+        if (router instanceof OrthogonalSearchRouter) {
+            OrthogonalSearchRouter searchRouter = (OrthogonalSearchRouter) router;
+            return searchRouter.getMaxDepth();
+        }
+        return -1;
     }
 
     @Override

@@ -107,13 +107,6 @@ public interface IParentPNodeWidget extends StateModel.Listener, VMDMinimizeAbil
     boolean isMinimized();
 
     /**
-     * Sets node glyphs.
-     *
-     * @param glyphs the list of images
-     */
-    void setGlyphs(List<Image> glyphs);
-
-    /**
      * Set the minimized state. This method will show/hide child widgets of this
      * Widget and switches anchors between node and pin widgets.
      *
@@ -127,16 +120,6 @@ public interface IParentPNodeWidget extends StateModel.Listener, VMDMinimizeAbil
      * @param nodeName the node name
      */
     void setNodeName(String nodeName);
-
-    /**
-     * Sets all node properties at once.
-     *
-     * @param image the node image
-     * @param nodeName the node name
-     * @param nodeType the node type (secondary name)
-     * @param glyphs the node glyphs
-     */
-    void setNodeProperties(Image image, String nodeName, String nodeType, List<Image> glyphs);
 
     /**
      * Sets a node type (secondary name).

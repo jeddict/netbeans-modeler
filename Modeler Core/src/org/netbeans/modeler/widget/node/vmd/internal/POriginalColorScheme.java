@@ -224,14 +224,6 @@ public class POriginalColorScheme implements IColorScheme {
     }
 
     @Override
-    public IPinSeperatorWidget createPinCategoryWidget(IPNodeWidget widget, String categoryDisplayName) {
-        Scene scene = widget.getScene();
-        IPinSeperatorWidget label = new PinSeperatorWidget(scene, categoryDisplayName);
-        installUI(label);
-        return label;
-    }
-
-    @Override
     public void installUI(IPinSeperatorWidget label) {
         label.setOpaque(true);
         label.setBackground(BORDER_CATEGORY_BACKGROUND);

@@ -87,26 +87,11 @@ public interface IPinWidget extends IWidget, IPropertyWidget {
     Widget getPinNameWidget();
 
     /**
-     * Sets pin glyphs.
-     *
-     * @param glyphs the list of images
-     */
-    void setGlyphs(List<Image> glyphs);
-
-    /**
      * Sets a pin name.
      *
      * @param name the pin name
      */
     void setPinName(String name);
-
-    /**
-     * Sets all pin properties at once.
-     *
-     * @param name the pin name
-     * @param glyphs the pin glyphs
-     */
-    void setProperties(String name, List<Image> glyphs);
 
     int getAnchorGap();
 

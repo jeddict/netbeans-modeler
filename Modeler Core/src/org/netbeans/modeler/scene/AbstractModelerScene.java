@@ -631,9 +631,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
 
     @Override
     public void manageLayerWidget() {
-
         getInterractionLayer().bringToBack();
-//        getBoundaryWidgetLayer().bringToFront();
         getMainLayer().bringToFront();
         getConnectionLayer().bringToFront();
         getBoundaryWidgetLayer().bringToFront();

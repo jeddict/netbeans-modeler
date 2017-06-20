@@ -25,6 +25,7 @@ import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.anchors.PNodeAnchor;
+import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.widget.design.ITextDesign;
 import org.netbeans.modeler.widget.design.PinTextDesign;
@@ -37,7 +38,6 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     private IColorScheme colorScheme;
     private final AdvanceImageWidget imageWidget;
     private final LabelWidget nameWidget;
-    private final VMDGlyphSetWidget glyphsWidget;
     private PNodeAnchor anchor;
     private final IWidgetStateHandler stateHandler;
     private ITextDesign textDesign;
@@ -57,11 +57,12 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
 
         addChild(imageWidget = new AdvanceImageWidget(scene));
         addChild(nameWidget = new LabelWidget(scene));
-        addChild(glyphsWidget = new VMDGlyphSetWidget(scene));
         
         stateHandler = new WidgetStateHandler(imageWidget);
         
-        colorScheme.installUI(this);
+        if(!((AbstractPModelerScene)this.getScene()).isSceneGenerating()){
+          colorScheme.installUI(this);  
+        }
         notifyStateChanged(ObjectState.createNormal(), ObjectState.createNormal());
     }
 
@@ -117,28 +118,6 @@ public abstract class AbstractPinWidget extends Widget implements IPinWidget {
     @Override
     public String getPinName() {
         return nameWidget.getLabel();
-    }
-
-    /**
-     * Sets pin glyphs.
-     *
-     * @param glyphs the list of images
-     */
-    @Override
-    public void setGlyphs(List<Image> glyphs) {
-        glyphsWidget.setGlyphs(glyphs);
-    }
-
-    /**
-     * Sets all pin properties at once.
-     *
-     * @param name the pin name
-     * @param glyphs the pin glyphs
-     */
-    @Override
-    public void setProperties(String name, List<Image> glyphs) {
-        setPinName(name);
-        glyphsWidget.setGlyphs(glyphs);
     }
 
     /**

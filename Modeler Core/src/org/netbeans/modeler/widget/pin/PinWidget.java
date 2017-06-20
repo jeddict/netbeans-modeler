@@ -58,8 +58,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
         this.nodeWidget = nodeWidget;
         editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getPinNameWidget().getActions().addAction(editAction);
-        
-        this.setProperties(pinWidgetInfo.getName(), null);
+        setPinName(pinWidgetInfo.getName());
     }
     
     public void edit(){

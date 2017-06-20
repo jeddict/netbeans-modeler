@@ -86,8 +86,6 @@ public interface IModelerScene<E extends IRootElement> extends IBaseElementWidge
 
     LayerWidget getBackgroundLayer();
 
-    LayerWidget getBoundaryWidgetLayer();
-
     void manageLayerWidget();
 
     Router getRouter();
