@@ -36,7 +36,7 @@ public class PropertySetUtil {
             vars.put("widget", baseElementWidget);
             vars.put("_this", object);
             vars.put("node", baseElementWidget.getBaseElementSpec());
-                return (Boolean) MVEL.executeExpression(exp, vars);
+            return (Boolean) MVEL.executeExpression(exp, vars);
         };
     }
 

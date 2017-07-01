@@ -115,9 +115,8 @@ final class OrthogonalSearchRouterCore {
         OrthogonalSearchRouterRegion region =
                 new OrthogonalSearchRouterRegion(sourceBoundaryPoint.x, sourceBoundaryPoint.y, 
                 0, 0, sourceDirection, 0);
-long st = new Date().getTime();  
+        
         search(region); 
-System.out.println("search Total time : " + (new Date().getTime() - st) + " ms " + region);
      
         //something went wrong in the search
         if (bestControlPoints == null) return null ;

@@ -29,13 +29,19 @@ import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.enti
 
 public class AutocompleteJComboBox<T> extends JComboBox<ComboBoxValue> {
 
-    private final List<ComboBoxValue<T>> terms;
-    private final Consumer<T> onSelection;
+    private List<ComboBoxValue<T>> terms;
+    private Consumer<T> onSelection;
 
+    public AutocompleteJComboBox() {
+        this(null, null);
+    }
+    
     public AutocompleteJComboBox(List<ComboBoxValue<T>> terms, Consumer<T> onSelection) {
-        this.terms = terms;
+        if(terms!=null){
+            this.terms = terms;
+            setModel(new DefaultComboBoxModel(new Vector(terms)));
+        }
         this.onSelection = onSelection;
-        setModel(new DefaultComboBoxModel(new Vector(terms)));
         setSelectedIndex(-1);
         setEditable(true);
         JTextField text = (JTextField) this.getEditor().getEditorComponent();
@@ -46,10 +52,15 @@ public class AutocompleteJComboBox<T> extends JComboBox<ComboBoxValue> {
             if ("COMBOBOX.CP_COMBOBOX".equals(evt.getPropertyName())
                     && evt.getNewValue()!=null && "NORMAL".equals(evt.getNewValue().toString())
                     && evt.getOldValue()!=null && "PRESSED".equals(evt.getOldValue().toString())) {//COMBOBOX.CP_COMBOBOX - NORMAL - PRESSED
-                this.onSelection.accept(getValue());
+                if(onSelection!=null)this.onSelection.accept(getValue());
             }
         });
 
+    }
+    
+    public void setValue(List<ComboBoxValue<T>> terms){
+        this.terms = terms;
+        setModel(new DefaultComboBoxModel(new Vector(terms)));
     }
 
     public T getValue() {
@@ -76,7 +87,7 @@ public class AutocompleteJComboBox<T> extends JComboBox<ComboBoxValue> {
             JTextField tf = (JTextField) comboBox.getEditor().getEditorComponent();
 
             if (key.getKeyCode() == KeyEvent.VK_ENTER) { //on enter press
-                onSelection.accept(comboBox.getValue());
+                if(onSelection!=null)onSelection.accept(comboBox.getValue());
             }
             if (key.getKeyCode() == KeyEvent.VK_UP
                     || key.getKeyCode() == KeyEvent.VK_DOWN

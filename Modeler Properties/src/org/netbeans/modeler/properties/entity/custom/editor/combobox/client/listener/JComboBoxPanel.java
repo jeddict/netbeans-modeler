@@ -16,6 +16,7 @@
 package org.netbeans.modeler.properties.entity.custom.editor.combobox.client.listener;
 
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.entity.custom.editor.combobox.client.entity.ComboBoxValue;
 import org.netbeans.modeler.properties.EntityComponent;
@@ -179,7 +180,11 @@ public class JComboBoxPanel extends javax.swing.JPanel {
                 comboBoxValue = (ComboBoxValue) itemComponent.getEntity();
             }
         } else {
+            try {
             comboBoxValue = (ComboBoxValue) actionHandler.getItemSupplier().get();
+            } catch(IllegalStateException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", ERROR_MESSAGE);
+            }
         }
 
         if (comboBoxValue != null) {

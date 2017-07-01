@@ -1012,7 +1012,6 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
             OrthogonalSearchRouter searchRouter = (OrthogonalSearchRouter) router;
             if (searchRouter.getMaxDepth() == 0) {
                 int size = this.getConnectionLayer().getChildren().size();
-                System.out.println("size : " + size);
                 if (size > 100) {
                     searchRouter.setMaxDepth(2);
                 } else if (size > 60) {
