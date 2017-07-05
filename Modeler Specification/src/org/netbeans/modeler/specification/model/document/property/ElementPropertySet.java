@@ -334,7 +334,11 @@ public class ElementPropertySet {
                         EnumComboBoxResolver resolver = Lookup.getDefault().lookup(EnumComboBoxResolver.class);
                         this.put(attributeGroupId,resolver.getPropertySupport(modelerFile, attribute, baseElementWidget, object, propertyChangeHandlers));
                     } else if (Embedded.class.isAssignableFrom(attribute.getClassType())) {
-                        this.createPropertySet(groupId, null, baseElementWidget, PropertyUtils.getSimpleProperty(object, attribute.getName()), propertyChangeHandlers, propertyVisiblityHandlers, true, replaceProperty);
+                        if(attribute.getGroupId() != null){
+                            groupId = attribute.getGroupId();
+                        }
+                        //in embedded id is used as category
+                        this.createPropertySet(groupId, attribute.getId(), baseElementWidget, PropertyUtils.getSimpleProperty(object, attribute.getName()), propertyChangeHandlers, propertyVisiblityHandlers, true, replaceProperty);
                     } else {
                         if (attribute.isReadOnly()) {
                             String value = BeanUtils.getProperty(object, attribute.getName());

@@ -54,7 +54,7 @@ public class ElementConfigFactory {
             if (element_TMP.getClassType() == null) {
                 throw new IllegalArgumentException(element_TMP.getId() + " class not found");
             }
-            if (StringUtils.equals(category, element_TMP.getCategory()) && element_TMP.getClassType().isAssignableFrom(classType)) { //all super class
+            if ((StringUtils.equals(category, element_TMP.getCategory()) || StringUtils.equals(category, element_TMP.getId())) && element_TMP.getClassType().isAssignableFrom(classType)) { //all super class
                 elements.add(element_TMP);
             }
         }
