@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.component.ModelerPanelTopComponent;
@@ -168,7 +169,10 @@ public abstract class ModelerFileActionListener implements ActionListener {
             }
 
         } catch (Throwable t) {
-            if (modelerFile != null) {
+            if(t.getCause()!=null && t.getCause() instanceof javax.xml.bind.UnmarshalException){
+                JOptionPane.showMessageDialog(null, "Unable to open the corrupt file", "Error", JOptionPane.ERROR_MESSAGE);
+                modelerFile.getModelerPanelTopComponent().close();
+            } else if (modelerFile != null) {
                 modelerFile.handleException(t);
             }
         }

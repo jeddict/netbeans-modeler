@@ -95,7 +95,12 @@ public class AutocompleteJComboBox<T> extends JComboBox<ComboBoxValue> {
                     || key.getKeyCode() == KeyEvent.VK_RIGHT) {
                 return;
             }
-
+            
+            if ((key.getKeyCode() == KeyEvent.VK_A && key.isControlDown()) 
+                    || key.getKeyCode() == KeyEvent.VK_CONTROL){
+                return;
+            }
+            
             String text = ((JTextField) key.getSource()).getText();
             comboBox.setModel(new DefaultComboBoxModel(terms.stream()
                     .filter(s -> s.getDisplayValue().toLowerCase().contains(text.toLowerCase()))
