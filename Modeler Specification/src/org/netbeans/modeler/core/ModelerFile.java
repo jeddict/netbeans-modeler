@@ -250,6 +250,10 @@ public class ModelerFile {
             ErrorManager.getDefault().notify(e);
         }
     }
+    
+    public void close(){
+        getModelerPanelTopComponent().close();
+    }
 
     public void deleteSelectedElements() {
         IModelerScene scene = this.getModelerScene();
