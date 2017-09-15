@@ -44,7 +44,7 @@ import org.netbeans.modeler.shape.adapter.ColorAdapter;
  }*/)
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ShapeDesign /*implements Unmarshaller , Marshaller*/ {
+public class ShapeDesign {
 
     @XmlTransient
     private OuterShapeContext outerShapeContext;
@@ -60,7 +60,6 @@ public class ShapeDesign /*implements Unmarshaller , Marshaller*/ {
         this.outerShapeContext = standardShapeDesign.getOuterShapeContext();
     }
 
-//    @XmlJavaTypeAdapter(AdaptorCDATA.class)
     @XmlValue
     private String value;
 
@@ -93,7 +92,6 @@ public class ShapeDesign /*implements Unmarshaller , Marshaller*/ {
         Shape shape = json.fromJson(value, Shape.class);
         this.innerShapeContext = shape.inner;
         this.outerShapeContext = shape.outer;
-//        System.out.println("afterUnmarshal value : " + value);
     }
 
     void beforeMarshal(Marshaller marshaller, Object parent) {
@@ -101,7 +99,6 @@ public class ShapeDesign /*implements Unmarshaller , Marshaller*/ {
         shape.inner = this.innerShapeContext;
         shape.outer = this.outerShapeContext;
         value = json.toJson(shape);//"<![CDATA[" + json.toJson(shape) + "]]>";
-//        System.out.println("beforeMarshal value : " + value);
     }
 
     public void beforeMarshal() {
@@ -112,16 +109,6 @@ public class ShapeDesign /*implements Unmarshaller , Marshaller*/ {
         afterUnmarshal(null, null);
     }
 
-//       void afterMarshal(Unmarshaller unmarshaller, Object parent) {//XML to Object
-//
-//        System.out.println("afterUnmarshal value : " + value);
-//    }
-//
-//    void beforeUnmarshal(Marshaller marshaller, Object parent) {
-//
-//        System.out.println("beforeMarshal value : " + value);
-//    }
-//
     /**
      * @return the outerShapeContext
      */

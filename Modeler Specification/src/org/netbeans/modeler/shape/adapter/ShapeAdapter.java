@@ -25,16 +25,14 @@ public class ShapeAdapter extends XmlAdapter<String, ShapeAdapter> {
     @Override
     public ShapeAdapter unmarshal(String outerShape) {
         ShapeAdapter outerShapeContext;
-        System.out.println("outerShape : " + outerShape);
         outerShapeContext = json.fromJson(outerShape, ShapeAdapter.class);
         return outerShapeContext;
     }
 
     @Override
     public String marshal(ShapeAdapter outerShapeContext) {
-        String outerShape = null;
+        String outerShape;
         outerShape = json.toJson(outerShapeContext);
-        System.out.println("outerShape : " + outerShape);
         return outerShape;
     }
 }

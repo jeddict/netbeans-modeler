@@ -27,7 +27,7 @@ import org.netbeans.modeler.shape.OuterShapeContext;
 @XmlType(name = "shape-design")
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class StandardShapeDesign /*implements Unmarshaller , Marshaller*/ {
+public class StandardShapeDesign {
 
     @XmlElement(name = "outer-shape")
 
@@ -36,70 +36,6 @@ public class StandardShapeDesign /*implements Unmarshaller , Marshaller*/ {
     @XmlElement(name = "inner-shape")
     private InnerShapeContext innerShapeContext;
 
-//    @XmlValue
-//    protected String value;
-//
-//    class Shape {
-//        public OuterShapeContext outer;
-//        public InnerShapeContext inner;
-//    }
-//
-//
-//
-//    void afterUnmarshal(Unmarshaller unmarshaller, Object parent) {//XML to Object
-//        Gson json = new Gson();
-//        Shape shape = json.fromJson(value, Shape.class);
-//        this.innerShapeContext = shape.inner;
-//        this.outerShapeContext = shape.outer;
-//        System.out.println("afterUnmarshal value : " + value);
-//    }
-//
-//    void beforeMarshal(Marshaller marshaller, Object parent) {
-////        Gson json = new Gson();
-//       final ColorAdapter colorAdapter = new ColorAdapter();
-//        JsonSerializer<Color> ser = new JsonSerializer<Color>() {
-//            @Override
-//            public JsonElement serialize(Color src, Type typeOfSrc, JsonSerializationContext context) {
-//                return src == null ? null : new JsonPrimitive(colorAdapter.marshal(src));
-//            }
-//        };
-//
-//        JsonDeserializer<Color> deser = new JsonDeserializer<Color>() {
-//            @Override
-//            public Color deserialize(JsonElement json, Type typeOfT,
-//                    JsonDeserializationContext context) throws JsonParseException {
-//                return json == null ? null : colorAdapter.unmarshal(value);
-//            }
-//        };
-//
-//Gson json = new GsonBuilder()
-//   .registerTypeAdapter(Color.class, ser)
-//   .registerTypeAdapter(Color.class, deser).create();
-//
-//
-//
-//
-//        Shape shape = new Shape();
-//        shape.inner = this.innerShapeContext;
-//        shape.outer = this.outerShapeContext;
-//        value = json.toJson(shape);
-//        System.out.println("beforeMarshal value : " + value);
-//    }
-//
-//     public void beforeMarshal() {
-//       beforeMarshal(null ,null );
-//     }
-//
-//       void afterMarshal(Unmarshaller unmarshaller, Object parent) {//XML to Object
-//
-//        System.out.println("afterUnmarshal value : " + value);
-//    }
-//
-//    void beforeUnmarshal(Marshaller marshaller, Object parent) {
-//
-//        System.out.println("beforeMarshal value : " + value);
-//    }
-//
     /**
      * @return the outerShapeContext
      */

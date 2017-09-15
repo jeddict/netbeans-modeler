@@ -27,5 +27,5 @@ public interface IFlowElementWidget<E extends IFlowElement> extends IBaseElement
     public Widget getFlowElementsContainer();
 
     public void setFlowElementsContainer(Widget flowElementsContainer);
-
+    
 }

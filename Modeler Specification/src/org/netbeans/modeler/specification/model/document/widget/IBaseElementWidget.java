@@ -33,7 +33,7 @@ public interface IBaseElementWidget<E extends IBaseElement> extends IWidget, IPr
     public void setBaseElementSpec(E baseElementSpec);
 
     public E getBaseElementSpec();
-
+    
     public void init();//Base Element spec available
     
     /**
