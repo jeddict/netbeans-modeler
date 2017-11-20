@@ -7,6 +7,46 @@
             <suite-component/>
             <module-dependencies/>
             <public-packages>
+                <package>ch.qos.logback.classic</package>
+                <package>ch.qos.logback.classic.boolex</package>
+                <package>ch.qos.logback.classic.db</package>
+                <package>ch.qos.logback.classic.filter</package>
+                <package>ch.qos.logback.classic.helpers</package>
+                <package>ch.qos.logback.classic.html</package>
+                <package>ch.qos.logback.classic.jmx</package>
+                <package>ch.qos.logback.classic.joran</package>
+                <package>ch.qos.logback.classic.joran.action</package>
+                <package>ch.qos.logback.classic.net</package>
+                <package>ch.qos.logback.classic.pattern</package>
+                <package>ch.qos.logback.classic.selector</package>
+                <package>ch.qos.logback.classic.selector.servlet</package>
+                <package>ch.qos.logback.classic.sift</package>
+                <package>ch.qos.logback.classic.spi</package>
+                <package>ch.qos.logback.classic.turbo</package>
+                <package>ch.qos.logback.classic.util</package>
+                <package>ch.qos.logback.core</package>
+                <package>ch.qos.logback.core.boolex</package>
+                <package>ch.qos.logback.core.db</package>
+                <package>ch.qos.logback.core.db.dialect</package>
+                <package>ch.qos.logback.core.filter</package>
+                <package>ch.qos.logback.core.helpers</package>
+                <package>ch.qos.logback.core.html</package>
+                <package>ch.qos.logback.core.joran</package>
+                <package>ch.qos.logback.core.joran.action</package>
+                <package>ch.qos.logback.core.joran.event</package>
+                <package>ch.qos.logback.core.joran.spi</package>
+                <package>ch.qos.logback.core.layout</package>
+                <package>ch.qos.logback.core.net</package>
+                <package>ch.qos.logback.core.pattern</package>
+                <package>ch.qos.logback.core.pattern.parser</package>
+                <package>ch.qos.logback.core.pattern.util</package>
+                <package>ch.qos.logback.core.read</package>
+                <package>ch.qos.logback.core.rolling</package>
+                <package>ch.qos.logback.core.rolling.helper</package>
+                <package>ch.qos.logback.core.sift</package>
+                <package>ch.qos.logback.core.spi</package>
+                <package>ch.qos.logback.core.status</package>
+                <package>ch.qos.logback.core.util</package>
                 <package>com.fasterxml.jackson.annotation</package>
                 <package>com.fasterxml.jackson.core</package>
                 <package>com.fasterxml.jackson.core.base</package>
@@ -134,6 +174,37 @@
                 <package>org.apache.commons.codec.language.bm</package>
                 <package>org.apache.commons.codec.net</package>
                 <package>org.apache.commons.collections</package>
+                <package>org.apache.commons.collections.bag</package>
+                <package>org.apache.commons.collections.bidimap</package>
+                <package>org.apache.commons.collections.buffer</package>
+                <package>org.apache.commons.collections.collection</package>
+                <package>org.apache.commons.collections.comparators</package>
+                <package>org.apache.commons.collections.functors</package>
+                <package>org.apache.commons.collections.iterators</package>
+                <package>org.apache.commons.collections.keyvalue</package>
+                <package>org.apache.commons.collections.list</package>
+                <package>org.apache.commons.collections.map</package>
+                <package>org.apache.commons.collections.set</package>
+                <package>org.apache.commons.io</package>
+                <package>org.apache.commons.io.comparator</package>
+                <package>org.apache.commons.io.filefilter</package>
+                <package>org.apache.commons.io.input</package>
+                <package>org.apache.commons.io.monitor</package>
+                <package>org.apache.commons.io.output</package>
+                <package>org.apache.commons.io.serialization</package>
+                <package>org.apache.commons.lang3</package>
+                <package>org.apache.commons.lang3.arch</package>
+                <package>org.apache.commons.lang3.builder</package>
+                <package>org.apache.commons.lang3.concurrent</package>
+                <package>org.apache.commons.lang3.event</package>
+                <package>org.apache.commons.lang3.exception</package>
+                <package>org.apache.commons.lang3.math</package>
+                <package>org.apache.commons.lang3.mutable</package>
+                <package>org.apache.commons.lang3.reflect</package>
+                <package>org.apache.commons.lang3.text</package>
+                <package>org.apache.commons.lang3.text.translate</package>
+                <package>org.apache.commons.lang3.time</package>
+                <package>org.apache.commons.lang3.tuple</package>
                 <package>org.apache.commons.logging</package>
                 <package>org.apache.commons.logging.impl</package>
                 <package>org.apache.http</package>
@@ -175,6 +246,25 @@
                 <package>org.apache.http.pool</package>
                 <package>org.apache.http.protocol</package>
                 <package>org.apache.http.util</package>
+                <package>org.apache.velocity</package>
+                <package>org.apache.velocity.app</package>
+                <package>org.apache.velocity.app.event</package>
+                <package>org.apache.velocity.app.event.implement</package>
+                <package>org.apache.velocity.context</package>
+                <package>org.apache.velocity.exception</package>
+                <package>org.apache.velocity.io</package>
+                <package>org.apache.velocity.runtime</package>
+                <package>org.apache.velocity.runtime.directive</package>
+                <package>org.apache.velocity.runtime.directive.contrib</package>
+                <package>org.apache.velocity.runtime.parser</package>
+                <package>org.apache.velocity.runtime.parser.node</package>
+                <package>org.apache.velocity.runtime.resource</package>
+                <package>org.apache.velocity.runtime.resource.loader</package>
+                <package>org.apache.velocity.runtime.resource.util</package>
+                <package>org.apache.velocity.runtime.visitor</package>
+                <package>org.apache.velocity.shaded.commons.io</package>
+                <package>org.apache.velocity.util</package>
+                <package>org.apache.velocity.util.introspection</package>
                 <package>org.mvel2</package>
                 <package>org.mvel2.asm</package>
                 <package>org.mvel2.asm.commons</package>
@@ -205,6 +295,10 @@
                 <package>org.mvel2.templates.util</package>
                 <package>org.mvel2.templates.util.io</package>
                 <package>org.mvel2.util</package>
+                <package>org.slf4j</package>
+                <package>org.slf4j.helpers</package>
+                <package>org.slf4j.impl</package>
+                <package>org.slf4j.spi</package>
                 <package>org.w3c.css.sac</package>
                 <package>org.w3c.css.sac.helpers</package>
                 <package>org.w3c.dom</package>
@@ -244,12 +338,20 @@
                 <binary-origin>release/modules/ext/commons-beanutils-1.8.3.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/commons-lang3-3.7.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-lang3-3.7.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/jackson-core-2.7.5.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jackson-core-2.7.5.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/mvel2-2.2.0.Final.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/mvel2-2.2.0.Final.jar</binary-origin>
+                <runtime-relative-path>ext/commons-collections-3.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-collections-3.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/mvel2-2.4.0.Final.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/mvel2-2.4.0.Final.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-logging-1.1.3.jar</runtime-relative-path>
@@ -268,8 +370,24 @@
                 <binary-origin>release/modules/ext/w3c.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/logback.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/logback.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/velocity-engine-core-2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/velocity-engine-core-2.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/slf4j.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/slf4j.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/jackson-databind-2.7.5.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jackson-databind-2.7.5.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-io-2.6.jar</runtime-relative-path>
+                <binary-origin>F:\JPAM\Module\JeddictWP\NBModeler\Modeler Libraries\release\modules\ext\commons-io-2.6.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/analytics-java-1.1.3.jar</runtime-relative-path>

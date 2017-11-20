@@ -16,7 +16,7 @@
 package org.netbeans.modeler.widget.properties.generic;
 
 import java.lang.reflect.InvocationTargetException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;
