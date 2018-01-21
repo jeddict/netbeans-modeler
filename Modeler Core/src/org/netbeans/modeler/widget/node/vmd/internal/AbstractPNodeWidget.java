@@ -308,7 +308,7 @@ public abstract class AbstractPNodeWidget extends Widget implements IPNodeWidget
      * @return the list of pin widgets
      */
     private List<Widget> getPinWidgets() {
-        ArrayList<Widget> pins = new ArrayList<Widget>(getChildren());
+        ArrayList<Widget> pins = new ArrayList<>(getChildren());
         pins.remove(header);
         pins.remove(pinsSeparator);
         return pins;

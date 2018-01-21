@@ -16,11 +16,9 @@
 package org.netbeans.modeler.widget.node.vmd.internal;
 
 import java.awt.Image;
-import java.util.List;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.layout.LayoutFactory;
 import org.netbeans.api.visual.model.ObjectState;
-import org.netbeans.api.visual.vmd.VMDGlyphSetWidget;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;

@@ -15,8 +15,6 @@
  */
 package org.netbeans.modeler.specification.model.document.property;
 
-import java.util.NoSuchElementException;
-
 public class PropertyLinkedList<E> {
  
     private Node head;

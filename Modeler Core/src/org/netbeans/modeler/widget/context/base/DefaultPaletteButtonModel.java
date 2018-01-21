@@ -42,7 +42,7 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
     private RelationshipFactory factory = null;//GeneralizationFactory.java,AssociationFactory.java
     private ContextPaletteModel paletteModel = null;
     private Supplier<Boolean> visibiltyCheck;
-
+  
     public DefaultPaletteButtonModel() {
     }
 
@@ -71,8 +71,6 @@ public class DefaultPaletteButtonModel implements ContextPaletteButtonModel {
         return paletteModel;
     }
 
-    ///////////////////////////////////////////////////////////////
-    // Data Accessors
     @Override
     public Image getImage() {
         return image;

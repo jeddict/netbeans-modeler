@@ -52,11 +52,9 @@ import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
-import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
-import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.IRootElement;
@@ -192,14 +190,14 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     protected void attachEdgeSourceAnchor(EdgeWidgetInfo edgeWidgetInfo, NodeWidgetInfo oldSourceNode, NodeWidgetInfo sourceNodeInfo) {
         IEdgeWidget edgeWidget = (IEdgeWidget) findWidget(edgeWidgetInfo);
         INodeWidget sourceNodeWidget = (INodeWidget) findWidget(sourceNodeInfo);
-        NBModelerUtil.attachEdgeSourceAnchor((IModelerScene) this, edgeWidget, sourceNodeWidget); // TBF_CODE (ModelerScene)
+        edgeWidget.attachEdgeSourceAnchor(sourceNodeWidget);
     }
 
     @Override
     protected void attachEdgeTargetAnchor(EdgeWidgetInfo edgeWidgetInfo, NodeWidgetInfo oldTargetNode, NodeWidgetInfo targetNodeInfo) {
         IEdgeWidget edgeWidget = (IEdgeWidget) findWidget(edgeWidgetInfo);
         INodeWidget targetNodeWidget = (INodeWidget) findWidget(targetNodeInfo);
-        NBModelerUtil.attachEdgeTargetAnchor((IModelerScene) this, edgeWidget, targetNodeWidget);
+        edgeWidget.attachEdgeTargetAnchor(targetNodeWidget);
         if (edgeWidget instanceof IBaseElementWidget) {
             ((IBaseElementWidget) edgeWidget).init();
         }
@@ -207,20 +205,27 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
 
     @Override
     protected Widget attachNodeWidget(NodeWidgetInfo widgetInfo) {
-        Widget widget = (Widget) this.getModelerFile().getModelerUtil().attachNodeWidget(this, widgetInfo);
-        this.getMainLayer().addChild(widget);
-        this.setFocusedWidget(widget);
-        this.validate();
-        if (widget instanceof IBaseElementWidget) {
-            ((IBaseElementWidget) widget).setId(widgetInfo.getId());
-            this.createBaseElement((IBaseElementWidget) widget);
+        Widget widget = null;
+        try {
+            widget = (Widget) widgetInfo.getModelerDocument().getWidget()
+                    .getConstructor(this.getClass(), NodeWidgetInfo.class)
+                    .newInstance(new Object[]{this, widgetInfo});
+            this.getMainLayer().addChild(widget);
+            this.setFocusedWidget(widget);
+            this.validate();
+            if (widget instanceof IBaseElementWidget) {
+                ((IBaseElementWidget) widget).setId(widgetInfo.getId());
+                this.createBaseElement((IBaseElementWidget) widget);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return widget;
     }
 
     @Override
     protected Widget attachEdgeWidget(EdgeWidgetInfo widgetInfo) {
-        IEdgeWidget edgeWidget = this.getModelerFile().getModelerUtil().attachEdgeWidget(this, widgetInfo);
+        IEdgeWidget edgeWidget = widgetInfo.createEdgeWidget();
         this.getConnectionLayer().addChild((Widget) edgeWidget);
         edgeWidget.setEndPointShape(PointShape.SQUARE_FILLED_SMALL);
         edgeWidget.setControlPointShape(PointShape.SQUARE_FILLED_SMALL);

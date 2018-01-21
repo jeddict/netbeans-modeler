@@ -15,9 +15,6 @@
  */
 package org.netbeans.modeler.specification.model.document.widget;
 
-import org.netbeans.modeler.core.exception.InvalidElmentException;
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
-
 public interface IArtifactEdgeWidget extends IArtifactWidget {
 
     public IBaseElementWidget getSourceElementWidget();

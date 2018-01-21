@@ -23,7 +23,6 @@ import org.netbeans.api.visual.anchor.AnchorFactory;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.widget.node.INodeWidget;
 
 /**
@@ -43,19 +42,18 @@ public class ContextPaletteConnectDecorator implements ConnectDecorator {
                 BasicStroke.JOIN_MITER, new float[]{4, 4}, 0);
         widget.setStroke(DEFAULT_DASH);
 //        widget.setForeground(new Color(242, 132, 0));
-
 //        widget.setTargetAnchorShape(AnchorShape.NONE);
         return widget;
     }
 
     @Override
     public Anchor createSourceAnchor(Widget sourceWidget) {
-        return NBModelerUtil.getAnchor((INodeWidget) sourceWidget);
+        return ((INodeWidget)sourceWidget).getAnchor();
     }
 
     @Override
     public Anchor createTargetAnchor(Widget targetWidget) {
-        return NBModelerUtil.getAnchor((INodeWidget) targetWidget);
+        return ((INodeWidget)targetWidget).getAnchor();
     }
 
     @Override

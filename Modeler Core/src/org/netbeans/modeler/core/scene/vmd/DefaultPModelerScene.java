@@ -33,11 +33,10 @@ import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidg
  *
  * @author Gaurav Gupta
  * @param <E>
- * @param <R>
  */
 public abstract class DefaultPModelerScene<E extends IRootElement> extends PModelerScene<E> {
 
-    private Map<String, IFlowElementWidget> flowElements = new LinkedHashMap<>();
+    private final Map<String, IFlowElementWidget> flowElements = new LinkedHashMap<>();
 
     @Override
     public void onConnection() {

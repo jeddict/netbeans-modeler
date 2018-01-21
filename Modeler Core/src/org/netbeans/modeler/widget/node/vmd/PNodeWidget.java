@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.netbeans.api.visual.action.PopupMenuProvider;
@@ -47,10 +48,11 @@ import org.netbeans.modeler.label.inplace.TextFieldInplaceEditorProvider;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
+import org.netbeans.modeler.shape.ShapeDesign;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
+import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
-import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene;
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
@@ -88,6 +90,19 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     private boolean anchorState = false;
     private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<>();
 
+    public PNodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
+        super((Scene) scene, ((IPModelerScene) scene).getColorScheme(), nodeWidgetInfo.getNodeDesign());
+        this.scene = scene;
+        this.nodeWidgetInfo = nodeWidgetInfo;
+        setAnchorGap(0);
+
+        WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        getNodeNameWidget().getActions().addAction(editAction);
+        getHeader().getActions().addAction(scene.createObjectHoverAction());
+
+        setWidgetBorder(getNodeBorder());
+    }
+    
     @Override
     public void addPropertyChangeListener(String id, PropertyChangeListener propertyChangeListener) {
         this.propertyChangeHandlers.put(id, propertyChangeListener);
@@ -138,19 +153,6 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         x = x < (int) bound.getWidth().getMax() ? x : (int) bound.getWidth().getMax();
         y = y < (int) bound.getHeight().getMax() ? y : (int) bound.getHeight().getMax();
         return new Dimension(x, y);
-    }
-
-    public PNodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
-        super((Scene) scene, ((IPModelerScene) scene).getColorScheme(), nodeWidgetInfo.getNodeDesign());
-        this.scene = scene;
-        this.nodeWidgetInfo = nodeWidgetInfo;
-        setAnchorGap(0);
-
-        WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
-        getNodeNameWidget().getActions().addAction(editAction);
-        getHeader().getActions().addAction(scene.createObjectHoverAction());
-
-        setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
     }
 
     // Alternative to AbstractPModelerScene createPinWidget
@@ -213,9 +215,10 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
 //    }
     @Override
     public void showResizeBorder() {
-        Border border = this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this);
+        ResizeBorder border = getNodeBorder();
         if (border != null) {
             this.setBorder(border);
+            setWidgetBorder(border);
         }
     }
 
@@ -636,7 +639,21 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
 
     }
     
+    @Override
       public boolean isValidPinWidget(SubCategoryNodeConfig subCategoryInfo){
         return true;
+    }
+      
+    public <T> T createPinWidget(IBaseElement baseElement, Class<T> documentId, Function<PinWidgetInfo, IPinWidget> pinWidgetFunction) {
+        PinWidgetInfo pinWidgetInfo = new PinWidgetInfo(baseElement);
+        pinWidgetInfo.setName(baseElement.getName());
+        pinWidgetInfo.setDocumentId(documentId.getSimpleName());
+        pinWidgetInfo.setPinWidgetFunction(pinWidgetFunction);
+        return (T)this.createPinWidget(pinWidgetInfo);
+    }
+    
+    
+    public void updateNodeWidgetDesign(ShapeDesign shapeDesign){
+        
     }
 }

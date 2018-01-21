@@ -24,17 +24,5 @@ import org.netbeans.api.visual.action.ConnectProvider;
  *
  */
 public interface ExConnectProvider extends ConnectProvider {
-    /**
-     * Checks if the provider is able to create new node widgets.
-     *
-     * @return true if the provider is able to create a new node widget.
-     */
-    //  public boolean hasTargetWidgetCreator();
 
-    /**
-     * Creates a new node widget.
-     *
-     * @param scene The scene that will contain the new widget.
-     */
-  //  public Widget createTargetWidget(Scene scene, Widget sourceWidget, Point location);
 }

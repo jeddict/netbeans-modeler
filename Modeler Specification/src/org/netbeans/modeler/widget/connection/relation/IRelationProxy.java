@@ -15,52 +15,22 @@
  */
 package org.netbeans.modeler.widget.connection.relation;
 
-import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 
-/**
- *
- *
- */
 public interface IRelationProxy {
 
-//    /**
-//     * @return the connection
-//     */
-//    IEdgeWidget getConnection();
-    /**
-     * @return the source
-     */
     INodeWidget getSource();
 
-    /**
-     * @return the target
-     */
+    void setSource(INodeWidget source);
+    
     INodeWidget getTarget();
 
-    boolean isRelationValidated();
-
-//    /**
-//     * @param connection the connection to set
-//     */
-//    void setConnection(IEdgeWidget connection);
-    /**
-     * @param source the source to set
-     */
-    void setSource(INodeWidget source);
-
-    /**
-     * @param target the target to set
-     */
-    void setTarget(INodeWidget target);
-
-    /**
-     * @return the edgeType
-     */
+    void setTarget(INodeWidget target);   
+       
     public String getEdgeType();
 
-    /**
-     * @param edgeType the edgeType to set
-     */
     public void setEdgeType(String edgeType);
+    
+    boolean isRelationValidated();
+    
 }

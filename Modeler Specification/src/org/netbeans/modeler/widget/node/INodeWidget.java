@@ -18,10 +18,11 @@ package org.netbeans.modeler.widget.node;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.modeler.border.ResizeBorder;
-import org.netbeans.modeler.properties.view.manager.IPropertyManager;
+import org.netbeans.modeler.shape.ShapeDesign;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.design.ITextDesign;
@@ -93,4 +94,9 @@ public interface INodeWidget extends IWidget, IPropertyWidget {
 
     void setTextDesign(ITextDesign textDesign);
     
+    Anchor getAnchor();
+    
+    ResizeBorder getNodeBorder();
+    
+    void updateNodeWidgetDesign(ShapeDesign shapeDesign);
 }

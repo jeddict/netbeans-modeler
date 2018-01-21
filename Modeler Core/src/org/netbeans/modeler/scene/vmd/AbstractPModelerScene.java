@@ -189,20 +189,26 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
      * responsible for creating the widget, adding it into the scene and
      * returning it from the method.
      *
-     * @param node the node that is going to be added
+     * @param widgetInfo the node that is going to be added
      * @return the widget representing the node; null, if the node is non-visual
      */
     @Override
     protected Widget attachNodeWidget(NodeWidgetInfo widgetInfo) {
-        Widget widget = (Widget) this.getModelerFile().getModelerUtil().attachNodeWidget(this, widgetInfo);
-        this.getMainLayer().addChild(widget);
-        this.setFocusedWidget(widget);
-        this.validateComponent();//#60
-        if (widget instanceof IBaseElementWidget) {
-            ((IBaseElementWidget) widget).setId(widgetInfo.getId());
-            this.createBaseElement((IBaseElementWidget) widget);
+        Widget widget = null;
+        try {
+            widget = (Widget) widgetInfo.getModelerDocument().getWidget()
+                    .getConstructor(this.getClass(), NodeWidgetInfo.class)
+                    .newInstance(new Object[]{this, widgetInfo});
+            this.getMainLayer().addChild(widget);
+            this.setFocusedWidget(widget);
+            this.validateComponent();//#60
+            if (widget instanceof IBaseElementWidget) {
+                ((IBaseElementWidget) widget).setId(widgetInfo.getId());
+                this.createBaseElement((IBaseElementWidget) widget);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
         return widget;
     }
 
@@ -212,12 +218,13 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
      * responsible for creating the widget, adding it into the scene and
      * returning it from the method.
      *
+     * @param widgetInfo
      * @param edge the edge that is going to be added
      * @return the widget representing the edge; null, if the edge is non-visual
      */
     @Override
     protected Widget attachEdgeWidget(EdgeWidgetInfo widgetInfo) {
-        IEdgeWidget edgeWidget = this.getModelerFile().getModelerUtil().attachEdgeWidget(this, widgetInfo);
+        IEdgeWidget edgeWidget = widgetInfo.createEdgeWidget();
         this.getConnectionLayer().addChild((Widget) edgeWidget);
         edgeWidget.setEndPointShape(PointShape.SQUARE_FILLED_SMALL);
         edgeWidget.setControlPointShape(PointShape.SQUARE_FILLED_SMALL);
@@ -249,7 +256,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         if (pinWidgetInfo.getDocumentId().equals("INTERNAL")) {
             return null;
         }
-        PinWidget pinWidget = (PinWidget) this.getModelerFile().getPModelerUtil().attachPinWidget(this, nodeWidget, pinWidgetInfo);
+        PinWidget pinWidget = (PinWidget) pinWidgetInfo.createPinWidget();
         if (pinWidget == null) {
             return null;
         }
@@ -289,10 +296,10 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         }
         IPinWidget sourcePinWidget = (IPinWidget) findWidget(sourcePinInfo);
         if (sourcePinWidget != null) {
-            NBModelerUtil.attachEdgeSourceAnchor((IModelerScene) this, edgeWidget, sourcePinWidget);
+            edgeWidget.attachEdgeSourceAnchor(sourcePinWidget);
         } else {
             INodeWidget sourceNodeWidget = (INodeWidget) findWidget(getPinNode(sourcePinInfo));
-            NBModelerUtil.attachEdgeSourceAnchor((IModelerScene) this, edgeWidget, sourceNodeWidget);
+            edgeWidget.attachEdgeSourceAnchor(sourceNodeWidget);
         }
     }
 
@@ -322,10 +329,10 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         }
         IPinWidget targetPinWidget = (IPinWidget) findWidget(targetPinInfo);
         if (targetPinWidget != null) {
-            NBModelerUtil.attachEdgeTargetAnchor((IModelerScene) this, edgeWidget, targetPinWidget);
+            edgeWidget.attachEdgeTargetAnchor(targetPinWidget);
         } else {
             INodeWidget targetNodeWidget = (INodeWidget) findWidget(getPinNode(targetPinInfo));
-            NBModelerUtil.attachEdgeTargetAnchor((IModelerScene) this, edgeWidget, targetNodeWidget);
+            edgeWidget.attachEdgeTargetAnchor(targetNodeWidget);
         }
         if (edgeWidget instanceof IBaseElementWidget) {
             ((IBaseElementWidget) edgeWidget).init();
@@ -989,7 +996,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
             long st = new Date().getTime();
             updateRouterMaxDepth();
             this.validate();
-            System.out.println("validateComponent Total time : " + (new Date().getTime() - st) + " ms");
+//            System.out.println("validateComponent Total time : " + (new Date().getTime() - st) + " ms");
         }
     }
     private boolean sceneGeneration; //to improve the effciency and thread-safety in parrallel processing of ui generation (scene.validate() called at the end instead of after each element creation)

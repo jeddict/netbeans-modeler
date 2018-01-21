@@ -51,7 +51,6 @@ import org.netbeans.api.visual.border.Border;
 import org.netbeans.api.visual.border.BorderFactory;
 import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.LabelWidget;
-import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;

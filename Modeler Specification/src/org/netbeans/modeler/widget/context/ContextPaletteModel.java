@@ -16,7 +16,6 @@
 package org.netbeans.modeler.widget.context;
 
 import java.util.ArrayList;
-import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.widget.node.IWidget;
 
 /**

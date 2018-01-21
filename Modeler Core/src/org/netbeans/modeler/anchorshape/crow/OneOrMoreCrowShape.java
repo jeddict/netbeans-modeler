@@ -31,15 +31,15 @@ public class OneOrMoreCrowShape extends CrowAnchorShape {
         float centerY = 0.0f;
 
         path.moveTo(centerX, centerY);
-        path.lineTo((float) centerX - size, (float) -sin);
+        path.lineTo(centerX - size, -sin);
         path.moveTo(centerX, centerY);
-        path.lineTo((float) centerX - size, (float) sin);
+        path.lineTo(centerX - size, sin);
         path.moveTo(centerX, centerY);
-        path.lineTo((float) centerX - size, (float) 0.0f);
+        path.lineTo(centerX - size, 0.0f);
         path.moveTo(centerX, centerY);
-        path.lineTo((float) centerX, (float) -sin);
+        path.lineTo(centerX, -sin);
         path.moveTo(centerX, centerY);
-        path.lineTo((float) centerX, (float) sin);
+        path.lineTo(centerX, sin);
 
     }
 

@@ -152,7 +152,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
                     scene.getModelerPanelTopComponent().initializeToolBar();
                     modelerFile.getModelerScene().init(); //color scheme depends on entitymapping
                     modelerFile.load();
-                    System.out.println("MFA Total time : " + (new Date().getTime() - st) + " ms");
+//                    System.out.println("MFA Total time : " + (new Date().getTime() - st) + " ms");
                 } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
                     modelerFile.handleException(ex);
                 }

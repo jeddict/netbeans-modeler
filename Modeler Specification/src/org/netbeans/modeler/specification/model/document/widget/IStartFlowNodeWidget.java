@@ -15,9 +15,6 @@
  */
 package org.netbeans.modeler.specification.model.document.widget;
 
-import java.util.List;
-import javax.swing.JMenuItem;
-
 public interface IStartFlowNodeWidget extends IFlowNodeWidget {
 
 }

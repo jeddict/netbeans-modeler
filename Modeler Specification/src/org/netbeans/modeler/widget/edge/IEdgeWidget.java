@@ -18,6 +18,10 @@ package org.netbeans.modeler.widget.edge;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.property.ElementPropertySet;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
+import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
+import org.netbeans.modeler.widget.pin.IPinWidget;
+import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.property.IPropertyWidget;
 
 public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget, IPropertyWidget {
@@ -43,6 +47,26 @@ public interface IEdgeWidget<S extends IModelerScene> extends IConnectionWidget,
     boolean isLocked();
 
     void setLocked(boolean locked);
-    
+
     void cleanReference();
+
+    PinWidgetInfo getSourcePinWidget(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget);
+
+    PinWidgetInfo getSourcePinWidget(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, IPinWidget sourcePinWidget);
+
+    PinWidgetInfo getTargetPinWidget(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget);
+
+    PinWidgetInfo getTargetPinWidget(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, IPinWidget targetPinWidget);
+
+    void dettachEdgeSourceAnchor(IWidget sourcePinWidget);
+
+    void dettachEdgeTargetAnchor(IWidget targetPinWidget);
+
+    void attachEdgeSourceAnchor(IPinWidget sourcePinWidget);
+
+    void attachEdgeTargetAnchor(IPinWidget targetPinWidget);
+
+    void attachEdgeSourceAnchor(INodeWidget sourceNodeWidget);
+
+    void attachEdgeTargetAnchor(INodeWidget targetNodeWidget);
 }

@@ -27,12 +27,11 @@ public class ZeroOrOneCrowShape extends CrowAnchorShape {
         super(size);
 
         path.moveTo(0.0f, 0.0f);
-        path.lineTo((float) size, (float) 0.0f);
-
+        path.lineTo(size, 0.0f);
         path.moveTo(size / 2, 0.0f);
-        path.lineTo((float) size / 2, (float) -size);
+        path.lineTo(size / 2, -size);
         path.moveTo(size / 2, 0.0f);
-        path.lineTo((float) size / 2, (float) size);
+        path.lineTo(size / 2, size);
 
     }
 

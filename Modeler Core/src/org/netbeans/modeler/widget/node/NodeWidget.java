@@ -40,7 +40,6 @@ import org.netbeans.modeler.border.ResizeBorder;
 import org.netbeans.modeler.border.RoundResizeBorder;
 import org.netbeans.modeler.config.document.BoundsConstraint;
 import org.netbeans.modeler.config.document.IModelerDocument;
-import org.netbeans.modeler.core.NBModelerUtil;
 import org.netbeans.modeler.core.exception.SVGAttributeNotFoundException;
 import org.netbeans.modeler.core.scene.ModelerScene;
 import org.netbeans.modeler.label.BasicLabelManager;
@@ -106,7 +105,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
                 modelerDocument.generateDocument(),
                 new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue())));
 
-        NBModelerUtil.updateNodeWidgetDesign(new ShapeDesign(modelerDocument.getDocumentShapeDesign()), this);
+        updateNodeWidgetDesign(new ShapeDesign(modelerDocument.getDocumentShapeDesign()));
 
         setRangeConstraint();
 
@@ -116,7 +115,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         setChildConstraint(getNodeImageWidget(), 1);
         setCheckClipping(true);
 
-        this.setWidgetBorder(this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this));
+        this.setWidgetBorder(getNodeBorder());
 
     }
 
@@ -246,9 +245,10 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
 
     @Override
     public void showResizeBorder() {
-        Border border = this.getModelerScene().getModelerFile().getModelerUtil().getNodeBorder(this);
+        ResizeBorder border = getNodeBorder();
         if (border != null) {
             this.setBorder(border);
+            setWidgetBorder(border);
         }
     }
 
@@ -935,15 +935,9 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         new_nodewidget.setPreferredLocation(point);
 
         if (connect) {
-            SceneConnectProvider connectProvider = new SceneConnectProvider(null);// ModelerUtil.getEdgeType() will decide EdgeType
+            SceneConnectProvider connectProvider = new SceneConnectProvider(null, null);
             connectProvider.createConnection((ModelerScene) nodeWidget.getModelerScene(), nodeWidget, (NodeWidget) new_nodewidget);
         }
-//                        if (nodeWidget instanceof FlowNodeWidget) {
-//                            FlowNodeWidget flowNodeWidget = (FlowNodeWidget) nodeWidget;
-//                            if (flowNodeWidget.getFlowElementsContainer() instanceof IModelerSubScene) {
-//                                ((SubProcessWidget) flowNodeWidget.getFlowElementsContainer()).moveFlowNodeWidget((FlowNodeWidget) new_nodewidget);
-//                            }
-//                        }
         nodeWidget.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         return new_nodewidget;
     }
@@ -977,5 +971,9 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         }
         this.getModelerScene().getModelerFile().getModelerDiagramEngine().clearNodeWidgetAction(this);
         this.getLabelManager().getLabelConnectionWidget().clearActions();
+    }
+    
+    public void updateNodeWidgetDesign(ShapeDesign shapeDesign){
+        
     }
 }

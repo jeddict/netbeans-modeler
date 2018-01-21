@@ -15,8 +15,6 @@
  */
 package org.netbeans.modeler.specification.model.document;
 
-import org.netbeans.modeler.specification.model.document.core.IBaseElement;
-
 public interface ITextElement {
 
     public String getContent();//return type must not be null

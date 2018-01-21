@@ -15,13 +15,11 @@
  */
 package org.netbeans.modeler.config.document;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import org.netbeans.modeler.file.IModelerFileDataObject;
 import org.netbeans.modeler.util.Util;
 import org.openide.util.Exceptions;
 

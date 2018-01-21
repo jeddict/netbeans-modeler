@@ -112,56 +112,15 @@ public class ConnectAction extends WidgetAction.LockedAdapter {
         }
         Point point = event.getPoint();
         boolean state = move(widget, point);
-//        final Point finishPnt = widget.convertLocalToScene(point);
-//        final Point startingPnt = sourceWidget.convertLocalToScene(startingPoint);
-
-        if ((state) && (event.getButton() == MouseEvent.BUTTON1)) {
+        if (state && (event.getButton() == MouseEvent.BUTTON1)) {
             if (targetWidget != null) {
                 if (Math.abs(startingPoint.x - point.x) >= MIN_DIFFERENCE || Math.abs(startingPoint.y - point.y) >= MIN_DIFFERENCE) {
-//                    if (provider instanceof ExConnectWithLocationProvider) {
-//                        ArrayList<ConnectionWidget> messageWs = ((ExConnectWithLocationProvider) provider).createConnection(sourceWidget, targetWidget, startingPnt, finishPnt);
-//                    } else {
                     provider.createConnection(sourceWidget, targetWidget);
-//                    }
                 }
                 cancel();
             } else if (targetExistButNotValid) {
                 cancel();
-            } //            else if(provider.hasTargetWidgetCreator() == true)
-            //            {
-            //                if(provider instanceof ExConnectWithLocationProvider)
-            //                {
-            //                    targetWidget = ((ExConnectWithLocationProvider)provider).createTargetWidget(interractionLayer.getScene(),finishPnt);
-            //                }
-            //                else targetWidget = provider.createTargetWidget(interractionLayer.getScene(),
-            //                                                                sourceWidget, point);
-            //
-            //                if(targetWidget != null)
-            //                {
-            //                    //need to wait for scene validation, so complex objects can define borders, sizes etc
-            //                    new AfterValidationExecutor(
-            //                            new ActionProvider() {
-            //                        @Override
-            //                                public void perfomeAction() {
-            //                                    Point tmp=targetWidget.getPreferredLocation();
-            //                                    tmp.x=finishPnt.x;
-            //                                    targetWidget.setPreferredLocation(tmp);//set proper x location for new widget
-            //                                    if(provider instanceof ExConnectWithLocationProvider)
-            //                                    {
-            //                                        ((ExConnectWithLocationProvider)provider).createConnection(sourceWidget, targetWidget, startingPnt,finishPnt);
-            //                                    }
-            //                                    else provider.createConnection (sourceWidget, targetWidget);
-            //                                   cancel ();
-            //                                }
-            //                            }
-            //                            ,
-            //                            widget.getScene()
-            //                            );
-            //                            widget.getScene().revalidate();
-            //                            widget.getScene().validate();
-            //               }
-            //            }
-            else {
+            } else {
                 cancel();
             }
         } else {

@@ -16,7 +16,6 @@
 package org.netbeans.modeler.widget.transferable.cp;
 
 import java.awt.Rectangle;
-import java.util.List;
 import java.util.Map;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 

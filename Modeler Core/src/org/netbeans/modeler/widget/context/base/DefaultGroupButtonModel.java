@@ -15,39 +15,23 @@
  */
 package org.netbeans.modeler.widget.context.base;
 
-import java.awt.Image;
 import java.util.ArrayList;
-import org.netbeans.api.visual.action.WidgetAction;
-import org.netbeans.modeler.core.scene.ModelerScene;
 import org.netbeans.modeler.widget.context.ContextPaletteButtonModel;
 
 public class DefaultGroupButtonModel extends DefaultPaletteButtonModel {
 
-    private ArrayList< ContextPaletteButtonModel> buttonList
-            = new ArrayList< ContextPaletteButtonModel>();
+    private final ArrayList< ContextPaletteButtonModel> buttonList = new ArrayList<>();
 
     public DefaultGroupButtonModel() {
-    }
-
-    public void add(ContextPaletteButtonModel desc) {
-        buttonList.add(desc);
     }
 
     public ContextPaletteButtonModel getActiveDescription() {
         return this;//buttonList.get(0);
     }
 
-    ///////////////////////////////////////////////////////////////
-    // RapidButtonDescription Overrides
     @Override
     public boolean isGroup() {
         return true;
-    }
-
-    public WidgetAction[] createActions(ModelerScene scene) {
-//        ContextPaletteButtonModel activeDesc = getActiveDescription();
-//        return activeDesc.createActions(scene);
-        return null;
     }
 
     @Override
@@ -55,55 +39,8 @@ public class DefaultGroupButtonModel extends DefaultPaletteButtonModel {
         return buttonList;
     }
 
-    ///////////////////////////////////////////////////////////////
-    // Data Accessors
-    @Override
-    public Image getImage() {
-        Image retVal = super.getImage();
-
-//        ContextPaletteButtonModel active = getActiveDescription();
-//        if (active != null) {
-//            retVal = active.getImage();
-//        }
-        return retVal;
+    public void add(ContextPaletteButtonModel desc) {
+        buttonList.add(desc);
     }
 
-//    public void setImage(Image image)
-//    {
-//        ContextPaletteButtonModel active = getActiveDescription();
-//        if(active != null)
-//        {
-//            active.setImage(image);
-//        }
-//    }
-    @Override
-    public String getName() {
-        String retVal = super.getName();
-
-//        ContextPaletteButtonModel active = getActiveDescription();
-//        if (active != null) {
-//            retVal = active.getName();
-//        }
-        return retVal;
-    }
-
-//    public void setName(String name)
-//    {
-//        ContextPaletteButtonModel active = getActiveDescription();
-//        if(active != null)
-//        {
-//            active.setName(name);
-//        }
-//    }
-//    public String getConnectionType()
-//    {
-//        String retVal = null;
-//
-//        RapidButtonDescription active = getActiveDescription();
-//        if(active != null)
-//        {
-//            retVal = active.getConnectionType();
-//        }
-//        return retVal;
-//    }
 }

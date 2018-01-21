@@ -1,5 +1,5 @@
 /**
- * Copyright [2014] Gaurav Gupta
+ * Copyright [2018] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -32,23 +32,11 @@ import org.netbeans.api.visual.action.WidgetAction;
 public interface ContextPaletteButtonModel {
 
     /**
-     * Gives the ContextPaletteButtonModel the chance to initialize the buttons
-     * details from a NetBeans DataObject
-     *
-     * @param fo the data object.
-     */
-    //  void initialize(DataObject fo);
-    /**
      * Retrieves the actions that should be executed when the users presses the
      * button.
      *
-     * @param scene The scene that contains the palettes associates widget.
      * @return The actions that need to be executed.
      */
-//     WidgetAction[] createConnectActions(IModelerScene scene);
-//
-//     MouseListener addWidgetRemoveAction(IModelerScene scene);
-//       MouseListener addWidgetReplaceAction(Scene scene );
     WidgetAction[] getWidgetActions();
 
     void setWidgetActions(WidgetAction[] actions);
@@ -123,7 +111,6 @@ public interface ContextPaletteButtonModel {
      * Retrieves the ContextPaletteModel that owns the button model.
      *
      * @return the owner.
-     * @param ContextPaletteModel
      */
     ContextPaletteModel getPaletteModel();
 

@@ -16,9 +16,11 @@
 package org.netbeans.modeler.widget.pin.info;
 
 import java.awt.Image;
+import java.util.function.Function;
 import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.widget.design.ITextDesign;
 import org.netbeans.modeler.widget.info.WidgetInfo;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 
 public class PinWidgetInfo implements WidgetInfo {
 
@@ -29,6 +31,7 @@ public class PinWidgetInfo implements WidgetInfo {
     private IBaseElement baseElementSpec;
     private Boolean exist = false;
     private ITextDesign textDesign;
+    private Function<PinWidgetInfo, IPinWidget> pinWidgetFunction;
 
     public PinWidgetInfo(String id,IBaseElement baseElementSpec, String documentId) {
         this.id = id;
@@ -45,10 +48,23 @@ public class PinWidgetInfo implements WidgetInfo {
         this.id = id;
         this.baseElementSpec=baseElementSpec;
     }
+    
+    public PinWidgetInfo(IBaseElement baseElementSpec) {
+        this.id = baseElementSpec.getId();
+        this.baseElementSpec = baseElementSpec;
+    }
 
     private PinWidgetInfo() {
     }
 
+    public void setPinWidgetFunction(Function<PinWidgetInfo, IPinWidget> pinWidgetFunction) {
+        this.pinWidgetFunction = pinWidgetFunction;
+    }
+
+    public IPinWidget createPinWidget(){
+        return pinWidgetFunction.apply(this);
+    }
+    
     public Image getImage() {
         return image;
     }

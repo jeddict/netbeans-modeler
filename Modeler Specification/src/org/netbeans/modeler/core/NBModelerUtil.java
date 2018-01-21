@@ -1,5 +1,5 @@
 /**
- * Copyright [2014] Gaurav Gupta
+ * Copyright [2018] Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -35,23 +35,19 @@ import org.netbeans.api.java.source.ClassIndex;
 import org.netbeans.api.java.source.ClasspathInfo;
 import org.netbeans.api.java.source.ElementHandle;
 import org.netbeans.api.java.source.ui.TypeElementFinder;
-import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
-import org.netbeans.modeler.shape.ShapeDesign;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.widget.connection.relation.IRelationProxy;
 import org.netbeans.modeler.widget.connection.relation.IRelationValidator;
 import org.netbeans.modeler.widget.connection.relation.RelationProxy;
-import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
-import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.openide.util.Exceptions;
 import org.openide.util.Pair;
 import org.netbeans.editor.Utilities;
@@ -102,70 +98,12 @@ public class NBModelerUtil {
         file.getModelerUtil().saveModelerFile(file);
     }
 
-    public static INodeWidget updateNodeWidgetDesign(ShapeDesign shapeDesign, INodeWidget nodeWidget) {
-        return nodeWidget.getModelerScene().getModelerFile().getModelerUtil().updateNodeWidgetDesign(shapeDesign, nodeWidget);
-    }
-
-    public static void dettachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget) {
-        scene.getModelerFile().getNModelerUtil().dettachEdgeSourceAnchor(scene, edgeWidget, sourceNodeWidget);
-    }
-
-    public static void dettachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget) {
-        scene.getModelerFile().getNModelerUtil().dettachEdgeTargetAnchor(scene, edgeWidget, targetNodeWidget);
-    }
-
-    public static void attachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget sourceNodeWidget) {
-//        if (sourceNodeWidget instanceof INNodeWidget) {
-//            scene.getModelerFile().getNModelerUtil().attachEdgeSourceAnchor(scene, edgeWidget, sourceNodeWidget);
-//        } else if (sourceNodeWidget instanceof IPNodeWidget) {
-//            scene.getModelerFile().getPModelerUtil().attachEdgeSourceAnchor(scene, edgeWidget, sourceNodeWidget);
-//        }
-        scene.getModelerFile().getModelerUtil().attachEdgeSourceAnchor(scene, edgeWidget, sourceNodeWidget);
-    }
-
-    public static void attachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, INodeWidget targetNodeWidget) {
-//        if (targetNodeWidget instanceof INNodeWidget) {
-//            scene.getModelerFile().getNModelerUtil().attachEdgeTargetAnchor(scene, edgeWidget, targetNodeWidget);
-//        } else if (targetNodeWidget instanceof IPNodeWidget) {
-//            scene.getModelerFile().getPModelerUtil().attachEdgeTargetAnchor(scene, edgeWidget, targetNodeWidget);
-//        }
-        scene.getModelerFile().getModelerUtil().attachEdgeTargetAnchor(scene, edgeWidget, targetNodeWidget);
-    }
-
-    public static void dettachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget sourcePinWidget) {
-        scene.getModelerFile().getPModelerUtil().dettachEdgeSourceAnchor(scene, edgeWidget, sourcePinWidget);
-    }
-
-    public static void dettachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget targetPinWidget) {
-        scene.getModelerFile().getPModelerUtil().dettachEdgeTargetAnchor(scene, edgeWidget, targetPinWidget);
-    }
-
-    public static void attachEdgeSourceAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget sourcePinWidget) {
-        scene.getModelerFile().getPModelerUtil().attachEdgeSourceAnchor(scene, edgeWidget, sourcePinWidget);
-    }
-
-    public static void attachEdgeTargetAnchor(IModelerScene scene, IEdgeWidget edgeWidget, IPinWidget targetPinWidget) {
-        scene.getModelerFile().getPModelerUtil().attachEdgeTargetAnchor(scene, edgeWidget, targetPinWidget);
-    }
-
-    public static Anchor getAnchor(INodeWidget nodeWidget) {
-        return nodeWidget.getModelerScene().getModelerFile().getModelerUtil().getAnchor(nodeWidget);
-    }
-
-    public static String getEdgeType(INodeWidget sourceNodeWidget, INodeWidget targetNodeWidget, String connectionContextToolId) {
-        return sourceNodeWidget.getModelerScene().getModelerFile().getModelerUtil().getEdgeType(sourceNodeWidget, targetNodeWidget, connectionContextToolId);
-    }
-
-    public static Long getAutoGeneratedId() {
-        return new Date().getTime();
-    }
     private static int sequence = 0;
 
     public static String getAutoGeneratedStringId() {
         return "_" + new Date().getTime() + ++sequence;
     }
 
-//
     public static void hideContextPalette(IModelerScene scene) {
         if (scene.getContextPaletteManager() != null) {
             scene.getContextPaletteManager().cancelPalette();
@@ -184,7 +122,6 @@ public class NBModelerUtil {
         relationshipProxy.setSource(from);
         relationshipProxy.setTarget(to);
         relationshipProxy.setEdgeType(edgeType);
-//        IRelationValidator validator = new RelationValidator();
 
         boolean retVal = relationValidator.validateRelation(relationshipProxy);
         if (changeStatus) {
@@ -208,7 +145,7 @@ public class NBModelerUtil {
     }
 
     public static Collection<ConnectionWidget> getAllContainedEdges(Widget widget) {
-        HashSet<ConnectionWidget> set = new HashSet<ConnectionWidget>();
+        HashSet<ConnectionWidget> set = new HashSet<>();
         Scene scene = widget.getScene();
         if (scene instanceof GraphScene) {
             GraphScene gs = (GraphScene) scene;
@@ -230,10 +167,9 @@ public class NBModelerUtil {
 
     public static List<Object> getAllNodeChildren(Widget widget) {
         if (!(widget.getScene() instanceof GraphScene)) {
-            return new ArrayList<Object>();
+            return new ArrayList<>();
         }
-
-        return getAllNodeChildrenRecursive(new ArrayList<Object>(), widget);
+        return getAllNodeChildrenRecursive(new ArrayList<>(), widget);
     }
 
     private static List<Object> getAllNodeChildrenRecursive(List<Object> list, Widget widget) {
@@ -335,9 +271,7 @@ public class NBModelerUtil {
                         empty = false;
                     }
                     f.setAccessible(false);
-                } catch (IllegalArgumentException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (IllegalAccessException ex) {
+                } catch (IllegalArgumentException | IllegalAccessException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }

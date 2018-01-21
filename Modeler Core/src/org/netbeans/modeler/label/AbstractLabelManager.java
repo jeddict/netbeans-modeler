@@ -462,9 +462,8 @@ public abstract class AbstractLabelManager implements LabelManager {
                         lineWidget.setSourceAnchor(new ConnectionAnchor(((ConnectionWidget) connector), anchorLocation));
                     } else if (connector instanceof INodeWidget) {
                         INodeWidget nodeWidget = (INodeWidget) connector;
-                        lineWidget.setSourceAnchor(nodeWidget.getModelerScene().getModelerFile().getModelerUtil().getAnchor(nodeWidget));
+                        lineWidget.setSourceAnchor(nodeWidget.getAnchor());
                     }
-
                     lineWidget.setTargetAnchor(new ShapeUniqueAnchor(label, false));
                 }
                 owner.addChild(lineWidget);

@@ -38,8 +38,6 @@ import org.netbeans.modeler.specification.model.ModelerDiagramSpecification;
 import org.netbeans.modeler.specification.model.document.IDefinitionElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.util.IModelerUtil;
-import org.netbeans.modeler.specification.model.util.NModelerUtil;
-import org.netbeans.modeler.specification.model.util.PModelerUtil;
 import org.netbeans.modeler.specification.version.SoftwareVersion;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
@@ -191,17 +189,6 @@ public class ModelerFile {
      */
     public void setModelerDiagramModel(ModelerDiagramSpecification modelerSpecificationDiagramModel) {
         this.modelerSpecificationDiagramModel = modelerSpecificationDiagramModel;
-    }
-
-    /**
-     * These two method are for convenience *
-     */
-    public NModelerUtil getNModelerUtil() {
-        return (NModelerUtil) this.getModelerDiagramModel().getModelerUtil();
-    }
-
-    public PModelerUtil getPModelerUtil() {
-        return (PModelerUtil) this.getModelerDiagramModel().getModelerUtil();
     }
 
     /**

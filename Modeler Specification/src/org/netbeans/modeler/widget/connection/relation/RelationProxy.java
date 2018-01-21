@@ -15,7 +15,6 @@
  */
 package org.netbeans.modeler.widget.connection.relation;
 
-import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 
 public class RelationProxy implements IRelationProxy {

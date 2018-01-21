@@ -111,10 +111,6 @@ public interface IModelerDocument {
     void setDefinition(String definition);
 
     /**
-     * @param document the document to set
-     */
-//    void setDocument(SVGDocument document);
-    /**
      * @param documentPath the documentPath to set
      */
     void setDocumentPath(String documentPath);

@@ -38,11 +38,13 @@ import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.specification.model.document.INModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
-import org.netbeans.modeler.specification.model.util.IModelerUtil;
-import org.netbeans.modeler.specification.model.util.NModelerUtil;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.INodeWidget;
+import org.netbeans.modeler.widget.node.IPNodeWidget;
+import org.netbeans.modeler.widget.node.IWidget;
+import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.openide.DialogDisplayer;
@@ -339,20 +341,40 @@ public abstract class EdgeWidget<S extends IModelerScene> extends ConnectionWidg
 
     private void removeEdge() {
         if (!locked) {
-//            this.setLabel("");
             this.hideLabel();
-
-            IModelerUtil modelerUtil = this.getModelerScene().getModelerFile().getModelerUtil();
-            if (modelerUtil instanceof NModelerUtil) {
-                NModelerUtil nModelerUtil = (NModelerUtil) modelerUtil;
-                nModelerUtil.dettachEdgeSourceAnchor(scene, this, (INodeWidget) this.getSourceAnchor().getRelatedWidget().getParentWidget());
-                nModelerUtil.dettachEdgeTargetAnchor(scene, this, (INodeWidget) this.getTargetAnchor().getRelatedWidget().getParentWidget());
+            if (this.getModelerScene() instanceof INModelerScene) {
+                dettachEdgeSourceAnchor((INodeWidget) this.getSourceAnchor().getRelatedWidget().getParentWidget());
+                dettachEdgeTargetAnchor((INodeWidget) this.getTargetAnchor().getRelatedWidget().getParentWidget());
             }
             scene.deleteBaseElement((IBaseElementWidget) this);
             scene.deleteEdgeWidget(this);
             this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
             cleanReference();
         }
+    }
+
+    public void dettachEdgeSourceAnchor(IWidget sourcePinWidget) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void dettachEdgeTargetAnchor(IWidget targetPinWidget) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void attachEdgeSourceAnchor(IPinWidget sourcePinWidget) {
+        setSourceAnchor(sourcePinWidget.createAnchor());
+    }
+
+    public void attachEdgeTargetAnchor(IPinWidget targetPinWidget) {
+        setTargetAnchor(targetPinWidget.createAnchor());
+    }
+
+    public void attachEdgeSourceAnchor(INodeWidget sourceNodeWidget) {
+        setSourceAnchor(((IPNodeWidget) sourceNodeWidget).getNodeAnchor());
+    }
+    
+    public void attachEdgeTargetAnchor(INodeWidget targetNodeWidget) {
+        setTargetAnchor(((IPNodeWidget) targetNodeWidget).getNodeAnchor());
     }
 
     private boolean locked = false;

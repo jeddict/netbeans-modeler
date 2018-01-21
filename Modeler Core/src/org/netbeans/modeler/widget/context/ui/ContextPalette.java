@@ -134,20 +134,20 @@ public class ContextPalette extends JPanel {
 
         ButtonListener buttonListener = new ButtonListener();
         for (ContextPaletteButtonModel componentModel : children) {
-            if(componentModel.isVisible()){
-            if (componentModel.isGroup() == true) {
-                ComboButton btn = new ComboButton(model.getContext(), componentModel);
-                btn.setDirection(getDirection());
-                btn.addComboButtonListener(new ComboListener());
-                btn.addContextButtonListener(buttonListener);
-                widgetList.add(btn);
-            } else {
-                PaletteButton btn = new PaletteButton(model.getContext(),
-                        componentModel,
-                        getDirection(), true);
-                widgetList.add(btn);
-                btn.addContextButtonListener(buttonListener);
-            }
+            if (componentModel.isVisible()) {
+                if (componentModel.isGroup() == true) {
+                    ComboButton btn = new ComboButton(model.getContext(), componentModel);
+                    btn.setDirection(getDirection());
+                    btn.addComboButtonListener(new ComboListener());
+                    btn.addContextButtonListener(buttonListener);
+                    widgetList.add(btn);
+                } else {
+                    PaletteButton btn = new PaletteButton(model.getContext(),
+                            componentModel,
+                            getDirection(), true);
+                    widgetList.add(btn);
+                    btn.addContextButtonListener(buttonListener);
+                }
             }
         }
 
@@ -382,7 +382,6 @@ public class ContextPalette extends JPanel {
 
         @Override
         public void actionPerformed(PaletteButton source, boolean locked) {
-            ////System.out.println("ContextPalette ButtonListener  actionPerformed...");
             if (locked == true) {
                 setVisible(false);
             } else if (isVisible() == false) {
