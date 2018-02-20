@@ -1,14 +1,10 @@
-/Modeler Core/build/
-/Modeler Core/nbproject/private/
 /build/
-/Modeler Palette/build/
-/Modeler Properties/build/
-/Libraries/build/
-/Modeler Libraries/build/
-/Modeler Libraries/nbproject/private/
 /nbproject/private/
-/Modeler Properties/nbproject/private/
-/Modeler Palette/nbproject/private/
-/Visual API Patch/build/
-/Visual API Patch/nbproject/private/
-/Modeler Specification/build/
+/modeler.impl/nbproject/private/
+/modeler.api/nbproject/private/
+/modeler.properties/nbproject/private/
+/libs/nbproject/private/
+/modeler.api/build/
+/modeler.impl/build/
+/modeler.properties/build/
+/libs/build/
