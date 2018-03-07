@@ -21,12 +21,13 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
+import static org.openide.windows.TopComponent.Registry.PROP_ACTIVATED_NODES;
 import org.openide.windows.WindowManager;
 
 public abstract class ModelerNavigatorPanel implements NavigatorPanel {
 
-    private DiagramNavigatorContent navigator = null;
-    private Lookup.Template< IModelerScene> template = new Lookup.Template<>(IModelerScene.class);
+    private DiagramNavigatorContent navigator;
+    private final Lookup.Template< IModelerScene> template = new Lookup.Template<>(IModelerScene.class);
 
     @Override
     public String getDisplayName() {
@@ -57,43 +58,21 @@ public abstract class ModelerNavigatorPanel implements NavigatorPanel {
 
     @Override
     public void panelActivated(Lookup context) {
-        getComponent();
-        TopComponent.getRegistry().addPropertyChangeListener(navigator);
+        TopComponent.getRegistry().addPropertyChangeListener(getComponent());
         TopComponent tc = getTopComponent();
         if (tc != null) {
-//            result = tc.getLookup().lookup(template);
-//            result.addLookupListener(this);
-//            Collection c = result.allInstances();
-//            resultChanged(null);
-            navigator.propertyChange(new PropertyChangeEvent(this,
-                    TopComponent.getRegistry().PROP_ACTIVATED_NODES, false, true));
-
+            getComponent().propertyChange(new PropertyChangeEvent(this, PROP_ACTIVATED_NODES, false, true));
         }
     }
 
     @Override
     public void panelDeactivated() {
-        TopComponent.getRegistry().removePropertyChangeListener(navigator);
-
-//        if (result != null) {
-//            result.removeLookupListener(this);
-//            result = null;
-//        }
+        TopComponent.getRegistry().removePropertyChangeListener(getComponent());
     }
 
     @Override
     public Lookup getLookup() {
-//        TopComponent tc = TopComponent.getRegistry().getActivated()
-//        return null;
         return Lookup.EMPTY;
     }
 
-//    @Override
-//    public void resultChanged(LookupEvent ev) {
-//        Collection selected = result.allInstances();
-//        if (selected.size() == 1) {
-//            IModelerScene scene = (IModelerScene) selected.iterator().next();
-//            navigator.navigate(scene.getSatelliteView());
-//        }
-//    }
 }

@@ -47,7 +47,6 @@ import org.openide.explorer.ExplorerUtils;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
-import org.openide.util.RequestProcessor;
 import org.openide.util.actions.CallbackSystemAction;
 import org.openide.util.actions.SystemAction;
 import org.openide.util.lookup.AbstractLookup;
@@ -55,6 +54,7 @@ import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
+import org.netbeans.core.windows.view.ui.NbSheet;
 
 /**
  * Top component which displays something.
@@ -89,10 +89,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         this.setToolTipText(modelerFile.getTooltip());
         setFocusable(true);
         initComponents();
-        TopComponent propertiesComponent = WindowManager.getDefault().findTopComponent("properties");
-        if (!propertiesComponent.isOpened()) {
-            propertiesComponent.open();
-        }
         setupActionMap(getActionMap());
         initLookup();
     }
@@ -138,8 +134,6 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
         navigatorCookie = null;
         exploreLookup = null;
         paletteController = null;
-//        this.lookupContent = null;
-//        this.lookup = Lookup.EMPTY;
     }
     private NavigatorHint navigatorCookie = null;
 
@@ -246,10 +240,8 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
 
     @Override
     public void componentOpened() {
-        super.componentOpened();
+        super.componentOpened();      
     }
-
-    private static final RequestProcessor RP = new RequestProcessor("Closing Diagram", 1); // NOI18N
 
     @Override
     public void componentClosed() {
@@ -410,6 +402,58 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     @Override
     public boolean isPersistenceState() {
         return persistenceState;
+    }
+    
+    private static void handlePropertyPanelEvent() {
+        TopComponent.getRegistry().addPropertyChangeListener(evt -> {
+            String property = evt.getPropertyName();
+            Object oldValue = evt.getOldValue();
+            Object newValue = evt.getNewValue();
+            if (property.equals(TopComponent.Registry.PROP_ACTIVATED)) {
+                if((oldValue instanceof TopComponent.Cloneable)//MultiViewCloneableTopComponent 
+                        && newValue instanceof ModelerPanelTopComponent) {
+                    openPropertyPanel();
+                } else if((oldValue instanceof ModelerPanelTopComponent) 
+                        && newValue instanceof ModelerPanelTopComponent) {
+                    //ignore
+                } else if(oldValue instanceof ModelerPanelTopComponent
+                        && newValue instanceof TopComponent.Cloneable) {
+                    closePropertyPanel();
+                }
+            } else if (property.equals(TopComponent.Registry.PROP_TC_OPENED)) {
+                if(newValue instanceof ModelerPanelTopComponent) {
+                    openPropertyPanel();
+                }
+            } else if (property.equals(TopComponent.Registry.PROP_TC_CLOSED)) {
+                if(newValue instanceof ModelerPanelTopComponent) {
+                    closePropertyPanel();
+                }
+            }
+        });
+    }
+    
+        
+    private static void openPropertyPanel() {
+        TopComponent propertyWindow = NbSheet.findDefault();
+        try {
+            if (!propertyWindow.isOpened()) {
+                propertyWindow.open();
+                propertyWindow.requestActive();
+            }
+        } catch (Exception ex) {
+            // ignore
+        }
+    }
+    
+    private static void closePropertyPanel() {
+        NbSheet propertyWindow = NbSheet.findDefault();
+        if (propertyWindow.isOpened()) {
+            propertyWindow.close();
+        }
+    }
+    
+    static {
+        handlePropertyPanelEvent();
     }
 
 }
