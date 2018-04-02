@@ -83,6 +83,9 @@
                 <package>com.google.gson.internal.bind</package>
                 <package>com.google.gson.reflect</package>
                 <package>com.google.gson.stream</package>
+                <package>javax.json</package>
+                <package>javax.json.spi</package>
+                <package>javax.json.stream</package>
                 <package>org.analytics</package>
                 <package>org.apache.batik</package>
                 <package>org.apache.batik.anim</package>
@@ -265,6 +268,8 @@
                 <package>org.apache.velocity.shaded.commons.io</package>
                 <package>org.apache.velocity.util</package>
                 <package>org.apache.velocity.util.introspection</package>
+                <package>org.glassfish.json</package>
+                <package>org.glassfish.json.api</package>
                 <package>org.mvel2</package>
                 <package>org.mvel2.asm</package>
                 <package>org.mvel2.asm.commons</package>
@@ -279,6 +284,7 @@
                 <package>org.mvel2.debug</package>
                 <package>org.mvel2.integration</package>
                 <package>org.mvel2.integration.impl</package>
+                <package>org.mvel2.jsr223</package>
                 <package>org.mvel2.math</package>
                 <package>org.mvel2.optimizers</package>
                 <package>org.mvel2.optimizers.dynamic</package>
@@ -326,6 +332,10 @@
                 <binary-origin>release/modules/ext/batik-all-1_7.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/javax.json-api-1.1.2.jar</runtime-relative-path>
+                <binary-origin>release\modules\ext\javax.json-api-1.1.2.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/commons-beanutils-core-1.8.3.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-beanutils-core-1.8.3.jar</binary-origin>
             </class-path-extension>
@@ -342,6 +352,10 @@
                 <binary-origin>release/modules/ext/commons-lang3-3.7.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
+                <runtime-relative-path>ext/mvel2-2.4.0.Final.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/mvel2-2.4.0.Final.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
                 <runtime-relative-path>ext/jackson-core-2.7.5.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jackson-core-2.7.5.jar</binary-origin>
             </class-path-extension>
@@ -350,8 +364,8 @@
                 <binary-origin>release/modules/ext/commons-collections-3.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/mvel2-2.4.0.Final.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/mvel2-2.4.0.Final.jar</binary-origin>
+                <runtime-relative-path>ext/javax.json.impl-1.1.2.jar</runtime-relative-path>
+                <binary-origin>release\modules\ext\javax.json.impl-1.1.2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-logging-1.1.3.jar</runtime-relative-path>
@@ -387,7 +401,7 @@
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-io-2.6.jar</runtime-relative-path>
-                <binary-origin>F:\JPAM\Module\JeddictWP\NBModeler\Modeler Libraries\release\modules\ext\commons-io-2.6.jar</binary-origin>
+                <binary-origin>release\modules\ext\commons-io-2.6.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/analytics-java-1.1.3.jar</runtime-relative-path>
