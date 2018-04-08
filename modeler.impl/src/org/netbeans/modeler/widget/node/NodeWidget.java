@@ -261,7 +261,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         List<JMenuItem> menuItemList = new LinkedList<>();
         JMenuItem visualProperty = new JMenuItem(I18n.getString("Customize"));
         visualProperty.setIcon(ImageUtil.getInstance().getIcon("customize.png"));
-        visualProperty.addActionListener((ActionEvent e) -> {
+        visualProperty.addActionListener(e -> {
             AbstractNode node1 = new VisualPropertyViewManager((IBaseElementWidget) NodeWidget.this);
             NodeOperation.getDefault().showProperties(node1);
             NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
@@ -269,7 +269,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
 
         JMenuItem delete = new JMenuItem("Delete");
         delete.setIcon(ImageUtil.getInstance().getIcon("delete.png"));
-        delete.addActionListener((ActionEvent e) -> {
+        delete.addActionListener(e -> {
             NodeWidget.this.remove(true);
             NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
@@ -279,7 +279,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
 
         JMenuItem itemFront = new JMenuItem("Bring to Front");
         itemFront.setIcon(ImageUtil.getInstance().getIcon("front.png"));
-        itemFront.addActionListener((ActionEvent e) -> {
+        itemFront.addActionListener(e -> {
             NodeWidget.this.bringToFront();
             NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
@@ -287,7 +287,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
 
         JMenuItem itemBack = new JMenuItem("Send to Back");
         itemBack.setIcon(ImageUtil.getInstance().getIcon("back.png"));
-        itemBack.addActionListener((ActionEvent e) -> {
+        itemBack.addActionListener(e -> {
             NodeWidget.this.bringToBack();
             NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
@@ -295,7 +295,7 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
 
         JMenuItem baseProperty = new JMenuItem("Properties");
         baseProperty.setIcon(ImageUtil.getInstance().getIcon("properties.gif"));
-        baseProperty.addActionListener((ActionEvent e) -> {
+        baseProperty.addActionListener(e -> {
             NodeWidget.this.showProperties();
             NodeWidget.this.getModelerScene().getModelerPanelTopComponent().changePersistenceState(false);
         });
@@ -354,16 +354,6 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         org.netbeans.modeler.properties.util.PropertyUtil.showProperties(node, this.getLabel(), propertyVisibilityHandlers);
     }
 
-//    @Override
-//    public AbstractNode getNode() {
-//        this.node = org.netbeans.modeler.properties.util.PropertyUtil.getNode((IBaseElementWidget) this, node, this.getLabel(), propertyVisibilityHandlers);
-//        return node;
-//    }
-//
-//    @Override
-//    public void setNode(AbstractNode node) {
-//        this.node = node;
-//    }
     void hoverWidget() {
         hoverWidget(0);
     }

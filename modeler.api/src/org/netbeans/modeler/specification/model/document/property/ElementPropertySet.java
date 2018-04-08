@@ -109,7 +109,7 @@ public class ElementPropertySet {
             LinkedList<SheetProperty> propertyList = entry.getValue();
             //Prepare hashmap container
             Map<String, PropertyLinkedList<SheetProperty>> filterContainerMap= new LinkedHashMap<>();
-            propertyList.stream().forEach(p -> {
+            propertyList.forEach(p -> {
                 if (filterContainerMap.get(p.getProperty().getName()) == null) {
                     PropertyLinkedList<SheetProperty> propertyLinkedList = new PropertyLinkedList<>();
                     propertyLinkedList.addFirst(p);
@@ -119,7 +119,7 @@ public class ElementPropertySet {
                 }
             });
             
-            propertyList.stream().forEach(p -> {
+            propertyList.forEach(p -> {
                 if(p.getProperty() instanceof ModelerSheetProperty){
                     ModelerSheetProperty msp = (ModelerSheetProperty)p.getProperty();
                     if(msp.getAfter()!=null){

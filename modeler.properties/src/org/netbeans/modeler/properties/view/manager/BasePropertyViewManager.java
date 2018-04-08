@@ -67,11 +67,7 @@ public class BasePropertyViewManager extends AbstractNode implements IPropertyMa
             getBaseElementWidget().createPropertySet(elementPropertySet);
             elementPropertySet.executeProperties();
         } else {
-            for (String key : elementPropertySet.getGroupKey()) {
-//                if(sheet.get(key) !=null ){
-                    sheet.remove(key);
-//                }
-            }
+            elementPropertySet.getGroupKey().forEach(sheet::remove);
         }
         createSheet(sheet, propertyVisibilityHandlerList);
         return sheet;

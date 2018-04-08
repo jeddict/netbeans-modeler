@@ -89,6 +89,7 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
     private boolean highlightStatus = false;
     private boolean anchorState = false;
     private final Map<String, PropertyChangeListener> propertyChangeHandlers = new HashMap<>();
+    protected final WidgetAction editAction;
 
     public PNodeWidget(S scene, NodeWidgetInfo nodeWidgetInfo) {
         super((Scene) scene, ((IPModelerScene) scene).getColorScheme(), nodeWidgetInfo.getNodeDesign());
@@ -96,7 +97,7 @@ public abstract class PNodeWidget<S extends IModelerScene> extends AbstractPNode
         this.nodeWidgetInfo = nodeWidgetInfo;
         setAnchorGap(0);
 
-        WidgetAction editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
+        editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getNodeNameWidget().getActions().addAction(editAction);
         getHeader().getActions().addAction(scene.createObjectHoverAction());
 

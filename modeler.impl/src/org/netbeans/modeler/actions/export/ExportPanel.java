@@ -88,7 +88,7 @@ public class ExportPanel extends javax.swing.JPanel implements DocumentListener,
                 new ExportType[]{ExportType.png, ExportType.jpg});
         imageTypeComboBox.setModel(boxModel);
         if (exportManager != null) {
-            exportManager.getExportType().stream().forEach((file) -> {
+            exportManager.getExportType().forEach((file) -> {
                 boxModel.addElement(file);
             });
         }

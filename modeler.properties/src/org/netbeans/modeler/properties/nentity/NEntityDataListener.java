@@ -86,7 +86,7 @@ public class NEntityDataListener<T> implements INEntityDataListener {
     @Override
     public void setData(List<Object[]> data) {
         inputData.clear();
-        data.stream().forEach((row) -> {
+        data.forEach((row) -> {
             T t = (T) row[0];
             if(onSaveRowCallBack!=null){
                 onSaveRowCallBack.accept(t, row);

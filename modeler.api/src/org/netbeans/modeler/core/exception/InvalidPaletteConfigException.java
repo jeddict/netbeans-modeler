@@ -15,22 +15,22 @@
  */
 package org.netbeans.modeler.core.exception;
 
-public class InvalidPalleteConfigException extends InvalidConfigException {
+public class InvalidPaletteConfigException extends InvalidConfigException {
 
     /**
-     * Creates a new instance of <code>InvalidPalleteConfigException</code>
+     * Creates a new instance of <code>InvalidPaletteConfigException</code>
      * without detail message.
      */
-    public InvalidPalleteConfigException() {
+    public InvalidPaletteConfigException() {
     }
 
     /**
-     * Constructs an instance of <code>InvalidPalleteConfigException</code> with
+     * Constructs an instance of <code>InvalidPaletteConfigException</code> with
      * the specified detail message.
      *
      * @param msg the detail message.
      */
-    public InvalidPalleteConfigException(String msg) {
+    public InvalidPaletteConfigException(String msg) {
         super(msg);
     }
 }

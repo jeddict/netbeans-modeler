@@ -23,7 +23,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.netbeans.modeler.config.document.ModelerDocumentFactory;
 import org.netbeans.modeler.config.document.ModelerDocumentFactoryRepository;
-import org.netbeans.modeler.core.exception.InvalidPalleteConfigException;
+import org.netbeans.modeler.core.exception.InvalidPaletteConfigException;
 import org.netbeans.modeler.util.Util;
 import org.openide.util.Exceptions;
 
@@ -39,7 +39,7 @@ public class PaletteConfigRepository {
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 paletteConfig = (IPaletteConfig) jaxbUnmarshaller.unmarshal(Util.loadResource(resourcePath));
                 if (paletteConfig == null) {
-                    throw new InvalidPalleteConfigException("No PaletteConfig found for Vendor : " + vendorId + " DiagramModel : " + diagramModelId + " Resource : " + resourcePath);
+                    throw new InvalidPaletteConfigException("No PaletteConfig found for Vendor : " + vendorId + " DiagramModel : " + diagramModelId + " Resource : " + resourcePath);
                 }
                 paletteConfigList.put(vendorId + File.pathSeparator + diagramModelId, paletteConfig);
                 ModelerDocumentFactory modelerDocumentFactory = ModelerDocumentFactoryRepository.getModelerDocumentFactory(vendorId);
@@ -59,7 +59,7 @@ public class PaletteConfigRepository {
     public static IPaletteConfig getPaletteConfig(String vendorId, String diagramModelId) {//Class<? extends IModelerFileDataObject> modelerFileClass) {
         IPaletteConfig paletteConfig = paletteConfigList.get(vendorId + File.pathSeparator + diagramModelId);
         if (paletteConfig == null) {
-            throw new InvalidPalleteConfigException("No DiagramModelConfig PaletteConfig DiagramModel : " + diagramModelId);
+            throw new InvalidPaletteConfigException("No DiagramModelConfig PaletteConfig DiagramModel : " + diagramModelId);
         }
         return paletteConfig;
     }

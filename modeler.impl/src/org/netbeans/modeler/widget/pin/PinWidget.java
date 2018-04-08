@@ -49,7 +49,7 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     private final PinWidgetInfo pinWidgetInfo;
     private boolean activeStatus = true;
     private boolean highlightStatus = false;
-    private final InplaceEditorAction editAction;
+    protected final InplaceEditorAction editAction;
 
     public PinWidget(S scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
         super((Scene) scene, scene.getColorScheme(), pinWidgetInfo.getTextDesign());

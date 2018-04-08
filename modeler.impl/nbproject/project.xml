@@ -194,6 +194,7 @@
                 <package>org.netbeans.modeler.core.scene.vmd</package>
                 <package>org.netbeans.modeler.file</package>
                 <package>org.netbeans.modeler.label</package>
+                <package>org.netbeans.modeler.label.inplace</package>
                 <package>org.netbeans.modeler.navigator</package>
                 <package>org.netbeans.modeler.provider</package>
                 <package>org.netbeans.modeler.provider.connection</package>
