@@ -46,7 +46,7 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/org/netbeans/modeler/widget/properties/resource/settings.png"/>
+          <Image iconType="3" name="/org/netbeans/modeler/properties/resource/settings.png"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="org/netbeans/modeler/properties/combobox/Bundle.properties" key="JComboBoxPanel.setting_Button.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>

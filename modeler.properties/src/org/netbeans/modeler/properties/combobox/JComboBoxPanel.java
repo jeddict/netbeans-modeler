@@ -56,7 +56,7 @@ public class JComboBoxPanel extends javax.swing.JPanel {
         comboBox.setAlignmentY(0.0F);
 
         setting_Button.setForeground(new java.awt.Color(255, 255, 255));
-        setting_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/modeler/widget/properties/resource/settings.png"))); // NOI18N
+        setting_Button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/netbeans/modeler/properties/resource/settings.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(setting_Button, org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.setting_Button.text")); // NOI18N
         setting_Button.setToolTipText(org.openide.util.NbBundle.getMessage(JComboBoxPanel.class, "JComboBoxPanel.setting_Button.toolTipText")); // NOI18N
         setting_Button.setAlignmentY(0.0F);
