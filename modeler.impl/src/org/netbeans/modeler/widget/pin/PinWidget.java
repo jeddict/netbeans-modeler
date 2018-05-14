@@ -45,6 +45,7 @@ import org.openide.NotifyDescriptor;
 
 public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWidget {
 
+    private final S scene;
     private IPNodeWidget nodeWidget;
     private final PinWidgetInfo pinWidgetInfo;
     private boolean activeStatus = true;
@@ -53,12 +54,12 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
 
     public PinWidget(S scene, IPNodeWidget nodeWidget, PinWidgetInfo pinWidgetInfo) {
         super((Scene) scene, scene.getColorScheme(), pinWidgetInfo.getTextDesign());
-        this.setModelerScene(scene);
+        this.scene = scene;
         this.pinWidgetInfo = pinWidgetInfo;
         this.nodeWidget = nodeWidget;
         editAction = new InplaceEditorAction<>(new TextFieldInplaceEditorProvider(new LabelInplaceEditor((Widget) this), null));
         getPinNameWidget().getActions().addAction(editAction);
-        setPinName(pinWidgetInfo.getName());
+        setLabel(pinWidgetInfo.getName());
     }
     
     public void edit(){
@@ -74,7 +75,6 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     public String getLabel() {
         return this.getPinName();
     }
-    private S scene;
 
     /**
      * @return the scene
@@ -82,13 +82,6 @@ public abstract class PinWidget<S extends IPModelerScene> extends AbstractPinWid
     @Override
     public S getModelerScene() {
         return scene;
-    }
-
-    /**
-     * @param scene the scene to set
-     */
-    public void setModelerScene(S scene) {
-        this.scene = scene;
     }
 
     protected List<JMenuItem> getPopupMenuItemList() {

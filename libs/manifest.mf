@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 AutoUpdate-Show-In-Client: true
 OpenIDE-Module: org.netbeans.modeler.libs
 OpenIDE-Module-Localizing-Bundle: org/netbeans/modeler/libs/Bundle.properties
-OpenIDE-Module-Specification-Version: 4.8.2
+OpenIDE-Module-Specification-Version: 4.8.4
 
