@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" xs="false" id="_145053829046615" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity xre="false" sm="false" abstract="false" class="ModelerFile" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450538338018">
+        <jpa:attributes>
+            <one-to-one primaryKey="false" connected-entity-id="_1450540528666" target-entity="ModelerVendorSpecification" visibile="true" name="modelerVendorSpecification" id="_145054055081629">
+                <join-table/>
+            </one-to-one>
+            <one-to-one primaryKey="false" connected-entity-id="_1450540595766" target-entity="FileDataObject" visibile="true" name="fileDataObject" id="_145054060371031">
+                <join-table/>
+            </one-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="ModelerScene" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450538342209">
+        <jpa:attributes>
+            <basic attribute-type="String" visibile="true" name="baseElementSpec" id="_145113827104828">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </basic>
+            <one-to-many connected-entity-id="_1451138247811" target-entity="NodeWidget" visibile="true" name="flowElements" id="_145113830669829">
+                <join-table/>
+            </one-to-many>
+            <one-to-one primaryKey="false" connected-entity-id="_1450538388011" connected-attribute-id="_145053840108125" target-entity="ModelerPanel" visibile="true" name="modelerPanel" id="_145053840108124">
+                <join-table/>
+            </one-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="IModelerUtil" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450538346499">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="ModelerPanel" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450538388011">
+        <jpa:attributes>
+            <one-to-one mapped-by="modelerPanel" primaryKey="false" connected-entity-id="_1450538342209" connected-attribute-id="_145053840108124" target-entity="ModelerScene" visibile="true" name="modelerScene" id="_145053840108125"/>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="ModelerVendorSpecification" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450540528666">
+        <jpa:attributes>
+            <one-to-one primaryKey="false" connected-entity-id="_1450540631982" target-entity="ModelerDiagramSpecification" visibile="true" name="modelerDiagramSpecification" id="_145054064108533">
+                <join-table/>
+            </one-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="IModelerDiagramEngine" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450540531969">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="FileDataObject" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450540595766">
+        <jpa:attributes/>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="ModelerDiagramSpecification" visibile="true" minimized="false" rootElement="_145053829046615" id="_1450540631982">
+        <jpa:attributes>
+            <basic attribute-type="String" visibile="true" name="exportManager" id="_145113052364219">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </basic>
+            <basic attribute-type="String" visibile="true" name="relationValidator" id="_145113052436220">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </basic>
+            <basic attribute-type="String" visibile="true" name="definitionElement" id="_145113861912831">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </basic>
+            <one-to-one primaryKey="false" connected-entity-id="_1450538342209" target-entity="ModelerScene" visibile="true" name="modelerScene" id="_145054069877734">
+                <join-table/>
+            </one-to-one>
+            <one-to-one primaryKey="false" connected-entity-id="_1450540531969" target-entity="IModelerDiagramEngine" visibile="true" name="modelerDiagramEngine" id="_145054084753635">
+                <join-table/>
+            </one-to-one>
+            <one-to-one primaryKey="false" connected-entity-id="_1450538346499" target-entity="IModelerUtil" visibile="true" name="modelerUtil" id="_145054088832236">
+                <join-table/>
+            </one-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abstract="false" class="NodeWidget" visibile="true" minimized="false" rootElement="_145053829046615" id="_1451138247811">
+        <jpa:attributes>
+            <basic attribute-type="String" visibile="true" name="baseElementSpec" id="_145113832200030">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </basic>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:embeddable sm="false" abstract="false" class="Element" visibile="true" minimized="true" rootElement="_145053829046615" id="_1451130571888">
+        <jpa:attributes>
+            <basic attribute-type="String" visibile="true" name="definitionElement" id="_145113069258623">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </basic>
+            <basic attribute-type="String" visibile="true" name="diagramElement" id="_145113069319424">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </basic>
+        </jpa:attributes>
+    </jpa:embeddable>
+    <jpa:diagram id="_145053829046616">
+        <plane elementRef="_145053829046615" id="_145053829046617_p">
+            <shape elementRef="_1450538338018" id="_1450538338018_gui">
+                <Bounds x="-3.0" y="13.0" width="233.0" height="78.0"/>
+            </shape>
+            <shape elementRef="_1450538342209" id="_1450538342209_gui">
+                <Bounds x="702.0" y="168.0" width="200.0" height="110.0"/>
+            </shape>
+            <shape elementRef="_1450538346499" id="_1450538346499_gui">
+                <Bounds x="603.0" y="518.0" width="185.0" height="26.0"/>
+            </shape>
+            <shape elementRef="_1450538388011" id="_1450538388011_gui">
+                <Bounds x="433.0" y="67.0" width="197.0" height="58.0"/>
+            </shape>
+            <shape elementRef="_1450540528666" id="_1450540528666_gui">
+                <Bounds x="109.0" y="125.0" width="299.0" height="58.0"/>
+            </shape>
+            <shape elementRef="_1450540531969" id="_1450540531969_gui">
+                <Bounds x="774.0" y="469.0" width="268.0" height="26.0"/>
+            </shape>
+            <shape elementRef="_1450540595766" id="_1450540595766_gui">
+                <Bounds x="296.0" y="7.0" width="204.0" height="26.0"/>
+            </shape>
+            <shape elementRef="_1450540631982" id="_1450540631982_gui">
+                <Bounds x="296.0" y="268.0" width="307.0" height="170.0"/>
+            </shape>
+            <shape elementRef="_1451130571888" id="_1451130571888_gui">
+                <Bounds x="1465.0" y="951.0" width="161.0" height="23.0"/>
+            </shape>
+            <shape elementRef="_1451138247811" id="_1451138247811_gui">
+                <Bounds x="855.0" y="33.0" width="187.0" height="58.0"/>
+            </shape>
+        </plane>
+    </jpa:diagram>
+</jpa:entity-mappings>

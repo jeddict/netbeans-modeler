@@ -1,10 +1,5 @@
-/build/
-/nbproject/private/
-/modeler.impl/nbproject/private/
-/modeler.api/nbproject/private/
-/modeler.properties/nbproject/private/
-/libs/nbproject/private/
-/modeler.api/build/
-/modeler.impl/build/
-/modeler.properties/build/
-/libs/build/
+/target/
+/modeler-api/target/
+/modeler-impl/target/
+/modeler-lib/target/
+/modeler-properties/target/

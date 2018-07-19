@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: io.github.jeddict.modeler.impl
+OpenIDE-Module-Display-Category: Jeddict
+OpenIDE-Module-Long-Description: Modeling framework to design visual plugin for NetBeans e.g jBatchSuite, JPA Modeler, jBPMN, DB Modeler etc
+OpenIDE-Module-Short-Description: Modeling framework to design visual plugin for NetBeans
+
+
