@@ -15,21 +15,21 @@
  */
 package org.netbeans.modeler.actions;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
-import javax.swing.JComponent;
+import java.util.List;
 import org.netbeans.api.visual.action.AcceptProvider;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.action.WidgetDropListener;
 import org.netbeans.modeler.config.document.FlowDimensionType;
 import org.netbeans.modeler.config.palette.SubCategoryNodeConfig;
+import static org.netbeans.modeler.core.NBModelerUtil.drawImage;
 import org.netbeans.modeler.label.ILabelConnectionWidget;
 import org.netbeans.modeler.specification.model.document.IContainerElement;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
@@ -38,7 +38,6 @@ import org.netbeans.modeler.specification.model.document.core.IBaseElement;
 import org.netbeans.modeler.specification.model.document.widget.IBounadryFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene;
-import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.pin.IPinWidget;
@@ -74,21 +73,19 @@ public class CustomAcceptProvider implements AcceptProvider {
             }
         } else if (isPaletteItem(transferable)) {
             SubCategoryNodeConfig subCategoryInfo = getSubCategory(transferable);
-            Image dragImage = subCategoryInfo.getImage();
-            JComponent view = scene.getView();
-            
-            Graphics2D g2 = (Graphics2D) view.getGraphics();
-            Rectangle visRect = scene.getBounds();//view.getVisibleRect();//
-            view.paintImmediately(0, 0, visRect.width - visRect.x, visRect.height - visRect.y);//(visRect.x, visRect.y, visRect.width, visRect.height);
-            g2.drawImage(dragImage,
-                    AffineTransform.getTranslateInstance(point.getLocation().getX() - visRect.x,
-                            point.getLocation().getY() - visRect.y),
-                    null);
-
+            Image image = subCategoryInfo.getImage();
+            drawImage(image, point, scene);
             if (subCategoryInfo.getModelerDocument().getFlowDimension() == FlowDimensionType.BOUNDARY
                     || IPinWidget.class.isAssignableFrom(subCategoryInfo.getModelerDocument().getWidget())) {
                 scene.repaint();
                 return ConnectorState.REJECT;
+            }
+        } else {
+            List<WidgetDropListener> listeners = (List<WidgetDropListener>) scene.getWidgetDropListener();
+            for (WidgetDropListener listener : listeners) {
+                if (!listener.isDroppable(widget, point, transferable, scene)) {
+                    return ConnectorState.REJECT;
+                }
             }
         }
         return retVal;
@@ -97,89 +94,78 @@ public class CustomAcceptProvider implements AcceptProvider {
 
     @Override
     public void accept(Widget modelerScene, Point point, Transferable transferable) {
-        try {     
-        if (isWidgetMove(transferable)) {
-            boolean convertLocation = false;
-            Widget[] target;
-            try {
-                target = new Widget[]{getWidget(transferable)};
-                convertLocation = true;
-            } catch (Exception e) {
-                target = new Widget[0];
+        try {
+            if (isWidgetMove(transferable)) {
+                boolean convertLocation = false;
+                Widget[] target;
+                try {
+                    target = new Widget[]{getWidget(transferable)};
+                    convertLocation = true;
+                } catch (Exception e) {
+                    target = new Widget[0];
+                }
+
+                for (Widget curWidget : target) {
+
+                    if (curWidget instanceof IBounadryFlowNodeWidget
+                            || curWidget instanceof ILabelConnectionWidget) {
+                        continue;
+                    }
+                    if (curWidget.getParentWidget() != null) {
+                        curWidget.getParentWidget().removeChild(curWidget);
+                    }
+
+                    Point curPt = curWidget.getPreferredLocation();
+                    if (curPt == null) {
+                        curPt = curWidget.getLocation();
+                    }
+                    scene.addChild(curWidget);
+                    if (convertLocation == true) {
+                        curWidget.setPreferredLocation(scene.convertSceneToLocal(curPt));
+                    }
+
+                    IFlowElementWidget newNodeWidget = (IFlowElementWidget) curWidget;
+                    if (newNodeWidget.getFlowElementsContainer() instanceof IModelerSubScene) {
+                        IModelerSubScene subProcessWidget = (IModelerSubScene) newNodeWidget.getFlowElementsContainer();
+
+                        subProcessWidget.removeBaseElementElement(newNodeWidget);
+                        scene.addBaseElement(newNodeWidget);
+
+                        IRootElement rootElementSpec = (IRootElement) scene.getBaseElementSpec();
+                        IContainerElement subProcessSpec = (IContainerElement) subProcessWidget.getBaseElementSpec();
+                        IBaseElement baseElementSpec = newNodeWidget.getBaseElementSpec();
+
+                        subProcessSpec.removeBaseElement(baseElementSpec);
+                        rootElementSpec.addBaseElement(baseElementSpec);
+                    }
+                    newNodeWidget.setFlowElementsContainer(modelerScene);
+
+                }
+            } else if (isPaletteItem(transferable)) {
+                SubCategoryNodeConfig subCategoryInfo = getSubCategory(transferable);
+                boolean status = true;
+                if (subCategoryInfo.getModelerDocument().getFlowDimension() == FlowDimensionType.BOUNDARY) {
+                    status = false;
+                }
+                if (status) {
+                    scene.createNodeWidget(new NodeWidgetInfo(subCategoryInfo, point));
+                    scene.getModelerPanelTopComponent().changePersistenceState(false);
+                }
+            } else {
+                List<WidgetDropListener> listeners = (List<WidgetDropListener>) scene.getWidgetDropListener();
+                listeners.forEach(listener -> listener.drop(modelerScene, point, transferable, scene));
             }
 
-            for (Widget curWidget : target) {
-
-                if (curWidget instanceof IBounadryFlowNodeWidget
-                        || curWidget instanceof ILabelConnectionWidget) {
-                    continue;
-                }
-                if (curWidget.getParentWidget() != null) {
-                    curWidget.getParentWidget().removeChild(curWidget);
-                }
-
-                Point curPt = curWidget.getPreferredLocation();
-                if (curPt == null) {
-                    curPt = curWidget.getLocation();
-                }
-                scene.addChild(curWidget);
-                if (convertLocation == true) {
-                    curWidget.setPreferredLocation(scene.convertSceneToLocal(curPt));
-                }
-
-//                if(!(curWidget instanceof BaseElementWidget)){
-//                     break;
-//                }
-                IFlowElementWidget newNodeWidget = (IFlowElementWidget) curWidget;
-                /*Manage Widget and Widget Specification Start */
-
-                if (newNodeWidget.getFlowElementsContainer() instanceof IModelerSubScene) {
-                    IModelerSubScene subProcessWidget = (IModelerSubScene) newNodeWidget.getFlowElementsContainer();
-
-                    subProcessWidget.removeBaseElementElement(newNodeWidget);
-                    scene.addBaseElement(newNodeWidget);
-
-                    IRootElement rootElementSpec = (IRootElement)scene.getBaseElementSpec();
-                    IContainerElement subProcessSpec = (IContainerElement) subProcessWidget.getBaseElementSpec();
-                    IBaseElement baseElementSpec = newNodeWidget.getBaseElementSpec();
-
-                    subProcessSpec.removeBaseElement(baseElementSpec);
-                    rootElementSpec.addBaseElement(baseElementSpec);
-                }
-
-                /*Manage Widget and Widget Specification End */
-                newNodeWidget.setFlowElementsContainer(modelerScene);
-
-            }
-//            scene.getModelerPanelTopComponent().changePersistenceState(false);
-//            scene.revalidate();
-        } else if (isPaletteItem(transferable)) {
-            SubCategoryNodeConfig subCategoryInfo = getSubCategory(transferable);
-            boolean status = true;
-            if (subCategoryInfo.getModelerDocument().getFlowDimension() == FlowDimensionType.BOUNDARY) {
-                status = false;
-            }
-            if (status) {
-                INodeWidget widget = scene.createNodeWidget(new NodeWidgetInfo(subCategoryInfo, point));
-                scene.getModelerPanelTopComponent().changePersistenceState(false);
-            }
-//            scene.revalidate(); //!node.isExist() 
-//            scene.validate();
-        }
-
-        } catch(Throwable t){
-            ((IModelerScene)modelerScene).getModelerFile().handleException(t);
+        } catch (Throwable t) {
+            ((IModelerScene) modelerScene).getModelerFile().handleException(t);
         }
     }
 
     protected SubCategoryNodeConfig getSubCategory(Transferable transferable) {
         Object o = null;
         try {
-            //o =  transferable.getTransferData(PaletteItemTransferable.FLAVOR);
             o = transferable.getTransferData(DataFlavor.imageFlavor);
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (UnsupportedFlavorException ex) {
+        } catch (IOException | UnsupportedFlavorException ex) {
             Exceptions.printStackTrace(ex);
         }
         if (o instanceof Node) {
@@ -194,9 +180,7 @@ public class CustomAcceptProvider implements AcceptProvider {
         try {
             MoveWidgetTransferable data = (MoveWidgetTransferable) transferable.getTransferData(MoveWidgetTransferable.FLAVOR);
             return data.getWidget();
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (UnsupportedFlavorException ex) {
+        } catch (IOException | UnsupportedFlavorException ex) {
             Exceptions.printStackTrace(ex);
         }
         return null;
@@ -233,35 +217,5 @@ public class CustomAcceptProvider implements AcceptProvider {
     protected boolean isPaletteItem(Transferable transferable) {
         return transferable.isDataFlavorSupported(DataFlavor.imageFlavor);
     }
-    
-//    transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
-//            List files = null;
-//            try {
-//                files = (List) t.getTransferData(DataFlavor.javaFileListFlavor);
-//            } catch (Exception ex) {
-//                ErrorManager.getDefault().notify(ErrorManager.INFORMATIONAL, ex);
-//                return false;
-//            }
-//
-//            if (files.size() > 0) {
-//                File file = (File) files.get(0);
-//                if (file != null && IconEditor.isImageFileName(file.getName())) {
-//                    if (setExternalAsCPFile(file)) { // the file is on classpath
-//                        classPathRadio.setSelected(true);
-//                    } else {
-//                        selectedExternalFile = file;
-//                        selectedURL = null;
-//                        externalRadio.setSelected(true);
-//                        try {
-//                            urlField.setText(file.toURL().toExternalForm());
-//                        } catch (MalformedURLException ex) {
-//                            ErrorManager.getDefault().notify(ErrorManager.INFORMATIONAL, ex);
-//                        }
-//                    }
-//                    updateValue();
-//                    return true;
-//                }
-//            }
-//
 
 }

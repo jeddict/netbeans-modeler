@@ -56,6 +56,7 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.EventProcessingType;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.action.WidgetDropListener;
 import org.netbeans.modeler.actions.EventListener;
 import org.netbeans.modeler.actions.IEventListener;
 import org.netbeans.modeler.component.IModelerPanel;
@@ -65,6 +66,7 @@ import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
 import org.netbeans.modeler.properties.view.manager.IPropertyManager;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.router.OrthogonalSearchRouter;
+import org.netbeans.modeler.router.WidgetsCollisionCollector;
 import org.netbeans.modeler.specification.model.document.IColorScheme;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.IPModelerScene;
@@ -91,7 +93,6 @@ import org.netbeans.modeler.widget.pin.info.PinWidgetInfo;
 import org.netbeans.modeler.widget.properties.handler.PropertyChangeListener;
 import org.netbeans.modeler.widget.properties.handler.PropertyVisibilityHandler;
 import org.netbeans.modeler.widget.transferable.cp.WidgetTransferable;
-import org.netbeans.modeler.router.WidgetsCollisionCollector;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.WindowManager;
@@ -109,7 +110,7 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     private LayerWidget connectionLayer;
     private LayerWidget interractionLayer;//interactive actions like ConnectAction or AlignWithMoveAction
     private LayerWidget labelLayer;
-    private Router router = null;
+    private Router router;
     private JComponent satelliteView;
     private IModelerPanel modelerPanel;
     private ModelerFile modelerFile;
@@ -117,10 +118,11 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
     private ContextPaletteManager paletteManager = null;
     // Lookup Data
     private InstanceContent lookupContent = new InstanceContent();
-    private ArrayList< IFlowElementWidget> lockedSelected = new ArrayList< IFlowElementWidget>();
+    private List< IFlowElementWidget> lockedSelected = new ArrayList<>();
     private INodeWidget validNodeWidget;
     private INodeWidget invalidNodeWidget;
     private boolean alignSupport = true;
+    private List<WidgetDropListener> widgetDropListeners = new ArrayList<>();
 
     public AbstractPModelerScene() {
         setKeyEventProcessingType(EventProcessingType.FOCUSED_WIDGET_AND_ITS_CHILDREN);
@@ -1049,6 +1051,23 @@ public abstract class AbstractPModelerScene<E extends IRootElement> extends Grap
         super.createView();
         addKeyboardActions();
         return getView();
+    }
+
+    @Override
+    public List<WidgetDropListener> getWidgetDropListener() {
+        return widgetDropListeners;
+    }
+
+    protected void setWidgetDropListener(List<WidgetDropListener> widgetDropListener) {
+        this.widgetDropListeners = widgetDropListener;
+    }
+
+    protected void addWidgetDropListener(WidgetDropListener widgetDropListener) {
+        this.widgetDropListeners.add(widgetDropListener);
+    }
+
+    protected void removeWidgetDropListener(WidgetDropListener widgetDropListener) {
+        this.widgetDropListeners.remove(widgetDropListener);
     }
 
     /**

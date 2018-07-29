@@ -15,7 +15,6 @@
  */
 package org.netbeans.modeler.core;
 
-import org.netbeans.api.project.FileOwnerQuery;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.netbeans.api.project.FileOwnerQuery;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.visual.widget.Widget;
@@ -67,6 +67,8 @@ public class ModelerFile {
     private Map<String, Object> attributes = new HashMap<>();
     private ModelerFile parentFile;
     private Set<ModelerFile> childrenFile = new HashSet<>();
+    private Project project;
+    private SourceGroup sourceGroup;
 
     /**
      * @return the name
@@ -156,15 +158,13 @@ public class ModelerFile {
         this.setIcon(modelerFileDataObject.getIcon());
     }
 
-    private Project project;
     public Project getProject() {
-        if(project==null){
-        project = FileOwnerQuery.getOwner(modelerFileDataObject.getPrimaryFile());
+        if (project == null) {
+            project = FileOwnerQuery.getOwner(modelerFileDataObject.getPrimaryFile());
         }
         return project;
     }
-  
-    private SourceGroup sourceGroup;
+
     public SourceGroup getSourceGroup() {
         if (sourceGroup == null) {
             sourceGroup = SourceGroupSupport.findSourceGroupForFile(getProject(), getModelerFileDataObject().getPrimaryFile());
@@ -233,7 +233,10 @@ public class ModelerFile {
         }
     }
 
-    public void save() {
+    public void save(boolean force) {
+        if (force) {
+            this.getModelerPanelTopComponent().changePersistenceState(false);
+        }
         if (this.getModelerFileDataObject() != null) {
             SaveCookie cookie = this.getModelerFileDataObject().getCookie(SaveCookie.class);
             try {
@@ -245,6 +248,10 @@ public class ModelerFile {
             }
         }
     }
+
+    public void save() {
+        save(false);
+    }
     
     public void close(){
         getModelerPanelTopComponent().close();
@@ -253,7 +260,7 @@ public class ModelerFile {
     public void deleteSelectedElements() {
         IModelerScene scene = this.getModelerScene();
 
-        List<INodeWidget> nodeWidgets = new ArrayList<INodeWidget>();
+        List<INodeWidget> nodeWidgets = new ArrayList<>();
         for (Object o : scene.getSelectedObjects()) {
             if (scene.isNode(o)) {
                 Widget w = scene.findWidget(o);
@@ -263,7 +270,7 @@ public class ModelerFile {
                 }
             }
         }
-        List<IEdgeWidget> edgeWidgets = new ArrayList<IEdgeWidget>();
+        List<IEdgeWidget> edgeWidgets = new ArrayList<>();
         for (Object o : scene.getSelectedObjects()) {
             if (o instanceof EdgeWidgetInfo) {
                 Widget w = scene.findWidget(o);
@@ -293,12 +300,12 @@ public class ModelerFile {
                  * @author Juraj Balaz <georgeeb@java.net>
                  * @since Thu, 17 Apr 2014 10:39:05 +0000
                  */
-                for (IEdgeWidget edgeWidget : new CopyOnWriteArrayList<IEdgeWidget>(edgeWidgets)) {
+                for (IEdgeWidget edgeWidget : new CopyOnWriteArrayList<>(edgeWidgets)) {
                     if (edgeWidget.getModelerScene().isEdge(edgeWidget.getEdgeWidgetInfo())) {
                         edgeWidget.remove();
                     }
                 }
-                for (INodeWidget nodeWidget : new CopyOnWriteArrayList<INodeWidget>(nodeWidgets)) {
+                for (INodeWidget nodeWidget : new CopyOnWriteArrayList<>(nodeWidgets)) {
                     if (nodeWidget.getModelerScene().isNode(nodeWidget.getNodeWidgetInfo())) {
                         nodeWidget.remove();
                     }

@@ -50,6 +50,7 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.EventProcessingType;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modeler.action.WidgetDropListener;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.view.manager.BasePropertyViewManager;
@@ -88,7 +89,7 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     private LayerWidget interractionLayer;//interactive actions like ConnectAction or AlignWithMoveAction
     private LayerWidget boundaryWidgetLayer;
     private LayerWidget labelLayer;
-    private Router router = null;
+    private Router router;
     private JComponent satelliteView;
     private IModelerPanel modelerPanel;
     private ModelerFile modelerFile;
@@ -97,13 +98,12 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     // Lookup Data
     private InstanceContent lookupContent = new InstanceContent();
 //    private AbstractLookup lookup = new AbstractLookup(lookupContent);
-    private ArrayList< IFlowElementWidget> lockedSelected = new ArrayList< IFlowElementWidget>();
+    private ArrayList<IFlowElementWidget> lockedSelected = new ArrayList<>();
     private INodeWidget validNodeWidget;
     private INodeWidget invalidNodeWidget;
     private boolean alignSupport = true;
+    private List<WidgetDropListener> widgetDropListeners = new ArrayList<>();
 
-    //  private UltraSimpleIdGenerator idGenerator;
-    //private List<NodeWidget> nodeWidgets = new ArrayList<NodeWidget>();
     public AbstractModelerScene() {
 
         setKeyEventProcessingType(EventProcessingType.FOCUSED_WIDGET_AND_ITS_CHILDREN);
@@ -764,6 +764,23 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
     }
 
     @Override
+    public List<WidgetDropListener> getWidgetDropListener() {
+        return widgetDropListeners;
+    }
+
+    protected void setWidgetDropListener(List<WidgetDropListener> widgetDropListener) {
+        this.widgetDropListeners = widgetDropListener;
+    }
+
+    protected void addWidgetDropListener(WidgetDropListener widgetDropListener) {
+        this.widgetDropListeners.add(widgetDropListener);
+    }
+
+    protected void removeWidgetDropListener(WidgetDropListener widgetDropListener) {
+        this.widgetDropListeners.remove(widgetDropListener);
+    }
+
+    @Override
     public void autoLayout() {
         SceneLayout sceneLayout = LayoutFactory.createSceneGraphLayout(this, new GridGraphLayout<NodeWidgetInfo, EdgeWidgetInfo>().setChecker(true));
         sceneLayout.invokeLayout();
@@ -779,8 +796,6 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
         return this;
     }
 
-    private boolean closed = false;
-
     @Override
     public void cleanReference() {
         modelerFile.getModelerDiagramEngine().clearModelerSceneAction();
@@ -791,6 +806,5 @@ public abstract class AbstractModelerScene<E extends IRootElement> extends Graph
         if (getPropertyManager() != null) {
             getPropertyManager().getElementPropertySet().clearGroups();//clear ElementSupportGroup
         }
-        closed = true;
     }
 }

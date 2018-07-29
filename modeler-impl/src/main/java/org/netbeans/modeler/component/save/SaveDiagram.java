@@ -18,9 +18,7 @@ package org.netbeans.modeler.component.save;
 import java.io.IOException;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.core.NBModelerUtil;
-import org.netbeans.modeler.file.ModelerFileDataObject;
 import org.openide.cookies.SaveCookie;
-import org.openide.loaders.DataObject;
 
 public class SaveDiagram implements SaveCookie {
 
@@ -32,11 +30,8 @@ public class SaveDiagram implements SaveCookie {
 
     @Override
     public synchronized void save() throws IOException {
-                NBModelerUtil.saveModelerFile(file);
-                DataObject dobj = (DataObject) file.getModelerFileDataObject();
-                file.getModelerPanelTopComponent().changePersistenceState(true);
-                if (dobj instanceof ModelerFileDataObject) {
-                    ((ModelerFileDataObject) dobj).setDirty(false, SaveDiagram.this);
-                }
+        NBModelerUtil.saveModelerFile(file);
+        file.getModelerPanelTopComponent().changePersistenceState(true);
+        file.getModelerFileDataObject().setDirty(false, SaveDiagram.this);
     }
 }

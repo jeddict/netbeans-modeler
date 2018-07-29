@@ -16,9 +16,12 @@
 package org.netbeans.modeler.core;
 
 import java.awt.Cursor;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +42,7 @@ import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.editor.Utilities;
 import org.netbeans.modeler.resource.toolbar.ImageUtil;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.INModelerScene;
@@ -50,7 +54,6 @@ import org.netbeans.modeler.widget.node.IWidget;
 import org.netbeans.modeler.widget.node.NodeWidgetStatus;
 import org.openide.util.Exceptions;
 import org.openide.util.Pair;
-import org.netbeans.editor.Utilities;
 
 public class NBModelerUtil {
 
@@ -278,5 +281,17 @@ public class NBModelerUtil {
         }
         return empty;
     }
+
+    public static void drawImage(Image image, Point point, IModelerScene scene) {
+        JComponent view = scene.getView();
+        Graphics2D g2 = (Graphics2D) view.getGraphics();
+        Rectangle visRect = scene.getBounds();
+        view.paintImmediately(0, 0, visRect.width - visRect.x, visRect.height - visRect.y);
+        g2.drawImage(image,
+                AffineTransform.getTranslateInstance(point.getLocation().getX() - visRect.x,
+                        point.getLocation().getY() - visRect.y),
+                null);
+    }
+
 
 }

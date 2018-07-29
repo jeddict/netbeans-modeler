@@ -19,6 +19,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.LayerWidget;
+import org.netbeans.modeler.action.WidgetDropListener;
 import org.netbeans.modeler.component.IModelerPanel;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.specification.model.document.visual.IObjectScene;
@@ -126,4 +127,6 @@ public interface IModelerScene<E extends IRootElement> extends IBaseElementWidge
     void cleanReference();
 
     boolean isSceneGenerating();
+
+    List<WidgetDropListener> getWidgetDropListener();
 }
