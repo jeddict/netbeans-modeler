@@ -26,14 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import javax.swing.DefaultListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import org.openide.explorer.propertysheet.PropertyEnv;
 
 public class CustomAttributeEditor extends javax.swing.JPanel implements PropertyChangeListener {
 
-    private PropertyEnv env;
-    private PropertyEditor editor;
+    private final PropertyEnv env;
+    private final PropertyEditor editor;
 
     public CustomAttributeEditor(Object value, PropertyEditor editor, PropertyEnv env) {
         this.env = env;
@@ -44,12 +43,7 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
         initComponents();
 
         DefaultListSelectionModel dlsm = (DefaultListSelectionModel) this.jTableAttribute.getSelectionModel();
-        dlsm.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                jTablePropertiesListSelectionValueChanged(e);
-            }
-        });
+        dlsm.addListSelectionListener(this::jTablePropertiesListSelectionValueChanged);
 
         if (value != null && value instanceof Map) {
             this.setPropertiesMap((Map) value);
@@ -78,11 +72,6 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
         jPanelFields.setLayout(new java.awt.BorderLayout());
 
         jScrollPane3.setPreferredSize(new java.awt.Dimension(32767, 32767));
-        jScrollPane3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jScrollPane3MouseClicked(evt);
-            }
-        });
 
         jTableAttribute.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -165,13 +154,11 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
         jLayeredPane1Layout.setHorizontalGroup(
             jLayeredPane1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jLayeredPane1Layout.createSequentialGroup()
-                .add(6, 6, 6)
-                .add(jButtonNewProperty)
+                .add(jButtonNewProperty, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButtonModifyProperty)
+                .add(jButtonModifyProperty, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 133, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jButtonDeleteProperty)
-                .add(6, 6, 6))
+                .add(jButtonDeleteProperty, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 138, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
         jLayeredPane1Layout.setVerticalGroup(
             jLayeredPane1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -186,14 +173,14 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
         jPanelButtons2Layout.setHorizontalGroup(
             jPanelButtons2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanelButtons2Layout.createSequentialGroup()
-                .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 245, Short.MAX_VALUE))
+                .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 429, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 3, Short.MAX_VALUE))
         );
         jPanelButtons2Layout.setVerticalGroup(
             jPanelButtons2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanelButtons2Layout.createSequentialGroup()
                 .add(jLayeredPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 5, Short.MAX_VALUE))
+                .add(0, 0, Short.MAX_VALUE))
         );
 
         jPanelFields.add(jPanelButtons2, java.awt.BorderLayout.NORTH);
@@ -222,15 +209,8 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
         }
     }//GEN-LAST:event_jTableAttributeMouseClicked
 
-    private void jScrollPane3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane3MouseClicked
-        // Add your handling code here:
-    }//GEN-LAST:event_jScrollPane3MouseClicked
-
     private void jButtonNewPropertyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewPropertyActionPerformed
-//        Window pWin = SwingUtilities.windowForComponent(this);
-
         CustomAttributeDialog jrpd = new CustomAttributeDialog(Misc.getMainFrame(), true);
-        //JRPropertyDialog jrpd = new JRPropertyDialog(w, true);
         jrpd.setProperties(getPropertiesList());
         jrpd.setVisible(true);
 
@@ -268,7 +248,7 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
         int[] rows = jTableAttribute.getSelectedRows();
         DefaultTableModel dtm = (DefaultTableModel) jTableAttribute.getModel();
         for (int i = rows.length - 1; i >= 0; --i) {
-            dtm.removeRow(rows[i]);  //jTableProperties.convertRowIndexToModel(rows[i])
+            dtm.removeRow(rows[i]);
         }
     }//GEN-LAST:event_jButtonDeletePropertyActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -283,7 +263,7 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
     // End of variables declaration//GEN-END:variables
 
     public void setPropertiesMap(Map properties) {
-        List<GenericProperty> list = new ArrayList<GenericProperty>();
+        List<GenericProperty> list = new ArrayList<>();
         Iterator<Map.Entry<String, String>> properties_Itr = properties.entrySet().iterator();
         while (properties_Itr.hasNext()) {
             Map.Entry<String, String> entry = properties_Itr.next();
@@ -321,15 +301,6 @@ public class CustomAttributeEditor extends javax.swing.JPanel implements Propert
         return props;
     }
 
-//    /**
-//     * @return Returns the property value that is result of the
-//     * CustomPropertyEditor.
-//     * @exception InvalidStateException when the custom property editor does not
-//     * represent valid property value (and thus it should not be set)
-//     */
-//    private Object getPropertyValue() throws IllegalStateException {
-//        return getPropertiesMap();
-//    }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (PropertyEnv.PROP_STATE.equals(evt.getPropertyName()) && evt.getNewValue() == PropertyEnv.STATE_VALID) {
