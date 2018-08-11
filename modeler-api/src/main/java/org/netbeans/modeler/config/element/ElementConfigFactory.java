@@ -19,12 +19,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openide.util.Exceptions;
 
 public class ElementConfigFactory {
 
-    private ElementConfig elementConfig;
+    private final ElementConfig elementConfig;
 
     public ElementConfigFactory(ElementConfig elementConfig) {
         this.elementConfig = elementConfig;

@@ -20,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.core.ModelerFile;
 import org.netbeans.modeler.properties.spec.ComboBoxValue;

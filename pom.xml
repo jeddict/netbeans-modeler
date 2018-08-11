@@ -18,13 +18,14 @@
         <root.dir>${basedir}</root.dir>
         <nbm.cluster>jeddict</nbm.cluster>
         <nbm.build.dir>${root.dir}/../jeddict-cluster</nbm.build.dir>
+        <nbm.maven.plugin.version>4.1</nbm.maven.plugin.version>
     </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
-                <version>4.1</version>
+                <version>${nbm.maven.plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <licenseName>Apache License v2.0</licenseName>
@@ -34,6 +35,12 @@
                     <licenseFile>${root.dir}/LICENSE</licenseFile>
                     <cluster>${nbm.cluster}</cluster>
                     <nbmBuildDir>${nbm.build.dir}</nbmBuildDir>
+                    <moduleDependencies>
+                        <dependency>
+                            <id>org.netbeans.modules:org-netbeans-modules-maven-embedder</id>
+                            <type>impl</type>
+                        </dependency>
+                    </moduleDependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -69,6 +76,14 @@
         </resources>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.modules</groupId>
+            <artifactId>org-netbeans-modules-maven-embedder</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+    </dependencies>
+    
     <repositories>
         <repository>
             <id>netbeans-modules</id>

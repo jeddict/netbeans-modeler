@@ -19,7 +19,7 @@ package org.netbeans.modeler.analytics;
 import org.analytics.Analytics;
 import org.analytics.EventHit;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openide.util.NbBundle;
 
 /**
