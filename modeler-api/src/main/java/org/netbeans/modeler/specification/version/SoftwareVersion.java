@@ -22,19 +22,24 @@ package org.netbeans.modeler.specification.version;
 public class SoftwareVersion implements Comparable<SoftwareVersion>
 {
     private int[] parts;
-    private String value;
+    private final String value;
 
     public static SoftwareVersion getInstance(String value){
        return new SoftwareVersion(value);
     }
     public SoftwareVersion(String value)
     {
-        this.value=value;
-        if(value == null)
+        if (value == null) {
             throw new IllegalArgumentException("Version can not be null");
+        }
+        if (value.indexOf('-') != -1) {
+            value = value.substring(0, value.indexOf('-'));
+        }
 
-        if(value.matches("^[0-9]+(\\.[0-9]+)*$") == false)
+        if (value.matches("^[0-9]+(\\.[0-9]+)*$") == false)
             throw new IllegalArgumentException("Invalid version format");
+
+        this.value = value;
 
         String[] split = value.split("\\.");
         parts = new int[split.length];
