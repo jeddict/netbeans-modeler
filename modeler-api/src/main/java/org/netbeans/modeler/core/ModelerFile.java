@@ -239,12 +239,12 @@ public class ModelerFile {
         }
         if (this.getModelerFileDataObject() != null) {
             SaveCookie cookie = this.getModelerFileDataObject().getCookie(SaveCookie.class);
-            try {
-                if (cookie != null) {
+            if (cookie != null) {
+                try {
                     cookie.save();
+                } catch (IOException ex) {
+                    ErrorManager.getDefault().notify(ex);
                 }
-            } catch (IOException e) {
-                ErrorManager.getDefault().notify(e);
             }
         }
     }
