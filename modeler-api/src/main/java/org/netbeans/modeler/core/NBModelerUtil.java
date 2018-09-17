@@ -293,5 +293,17 @@ public class NBModelerUtil {
                 null);
     }
 
+    public static void drawImageOnNodeWidget(Image image, Point point, IModelerScene scene, Widget widget) {
+        JComponent view = scene.getView();
+        Graphics2D g2 = (Graphics2D) view.getGraphics();
+        Rectangle visRect = scene.getBounds();
+        view.paintImmediately(0, 0, visRect.width - visRect.x, visRect.height - visRect.y);
+        point = scene.convertSceneToView(point);
+        g2.drawImage(image,
+                AffineTransform.getTranslateInstance(widget.getLocation().x + point.getLocation().getX(),
+                        widget.getLocation().y + point.getLocation().getY()),
+                null);
+    }
+
 
 }
