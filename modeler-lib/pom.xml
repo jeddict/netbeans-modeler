@@ -60,17 +60,6 @@
     </build>
 
     <dependencies>
-
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.6</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-transcoder</artifactId>
@@ -156,4 +145,30 @@
             <url>file:${project.basedir}\repository</url>
         </repository>
     </repositories>
+
+    <profiles>
+        <profile>
+            <id>netbeans82</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>commons-lang</groupId>
+                    <artifactId>commons-lang</artifactId>
+                    <version>2.6</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                    <version>2.6</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>netbeans90</id>
+            <dependencies>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
