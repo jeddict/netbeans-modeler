@@ -43,10 +43,6 @@ public class I18n {
     //This is the default Resource Boundle for all the keys of the project.
     static final String DEFAULT_PACKAGE = "";
 
-    private static void printMissingResourceMessage(String key) {
-        //System.out.println("Missing resouce key: " + key);
-    }
-
     /**
      * Finds a localized and/or branded string in the iReport resource bundle.
      * This call never throws an exception, but a warning message is printed
@@ -165,8 +161,6 @@ public class I18n {
                 // Missing resource...
             }
         }
-
-        printMissingResourceMessage(key);
 
         return key;
     }
