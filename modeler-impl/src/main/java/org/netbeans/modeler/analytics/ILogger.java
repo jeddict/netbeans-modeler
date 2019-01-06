@@ -16,11 +16,12 @@
 package org.netbeans.modeler.analytics;
 
 
-import org.analytics.Analytics;
-import org.analytics.EventHit;
+import com.brsanthu.googleanalytics.GoogleAnalytics;
+import com.brsanthu.googleanalytics.internal.GoogleAnalyticsImpl;
+import com.brsanthu.googleanalytics.request.EventHit;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;
-import org.openide.util.NbBundle;
+import static org.openide.util.NbBundle.getMessage;
 
 /**
  * Insight program to collect usage data event for developer experience
@@ -31,12 +32,14 @@ import org.openide.util.NbBundle;
  */
 public class ILogger {
 
-    private static Analytics ANALYTICS;
+    private static GoogleAnalytics ANALYTICS;
     private static boolean ENABLE = false;
 
     static {
-        if (ENABLE = Boolean.valueOf(NbBundle.getMessage(ILogger.class, "TRACKING_ENABLE"))) {
-            ANALYTICS = new Analytics(NbBundle.getMessage(ILogger.class, "TRACKING_ID"));
+        if (ENABLE = Boolean.valueOf(getMessage(ILogger.class, "TRACKING_ENABLE"))) {
+            ANALYTICS = GoogleAnalytics.builder()
+                    .withTrackingId(getMessage(ILogger.class, "TRACKING_ID"))
+                    .build();
         }
     }
 
@@ -46,7 +49,7 @@ public class ILogger {
                 String category = token[0], action = token[1], label = token[2];
                 EventHit eventHit = new EventHit(category, action, label, value);
                 System.out.println("ANALYTICS category[" + category + "] action[" + action + "] label[" + label + "] value[" + value + "]");
-                ANALYTICS.postAsync(eventHit);
+                ((GoogleAnalyticsImpl)ANALYTICS).postAsync(eventHit);
             });
 
     public static void logEvent(String category, String action) {
