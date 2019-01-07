@@ -38,6 +38,8 @@
                         <publicPackage>org.eclipse.yasson.*</publicPackage>
                         <publicPackage>org.glassfish.json.*</publicPackage>
                         <publicPackage>com.brsanthu.googleanalytics.*</publicPackage>
+                        <publicPackage>org.apache.commons.collections.*</publicPackage>
+                        <publicPackage>org.apache.xalan.xsltc.trax.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
