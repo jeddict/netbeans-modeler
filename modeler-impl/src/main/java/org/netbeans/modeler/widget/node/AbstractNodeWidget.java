@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,14 +21,10 @@ import org.netbeans.api.visual.model.ObjectState;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
+import org.netbeans.modeler.svg.SvgNodeWidget;
 import org.netbeans.modeler.widget.design.ITextDesign;
 import org.netbeans.modeler.widget.design.NodeTextDesign;
-import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 
-/**
- *
- *
- */
 public abstract class AbstractNodeWidget extends Widget {
 
     public static enum TextOrientation {
@@ -73,7 +69,6 @@ public abstract class AbstractNodeWidget extends Widget {
         }
 
         setState(ObjectState.createNormal());
-
     }
 
     /**
@@ -94,7 +89,7 @@ public abstract class AbstractNodeWidget extends Widget {
     /**
      * Sets an image.
      *
-     * @param image the image
+     * @param nodeImageWidget
      */
     public final void setNodeImageWidget(SvgNodeWidget nodeImageWidget) {
         this.nodeImageWidget = nodeImageWidget;

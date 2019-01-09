@@ -91,4 +91,13 @@
             <url>http://bits.netbeans.org/maven2/</url>
         </repository>
     </repositories>
+    
+    <profiles>
+        <profile>
+            <id>svg-modeler</id>
+            <modules>
+                <module>modeler-svg-impl</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

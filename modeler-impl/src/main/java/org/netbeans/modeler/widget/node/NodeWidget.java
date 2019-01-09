@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -55,8 +55,10 @@ import org.netbeans.modeler.specification.model.document.property.ElementPropert
 import org.netbeans.modeler.specification.model.document.widget.IBaseElementWidget;
 import org.netbeans.modeler.specification.model.document.widget.IFlowNodeWidget;
 import org.netbeans.modeler.specification.model.document.widget.IModelerSubScene;
+import org.netbeans.modeler.svg.SVGDocument;
+import org.netbeans.modeler.svg.SvgNodeWidget;
+import org.netbeans.modeler.svg.SvgNodeWidgetFactory;
 import org.netbeans.modeler.widget.context.action.SceneConnectProvider;
-import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 import org.netbeans.modeler.widget.pin.IPinWidget;
 import org.netbeans.modeler.widget.properties.generic.ElementPropertySupport;
@@ -66,12 +68,8 @@ import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.NodeOperation;
-import org.w3c.dom.svg.SVGDocument;
+import org.openide.util.Lookup;
 
-/**
- *
- *
- */
 public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWidget implements INNodeWidget {
 
     public static final int WIDGET_BORDER_PADDING = 4;
@@ -101,9 +99,17 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         Dimension dimension = new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue());
         nodeWidgetInfo.setDimension(dimension);
 
-        this.setNodeImageWidget(new SvgNodeWidget(scene, this,
+        SvgNodeWidgetFactory factory = Lookup.getDefault().lookup(SvgNodeWidgetFactory.class);
+        SvgNodeWidget svgNodeWidget = factory.create(
+                scene,
+                this,
                 modelerDocument.generateDocument(),
-                new Dimension((int) modelerDocument.getBounds().getWidth().getValue(), (int) modelerDocument.getBounds().getHeight().getValue())));
+                new Dimension(
+                        (int) modelerDocument.getBounds().getWidth().getValue(),
+                        (int) modelerDocument.getBounds().getHeight().getValue()
+                )
+        );
+        this.setNodeImageWidget(svgNodeWidget);
 
         updateNodeWidgetDesign(new ShapeDesign(modelerDocument.getDocumentShapeDesign()));
 
@@ -592,7 +598,6 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
         setElementValue("inner", "stroke", getColorString(innerElementBorderColor));
     }
 
-    /*----------------------------------------*/
     String getColorString(Color color) {
         if (color != null) {
             return "RGB(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")";
@@ -624,7 +629,6 @@ public abstract class NodeWidget<S extends IModelerScene> extends AbstractNodeWi
 
     public void setElementValue(SVGDocument svgDocument, String id, String attribute, String value, boolean lazy) {
         if (svgDocument.getElementById(id) != null) {
-//            System.out.println(svgDocument.getElementById(id) + " -- "+ attribute + " -- "+ svgDocument.getElementById(id).getAttribute(attribute));
             if (svgDocument.getElementById(id).hasAttribute(attribute)) {
                 svgDocument.getElementById(id).setAttribute(attribute, value);
             } else {

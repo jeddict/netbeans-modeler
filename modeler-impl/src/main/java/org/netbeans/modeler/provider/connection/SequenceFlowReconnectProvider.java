@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,23 +25,19 @@ import org.netbeans.modeler.scene.AbstractModelerScene;
 import org.netbeans.modeler.scene.vmd.AbstractPModelerScene;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
+import org.netbeans.modeler.svg.SvgNodeWidget;
 import org.netbeans.modeler.widget.edge.EdgeWidget;
 import org.netbeans.modeler.widget.edge.IEdgeWidget;
 import org.netbeans.modeler.widget.edge.info.EdgeWidgetInfo;
 import org.netbeans.modeler.widget.node.NodeWidget;
-import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
 import org.netbeans.modeler.widget.node.info.NodeWidgetInfo;
 
-/**
- *
- *
- */
 public class SequenceFlowReconnectProvider implements ReconnectProvider {
 
     private EdgeWidgetInfo edge;
     private Object originalNode;
     private Object replacementNode;//NodeWidgetInfo
-    private IModelerScene scene;
+    private final IModelerScene scene;
 
     public SequenceFlowReconnectProvider(IModelerScene scene) {
         this.scene = scene;

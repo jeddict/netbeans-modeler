@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,17 +24,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.netbeans.modeler.svg.SVGDocument;
+import org.netbeans.modeler.svg.SvgImage;
 import org.netbeans.modeler.util.Util;
-import org.netbeans.modeler.widget.node.image.svg.SvgImage;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
-import org.w3c.dom.svg.SVGDocument;
-//import org.w3c.dom.svg.SVGDocument;
 
-/**
- *
- *
- */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ModelerDocument implements IModelerDocument {
 
@@ -54,8 +49,6 @@ public class ModelerDocument implements IModelerDocument {
     @XmlElement(name = "container-document")
     private String documentPath;
 
-//    @XmlTransient
-//    private SVGDocument document;
     @XmlTransient
     private Image image;
     @XmlTransient
@@ -69,34 +62,20 @@ public class ModelerDocument implements IModelerDocument {
     public void init() {
         String extension = getDocumentPath().substring(getDocumentPath().lastIndexOf(".") + 1, getDocumentPath().length());
         if ("svg".equalsIgnoreCase(extension)) {
-
-            SvgImage svgImage = Util.loadSvgImage(getDocumentPath());
-            this.svgImage = svgImage;
+            this.svgImage = Util.loadSvgImage(getDocumentPath());
         } else if ("gif".equalsIgnoreCase(extension)
                 || "png".equalsIgnoreCase(extension)
                 || "jpg".equalsIgnoreCase(extension)
                 || "jpeg".equalsIgnoreCase(extension)) {
             image = Util.loadImage(getDocumentPath());
         }
-
     }
 
     @Override
     public SVGDocument generateDocument() {
-        SVGDocument document = (SVGDocument) this.getDocument().cloneNode(true);
-        return document;
+        return this.getDocument().cloneDocument(true);
     }
 
-//     public Image getImage(double width , double height) {
-//        Image imageObj = null;
-//         try {
-//            SvgImage svgImage = new SvgImage(this.getDocument());
-//            imageObj =  svgImage.getImage(width, height);
-//        } catch (IOException ex) {
-//            Exceptions.printStackTrace(ex);
-//        }
-//         return imageObj;
-//    }
     /**
      * @return the id
      */
@@ -147,19 +126,6 @@ public class ModelerDocument implements IModelerDocument {
         this.documentPath = documentPath;
     }
 
-//    /**
-//     * @return the document
-//     */
-//    public SVGDocument getDocument() {
-//        return document;
-//    }
-//
-//    /**
-//     * @param document the document to set
-//     */
-//    public void setDocument(SVGDocument document) {
-//        this.document = document;
-//    }
     /**
      * @return the image
      */
@@ -183,13 +149,6 @@ public class ModelerDocument implements IModelerDocument {
         return new ImageIcon(getImage());
     }
 
-    /**
-     * @param image the image to set
-     */
-//    @Override
-//    public void setImage(Image image) {
-//        this.image = image;
-//    }
     /**
      * @return the flowDimension
      */
@@ -215,7 +174,7 @@ public class ModelerDocument implements IModelerDocument {
     }
 
     /**
-     * @param documentModelType the documentModelType to set
+     * @param documentModel
      */
     @Override
     public void setDocumentModel(String documentModel) {
@@ -257,20 +216,11 @@ public class ModelerDocument implements IModelerDocument {
     /**
      * @return the document
      */
-//  BUG : org.w3c.dom.svg.SVGDocument JAXB can't handle interface ; add JAB_API from Netbeans Module Platform
     @Override
     public SVGDocument getDocument() {
         return svgImage.getSvgDocument();
-//        return document;
     }
 
-    /**
-     * @param document the document to set
-     */
-//    @Override
-//    public void setDocument(SVGDocument document) {
-//        this.document = document;
-//    }
     /**
      * @return the specification
      */

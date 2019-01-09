@@ -22,24 +22,19 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>org.apache.commons.lang</publicPackage>
-                        <publicPackage>org.apache.commons.io</publicPackage>
-                        <publicPackage>org.apache.commons.beanutils</publicPackage>
-                        <publicPackage>org.apache.batik.*</publicPackage>
-                        <publicPackage>org.apache.velocity</publicPackage>
-                        <publicPackage>org.apache.velocity.*</publicPackage>
+                        <publicPackage>org.apache.commons.lang.*</publicPackage>
+                        <publicPackage>org.apache.commons.io.*</publicPackage>
+                        <publicPackage>org.apache.commons.beanutils.*</publicPackage>
+                        <publicPackage>org.apache.commons.collections.*</publicPackage>
                         <publicPackage>org.codehaus.plexus.*</publicPackage>
                         <publicPackage>javax.*</publicPackage>
                         <publicPackage>org.w3c.*</publicPackage>
                         <publicPackage>org.xml.*</publicPackage>
                         <publicPackage>org.mvel2</publicPackage>
-                        <publicPackage>org.analytics</publicPackage>
                         <publicPackage>org.atteo.evo.inflector</publicPackage>
                         <publicPackage>org.eclipse.yasson.*</publicPackage>
                         <publicPackage>org.glassfish.json.*</publicPackage>
                         <publicPackage>com.brsanthu.googleanalytics.*</publicPackage>
-                        <publicPackage>org.apache.commons.collections.*</publicPackage>
-                        <publicPackage>org.apache.xalan.xsltc.trax.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
@@ -64,50 +59,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-transcoder</artifactId>
-            <version>1.7</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-io</groupId>
-                    <artifactId>commons-io</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-util</artifactId>
-            <version>1.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-svg-dom</artifactId>
-            <version>1.7</version>
-        </dependency>
-        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.3</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-lang</groupId>
-                    <artifactId>commons-lang</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.mvel</groupId>
             <artifactId>mvel2</artifactId>
-            <version>2.4.0.Final</version>
+            <version>2.4.3.Final</version>
         </dependency>
         <dependency>
             <groupId>com.brsanthu</groupId>
@@ -122,17 +81,17 @@
         <dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>yasson</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>
-            <version>1.1.2</version>
+            <version>1.1.4</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
-            <version>1.1.2</version>
+            <version>1.1.4</version>
         </dependency>
 
         <dependency>

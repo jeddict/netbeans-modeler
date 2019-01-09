@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,11 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
-import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
+import org.netbeans.modeler.svg.SvgNodeWidget;
 import test.ClosestSegment;
 import test.GeometryClosestPointManager;
 
@@ -160,20 +159,10 @@ public class CustomPathAnchor extends Anchor {
         }
 
         float scale = 0.5f / Math.max(ddx, ddy);
-
         Point point = new Point(Math.round(relatedLocation.x + scale * dx), Math.round(relatedLocation.y + scale * dy));
 
-//        if(direction== Direction.BOTTOM){
-//            point.y = point.y - margin;
-//        } else if(direction== Direction.TOP){
-//            point.y = point.y + margin;
-//        } else if(direction== Direction.LEFT){
-//            point.x = point.x + margin;
-//        } else if(direction== Direction.RIGHT){
-//            point.x = point.x - margin;
-//        }
         SvgNodeWidget imageWidget = (SvgNodeWidget) widget;
-        Point movePo = null;
+        Point movePo;
         if (imageWidget.getTransform() != null) {
 
             Shape shape = imageWidget.getTransform().createTransformedShape(imageWidget.getOutlineShape());
@@ -181,19 +170,24 @@ public class CustomPathAnchor extends Anchor {
             ClosestSegment cs = GeometryClosestPointManager.getClosetsPoint(shape, new Point2D.Double(point.x - widgetLoc.x, point.y - widgetLoc.y));
             int padX = 0;//padding
             int padY = 0;
-            if (direction == Direction.TOP) {
-                padY = - 2;
-            } else if (direction == Direction.RIGHT) {
-                padX = +2;
-            } else if (direction == Direction.BOTTOM) {
-                padY = +2;
-            } else if (direction == Direction.LEFT) {
-                padX = - 2;
+            switch (direction) {
+                case TOP:
+                    padY = - 2;
+                    break;
+                case RIGHT:
+                    padX = +2;
+                    break;
+                case BOTTOM:
+                    padY = +2;
+                    break;
+                case LEFT:
+                    padX = - 2;
+                    break;
+                default:
+                    break;
             }
 
             movePo = new Point(widgetLoc.x + (int) cs.getBestPoint().getX() + padX, widgetLoc.y + (int) cs.getBestPoint().getY() + padY);
-
-//            movePo = Util.getComputedPoint(oppositeLocation, movePo, 10);
         } else {
             movePo = point;
         }

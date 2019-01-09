@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,6 +17,7 @@ package org.netbeans.modeler.anchors;
 
 import java.awt.Point;
 import org.netbeans.api.visual.anchor.Anchor;
+import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
@@ -24,23 +25,20 @@ import org.netbeans.modeler.widget.node.NodeWidget;
 
 public final class CustomCircularAnchor extends Anchor {
 
-//    private int radius;
     private String type = "NONE";
-    private IModelerScene modelerScene;
-    private INodeWidget nodeWidget;
+    private final IModelerScene modelerScene;
+    private final INodeWidget nodeWidget;
 
     public CustomCircularAnchor(INodeWidget nodeWidget) {
         super(((NodeWidget) nodeWidget).getNodeImageWidget());
         this.nodeWidget = nodeWidget;
         this.modelerScene = nodeWidget.getModelerScene();
-//        this.radius = radius;
     }
 
     @Override
     public Result compute(Entry entry) {
-//          NodeWidget nodeWidget = (NodeWidget)getRelatedWidget().getParentWidget();
         Point relatedLocation = getRelatedSceneLocation();
-        Point oppositeLocation = null;
+        Point oppositeLocation;
 
         java.util.List<Point> points = entry.getAttachedConnectionWidget().getControlPoints();
 

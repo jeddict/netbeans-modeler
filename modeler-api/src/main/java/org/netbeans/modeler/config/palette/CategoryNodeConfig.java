@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.netbeans.modeler.svg.SvgImage;
 import org.netbeans.modeler.util.Util;
-import org.netbeans.modeler.widget.node.image.svg.SvgImage;
 import org.openide.util.Exceptions;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -42,7 +42,7 @@ public class CategoryNodeConfig {
     private Image paletteImage;
     @XmlTransient
     private SvgImage svgPaletteImage;
-//    @XmlElementWrapper(name = "category-node-config")
+
     @XmlElement(name = "subcategory-node")
     private List<SubCategoryNodeConfig> subCategoryNodeConfigs = new ArrayList<SubCategoryNodeConfig>();
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,7 +25,7 @@ import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import org.netbeans.modeler.widget.node.image.svg.SvgImage;
+import org.netbeans.modeler.svg.SvgImage;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
@@ -82,11 +82,8 @@ public class Util<E> {
     public static SvgImage loadSvgImage(String resource) {
         SvgImage svgImage = null;
         try {
-            svgImage = new SvgImage(loadResource(resource));
-        } catch (ParserConfigurationException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (SAXException ex) {
-            Exceptions.printStackTrace(ex);
+            svgImage = Lookup.getDefault().lookup(SvgImage.class);
+            svgImage.loadStream(loadResource(resource));
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,24 +28,21 @@ import org.netbeans.modeler.specification.model.document.IModelerScene;
 import org.netbeans.modeler.specification.model.document.widget.IFlowEdgeWidget;
 import org.netbeans.modeler.widget.node.INodeWidget;
 import org.netbeans.modeler.widget.node.NodeWidget;
-import org.netbeans.modeler.widget.node.image.SvgNodeWidget;
-import org.netbeans.modeler.widget.node.image.svg.ResizeType;
+import org.netbeans.modeler.svg.SvgNodeWidget;
+import org.netbeans.modeler.svg.ResizeType;
 import test.ClosestSegment;
 import test.GeometryClosestPointManager;
 
 public class CustomRectangularAnchor extends Anchor {
 
-    private boolean includeBorders;
-    private int margin;
+    private final boolean includeBorders;
+    private final int margin;
     private String type = "NONE";
-    private IModelerScene modelerScene;
-//private INodeWidget nodeWidget;
+    private final IModelerScene modelerScene;
 
     public CustomRectangularAnchor(INodeWidget nodeWidget, int margin, boolean includeBorders) {
         super(nodeWidget instanceof NodeWidget ? ((NodeWidget) nodeWidget).getNodeImageWidget() : (Widget) nodeWidget);
-//        this.nodeWidget=nodeWidget;
         this.modelerScene = nodeWidget.getModelerScene();
-//        assert widget != null;
         this.margin = margin;
         this.includeBorders = includeBorders;
     }
@@ -173,14 +170,21 @@ public class CustomRectangularAnchor extends Anchor {
         Point point = new Point(Math.round(relatedLocation.x + scale * dx),
                 Math.round(relatedLocation.y + scale * dy));
 
-        if (direction == Direction.BOTTOM) {
-            point.y = point.y - margin;
-        } else if (direction == Direction.TOP) {
-            point.y = point.y + margin;
-        } else if (direction == Direction.LEFT) {
-            point.x = point.x + margin;
-        } else if (direction == Direction.RIGHT) {
-            point.x = point.x - margin;
+        switch (direction) {
+            case BOTTOM:
+                point.y = point.y - margin;
+                break;
+            case TOP:
+                point.y = point.y + margin;
+                break;
+            case LEFT:
+                point.x = point.x + margin;
+                break;
+            case RIGHT:
+                point.x = point.x - margin;
+                break;
+            default:
+                break;
         }
 
         Point movePo;
