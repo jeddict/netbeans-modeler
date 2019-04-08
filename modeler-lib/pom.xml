@@ -23,7 +23,7 @@
                 <configuration>
                     <publicPackages>
                         <publicPackage>org.apache.commons.logging.*</publicPackage>
-                        <publicPackage>org.apache.commons.lang.*</publicPackage>
+                        <publicPackage>io.github.jeddict.util.*</publicPackage>
                         <publicPackage>org.apache.commons.io.*</publicPackage>
                         <publicPackage>org.apache.commons.beanutils.*</publicPackage>
                         <publicPackage>org.apache.commons.collections.*</publicPackage>
@@ -101,24 +101,4 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>netbeans82</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>commons-lang</groupId>
-                    <artifactId>commons-lang</artifactId>
-                    <version>2.6</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>netbeans90</id>
-            <dependencies>
-            </dependencies>
-        </profile>
-    </profiles>
 </project>

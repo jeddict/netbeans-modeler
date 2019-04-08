@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
 package org.netbeans.modeler.widget.properties.generic;
 
 import java.lang.reflect.InvocationTargetException;
-import org.apache.commons.lang.StringUtils;
+import io.github.jeddict.util.StringUtils;
 import org.netbeans.modeler.config.element.Attribute;
 import org.netbeans.modeler.config.element.ModelerSheetProperty;
 import org.netbeans.modeler.core.ModelerFile;

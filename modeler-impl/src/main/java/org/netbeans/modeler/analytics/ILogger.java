@@ -1,5 +1,5 @@
 /**
- * Copyright [2017] Gaurav Gupta
+ * Copyright 2013-2019 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,7 +20,7 @@ import com.brsanthu.googleanalytics.GoogleAnalytics;
 import com.brsanthu.googleanalytics.internal.GoogleAnalyticsImpl;
 import com.brsanthu.googleanalytics.request.EventHit;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.lang.StringUtils;
+import io.github.jeddict.util.StringUtils;
 import static org.openide.util.NbBundle.getMessage;
 
 /**
@@ -61,7 +61,10 @@ public class ILogger {
     }
 
     public static void logEvent(String category, String action, String label, int value) {
-        if (ENABLE && StringUtils.isNotBlank(category) && StringUtils.isNotBlank(action) && StringUtils.isNotBlank(label)) {
+        if (ENABLE 
+                && StringUtils.isNotBlank(category) 
+                && StringUtils.isNotBlank(action) 
+                && StringUtils.isNotBlank(label)) {
             String key = category+"#"+action+"#"+label;
             Integer existingValue = data.get(key);
             if (existingValue != null) {
