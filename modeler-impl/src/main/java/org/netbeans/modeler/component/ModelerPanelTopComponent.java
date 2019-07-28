@@ -53,8 +53,8 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ProxyLookup;
 import org.openide.windows.TopComponent;
-import org.netbeans.core.windows.view.ui.NbSheet;
 import org.openide.actions.FindAction;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -434,7 +434,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     
         
     private static void openPropertyPanel() {
-        TopComponent propertyWindow = NbSheet.findDefault();
+        TopComponent propertyWindow = WindowManager.getDefault().findTopComponent("properties"); // NOI18N
         try {
             if (!propertyWindow.isOpened()) {
                 propertyWindow.open();
@@ -446,7 +446,7 @@ public class ModelerPanelTopComponent extends TopComponent implements ExplorerMa
     }
     
     private static void closePropertyPanel() {
-        NbSheet propertyWindow = NbSheet.findDefault();
+        TopComponent propertyWindow = WindowManager.getDefault().findTopComponent("properties"); // NOI18N
         if (propertyWindow.isOpened()) {
             propertyWindow.close();
         }

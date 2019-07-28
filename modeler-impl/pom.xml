@@ -38,12 +38,6 @@
                         <publicPackage>org.netbeans.modeler.border</publicPackage>
                         <publicPackage>org.netbeans.modeler.core.engine</publicPackage>
                     </publicPackages>
-                    <moduleDependencies>
-                        <dependency>
-                            <id>org.netbeans.modules:org-netbeans-core-windows</id>
-                            <type>impl</type>
-                        </dependency>
-                    </moduleDependencies>
                 </configuration>
             </plugin>
         </plugins>
@@ -120,11 +114,6 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-spi-palette</artifactId>
-            <version>${netbeans.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.modules</groupId>
-            <artifactId>org-netbeans-core-windows</artifactId>
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
