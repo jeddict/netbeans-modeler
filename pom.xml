@@ -4,7 +4,7 @@
     <groupId>io.github.jeddict.modeler</groupId>
     <artifactId>netbeans-modeler</artifactId>
     <name>NetBeans Modeler</name>
-    <version>5.3</version>
+    <version>5.4</version>
     <packaging>pom</packaging>
     <modules>
         <module>modeler-api</module>
@@ -80,12 +80,4 @@
         </profile>
     </profiles>
 
-    <repositories>
-        <repository>
-            <id>netbeans111</id>
-            <url>
-                https://repository.apache.org/content/repositories/orgapachenetbeans-1035
-            </url>
-        </repository>
-    </repositories>
 </project>
