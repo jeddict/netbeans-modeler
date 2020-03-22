@@ -77,7 +77,7 @@
         <dependency>
             <groupId>jakarta.json.bind</groupId>
             <artifactId>jakarta.json.bind-api</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse</groupId>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.json</artifactId>
-            <version>1.1.5</version>
+            <version>1.1.6</version>
         </dependency>
         <dependency>
             <groupId>org.atteo</groupId>
