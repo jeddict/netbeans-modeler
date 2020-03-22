@@ -12,7 +12,7 @@
 
     <properties>
         <root.dir>${basedir}/../</root.dir>
-        <batik.version>1.7</batik.version>
+        <batik.version>1.12</batik.version>
     </properties>
 
     <build>
