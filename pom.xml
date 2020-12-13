@@ -4,7 +4,7 @@
     <groupId>io.github.jeddict.modeler</groupId>
     <artifactId>netbeans-modeler</artifactId>
     <name>NetBeans Modeler</name>
-    <version>5.4.3</version>
+    <version>5.4.4</version>
     <packaging>pom</packaging>
     <modules>
         <module>modeler-api</module>
