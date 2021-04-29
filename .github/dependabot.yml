@@ -1,0 +1,80 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.netbeans.api:org-openide-actions
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-spi-navigator
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-spi-palette
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-awt
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-windows
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-loaders
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-modules-projectapi
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-modules-websvc-saas-codegen-java
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-modules-java-sourceui
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-modules-editor-lib
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-modules-java-source-base
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-modules
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-modules-xml-jaxb-api
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-filesystems
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-api-visual
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-nodes
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-util-lookup
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-util-ui
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-util
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-dialogs
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-openide-explorer
+    versions:
+    - RELEASE122
+  - dependency-name: org.netbeans.api:org-netbeans-api-annotations-common
+    versions:
+    - RELEASE122
+  - dependency-name: org.eclipse:yasson
+    versions:
+    - 2.0.1
+  - dependency-name: org.glassfish:jakarta.json
+    versions:
+    - 2.0.0
