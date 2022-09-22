@@ -15,7 +15,7 @@
  */
 package org.netbeans.modeler.shape.adapter;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class AdaptorCDATA extends XmlAdapter<String, String> {
 

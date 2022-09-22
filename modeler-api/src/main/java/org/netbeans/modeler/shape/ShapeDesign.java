@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 Gaurav Gupta
+ * Copyright 2013-2022 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,25 +15,16 @@
  */
 package org.netbeans.modeler.shape;
 
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-//import com.google.gson.JsonDeserializationContext;
-//import com.google.gson.JsonDeserializer;
-//import com.google.gson.JsonElement;
-//import com.google.gson.JsonParseException;
-//import com.google.gson.JsonPrimitive;
-//import com.google.gson.JsonSerializationContext;
-//import com.google.gson.JsonSerializer;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlValue;
 import org.netbeans.modeler.config.document.StandardShapeDesign;
 
 @XmlRootElement(name = "ShapeDesign", namespace = "http://nbmodeler.java.net")

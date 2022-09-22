@@ -174,7 +174,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
             }
 
         } catch (Throwable t) {
-            if(t.getCause()!=null && t.getCause() instanceof javax.xml.bind.UnmarshalException){
+            if(t.getCause()!=null && t.getCause() instanceof jakarta.xml.bind.UnmarshalException){
                 JOptionPane.showMessageDialog(null, "Unable to open the corrupt file", "Error", JOptionPane.ERROR_MESSAGE);
                 modelerFile.getModelerPanelTopComponent().close();
             } else if (modelerFile != null) {

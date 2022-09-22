@@ -17,10 +17,10 @@ package org.netbeans.modeler.config.document;
 
 import java.awt.Image;
 import java.io.IOException;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlTransient;
 import org.netbeans.modeler.svg.SvgImage;
 import org.openide.util.Exceptions;
 

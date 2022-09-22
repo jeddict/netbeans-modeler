@@ -15,8 +15,8 @@
  */
 package org.netbeans.modeler.validation.jaxb;
 
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
+import jakarta.xml.bind.ValidationEvent;
+import jakarta.xml.bind.ValidationEventHandler;
 
 public class ValidateJAXB implements ValidationEventHandler {
 
