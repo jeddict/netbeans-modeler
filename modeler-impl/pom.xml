@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.jeddict.modeler</groupId>
         <artifactId>netbeans-modeler</artifactId>
-        <version>6.0</version>
+        <version>6.0.1</version>
     </parent>
     <artifactId>modeler-impl</artifactId>
     <name>Modeler Implementation</name>
