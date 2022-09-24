@@ -19,7 +19,7 @@
         <netbeans.installation>${root.dir}/../incubator-netbeans/nbbuild/netbeans</netbeans.installation>
         <nbm.cluster>jeddict</nbm.cluster>
         <nbm.build.dir>${root.dir}/../jeddict-cluster</nbm.build.dir>
-        <nbm.maven.plugin.version>4.7</nbm.maven.plugin.version>
+        <nbm.maven.plugin.version>4.8</nbm.maven.plugin.version>
     </properties>
     <build>
         <plugins>
