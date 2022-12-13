@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 Gaurav Gupta
+ * Copyright 2013-2022 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -174,7 +174,7 @@ public abstract class ModelerFileActionListener implements ActionListener {
             }
 
         } catch (Throwable t) {
-            if(t.getCause()!=null && t.getCause() instanceof javax.xml.bind.UnmarshalException){
+            if(t.getCause()!=null && t.getCause() instanceof jakarta.xml.bind.UnmarshalException){
                 JOptionPane.showMessageDialog(null, "Unable to open the corrupt file", "Error", JOptionPane.ERROR_MESSAGE);
                 modelerFile.getModelerPanelTopComponent().close();
             } else if (modelerFile != null) {

@@ -16,7 +16,7 @@
 package org.netbeans.modeler.widget.design;
 
 import java.awt.Color;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 Gaurav Gupta
+ * Copyright 2013-2022 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,7 +15,7 @@
  */
 package org.netbeans.modeler.shape.adapter;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class AdaptorCDATA extends XmlAdapter<String, String> {
 

@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.github.jeddict.modeler</groupId>
         <artifactId>netbeans-modeler</artifactId>
-        <version>5.4.4</version>
+        <version>6.1.0</version>
     </parent>
     <artifactId>modeler-lib</artifactId>
     <name>Modeler Library</name>
@@ -17,7 +17,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.apache.netbeans.utilities</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
@@ -29,12 +29,14 @@
                         <publicPackage>org.apache.commons.collections.*</publicPackage>
                         <publicPackage>org.codehaus.plexus.*</publicPackage>
                         <publicPackage>javax.*</publicPackage>
+                        <publicPackage>jakarta.*</publicPackage>
                         <publicPackage>org.w3c.*</publicPackage>
                         <publicPackage>org.xml.*</publicPackage>
                         <publicPackage>org.mvel2</publicPackage>
                         <publicPackage>org.atteo.evo.inflector</publicPackage>
                         <publicPackage>org.eclipse.yasson.*</publicPackage>
-                        <publicPackage>org.glassfish.json.*</publicPackage>
+                        <publicPackage>org.glassfish.*</publicPackage>
+                        <publicPackage>com.sun.xml.*</publicPackage>
                         <publicPackage>com.brsanthu.googleanalytics.*</publicPackage>
                     </publicPackages>
                 </configuration>
@@ -44,7 +46,7 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
+                    <groupId>org.apache.netbeans.utilities</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
                     <dependencies>
                         <dependency>
@@ -114,6 +116,21 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>2.1.0</version>
         </dependency>
     </dependencies>
 

@@ -15,7 +15,7 @@
  */
 package org.netbeans.modeler.widget.design;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 public class NodeTextDesignValidator extends XmlAdapter<NodeTextDesign, NodeTextDesign> {
 

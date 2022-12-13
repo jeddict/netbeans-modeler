@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 Gaurav Gupta
+ * Copyright 2013-2022 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,9 +17,9 @@ package org.netbeans.modeler.config.element;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.netbeans.modeler.util.Util;
 import org.openide.util.Exceptions;
 

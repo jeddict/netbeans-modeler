@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 Gaurav Gupta
+ * Copyright 2013-2022 Gaurav Gupta
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,8 +15,8 @@
  */
 package org.netbeans.modeler.validation.jaxb;
 
-import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.ValidationEventHandler;
+import jakarta.xml.bind.ValidationEvent;
+import jakarta.xml.bind.ValidationEventHandler;
 
 public class ValidateJAXB implements ValidationEventHandler {
 
